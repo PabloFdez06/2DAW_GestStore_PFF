@@ -2,148 +2,77 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .app-header {
-  background-color: $bg-default;
-  border-bottom: $border-thin solid $border-default;
+  background: linear-gradient(135deg, #E5D5FF 0%, #F0E6FF 100%);
+  border-bottom: 1px solid #D4C5FF;
   position: sticky;
   top: 0;
   z-index: 100;
-  @include transition;
+  padding: $spacing-3 0;
 }
 
 .app-header__container {
-  padding-top: $spacing-4;
-  padding-bottom: $spacing-4;
-}
-
-.app-header__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: $spacing-6;
+
+  @include respond(md) {
+    gap: $spacing-4;
+  }
 }
 
 .app-header__logo {
-  h1 {
-    @include text-style($font-size-2xl, $font-weight-bold);
-    margin: 0;
-    color: $color-primary;
-  }
-}
-
-.app-header__nav {
-  display: none;
-
-  @include respond(md) {
-    display: block;
-  }
-}
-
-.app-header__menu {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  @include flex-between;
-  gap: $spacing-6;
-}
-
-.app-header__link {
-  @include text-style($font-size-sm, $font-weight-regular);
-  color: $text-default;
-  @include transition;
-  padding: $spacing-2 $spacing-3;
-  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  text-decoration: none;
+  @include focus-visible;
 
   &:hover {
-    background-color: $gray-50;
-    color: $color-primary;
+    opacity: 0.8;
   }
+}
 
-  &:focus-visible {
-    @include focus-visible;
-  }
+.app-header__logo-text {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin: 0;
+}
+
+.app-header__logo-icon {
+  width: 28px;
+  height: 28px;
+  color: $color-primary;
 }
 
 .app-header__actions {
-  gap: $spacing-3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-4;
 }
 
-.app-header__user-menu {
-  padding: $spacing-2;
+.app-header__language {
+  padding: $spacing-1 $spacing-2;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  font-size: 0.875rem;
+  color: $gray-500;
+  background: $bg-default;
   cursor: pointer;
   @include transition;
-  border-radius: $radius-md;
-  font-size: $font-size-lg;
+  @include focus-visible;
 
   &:hover {
-    background-color: $gray-50;
+    border-color: $color-primary;
   }
 
-  &:focus-visible {
-    @include focus-visible;
-  }
-}
-
-.app-header__hamburger {
-  display: block;
-  padding: $spacing-2;
-  font-size: $font-size-xl;
-  cursor: pointer;
-  @include transition;
-  border-radius: $radius-md;
-
-  @include respond(md) {
-    display: none;
-  }
-
-  &:hover {
-    background-color: $gray-50;
-  }
-
-  &:focus-visible {
-    @include focus-visible;
+  option {
+    color: $text-default;
   }
 }
 
-.app-header__mobile-menu {
-  display: none;
-  padding: $spacing-4 0;
-  border-top: $border-thin solid $border-default;
-  max-height: 0;
-  overflow: hidden;
-  @include transition(max-height);
-
-  @include respond(md) {
-    display: none !important;
-  }
-
-  &--open {
-    display: block;
-    max-height: 300px;
-  }
-}
-
-.app-header__mobile-menu-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  @include flex-center;
-  flex-direction: column;
-  gap: $spacing-2;
-}
-
-.app-header__mobile-link {
-  @include text-style($font-size-base, $font-weight-regular);
-  color: $text-default;
-  @include transition;
-  padding: $spacing-3 $spacing-4;
-  display: block;
-  border-radius: $radius-md;
-  width: 100%;
-  text-align: center;
-
-  &:hover {
-    background-color: $gray-50;
-    color: $color-primary;
-  }
-
-  &:focus-visible {
-    @include focus-visible;
-  }
+.app-header__login-btn {
+  white-space: nowrap;
 }

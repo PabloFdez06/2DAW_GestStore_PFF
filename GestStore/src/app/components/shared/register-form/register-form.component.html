@@ -1,0 +1,123 @@
+<div class="register-container">
+  <button class="register-container__back" aria-label="Volver" (click)="onBack()">
+    ← Volver
+  </button>
+  
+  <div class="register-content">
+    <div class="register-content__illustration">
+      <img src="/register-illustration.png" alt="Register Illustration" class="register-illustration-img">
+    </div>
+
+    <div class="register-content__form-section">
+        <h2 class="register-modal__title">Registrarme</h2>
+        
+        <form class="register-modal__form" (ngSubmit)="onSubmit($event)">
+          <div class="form-group">
+            <input type="text" 
+                   class="form-input form-input--with-icon" 
+                   placeholder="Introduce el nombre"
+                   [(ngModel)]="nombre"
+                   name="nombre"
+                   [class.form-input--error]="errors['nombre']">
+            <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+            </svg>
+            @if (errors['nombre']) {
+              <p class="form-error">{{ errors['nombre'] }}</p>
+            }
+          </div>
+
+          <div class="form-group">
+            <input type="text" 
+                   class="form-input form-input--with-icon" 
+                   placeholder="Introduce el apellido"
+                   [(ngModel)]="apellido"
+                   name="apellido"
+                   [class.form-input--error]="errors['apellido']">
+            <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+            </svg>
+            @if (errors['apellido']) {
+              <p class="form-error">{{ errors['apellido'] }}</p>
+            }
+          </div>
+
+          <div class="form-group">
+            <input type="text" 
+                   class="form-input form-input--with-icon" 
+                   placeholder="Introduce nombre de usuario"
+                   [(ngModel)]="usuario"
+                   name="usuario"
+                   [class.form-input--error]="errors['usuario']">
+            <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+            </svg>
+            @if (errors['usuario']) {
+              <p class="form-error">{{ errors['usuario'] }}</p>
+            }
+          </div>
+
+          <div class="form-group">
+            <input type="email" 
+                   class="form-input form-input--with-icon" 
+                   placeholder="Introduce el email"
+                   [(ngModel)]="email"
+                   name="email"
+                   [class.form-input--error]="errors['email']">
+            <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            @if (errors['email']) {
+              <p class="form-error">{{ errors['email'] }}</p>
+            }
+          </div>
+
+          <div class="form-group">
+            <input type="password" 
+                   class="form-input form-input--with-icon" 
+                   placeholder="Contraseña"
+                   [(ngModel)]="password"
+                   name="password"
+                   [class.form-input--error]="errors['password']">
+            <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            @if (errors['password']) {
+              <p class="form-error">{{ errors['password'] }}</p>
+            }
+          </div>
+
+          <div class="form-group">
+            <input type="password" 
+                   class="form-input form-input--with-icon" 
+                   placeholder="Confirmar contraseña"
+                   [(ngModel)]="confirmPassword"
+                   name="confirmPassword"
+                   [class.form-input--error]="errors['confirmPassword']">
+            <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            @if (errors['confirmPassword']) {
+              <p class="form-error">{{ errors['confirmPassword'] }}</p>
+            }
+          </div>
+
+          <div class="form-checkbox">
+            <input type="checkbox" 
+                   id="agree-terms" 
+                   [(ngModel)]="agreeTerms"
+                   name="agreeTerms"
+                   class="form-checkbox__input">
+            <label for="agree-terms" class="form-checkbox__label">De acuerdo con las condiciones</label>
+          </div>
+
+          <button type="submit" class="button button--primary button--register">Register</button>
+        </form>
+
+        <p class="register-modal__login-link">¿Tienes ya una cuenta? <a href="#" class="link-primary">Log In</a></p>
+      </div>
+    </div>
+</div>

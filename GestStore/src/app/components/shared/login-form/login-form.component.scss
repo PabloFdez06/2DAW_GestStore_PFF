@@ -1,41 +1,258 @@
 @use '../../../../styles/00-settings/variables' as *;
 @use '../../../../styles/01-tools/mixins' as *;
 
-.login-form {
-  max-width: 400px;
-  margin: $spacing-12 auto;
+.login-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: $spacing-8 auto;
+  padding: $spacing-6;
+  position: relative;
 }
 
-.login-form__fieldset {
+.login-container__back {
+  background: transparent;
   border: none;
-  padding: 0;
-  margin: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+  cursor: pointer;
+  padding: $spacing-2 $spacing-4;
+  margin-bottom: $spacing-6;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  transition: all $transition-base;
+
+  &:hover {
+    color: color-primary(normal-hover);
+    transform: translateX(-4px);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.login-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-8;
+  background: $bg-default;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-lg;
+  min-height: 500px;
+
+  @include respond(md) {
+    gap: $spacing-4;
+  }
+}
+
+.login-content__form-section {
   display: flex;
   flex-direction: column;
   gap: $spacing-6;
+  padding: $spacing-12 $spacing-8;
+  justify-content: center;
+
+  @include respond(md) {
+    padding: $spacing-8 $spacing-6;
+    gap: $spacing-4;
+  }
 }
 
-.login-form__legend {
-  @include text-style($font-size-2xl, $font-weight-bold);
-  margin-bottom: $spacing-4;
-  text-align: center;
-  padding: 0;
+.login-content__illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8;
+  background: linear-gradient(
+    135deg,
+    rgba(107, 90, 255, 0.05) 0%,
+    rgba(107, 90, 255, 0.1) 100%
+  );
+  min-height: 400px;
+
+  @include respond(md) {
+    padding: $spacing-4;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    object-fit: contain;
+  }
 }
 
-.login-form__footer {
-  text-align: center;
-  margin-top: $spacing-6;
+.login-modal__title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  color: #353535;
+  margin: 0;
+}
 
-  a {
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.form-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: $spacing-3 $spacing-3 $spacing-3 $spacing-10;
+  border: 1px solid #464646;
+  border-radius: $radius-md;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  color: #353535;
+  background: $bg-default;
+  transition: border-color $transition-base, box-shadow $transition-base;
+  font-weight: $font-weight-medium;
+
+  &:focus {
+    @include focus-visible;
+    border-color: $color-primary;
+  }
+
+  &::placeholder {
+    color: #757575;
+  }
+
+  &--error {
+    border-color: $error;
+  }
+}
+
+.form-input__icon {
+  position: absolute;
+  left: $spacing-3;
+  width: 30px;
+  height: 30px;
+  color: #464646;
+  pointer-events: none;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.form-checkbox__input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  border: 1px solid #464646;
+  @include focus-visible;
+
+  &:checked {
+    accent-color: $color-primary;
+  }
+}
+
+.form-checkbox__label {
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  color: #353535;
+  font-weight: $font-weight-medium;
+
+  &:hover {
+    color: #464646;
+  }
+}
+
+.button--login-large {
+  width: 129px;
+  padding: $spacing-3 $spacing-6;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-sm;
+}
+
+.login-social {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.login-social__label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: $font-weight-medium;
+  color: #353535;
+  margin: 0;
+}
+
+.login-social__links {
+  display: flex;
+  gap: $spacing-3;
+  align-items: center;
+}
+
+.login-social__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: $gray-500;
+  transition: all $transition-base;
+  @include focus-visible;
+
+  &:hover {
     color: $color-primary;
-    @include transition;
+    transform: scale(1.1);
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.login-register-link {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: $font-weight-medium;
+  color: #353535;
+  margin: 0;
+
+  .link-register {
+    color: #008bd9;
+    text-decoration: none;
+    cursor: pointer;
+    @include focus-visible;
 
     &:hover {
-      color: color-primary(normal-hover);
-    }
-
-    &:focus-visible {
-      @include focus-visible;
+      text-decoration: underline;
     }
   }
+}
+
+.login-illustration-img {
+  max-width: 100%;
+  height: auto;
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  display: block;
 }

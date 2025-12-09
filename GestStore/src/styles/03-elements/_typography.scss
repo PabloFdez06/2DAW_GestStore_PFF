@@ -12,20 +12,62 @@ body {
   font-family: $font-primary;
 }
 
-// Headings
+// Headings - según Figma
 h1, h2, h3, h4, h5, h6 {
   font-family: $font-primary;
-  font-weight: $font-weight-semibold;
-  line-height: $line-tight;
   margin-bottom: $spacing-3;
 }
 
-h1 { font-size: $font-size-4xl; }
-h2 { font-size: $font-size-3xl; }
-h3 { font-size: $font-size-2xl; }
-h4 { font-size: $font-size-xl; }
+// H1: 72pt, Regular, line-height 100%
+h1 { 
+  font-size: $font-size-7xl;
+  font-weight: $font-weight-regular;
+  line-height: $line-tight;
+}
+
+// H2: 64pt, Medium, line-height 100%
+h2 { 
+  font-size: $font-size-6xl;
+  font-weight: $font-weight-medium;
+  line-height: $line-tight;
+}
+
+// H3: 56pt, Semi Bold, line-height 100%
+h3 { 
+  font-size: $font-size-5xl;
+  font-weight: $font-weight-semibold;
+  line-height: $line-tight;
+}
+
+// H4: 24px, Semi Bold, line-height 32px
+h4 { 
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  line-height: $line-heading;
+}
+
 h5 { font-size: $font-size-lg; }
 h6 { font-size: $font-size-base; }
+
+// Text styles - según Figma
+.text-1 {
+  font-size: $font-size-3xl;  // 40pt
+  font-weight: $font-weight-regular;
+  line-height: $line-tight;
+}
+
+.text-2 {
+  font-size: $font-size-2xl;  // 36pt
+  font-weight: $font-weight-regular;
+  line-height: $line-tight;
+}
+
+// Display 1: 48px, Semi Bold, line-height 56px
+.display-1 {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-semibold;
+  line-height: 1.17;
+}
 
 // Párrafos
 p {

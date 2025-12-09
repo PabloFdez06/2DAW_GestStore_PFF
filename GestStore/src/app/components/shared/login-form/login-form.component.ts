@@ -1,29 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { FormInputComponent } from '../form-input/form-input.component';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, FormInputComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent {
+  @Output() backClicked = new EventEmitter<void>();
+  
   email: string = '';
   password: string = '';
+  rememberMe: boolean = false;
   errors: { [key: string]: string } = {};
 
   onSubmit(event: any): void {
     event.preventDefault();
     this.errors = {};
     
-    // Validación básica
-    if (!this.email) {
-      this.errors['email'] = 'El correo es requerido';
-    } else if (!this.isValidEmail(this.email)) {
-      this.errors['email'] = 'El correo no es válido';
+    if (!this.email.trim()) {
+      this.errors['email'] = 'El nombre es requerido';
     }
 
     if (!this.password) {
@@ -31,11 +30,11 @@ export class LoginFormComponent {
     }
 
     if (Object.keys(this.errors).length === 0) {
-      console.log('Formulario válido:', { email: this.email, password: this.password });
+      console.log('Login:', { email: this.email, password: this.password, rememberMe: this.rememberMe });
     }
   }
 
-  private isValidEmail(email: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  onBack(): void {
+    this.backClicked.emit();
   }
 }

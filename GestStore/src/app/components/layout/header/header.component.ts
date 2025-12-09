@@ -9,13 +9,4 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  isMobileMenuOpen = false;
-
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-  }
-
-  closeMobileMenu(): void {
-    this.isMobileMenuOpen = false;
-  }
 }

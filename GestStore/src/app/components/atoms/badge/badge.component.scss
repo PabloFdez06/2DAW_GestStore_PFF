@@ -1,0 +1,52 @@
+@use '../../../../styles/00-settings/variables' as vars;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: vars.$radius-full;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: vars.$font-weight-medium;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+
+  &--small {
+    padding: vars.$spacing-1 vars.$spacing-2;
+    font-size: 0.75rem;
+  }
+
+  &--medium {
+    padding: vars.$spacing-2 vars.$spacing-3;
+    font-size: 0.875rem;
+  }
+
+  &--primary {
+    background-color: vars.$color-primary;
+    color: white;
+  }
+
+  &--secondary {
+    background-color: vars.$gray-200;
+    color: vars.$text-default;
+  }
+
+  &--success {
+    background-color: vars.$success;
+    color: white;
+  }
+
+  &--warning {
+    background-color: vars.$warning;
+    color: white;
+  }
+
+  &--error {
+    background-color: vars.$error;
+    color: white;
+  }
+
+  &--info {
+    background-color: vars.$info;
+    color: white;
+  }
+}

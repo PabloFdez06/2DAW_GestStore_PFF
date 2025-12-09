@@ -1,53 +1,21 @@
 <header class="app-header">
   <div class="app-header__container o-container">
-    <div class="app-header__top o-flex o-flex--between">
-      <!-- Logo -->
-      <a href="/" class="app-header__logo" aria-label="Inicio">
-        <h1>GestStore</h1>
-      </a>
+    <!-- Logo -->
+    <a href="/" class="app-header__logo" aria-label="Inicio - GestStore">
+      <span class="app-header__logo-text">GestStore</span>
+    </a>
 
-      <!-- Navegación Desktop -->
-      <nav class="app-header__nav" aria-label="Navegación principal">
-        <ul class="app-header__menu">
-          <li><a href="/" class="app-header__link">Inicio</a></li>
-          <li><a href="/dashboard" class="app-header__link">Dashboard</a></li>
-          <li><a href="/tareas" class="app-header__link">Tareas</a></li>
-          <li><a href="/almacen" class="app-header__link">Almacén</a></li>
-        </ul>
-      </nav>
+    <!-- Language & Login -->
+    <div class="app-header__actions">
+      <select class="app-header__language" aria-label="Seleccionar idioma">
+        <option value="es">ES (ES)</option>
+        <option value="en">EN (EN)</option>
+        <option value="fr">FR (FR)</option>
+      </select>
 
-      <!-- Acciones Derecha -->
-      <div class="app-header__actions o-flex">
-        <button 
-          class="app-header__user-menu" 
-          aria-label="Menú de usuario"
-          aria-haspopup="true">
-          👤
-        </button>
-        <button 
-          class="app-header__hamburger"
-          [attr.aria-expanded]="isMobileMenuOpen"
-          aria-controls="mobile-menu"
-          (click)="toggleMobileMenu()"
-          aria-label="Abrir menú">
-          ☰
-        </button>
-      </div>
+      <button class="button button--primary button--login-header" aria-label="Iniciar sesión">
+        Login
+      </button>
     </div>
-
-    <!-- Menú Mobile (Oculto en Desktop) -->
-    <nav 
-      id="mobile-menu"
-      class="app-header__mobile-menu"
-      [class.app-header__mobile-menu--open]="isMobileMenuOpen"
-      aria-label="Navegación móvil"
-      aria-hidden="false">
-      <ul class="app-header__mobile-menu-list">
-        <li><a href="/" class="app-header__mobile-link" (click)="closeMobileMenu()">Inicio</a></li>
-        <li><a href="/dashboard" class="app-header__mobile-link" (click)="closeMobileMenu()">Dashboard</a></li>
-        <li><a href="/tareas" class="app-header__mobile-link" (click)="closeMobileMenu()">Tareas</a></li>
-        <li><a href="/almacen" class="app-header__mobile-link" (click)="closeMobileMenu()">Almacén</a></li>
-      </ul>
-    </nav>
   </div>
 </header>

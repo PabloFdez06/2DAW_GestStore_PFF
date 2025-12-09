@@ -1,36 +1,137 @@
-<form class="login-form" (ngSubmit)="onSubmit($event)">
-  <fieldset class="login-form__fieldset">
-    <legend class="login-form__legend">Iniciar Sesión</legend>
+<div class="login-container">
+  <button
+    class="login-container__back"
+    aria-label="Volver"
+    (click)="onBack()"
+  >
+    ← Volver
+  </button>
 
-    <app-form-input
-      id="email"
-      name="email"
-      type="email"
-      label="Correo Electrónico"
-      placeholder="tu@email.com"
-      [required]="true"
-      [(ngModel)]="email"
-      [error]="errors['email']"
-      helpText="Ingresa tu correo registrado"
-    ></app-form-input>
+  <div class="login-content">
+    <div class="login-content__form-section">
+        <h1 class="login-modal__title">Iniciar Sesión</h1>
 
-    <app-form-input
-      id="password"
-      name="password"
-      type="password"
-      label="Contraseña"
-      placeholder="••••••••"
-      [required]="true"
-      [(ngModel)]="password"
-      [error]="errors['password']"
-    ></app-form-input>
+        <form class="login-form" (ngSubmit)="onSubmit($event)">
+          <!-- Usuario Input -->
+          <div class="form-group">
+            <div class="form-input-wrapper">
+              <svg
+                class="form-input__icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"
+                />
+              </svg>
+              <input
+                type="text"
+                class="form-input"
+                placeholder="Introduce el nombre"
+                [(ngModel)]="email"
+                name="email"
+                [class.form-input--error]="errors['email']"
+              />
+            </div>
+          </div>
 
-    <button type="submit" class="button button--primary button--full">
-      Iniciar Sesión
-    </button>
-  </fieldset>
+          <!-- Password Input -->
+          <div class="form-group">
+            <div class="form-input-wrapper">
+              <svg
+                class="form-input__icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <input
+                type="password"
+                class="form-input"
+                placeholder="Introduce la contraseña"
+                [(ngModel)]="password"
+                name="password"
+                [class.form-input--error]="errors['password']"
+              />
+            </div>
+          </div>
 
-  <p class="login-form__footer">
-    ¿No tienes cuenta? <a href="/register">Regístrate aquí</a>
-  </p>
-</form>
+          <!-- Remember Me -->
+          <div class="form-checkbox">
+            <input
+              type="checkbox"
+              id="remember"
+              [(ngModel)]="rememberMe"
+              name="rememberMe"
+              class="form-checkbox__input"
+            />
+            <label for="remember" class="form-checkbox__label">
+              Recuérdame
+            </label>
+          </div>
+
+          <!-- Login Button -->
+          <button
+            type="submit"
+            class="button button--primary button--login-large"
+          >
+            Login
+          </button>
+        </form>
+
+        <!-- Social Login -->
+        <div class="login-social">
+          <p class="login-social__label">Inicia con...</p>
+          <div class="login-social__links">
+            <a href="#" class="login-social__link" title="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                />
+              </svg>
+            </a>
+            <a href="#" class="login-social__link" title="Google">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                />
+              </svg>
+            </a>
+            <a href="#" class="login-social__link" title="X">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.6l-5.165-6.75-5.932 6.75h-3.308l7.73-8.835L2.542 2.25h6.773l4.67 6.168L17.17 2.25h.074zm-1.97 19.5h1.828L5.556 3.966H3.632l12.642 17.784z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Register Link -->
+        <p class="login-register-link">
+          No tienes cuenta? <a href="#" class="link-register">Registrate</a>
+        </p>
+      </div>
+
+      <!-- Illustration -->
+      <div class="login-content__illustration">
+        <img
+          src="/login-illustration.png"
+          alt="Login Illustration"
+          class="login-illustration-img"
+        />
+      </div>
+    </div>
+</div>

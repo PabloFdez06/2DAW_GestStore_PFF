@@ -1,0 +1,54 @@
+@use '../../../../styles/00-settings/variables' as vars;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.card {
+  background-color: white;
+  border-radius: vars.$radius-md;
+  border: 1px solid vars.$border-default;
+  overflow: hidden;
+  transition: all vars.$transition-base;
+
+  &--shadow-small {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  &--shadow-medium {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  &--shadow-large {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  &--hoverable {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__header {
+    padding: vars.$spacing-6;
+    border-bottom: 1px solid vars.$border-default;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: vars.$font-size-lg;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$text-default;
+  }
+
+  &__body {
+    padding: vars.$spacing-6;
+  }
+
+  &__footer {
+    padding: vars.$spacing-6;
+    border-top: 1px solid vars.$border-default;
+    background-color: vars.$gray-50;
+  }
+}

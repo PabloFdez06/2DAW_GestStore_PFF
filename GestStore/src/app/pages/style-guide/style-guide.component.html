@@ -1,0 +1,331 @@
+<div class="style-guide">
+  <h1 class="style-guide__title">Design System - GestStore</h1>
+
+  <nav class="style-guide__nav">
+    <button 
+      class="button button--secondary" 
+      (click)="switchView('components')"
+      [class.button--active]="currentView === 'components'">
+      Componentes
+    </button>
+    <button 
+      class="button button--secondary" 
+      (click)="switchView('colors')"
+      [class.button--active]="currentView === 'colors'">
+      Colores
+    </button>
+    <button 
+      class="button button--secondary" 
+      (click)="switchView('typography')"
+      [class.button--active]="currentView === 'typography'">
+      Tipografía
+    </button>
+    <button 
+      class="button button--secondary" 
+      (click)="switchView('login')"
+      [class.button--active]="currentView === 'login'">
+      Login
+    </button>
+    <button 
+      class="button button--secondary" 
+      (click)="switchView('register')"
+      [class.button--active]="currentView === 'register'">
+      Register
+    </button>
+  </nav>
+
+  @if (currentView === 'components') {
+    <section class="section">
+      <h2 class="section__title">Botones</h2>
+      <div class="component-showcase">
+        <button class="button button--primary">Primary Button</button>
+        <button class="button button--secondary">Secondary Button</button>
+        <button class="button button--success">Success Button</button>
+        <button class="button button--error">Error Button</button>
+        <button class="button button--warning">Warning Button</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__title">Badges</h2>
+      <div class="component-showcase">
+        <app-badge variant="secondary">Secondary</app-badge>
+        <app-badge variant="primary">Primary</app-badge>
+        <app-badge variant="success">Success</app-badge>
+        <app-badge variant="error">Error</app-badge>
+        <app-badge variant="warning">Warning</app-badge>
+        <app-badge variant="info">Info</app-badge>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__title">Tags</h2>
+      <div class="component-showcase">
+        <app-tag color="default">Default</app-tag>
+        <app-tag color="primary">Primary</app-tag>
+        <app-tag color="success">Success</app-tag>
+        <app-tag color="error">Error</app-tag>
+        <app-tag color="warning">Warning</app-tag>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__title">Alerts</h2>
+      <div class="component-showcase component-showcase--vertical">
+        <app-alert variant="success" message="¡Operación completada exitosamente!" />
+        <app-alert variant="error" message="Error: No se pudo completar la operación" />
+        <app-alert variant="warning" message="Advertencia: Verifica los datos antes de continuar" />
+        <app-alert variant="info" message="Información: Recuerda guardar tus cambios" />
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__title">Cards</h2>
+      <div class="component-showcase">
+        <app-card>
+          <h3>Card Title</h3>
+          <p>This is a card with some content inside.</p>
+        </app-card>
+        <app-card>
+          <h3>Another Card</h3>
+          <p>Cards are great for organizing content.</p>
+        </app-card>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__title">Form Inputs</h2>
+      <div class="component-showcase component-showcase--vertical">
+        <app-form-input 
+          label="Nombre completo" 
+          placeholder="Ingresa tu nombre"
+          type="text"
+        />
+        <app-form-input 
+          label="Email" 
+          placeholder="tu@email.com"
+          type="email"
+        />
+        <app-form-input 
+          label="Contraseña" 
+          placeholder="••••••••"
+          type="password"
+        />
+      </div>
+    </section>
+  }
+
+  @if (currentView === 'colors') {
+
+
+    <section class="section">
+      <h2 class="section__title">Primarios</h2>
+      <p class="section__description">Colores primarios usados en la mayoría del diseño</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: rgba(107, 90, 255, 0.18);"></div>
+          <div class="color-card__info">
+            <h3>Primary Light</h3>
+            <p>rgba(107, 90, 255, 0.18)</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #6B5AFF;"></div>
+          <div class="color-card__info">
+            <h3>Primary</h3>
+            <p>#6B5AFF</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+        <section class="section">
+      <h2 class="section__title">Neutral - Escala de Grises</h2>
+      <p class="section__description">Colores neutrales usados en la mayoría de diseños, usados también en DarkMode</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #FFFFFF; border: 1px solid #e9ecef;"></div>
+          <div class="color-card__info">
+            <h3>White</h3>
+            <p>#FFFFFF</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #F8F9FA;"></div>
+          <div class="color-card__info">
+            <h3>Grey 50</h3>
+            <p>#F8F9FA</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #F1F1F1;"></div>
+          <div class="color-card__info">
+            <h3>Grey 100</h3>
+            <p>#F1F1F1</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #EAEAEA;"></div>
+          <div class="color-card__info">
+            <h3>Grey 200</h3>
+            <p>#EAEAEA</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #D4D4D4;"></div>
+          <div class="color-card__info">
+            <h3>Grey 300</h3>
+            <p>#D4D4D4</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #757575;"></div>
+          <div class="color-card__info">
+            <h3>Grey 400</h3>
+            <p>#757575</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #696969;"></div>
+          <div class="color-card__info">
+            <h3>Grey 500</h3>
+            <p>#696969</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #5E5E5E;"></div>
+          <div class="color-card__info">
+            <h3>Grey 600</h3>
+            <p>#5E5E5E</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #585858;"></div>
+          <div class="color-card__info">
+            <h3>Grey 700</h3>
+            <p>#585858</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #464646;"></div>
+          <div class="color-card__info">
+            <h3>Grey 800</h3>
+            <p>#464646</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #353535;"></div>
+          <div class="color-card__info">
+            <h3>Grey 900</h3>
+            <p>#353535</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #292929;"></div>
+          <div class="color-card__info">
+            <h3>Grey 950</h3>
+            <p>#292929</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__title">Especiales / Acentos</h2>
+      <p class="section__description">Colores usados en momentos concretos para dar retoques</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #F21E1E;"></div>
+          <div class="color-card__info">
+            <h3>Acento 1</h3>
+            <p>#F21E1E</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #05A301;"></div>
+          <div class="color-card__info">
+            <h3>Acento 2</h3>
+            <p>#05A301</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #0225FF;"></div>
+          <div class="color-card__info">
+            <h3>Acento 3</h3>
+            <p>#0225FF</p>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background-color: #FFC107;"></div>
+          <div class="color-card__info">
+            <h3>Acento 4</h3>
+            <p>#FFC107</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (currentView === 'typography') {
+    <section class="section">
+      <h2 class="section__title">Estilo de Fuente - IBM Plex Sans</h2>
+      <div class="typography-showcase">
+        <div class="typography-item">
+          <span class="typography-label">H1 - 72pt</span>
+          <span class="typography-weight">Regular</span>
+          <h1>IBM Plex Sans | Regular</h1>
+        </div>
+        
+        <div class="typography-item">
+          <span class="typography-label">H2 - 64pt</span>
+          <span class="typography-weight">Medium</span>
+          <h2>IBM Plex Sans | Medium</h2>
+        </div>
+        
+        <div class="typography-item">
+          <span class="typography-label">H3 - 56pt</span>
+          <span class="typography-weight">Semi Bold</span>
+          <h3>IBM Plex Sans | Semi-Bold</h3>
+        </div>
+        
+        <div class="typography-item">
+          <span class="typography-label">H4 - 24px</span>
+          <span class="typography-weight">Semi Bold</span>
+          <h4>IBM Plex Sans | Semi-Bold</h4>
+        </div>
+
+        <div class="typography-item">
+          <span class="typography-label">Text 1 - 40pt</span>
+          <span class="typography-weight">Regular</span>
+          <p class="text-1">IBM Plex Sans | Regular</p>
+        </div>
+
+        <div class="typography-item">
+          <span class="typography-label">Text 2 - 36pt</span>
+          <span class="typography-weight">Regular</span>
+          <p class="text-2">IBM Plex Sans | Regular</p>
+        </div>
+
+        <div class="typography-item">
+          <span class="typography-label">Display 1 - 48px</span>
+          <span class="typography-weight">Semi Bold</span>
+          <p class="display-1">IBM Plex Sans | Semi-Bold</p>
+        </div>
+
+        <div class="typography-item">
+          <span class="typography-label">Body 1 - 16px</span>
+          <span class="typography-weight">Regular</span>
+          <p>Este es un párrafo regular con texto de ejemplo usando Body 1. IBM Plex Sans es la fuente principal del proyecto.</p>
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (currentView === 'login') {
+    <app-login-form (backClicked)="switchView('components')"></app-login-form>
+  }
+
+  @if (currentView === 'register') {
+    <app-register-form (backClicked)="switchView('components')"></app-register-form>
+  }
+</div>

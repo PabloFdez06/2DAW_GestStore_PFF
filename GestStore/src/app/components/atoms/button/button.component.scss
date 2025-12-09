@@ -1,0 +1,107 @@
+@use '../../../../styles/00-settings/variables' as vars;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.button {
+  cursor: pointer;
+  border: none;
+  border-radius: vars.$radius-sm;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: vars.$font-weight-medium;
+  transition: all vars.$transition-base;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: vars.$spacing-2;
+  
+  @include focus-visible;
+
+  // Sizes
+  &--small {
+    padding: vars.$spacing-2 vars.$spacing-4;
+    font-size: 0.875rem;
+  }
+
+  &--medium {
+    padding: vars.$spacing-3 vars.$spacing-6;
+    font-size: 1rem;
+  }
+
+  &--large {
+    padding: vars.$spacing-4 vars.$spacing-8;
+    font-size: 1.125rem;
+  }
+
+  // Variants
+  &--primary {
+    background-color: vars.$color-primary;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(vars.$color-primary, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(vars.$color-primary, 0.3);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+  }
+
+  &--secondary {
+    background-color: vars.$gray-100;
+    color: vars.$text-default;
+    border: 1px solid vars.$border-default;
+
+    &:hover:not(:disabled) {
+      background-color: vars.$gray-200;
+      border-color: vars.$text-default;
+    }
+  }
+
+  &--tertiary {
+    background-color: transparent;
+    color: vars.$color-primary;
+    border: 1px solid vars.$color-primary;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(vars.$color-primary, 0.1);
+    }
+  }
+
+  &--danger {
+    background-color: vars.$error;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(vars.$error, 10%);
+    }
+  }
+
+  &--success {
+    background-color: vars.$success;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(vars.$success, 10%);
+    }
+  }
+
+  &--warning {
+    background-color: vars.$warning;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(vars.$warning, 10%);
+    }
+  }
+
+  // Disabled state
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+}
