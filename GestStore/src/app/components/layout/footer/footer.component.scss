@@ -1,0 +1,93 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.app-footer {
+  background-color: $gray-50;
+  border-top: $border-thin solid $border-default;
+  margin-top: $spacing-16;
+  padding-top: $spacing-12;
+  padding-bottom: $spacing-8;
+}
+
+.app-footer__container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.app-footer__content {
+  margin-top: $spacing-4;
+}
+
+.app-footer__section {
+  @include respond(md) {
+    padding-right: $spacing-4;
+  }
+}
+
+.app-footer__title {
+  @include text-style($font-size-lg, $font-weight-semibold);
+  margin-bottom: $spacing-4;
+}
+
+.app-footer__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-3;
+  align-items: flex-start;
+}
+
+.app-footer__link {
+  @include text-style($font-size-sm, $font-weight-regular);
+  color: $text-default;
+  @include transition;
+
+  &:hover {
+    color: $color-primary;
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.app-footer__social {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.app-footer__social-link {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-md;
+  background-color: $color-primary;
+  color: $text-inverse;
+  font-size: $font-size-base;
+  @include transition;
+  text-decoration: none;
+
+  &:hover {
+    background-color: color-primary(normal-hover);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.app-footer__bottom {
+  border-top: $border-thin solid $border-default;
+  padding-top: $spacing-6;
+  text-align: center;
+}
+
+.app-footer__copyright {
+  @include text-style($font-size-xs, $font-weight-regular);
+  color: $gray-500;
+  margin: 0;
+}

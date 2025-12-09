@@ -1,0 +1,41 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.login-form {
+  max-width: 400px;
+  margin: $spacing-12 auto;
+}
+
+.login-form__fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+}
+
+.login-form__legend {
+  @include text-style($font-size-2xl, $font-weight-bold);
+  margin-bottom: $spacing-4;
+  text-align: center;
+  padding: 0;
+}
+
+.login-form__footer {
+  text-align: center;
+  margin-top: $spacing-6;
+
+  a {
+    color: $color-primary;
+    @include transition;
+
+    &:hover {
+      color: color-primary(normal-hover);
+    }
+
+    &:focus-visible {
+      @include focus-visible;
+    }
+  }
+}

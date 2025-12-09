@@ -1,0 +1,57 @@
+@use '../00-settings/variables' as *;
+
+:root {
+  // Colores - Light Theme (default)
+  --color-primary: #{$color-primary};
+  --color-accent-1: #{$color-accent-1};
+  --color-accent-2: #{$color-accent-2};
+  --color-accent-3: #{$color-accent-3};
+  --color-accent-4: #{$color-accent-4};
+
+  // Neutrales
+  --gray-50: #{$gray-50};
+  --gray-100: #{$gray-100};
+  --gray-200: #{$gray-200};
+  --gray-300: #{$gray-300};
+  --gray-400: #{$gray-400};
+  --gray-500: #{$gray-500};
+  --gray-600: #{$gray-600};
+  --gray-700: #{$gray-700};
+  --gray-800: #{$gray-800};
+  --gray-900: #{$gray-900};
+
+  // Semánticos
+  --bg-default: #{$bg-default};
+  --text-default: #{$text-default};
+  --text-inverse: #{$text-inverse};
+  --border-default: #{$border-default};
+  --color-success: #{$success};
+  --color-error: #{$error};
+  --color-warning: #{$warning};
+  --color-info: #{$info};
+}
+
+// Dark Theme
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-default: #{$gray-900};
+    --text-default: #{$gray-50};
+    --text-inverse: #{$gray-900};
+    --border-default: #{$gray-700};
+  }
+}
+
+// Manual toggle (si se usa data-theme="dark")
+[data-theme='dark'] {
+  --bg-default: #{$gray-900};
+  --text-default: #{$gray-50};
+  --text-inverse: #{$gray-900};
+  --border-default: #{$gray-700};
+}
+
+[data-theme='light'] {
+  --bg-default: #{$bg-default};
+  --text-default: #{$text-default};
+  --text-inverse: #{$text-inverse};
+  --border-default: #{$border-default};
+}

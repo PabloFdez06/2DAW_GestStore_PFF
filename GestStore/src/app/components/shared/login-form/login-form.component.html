@@ -1,0 +1,36 @@
+<form class="login-form" (ngSubmit)="onSubmit($event)">
+  <fieldset class="login-form__fieldset">
+    <legend class="login-form__legend">Iniciar Sesión</legend>
+
+    <app-form-input
+      id="email"
+      name="email"
+      type="email"
+      label="Correo Electrónico"
+      placeholder="tu@email.com"
+      [required]="true"
+      [(ngModel)]="email"
+      [error]="errors['email']"
+      helpText="Ingresa tu correo registrado"
+    ></app-form-input>
+
+    <app-form-input
+      id="password"
+      name="password"
+      type="password"
+      label="Contraseña"
+      placeholder="••••••••"
+      [required]="true"
+      [(ngModel)]="password"
+      [error]="errors['password']"
+    ></app-form-input>
+
+    <button type="submit" class="button button--primary button--full">
+      Iniciar Sesión
+    </button>
+  </fieldset>
+
+  <p class="login-form__footer">
+    ¿No tienes cuenta? <a href="/register">Regístrate aquí</a>
+  </p>
+</form>

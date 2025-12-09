@@ -1,0 +1,12 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.app-main {
+  flex: 1 1 auto;
+  padding-top: $spacing-8;
+  padding-bottom: $spacing-8;
+}
+
+.app-main__container {
+  min-height: 400px;
+}
