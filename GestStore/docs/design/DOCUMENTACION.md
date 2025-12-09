@@ -1,4 +1,4 @@
-# Sección 1: Arquitectura CSS y comunicación visual
+# Fase 1: Fundamentos y Arquitectura CSS
 
 ## 1.1 Principios de comunicación visual
 
@@ -129,3 +129,95 @@ export class RegisterFormComponent { ... }
 ```
 
 La ausencia de la propiedad `encapsulation` indica que se está usando la opción Emulated por defecto.
+
+
+---
+
+# Fase 2: HTML semántico y componentes de Layout
+
+## 2.1 Elementos semánticos utilizados
+
+En la aplicación se emplean los siguientes elementos semánticos para estructurar el contenido:
+
+- `<header>`: Encabezado principal, contiene el logo, navegación y acciones de usuario.
+- `<nav>`: Navegación principal y secundaria.
+- `<main>`: Contenedor del contenido principal de cada página.
+- `<section>`: Agrupa bloques de contenido relacionados, como enlaces legales o redes sociales en el footer.
+- `<footer>`: Pie de página con información legal y de contacto.
+- `<form>`: Para formularios de login y registro.
+- `<fieldset>` y `<legend>`: Para agrupar y describir campos relacionados en formularios.
+- `<aside>`: Opcional, para contenido secundario si el diseño lo requiere.
+
+**Ejemplo de código:**
+```html
+<header class="app-header">
+  <nav> ... </nav>
+</header>
+<main class="app-main">
+  <section> ... </section>
+</main>
+<footer class="app-footer">
+  <section> ... </section>
+</footer>
+```
+
+---
+
+## 2.2 Jerarquía de headings
+
+La estrategia de headings sigue estas reglas:
+- Solo un `<h1>` por página, para el título principal.
+- `<h2>` para secciones principales.
+- `<h3>` para subsecciones.
+- Nunca se saltan niveles.
+
+**Diagrama de jerarquía:**
+```
+h1: Título principal de la página
+  └─ h2: Sección principal
+      └─ h3: Subsección
+```
+
+![Jerarquia titulos](image-2.png)
+
+---
+
+## 2.3 Estructura de formularios
+
+Los formularios usan `<form>`, `<fieldset>`, `<legend>`, y el componente `form-input` para cada campo. Los labels están correctamente asociados a los inputs mediante `for` e `id`.
+
+**Ejemplo de código de form-input:**
+```html
+<form class="register-modal__form" (ngSubmit)="onSubmit($event)">
+    <fieldset>
+    <legend>Datos de registro</legend>
+    <div class="form-group">
+        <input type="text" 
+                class="form-input form-input--with-icon" 
+                placeholder="Introduce el nombre"
+                [(ngModel)]="nombre"
+                name="nombre"
+                [class.form-input--error]="errors['nombre']">
+        <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+        </svg>
+        @if (errors['nombre']) {
+        <p class="form-error">{{ errors['nombre'] }}</p>
+        }
+    </div>
+
+```
+
+![Register](image-1.png)
+
+---
+
+**Fase 2 completada:**
+- Componentes de layout semánticos y reutilizables.
+- Componente form-input funcional y accesible.
+- Formularios estructurados y completos.
+- Estilos SCSS siguiendo BEM y usando variables.
+- Custom Properties CSS para temas.
+- Documentación ampliada en este archivo.
+
+

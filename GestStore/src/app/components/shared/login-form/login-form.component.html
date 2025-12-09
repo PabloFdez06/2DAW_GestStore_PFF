@@ -12,74 +12,77 @@
         <h1 class="login-modal__title">Iniciar Sesión</h1>
 
         <form class="login-form" (ngSubmit)="onSubmit($event)">
-          <!-- Usuario Input -->
-          <div class="form-group">
-            <div class="form-input-wrapper">
-              <svg
-                class="form-input__icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path
-                  d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"
+          <fieldset>
+            <legend>Datos de acceso</legend>
+            <!-- Usuario Input -->
+            <div class="form-group">
+              <div class="form-input-wrapper">
+                <svg
+                  class="form-input__icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"
+                  />
+                </svg>
+                <input
+                  type="text"
+                  class="form-input"
+                  placeholder="Introduce el nombre"
+                  [(ngModel)]="email"
+                  name="email"
+                  [class.form-input--error]="errors['email']"
                 />
-              </svg>
-              <input
-                type="text"
-                class="form-input"
-                placeholder="Introduce el nombre"
-                [(ngModel)]="email"
-                name="email"
-                [class.form-input--error]="errors['email']"
-              />
+              </div>
             </div>
-          </div>
 
-          <!-- Password Input -->
-          <div class="form-group">
-            <div class="form-input-wrapper">
-              <svg
-                class="form-input__icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-              >
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-              <input
-                type="password"
-                class="form-input"
-                placeholder="Introduce la contraseña"
-                [(ngModel)]="password"
-                name="password"
-                [class.form-input--error]="errors['password']"
-              />
+            <!-- Password Input -->
+            <div class="form-group">
+              <div class="form-input-wrapper">
+                <svg
+                  class="form-input__icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input
+                  type="password"
+                  class="form-input"
+                  placeholder="Introduce la contraseña"
+                  [(ngModel)]="password"
+                  name="password"
+                  [class.form-input--error]="errors['password']"
+                />
+              </div>
             </div>
-          </div>
 
-          <!-- Remember Me -->
-          <div class="form-checkbox">
-            <input
-              type="checkbox"
-              id="remember"
-              [(ngModel)]="rememberMe"
-              name="rememberMe"
-              class="form-checkbox__input"
-            />
-            <label for="remember" class="form-checkbox__label">
-              Recuérdame
-            </label>
-          </div>
+            <!-- Remember Me -->
+            <div class="form-checkbox">
+              <input
+                type="checkbox"
+                id="remember"
+                [(ngModel)]="rememberMe"
+                name="rememberMe"
+                class="form-checkbox__input"
+              />
+              <label for="remember" class="form-checkbox__label">
+                Recuérdame
+              </label>
+            </div>
 
-          <!-- Login Button -->
-          <button
-            type="submit"
-            class="button button--primary button--login-large"
-          >
-            Login
-          </button>
+            <!-- Login Button -->
+            <button
+              type="submit"
+              class="button button--primary button--login-large"
+            >
+              Login
+            </button>
+          </fieldset>
         </form>
 
         <!-- Social Login -->
