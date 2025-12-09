@@ -115,17 +115,27 @@
   font-size: 0.875rem;
   color: $gray-500;
   margin: 0;
+  border: none;
 
   a {
     color: $color-primary;
     text-decoration: none;
     font-weight: $font-weight-semibold;
-    @include focus-visible;
 
     &:hover {
       text-decoration: underline;
     }
+
+    &:focus-visible {
+      outline: none;
+    }
   }
+}
+
+.link-primary:focus {
+  outline: none;
+  box-shadow: none;
+  
 }
 
 .form-group {
@@ -189,10 +199,16 @@
   width: 18px;
   height: 18px;
   cursor: pointer;
-  @include focus-visible;
+  outline: none;
+  box-shadow: none;
 
   &:checked {
     accent-color: $color-primary;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
   }
 }
 

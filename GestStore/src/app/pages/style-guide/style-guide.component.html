@@ -32,6 +32,12 @@
       [class.button--active]="currentView === 'register'">
       Register
     </button>
+    <button 
+      class="button button--secondary" 
+      (click)="switchView('page')"
+      [class.button--active]="currentView === 'page'">
+      Página
+    </button>
   </nav>
 
   @if (currentView === 'components') {
@@ -97,16 +103,22 @@
       <h2 class="section__title">Form Inputs</h2>
       <div class="component-showcase component-showcase--vertical">
         <app-form-input 
+          id="guide-nombre"
+          name="nombre"
           label="Nombre completo" 
           placeholder="Ingresa tu nombre"
           type="text"
         />
         <app-form-input 
+          id="guide-email"
+          name="email"
           label="Email" 
           placeholder="tu@email.com"
           type="email"
         />
         <app-form-input 
+          id="guide-password"
+          name="password"
           label="Contraseña" 
           placeholder="••••••••"
           type="password"
@@ -327,5 +339,20 @@
 
   @if (currentView === 'register') {
     <app-register-form (backClicked)="switchView('components')"></app-register-form>
+  }
+
+  @if (currentView === 'page') {
+    <app-header></app-header>
+    <app-main>
+      <h1 class="page-demo__title">Contenido Principal</h1>
+      <p class="page-demo__description">Esta es la vista de página completa mostrando el Header, Main y Footer en su disposición natural.</p>
+      <div class="page-demo__content">
+        <section class="page-demo__section">
+          <h2>Sección de Ejemplo</h2>
+          <p>Aquí puedes ver cómo se estructura la página con todos los componentes de layout trabajando juntos.</p>
+        </section>
+      </div>
+    </app-main>
+    <app-footer></app-footer>
   }
 </div>

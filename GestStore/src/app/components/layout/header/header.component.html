@@ -1,7 +1,7 @@
 <header class="app-header">
   <div class="app-header__container o-container">
     <!-- Logo -->
-    <a href="/" class="app-header__logo" aria-label="Inicio - GestStore">
+    <a routerLink="/" class="app-header__logo" aria-label="Inicio - GestStore">
       <span class="app-header__logo-text">GestStore</span>
     </a>
 
@@ -13,7 +13,7 @@
         <option value="fr">FR (FR)</option>
       </select>
 
-      <button class="button button--primary button--login-header" aria-label="Iniciar sesión">
+      <button class="button button--primary button--login-header" aria-label="Iniciar sesión" (click)="navigateToLogin()">
         Login
       </button>
     </div>

@@ -1,11 +1,12 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
@@ -16,6 +17,8 @@ export class LoginFormComponent {
   password: string = '';
   rememberMe: boolean = false;
   errors: { [key: string]: string } = {};
+
+  constructor(private router: Router) {}
 
   onSubmit(event: any): void {
     event.preventDefault();
@@ -35,6 +38,6 @@ export class LoginFormComponent {
   }
 
   onBack(): void {
-    this.backClicked.emit();
+    this.router.navigate(['/']);
   }
 }

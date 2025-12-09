@@ -29,6 +29,7 @@
                 </svg>
                 <input
                   type="text"
+                  id="login-email"
                   class="form-input"
                   placeholder="Introduce el nombre"
                   [(ngModel)]="email"
@@ -52,6 +53,7 @@
                 </svg>
                 <input
                   type="password"
+                  id="login-password"
                   class="form-input"
                   placeholder="Introduce la contraseña"
                   [(ngModel)]="password"
@@ -124,7 +126,7 @@
 
         <!-- Register Link -->
         <p class="login-register-link">
-          No tienes cuenta? <a href="#" class="link-register">Registrate</a>
+          No tienes cuenta? <a routerLink="/register" class="link-register">Registrate</a>
         </p>
       </div>
 

@@ -26,10 +26,13 @@
   align-items: center;
   gap: $spacing-2;
   text-decoration: none;
-  @include focus-visible;
 
   &:hover {
     opacity: 0.8;
+  }
+
+  &:focus-visible {
+    outline: none;
   }
 }
 

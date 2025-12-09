@@ -1,11 +1,12 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.scss']
 })
@@ -20,6 +21,8 @@ export class RegisterFormComponent {
   confirmPassword: string = '';
   agreeTerms: boolean = false;
   errors: { [key: string]: string } = {};
+
+  constructor(private router: Router) {}
 
   onSubmit(event: any): void {
     event.preventDefault();
@@ -73,6 +76,6 @@ export class RegisterFormComponent {
   }
 
   onBack(): void {
-    this.backClicked.emit();
+    this.router.navigate(['/']);
   }
 }
