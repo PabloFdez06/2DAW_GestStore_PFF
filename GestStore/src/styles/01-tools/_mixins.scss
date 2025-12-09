@@ -1,0 +1,75 @@
+@use '../00-settings/variables' as *;
+
+// ============================================================================
+// BREAKPOINTS RESPONSIVOS
+// ============================================================================
+@mixin respond($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == md {
+    @media (min-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) { @content; }
+  }
+}
+
+// ============================================================================
+// TIPOGRAFÍA
+// ============================================================================
+@mixin text-style($size: $font-size-base, $weight: $font-weight-regular, $lh: $line-normal) {
+  font-family: $font-primary;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $lh;
+}
+
+// ============================================================================
+// ACCESIBILIDAD - FOCUS VISIBLE
+// ============================================================================
+@mixin focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
+}
+
+// ============================================================================
+// TRANSICIONES
+// ============================================================================
+@mixin transition($properties: all, $duration: $transition-base) {
+  transition: $properties $duration $transition-easing;
+}
+
+// ============================================================================
+// FLEX UTILITIES
+// ============================================================================
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// ============================================================================
+// TRUNCATE TEXT
+// ============================================================================
+@mixin truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ============================================================================
+// ABSOLUTE CENTER
+// ============================================================================
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

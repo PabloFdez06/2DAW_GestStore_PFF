@@ -1,0 +1,66 @@
+@use '../00-settings/variables' as *;
+@use '../01-tools/mixins' as *;
+
+.form-group {
+  margin-bottom: $spacing-4;
+}
+
+.form-label {
+  @include text-style($font-size-sm, $font-weight-medium);
+  display: block;
+  margin-bottom: $spacing-2;
+  color: $text-default;
+
+  .required {
+    color: $error;
+  }
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  border: $border-thin solid $border-default;
+  border-radius: $radius-md;
+  font-family: $font-primary;
+  font-size: $font-size-base;
+  @include transition;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba(107, 90, 255, 0.1);
+  }
+
+  &:disabled {
+    background-color: $gray-100;
+    color: $gray-500;
+    cursor: not-allowed;
+  }
+
+  &--error {
+    border-color: $error;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(242, 30, 30, 0.1);
+    }
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-help {
+  @include text-style($font-size-xs, $font-weight-regular);
+  margin-top: $spacing-2;
+  color: $gray-500;
+}
+
+.form-error {
+  @include text-style($font-size-xs, $font-weight-regular);
+  margin-top: $spacing-2;
+  color: $error;
+}

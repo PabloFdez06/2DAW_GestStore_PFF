@@ -1,0 +1,105 @@
+@use '../00-settings/variables' as *;
+@use '../01-tools/mixins' as *;
+
+// Contenedor principal
+.o-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: $spacing-4;
+  
+  @include respond(md) {
+    padding-inline: $spacing-6;
+  }
+}
+
+// Wrapper fullwidth
+.o-wrapper {
+  width: 100%;
+}
+
+// Página base
+.o-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.o-page__header {
+  flex-shrink: 0;
+}
+
+.o-page__main {
+  flex: 1 1 auto;
+}
+
+.o-page__footer {
+  flex-shrink: 0;
+}
+
+// Grid 12 columnas
+.o-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: $spacing-4;
+  
+  @include respond(md) {
+    gap: $spacing-6;
+  }
+}
+
+.o-grid__item {
+  grid-column: span 12;
+  
+  &--sm-6 {
+    @include respond(sm) { grid-column: span 6; }
+  }
+  
+  &--md-6 {
+    @include respond(md) { grid-column: span 6; }
+  }
+  
+  &--md-4 {
+    @include respond(md) { grid-column: span 4; }
+  }
+  
+  &--md-3 {
+    @include respond(md) { grid-column: span 3; }
+  }
+  
+  &--lg-6 {
+    @include respond(lg) { grid-column: span 6; }
+  }
+  
+  &--lg-4 {
+    @include respond(lg) { grid-column: span 4; }
+  }
+  
+  &--lg-3 {
+    @include respond(lg) { grid-column: span 3; }
+  }
+}
+
+// Flex utilities
+.o-flex {
+  display: flex;
+  gap: $spacing-4;
+  
+  &--column { flex-direction: column; }
+  &--center { @include flex-center; }
+  &--between { justify-content: space-between; }
+  &--end { justify-content: flex-end; }
+  &--wrap { flex-wrap: wrap; }
+  &--gap-sm { gap: $spacing-2; }
+  &--gap-lg { gap: $spacing-6; }
+}
+
+// Stack (espaciado vertical)
+.o-stack {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  
+  &--sm { gap: $spacing-2; }
+  &--lg { gap: $spacing-6; }
+}

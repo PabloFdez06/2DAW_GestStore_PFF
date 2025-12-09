@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+// ITCSS: de menor a mayor especificidad
+
+// 1) Settings
+@use './styles/00-settings/variables';
+
+// 2) Tools
+@use './styles/01-tools/mixins';
+
+// 3) Generic
+@use './styles/02-generic/reset';
+
+// 4) Elements
+@use './styles/03-elements/typography';
+
+// 5) Objects (layout)
+@use './styles/04-objects/layout';
+
+// 6) Components
+@use './styles/05-components/button';
+@use './styles/05-components/form';
+@use './styles/05-components/card';
+@use './styles/05-components/alert';

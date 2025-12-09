@@ -1,0 +1,49 @@
+@use '../00-settings/variables' as *;
+@use '../01-tools/mixins' as *;
+
+.alert {
+  padding: $spacing-4;
+  border-radius: $radius-md;
+  border-left: 4px solid;
+  display: flex;
+  gap: $spacing-3;
+  align-items: flex-start;
+
+  &--success {
+    background-color: rgba($success, 0.1);
+    border-color: $success;
+    color: darken($success, 20%);
+  }
+
+  &--error {
+    background-color: rgba($error, 0.1);
+    border-color: $error;
+    color: darken($error, 20%);
+  }
+
+  &--warning {
+    background-color: rgba($warning, 0.1);
+    border-color: $warning;
+    color: darken($warning, 30%);
+  }
+
+  &--info {
+    background-color: rgba($info, 0.1);
+    border-color: $info;
+    color: darken($info, 20%);
+  }
+}
+
+.alert__close {
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  @include transition;
+  color: inherit;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

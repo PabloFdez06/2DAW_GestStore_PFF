@@ -1,0 +1,92 @@
+@use '../00-settings/variables' as *;
+@use '../01-tools/mixins' as *;
+
+html {
+  font-size: 100%;
+}
+
+body {
+  @include text-style($font-size-base, $font-weight-regular, $line-normal);
+  background-color: $bg-default;
+  color: $text-default;
+  font-family: $font-primary;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-primary;
+  font-weight: $font-weight-semibold;
+  line-height: $line-tight;
+  margin-bottom: $spacing-3;
+}
+
+h1 { font-size: $font-size-4xl; }
+h2 { font-size: $font-size-3xl; }
+h3 { font-size: $font-size-2xl; }
+h4 { font-size: $font-size-xl; }
+h5 { font-size: $font-size-lg; }
+h6 { font-size: $font-size-base; }
+
+// Párrafos
+p {
+  @include text-style($font-size-base, $font-weight-regular, $line-normal);
+  margin-bottom: $spacing-4;
+}
+
+small, .text-sm {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+}
+
+strong, .text-bold {
+  font-weight: $font-weight-semibold;
+}
+
+// Enlaces
+a {
+  color: $interactive-primary;
+  @include transition;
+
+  &:hover {
+    color: color-primary(normal-hover);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// Código
+code, pre {
+  background-color: $gray-100;
+  border-radius: $radius-sm;
+  font-family: 'Courier New', monospace;
+}
+
+code {
+  padding: 2px 6px;
+  font-size: $font-size-sm;
+}
+
+pre {
+  padding: $spacing-4;
+  overflow-x: auto;
+}
+
+// Listas
+ul, ol {
+  margin-bottom: $spacing-4;
+}
+
+li {
+  margin-bottom: $spacing-2;
+}
+
+// Blockquote
+blockquote {
+  border-left: 4px solid $color-primary;
+  padding-left: $spacing-4;
+  margin: $spacing-4 0;
+  font-style: italic;
+  color: $gray-600;
+}
