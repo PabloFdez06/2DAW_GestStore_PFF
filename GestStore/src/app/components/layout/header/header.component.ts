@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 
@@ -10,9 +10,20 @@ import { RouterModule, Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  isMenuOpen = signal(false);
+
   constructor(private router: Router) {}
+
+  toggleMenu(): void {
+    this.isMenuOpen.update(open => !open);
+  }
+
+  closeMenu(): void {
+    this.isMenuOpen.set(false);
+  }
 
   navigateToLogin(): void {
     this.router.navigate(['/login']);
+    this.closeMenu();
   }
 }

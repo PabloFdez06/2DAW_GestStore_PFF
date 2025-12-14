@@ -1,0 +1,30 @@
+<div class="form-group">
+  <label [for]="id" class="form-label" *ngIf="label">
+    {{ label }}
+    <span class="required" *ngIf="required" aria-label="requerido">*</span>
+  </label>
+  
+  <select
+    [id]="id"
+    [name]="name"
+    [required]="required"
+    [disabled]="disabled"
+    [value]="value"
+    [class.form-select--error]="error"
+    class="form-select"
+    (change)="onChange($event)"
+    aria-describedby="help-text error-text"
+  >
+    <option [value]="''" disabled selected *ngIf="!value">
+      {{ placeholder }}
+    </option>
+    <option *ngFor="let option of options" 
+            [value]="option.value" 
+            [disabled]="option.disabled">
+      {{ option.label }}
+    </option>
+  </select>
+
+  <p class="form-help" id="help-text" *ngIf="helpText">{{ helpText }}</p>
+  <p class="form-error" id="error-text" *ngIf="error" role="alert">{{ error }}</p>
+</div>

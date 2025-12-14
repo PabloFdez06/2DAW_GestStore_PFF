@@ -26,6 +26,7 @@
   align-items: center;
   gap: $spacing-2;
   text-decoration: none;
+  flex-shrink: 0;
 
   &:hover {
     opacity: 0.8;
@@ -43,17 +44,121 @@
   margin: 0;
 }
 
-.app-header__logo-icon {
-  width: 28px;
-  height: 28px;
-  color: $color-primary;
+// Desktop Navigation
+.app-header__nav {
+  display: flex;
+  gap: $spacing-6;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &--desktop {
+    display: none;
+
+    @include respond(lg) {
+      display: flex;
+    }
+  }
+
+  &--mobile {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1px solid $border-default;
+    flex-direction: column;
+    padding: $spacing-4;
+    gap: $spacing-3;
+    box-shadow: $shadow-md;
+    animation: slideDown $transition-base ease-out;
+
+    @include respond(lg) {
+      display: none;
+    }
+  }
 }
 
+.app-header__nav-link {
+  color: $text-default;
+  text-decoration: none;
+  font-weight: $font-weight-medium;
+  @include transition;
+  padding: $spacing-2 $spacing-4;
+  border-radius: $radius-md;
+
+  &:hover {
+    color: $color-primary;
+    background-color: rgba($color-primary, 0.1);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// Hamburger Menu
+.app-header__hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: $spacing-2;
+  align-items: center;
+
+  @include respond(lg) {
+    display: none;
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.hamburger__line {
+  width: 24px;
+  height: 2px;
+  background-color: $text-default;
+  @include transition;
+  transform-origin: center;
+
+  &--top {
+    transform: translateY(calc(-#{$spacing-1} - 0.125rem));
+  }
+
+  &--bottom {
+    transform: translateY(calc(#{$spacing-1} + 0.125rem));
+  }
+}
+
+// Desktop Actions
 .app-header__actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $spacing-4;
+
+  &--desktop {
+    display: none;
+
+    @include respond(lg) {
+      display: flex;
+    }
+  }
+}
+
+// Mobile Actions
+.app-header__mobile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  margin-top: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: 1px solid $border-default;
+  width: 100%;
 }
 
 .app-header__language {
@@ -76,6 +181,24 @@
   }
 }
 
-.app-header__login-btn {
+.button--login-header {
   white-space: nowrap;
+  flex-shrink: 0;
 }
+
+.button--login-mobile {
+  width: 100%;
+}
+
+// Animation
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
