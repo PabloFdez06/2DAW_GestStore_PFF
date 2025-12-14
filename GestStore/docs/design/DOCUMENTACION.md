@@ -1232,15 +1232,9 @@ Todos los componentes cumplen con estándares WCAG 2.1:
 - Navegación responsive con hamburger menu
 - Style Guide profesional e interactivo
 - Paleta de colores documentada (completa)
-- Accesibilidad (WCAG 2.1)
+- Accesibilidad
 - Nomenclatura BEM aplicada
 - Responsive design (mobile, tablet, desktop)
-
-**Compilación:**
-- 0 Errores TypeScript
-- 0 Errores SCSS críticos
-- Build exitoso (239.20 kB)
-- Servidor de desarrollo activo
 
 ---
 
