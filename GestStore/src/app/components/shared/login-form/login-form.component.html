@@ -1,4 +1,4 @@
-<div class="login-container">
+<section class="login-container">
   <button
     class="login-container__back"
     aria-label="Volver"
@@ -7,16 +7,16 @@
     ← Volver
   </button>
 
-  <div class="login-content">
-    <div class="login-content__form-section">
+  <section class="login-content">
+    <section class="login-content__form-section">
         <h1 class="login-modal__title">Iniciar Sesión</h1>
 
         <form class="login-form" (ngSubmit)="onSubmit($event)">
           <fieldset>
             <legend>Datos de acceso</legend>
             <!-- Usuario Input -->
-            <div class="form-group">
-              <div class="form-input-wrapper">
+            <label class="form-group">
+              <span class="form-input-wrapper">
                 <svg
                   class="form-input__icon"
                   viewBox="0 0 24 24"
@@ -36,12 +36,12 @@
                   name="email"
                   [class.form-input--error]="errors['email']"
                 />
-              </div>
-            </div>
+              </span>
+            </label>
 
             <!-- Password Input -->
-            <div class="form-group">
-              <div class="form-input-wrapper">
+            <label class="form-group">
+              <span class="form-input-wrapper">
                 <svg
                   class="form-input__icon"
                   viewBox="0 0 24 24"
@@ -60,11 +60,11 @@
                   name="password"
                   [class.form-input--error]="errors['password']"
                 />
-              </div>
-            </div>
+              </span>
+            </label>
 
             <!-- Remember Me -->
-            <div class="form-checkbox">
+            <label class="form-checkbox">
               <input
                 type="checkbox"
                 id="remember"
@@ -72,15 +72,15 @@
                 name="rememberMe"
                 class="form-checkbox__input"
               />
-              <label for="remember" class="form-checkbox__label">
+              <span class="form-checkbox__label">
                 Recuérdame
-              </label>
-            </div>
+              </span>
+            </label>
 
             <!-- Login Button -->
             <button
               type="submit"
-              class="button button--primary button--login-large"
+              class="button button--primary"
             >
               Login
             </button>
@@ -88,17 +88,17 @@
         </form>
 
         <!-- Social Login -->
-        <div class="login-social">
+        <nav class="login-social">
           <p class="login-social__label">Inicia con...</p>
-          <div class="login-social__links">
-            <a href="#" class="login-social__link" title="Facebook">
+          <ul class="login-social__links">
+            <li><a href="#" class="login-social__link" title="Facebook">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
                   d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
                 />
               </svg>
-            </a>
-            <a href="#" class="login-social__link" title="Google">
+            </a></li>
+            <li><a href="#" class="login-social__link" title="Google">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -113,30 +113,30 @@
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-            </a>
-            <a href="#" class="login-social__link" title="X">
+            </a></li>
+            <li><a href="#" class="login-social__link" title="X">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
                   d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.6l-5.165-6.75-5.932 6.75h-3.308l7.73-8.835L2.542 2.25h6.773l4.67 6.168L17.17 2.25h.074zm-1.97 19.5h1.828L5.556 3.966H3.632l12.642 17.784z"
                 />
               </svg>
-            </a>
-          </div>
-        </div>
+            </a></li>
+          </ul>
+        </nav>
 
         <!-- Register Link -->
         <p class="login-register-link">
           No tienes cuenta? <a routerLink="/register" class="link-register">Registrate</a>
         </p>
-      </div>
+      </section>
 
       <!-- Illustration -->
-      <div class="login-content__illustration">
+      <section class="login-content__illustration">
         <img
           src="/login-illustration.png"
           alt="Login Illustration"
           class="login-illustration-img"
         />
-      </div>
-    </div>
-</div>
+      </section>
+    </section>
+</section>

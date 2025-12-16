@@ -1,5 +1,5 @@
 <header class="app-header">
-  <div class="app-header__container o-container">
+  <section class="app-header__container o-container">
     <!-- Logo -->
     <a routerLink="/" class="app-header__logo" aria-label="Inicio - GestStore">
       <span class="app-header__logo-text">GestStore</span>
@@ -24,7 +24,7 @@
     </button>
 
     <!-- Language & Login (Desktop) -->
-    <div class="app-header__actions app-header__actions--desktop">
+    <aside class="app-header__actions app-header__actions--desktop">
       <select class="app-header__language" aria-label="Seleccionar idioma">
         <option value="es">ES (ES)</option>
         <option value="en">EN (EN)</option>
@@ -34,8 +34,8 @@
       <button class="button button--primary button--login-header" aria-label="Iniciar sesión" (click)="navigateToLogin()">
         Login
       </button>
-    </div>
-  </div>
+    </aside>
+  </section>
 
   <!-- Mobile Menu -->
   @if (isMenuOpen()) {
@@ -44,7 +44,7 @@
       <a href="#" class="app-header__nav-link" (click)="closeMenu()">Productos</a>
       <a href="#" class="app-header__nav-link" (click)="closeMenu()">Contacto</a>
       
-      <div class="app-header__mobile-actions">
+      <aside class="app-header__mobile-actions">
         <select class="app-header__language" aria-label="Seleccionar idioma">
           <option value="es">ES (ES)</option>
           <option value="en">EN (EN)</option>
@@ -53,7 +53,7 @@
         <button class="button button--primary button--login-mobile" aria-label="Iniciar sesión" (click)="navigateToLogin()">
           Login
         </button>
-      </div>
+      </aside>
     </nav>
   }
 </header>

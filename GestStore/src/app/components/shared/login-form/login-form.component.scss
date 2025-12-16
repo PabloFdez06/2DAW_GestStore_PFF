@@ -103,6 +103,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  margin-bottom: $spacing-4;
 }
 
 .form-input-wrapper {
@@ -150,6 +151,7 @@
   display: flex;
   align-items: center;
   gap: $spacing-2;
+  margin-bottom: $spacing-4;
 }
 
 .form-checkbox__input {
@@ -178,13 +180,42 @@
   }
 }
 
-.button--login-large {
-  width: 129px;
-  padding: $spacing-3 $spacing-6;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
+fieldset .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  border-radius: $radius-md;
+  border: none;
+  padding: $spacing-3 $spacing-5;
+  cursor: pointer;
+  transition: all $transition-base;
+  width: 100%;
+  text-align: center;
+  font-size: $font-size-sm;
   font-weight: $font-weight-medium;
-  border-radius: $radius-sm;
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+
+  &.button--primary {
+    background-color: $color-primary;
+    color: white;
+
+    &:hover {
+      background-color: darken($color-primary, 10%);
+    }
+
+    &:active {
+      background-color: darken($color-primary, 20%);
+    }
+
+    &:disabled {
+      background-color: $gray-300;
+      cursor: not-allowed;
+    }
+  }
 }
 
 .login-social {

@@ -1,20 +1,20 @@
-<div class="register-container">
+<section class="register-container">
   <button class="register-container__back" aria-label="Volver" (click)="onBack()">
     ← Volver
   </button>
   
-  <div class="register-content">
-    <div class="register-content__illustration">
+  <section class="register-content">
+    <section class="register-content__illustration">
       <img src="/register-illustration.png" alt="Register Illustration" class="register-illustration-img">
-    </div>
+    </section>
 
-    <div class="register-content__form-section">
+    <section class="register-content__form-section">
         <h2 class="register-modal__title">Registrarme</h2>
         
         <form class="register-modal__form" (ngSubmit)="onSubmit($event)">
           <fieldset>
             <legend>Datos de registro</legend>
-            <div class="form-group">
+            <label class="form-group">
               <input type="text" 
                      id="nombre"
                      class="form-input form-input--with-icon" 
@@ -28,9 +28,9 @@
               @if (errors['nombre']) {
                 <p class="form-error">{{ errors['nombre'] }}</p>
               }
-            </div>
+            </label>
 
-            <div class="form-group">
+            <label class="form-group">
               <input type="text" 
                      id="apellido"
                      class="form-input form-input--with-icon" 
@@ -44,9 +44,9 @@
               @if (errors['apellido']) {
                 <p class="form-error">{{ errors['apellido'] }}</p>
               }
-            </div>
+            </label>
 
-            <div class="form-group">
+            <label class="form-group">
               <input type="text" 
                      id="usuario"
                      class="form-input form-input--with-icon" 
@@ -60,9 +60,9 @@
               @if (errors['usuario']) {
                 <p class="form-error">{{ errors['usuario'] }}</p>
               }
-            </div>
+            </label>
 
-            <div class="form-group">
+            <label class="form-group">
               <input type="email" 
                      id="email"
                      class="form-input form-input--with-icon" 
@@ -77,9 +77,9 @@
               @if (errors['email']) {
                 <p class="form-error">{{ errors['email'] }}</p>
               }
-            </div>
+            </label>
 
-            <div class="form-group">
+            <label class="form-group">
               <input type="password" 
                      id="password"
                      class="form-input form-input--with-icon" 
@@ -94,9 +94,9 @@
               @if (errors['password']) {
                 <p class="form-error">{{ errors['password'] }}</p>
               }
-            </div>
+            </label>
 
-            <div class="form-group">
+            <label class="form-group">
               <input type="password" 
                      id="confirmPassword"
                      class="form-input form-input--with-icon" 
@@ -111,22 +111,22 @@
               @if (errors['confirmPassword']) {
                 <p class="form-error">{{ errors['confirmPassword'] }}</p>
               }
-            </div>
+            </label>
 
-            <div class="form-checkbox">
+            <label class="form-checkbox">
               <input type="checkbox" 
                      id="agree-terms" 
                      [(ngModel)]="agreeTerms"
                      name="agreeTerms"
                      class="form-checkbox__input">
-              <label for="agree-terms" class="form-checkbox__label">De acuerdo con las condiciones</label>
-            </div>
+              <span class="form-checkbox__label">De acuerdo con las condiciones</span>
+            </label>
 
-            <button type="submit" class="button button--primary button--register">Register</button>
+            <button type="submit" class="button button--primary">Register</button>
           </fieldset>
         </form>
 
         <p class="register-modal__login-link">¿Tienes ya una cuenta? <a routerLink="/login" class="link-primary">Log In</a></p>
-      </div>
-    </div>
-</div>
+      </section>
+    </section>
+</section>
