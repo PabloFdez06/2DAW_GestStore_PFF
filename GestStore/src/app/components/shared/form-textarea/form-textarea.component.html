@@ -1,7 +1,8 @@
-<fieldset class="form-group">
+<div class="form-group">
   <label [for]="id" class="form-label" *ngIf="label">
     {{ label }}
-    <span class="required" *ngIf="required" aria-label="requerido">*</span>
+    <span class="required" *ngIf="required" aria-hidden="true">*</span>
+    <span class="visually-hidden" *ngIf="required">(campo requerido)</span>
   </label>
   
   <textarea
@@ -13,11 +14,12 @@
     [value]="value"
     [rows]="rows"
     [class.form-textarea--error]="error"
+    [attr.aria-invalid]="error ? 'true' : null"
+    [attr.aria-describedby]="getAriaDescribedBy()"
     class="form-textarea"
     (input)="onInput($event)"
-    aria-describedby="help-text error-text"
   ></textarea>
 
-  <p class="form-help" id="help-text" *ngIf="helpText">{{ helpText }}</p>
-  <p class="form-error" id="error-text" *ngIf="error" role="alert">{{ error }}</p>
-</fieldset>
+  <p class="form-help" [id]="id + '-help'" *ngIf="helpText">{{ helpText }}</p>
+  <p class="form-error" [id]="id + '-error'" *ngIf="error" role="alert">{{ error }}</p>
+</div>

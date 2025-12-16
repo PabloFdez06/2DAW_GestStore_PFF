@@ -8,8 +8,8 @@ export type AlertType = 'success' | 'warning' | 'error' | 'info';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [class]="getAlertClasses()" role="alert">
-      <div class="alert__icon">
+    <aside [class]="getAlertClasses()" role="alert" [attr.aria-live]="type === 'error' ? 'assertive' : 'polite'">
+      <span class="alert__icon" aria-hidden="true">
         <svg class="alert__icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <ng-container [ngSwitch]="type">
             <ng-container *ngSwitchCase="'success'">
@@ -33,17 +33,22 @@ export type AlertType = 'success' | 'warning' | 'error' | 'info';
             </ng-container>
           </ng-container>
         </svg>
-      </div>
-      <div class="alert__content">
+      </span>
+      <p class="alert__content">
         <ng-content></ng-content>
-      </div>
-      <button *ngIf="closable" class="alert__close" (click)="onClose()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      </p>
+      <button 
+        *ngIf="closable" 
+        class="alert__close" 
+        (click)="onClose()"
+        type="button"
+        aria-label="Cerrar alerta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18" stroke-width="2" stroke-linecap="round"/>
           <line x1="6" y1="6" x2="18" y2="18" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
-    </div>
+    </aside>
   `,
   styleUrl: './alert.component.scss'
 })

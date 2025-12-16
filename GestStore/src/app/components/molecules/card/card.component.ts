@@ -6,17 +6,17 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [class]="getCardClasses()">
-      <div *ngIf="title" class="card__header">
+    <article [class]="getCardClasses()">
+      <header *ngIf="title" class="card__header">
         <h3 class="card__title">{{ title }}</h3>
-      </div>
-      <div class="card__body">
+      </header>
+      <section class="card__body">
         <ng-content></ng-content>
-      </div>
-      <div *ngIf="footer" class="card__footer">
+      </section>
+      <footer *ngIf="footer" class="card__footer">
         <ng-content select="[card-footer]"></ng-content>
-      </div>
-    </div>
+      </footer>
+    </article>
   `,
   styleUrl: './card.component.scss'
 })

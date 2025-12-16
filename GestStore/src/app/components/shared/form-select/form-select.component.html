@@ -1,7 +1,8 @@
-<fieldset class="form-group">
+<div class="form-group">
   <label [for]="id" class="form-label" *ngIf="label">
     {{ label }}
-    <span class="required" *ngIf="required" aria-label="requerido">*</span>
+    <span class="required" *ngIf="required" aria-hidden="true">*</span>
+    <span class="visually-hidden" *ngIf="required">(campo requerido)</span>
   </label>
   
   <select
@@ -11,9 +12,10 @@
     [disabled]="disabled"
     [value]="value"
     [class.form-select--error]="error"
+    [attr.aria-invalid]="error ? 'true' : null"
+    [attr.aria-describedby]="getAriaDescribedBy()"
     class="form-select"
     (change)="onChange($event)"
-    aria-describedby="help-text error-text"
   >
     <option [value]="''" disabled selected *ngIf="!value">
       {{ placeholder }}
@@ -25,6 +27,6 @@
     </option>
   </select>
 
-  <p class="form-help" id="help-text" *ngIf="helpText">{{ helpText }}</p>
-  <p class="form-error" id="error-text" *ngIf="error" role="alert">{{ error }}</p>
-</fieldset>
+  <p class="form-help" [id]="id + '-help'" *ngIf="helpText">{{ helpText }}</p>
+  <p class="form-error" [id]="id + '-error'" *ngIf="error" role="alert">{{ error }}</p>
+</div>

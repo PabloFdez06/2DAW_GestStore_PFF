@@ -34,4 +34,11 @@ export class FormSelectComponent {
     this.value = newValue;
     this.valueChange.emit(newValue);
   }
+
+  getAriaDescribedBy(): string | null {
+    const ids: string[] = [];
+    if (this.helpText) ids.push(`${this.id}-help`);
+    if (this.error) ids.push(`${this.id}-error`);
+    return ids.length > 0 ? ids.join(' ') : null;
+  }
 }

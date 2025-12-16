@@ -1,5 +1,5 @@
 <header class="app-header">
-  <section class="app-header__container o-container">
+  <div class="app-header__container o-container">
     <!-- Logo -->
     <a routerLink="/" class="app-header__logo" aria-label="Inicio - GestStore">
       <span class="app-header__logo-text">GestStore</span>
@@ -7,53 +7,60 @@
 
     <!-- Desktop Navigation -->
     <nav class="app-header__nav app-header__nav--desktop" aria-label="Navegación principal">
-      <a routerLink="/" class="app-header__nav-link">Inicio</a>
-      <a href="#" class="app-header__nav-link">Productos</a>
-      <a href="#" class="app-header__nav-link">Contacto</a>
+      <ul class="app-header__nav-list">
+        <li><a routerLink="/" class="app-header__nav-link">Inicio</a></li>
+        <li><a href="#" class="app-header__nav-link">Productos</a></li>
+        <li><a href="#" class="app-header__nav-link">Contacto</a></li>
+      </ul>
     </nav>
 
     <!-- Mobile Hamburger Button -->
     <button 
       class="app-header__hamburger" 
-      aria-label="Abrir menú" 
+      aria-label="Abrir menú de navegación" 
       (click)="toggleMenu()"
-      [attr.aria-expanded]="isMenuOpen()">
-      <span class="hamburger__line hamburger__line--top"></span>
-      <span class="hamburger__line hamburger__line--middle"></span>
-      <span class="hamburger__line hamburger__line--bottom"></span>
+      [attr.aria-expanded]="isMenuOpen()"
+      aria-controls="mobile-menu">
+      <span class="hamburger__line hamburger__line--top" aria-hidden="true"></span>
+      <span class="hamburger__line hamburger__line--middle" aria-hidden="true"></span>
+      <span class="hamburger__line hamburger__line--bottom" aria-hidden="true"></span>
     </button>
 
     <!-- Language & Login (Desktop) -->
-    <aside class="app-header__actions app-header__actions--desktop">
-      <select class="app-header__language" aria-label="Seleccionar idioma">
+    <div class="app-header__actions app-header__actions--desktop">
+      <label for="language-desktop" class="visually-hidden">Seleccionar idioma</label>
+      <select id="language-desktop" class="app-header__language">
         <option value="es">ES (ES)</option>
         <option value="en">EN (EN)</option>
         <option value="fr">FR (FR)</option>
       </select>
 
-      <button class="button button--primary button--login-header" aria-label="Iniciar sesión" (click)="navigateToLogin()">
+      <button class="button button--primary button--login-header" (click)="navigateToLogin()">
         Login
       </button>
-    </aside>
-  </section>
+    </div>
+  </div>
 
   <!-- Mobile Menu -->
   @if (isMenuOpen()) {
-    <nav class="app-header__nav app-header__nav--mobile" aria-label="Navegación móvil">
-      <a routerLink="/" class="app-header__nav-link" (click)="closeMenu()">Inicio</a>
-      <a href="#" class="app-header__nav-link" (click)="closeMenu()">Productos</a>
-      <a href="#" class="app-header__nav-link" (click)="closeMenu()">Contacto</a>
+    <nav id="mobile-menu" class="app-header__nav app-header__nav--mobile" aria-label="Navegación móvil">
+      <ul class="app-header__nav-list">
+        <li><a routerLink="/" class="app-header__nav-link" (click)="closeMenu()">Inicio</a></li>
+        <li><a href="#" class="app-header__nav-link" (click)="closeMenu()">Productos</a></li>
+        <li><a href="#" class="app-header__nav-link" (click)="closeMenu()">Contacto</a></li>
+      </ul>
       
-      <aside class="app-header__mobile-actions">
-        <select class="app-header__language" aria-label="Seleccionar idioma">
+      <div class="app-header__mobile-actions">
+        <label for="language-mobile" class="visually-hidden">Seleccionar idioma</label>
+        <select id="language-mobile" class="app-header__language">
           <option value="es">ES (ES)</option>
           <option value="en">EN (EN)</option>
           <option value="fr">FR (FR)</option>
         </select>
-        <button class="button button--primary button--login-mobile" aria-label="Iniciar sesión" (click)="navigateToLogin()">
+        <button class="button button--primary button--login-mobile" (click)="navigateToLogin()">
           Login
         </button>
-      </aside>
+      </div>
     </nav>
   }
 </header>

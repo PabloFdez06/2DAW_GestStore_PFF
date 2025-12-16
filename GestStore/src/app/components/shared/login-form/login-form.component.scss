@@ -238,6 +238,9 @@ fieldset .button {
   display: flex;
   gap: $spacing-3;
   align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .login-social__link {

@@ -10,6 +10,10 @@
   min-height: 100vh;
 }
 
+.style-guide__header {
+  margin-bottom: $spacing-2;
+}
+
 .style-guide__title {
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
@@ -28,18 +32,18 @@
 .style-guide__nav {
   display: flex;
   gap: $spacing-3;
-  margin-bottom: $spacing-10;
   flex-wrap: wrap;
+  margin-bottom: $spacing-10;
   padding: $spacing-6;
-  background: white;
+  background: $color-white;
   border-radius: $radius-lg;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid $border-default;
+  box-shadow: $shadow-sm;
+  border: $border-thin solid $border-default;
 
-  button {
+  .button {
     padding: $spacing-3 $spacing-5;
     border-radius: $radius-md;
-    transition: all 0.3s ease;
+    @include transition;
     font-weight: $font-weight-medium;
     font-size: $font-size-sm;
     border: none;
@@ -53,7 +57,7 @@
 
     &.button--active {
       background: linear-gradient(135deg, $color-primary 0%, #7b68ee 100%);
-      color: white;
+      color: $color-white;
       box-shadow: 0 4px 12px rgba($color-primary, 0.3);
 
       &:hover {
@@ -272,44 +276,48 @@
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: $spacing-6;
   padding: $spacing-4;
-  background: white;
+  background: $color-white;
   border-radius: $radius-lg;
-  border: 1px solid $border-default;
+  border: $border-thin solid $border-default;
+  list-style: none;
+  margin: 0;
 }
 
 .color-card {
-  border: 1px solid $border-default;
+  border: $border-thin solid $border-default;
   border-radius: $radius-md;
   overflow: hidden;
-  background: white;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: $color-white;
+  @include transition(transform, $transition-base);
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow-lg;
   }
 }
 
 .color-card__swatch {
   width: 100%;
   height: 120px;
+  display: block;
+  margin: 0;
 }
 
 .color-card__info {
   padding: $spacing-4;
 
-  h3 {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-semibold;
-    margin: 0 0 $spacing-2 0;
+  strong {
+    @include text-style($font-size-lg, $font-weight-semibold);
+    display: block;
+    margin-bottom: $spacing-2;
     color: $text-default;
   }
 
-  p {
-    margin: 0;
-    color: $gray-600;
+  code {
     font-family: monospace;
     font-size: $font-size-sm;
+    color: $gray-600;
+    background: transparent;
   }
 }
 
@@ -401,3 +409,50 @@
     line-height: $line-relaxed;
   }
 }
+
+// ============================================================================
+// COLOR SWATCHES - Usando variables de _variables.scss
+// ============================================================================
+
+// Primary Scale - Usando el mapa $color-primary-scale
+.color-swatch--primary-light { background-color: map-get($color-primary-scale, light); }
+.color-swatch--primary-light-hover { background-color: map-get($color-primary-scale, light-hover); }
+.color-swatch--primary-light-active { background-color: map-get($color-primary-scale, light-active); }
+.color-swatch--primary-normal { background-color: map-get($color-primary-scale, normal); }
+.color-swatch--primary-hover { background-color: map-get($color-primary-scale, normal-hover); }
+.color-swatch--primary-active { background-color: map-get($color-primary-scale, normal-active); }
+.color-swatch--primary-dark { background-color: map-get($color-primary-scale, dark); }
+.color-swatch--primary-dark-hover { background-color: map-get($color-primary-scale, dark-hover); }
+.color-swatch--primary-dark-active { background-color: map-get($color-primary-scale, dark-active); }
+.color-swatch--primary-darker { background-color: map-get($color-primary-scale, darker); }
+
+// Neutral Scale - Usando variables $gray-*
+.color-swatch--white { 
+  background-color: $color-white; 
+  border: $border-thin solid $border-default;
+}
+.color-swatch--gray-50 { background-color: $gray-50; }
+.color-swatch--gray-100 { background-color: $gray-100; }
+.color-swatch--gray-200 { background-color: $gray-200; }
+.color-swatch--gray-300 { background-color: $gray-300; }
+.color-swatch--gray-400 { background-color: $gray-400; }
+.color-swatch--gray-500 { background-color: $gray-500; }
+.color-swatch--gray-600 { background-color: $gray-600; }
+.color-swatch--gray-700 { background-color: $gray-700; }
+.color-swatch--gray-800 { background-color: $gray-800; }
+.color-swatch--gray-900 { background-color: $gray-900; }
+.color-swatch--gray-950 { background-color: $gray-950; }
+
+// Special / Accent Colors - Usando variables semánticas
+.color-swatch--error { background-color: $error; }
+.color-swatch--success { background-color: $success; }
+.color-swatch--info { background-color: $info; }
+.color-swatch--warning { background-color: $warning; }
+.color-swatch--side-menu { background-color: $color-side-menu; }
+.color-swatch--black { background-color: $color-black; }
+
+// Text & Border Colors - Usando variables semánticas
+.color-swatch--text-default { background-color: $text-default; }
+.color-swatch--text-secondary { background-color: $text-secondary; }
+.color-swatch--text-muted { background-color: $text-muted; }
+.color-swatch--border-default { background-color: $border-default; }

@@ -46,13 +46,6 @@
 
 // Desktop Navigation
 .app-header__nav {
-  display: flex;
-  gap: $spacing-6;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
   &--desktop {
     display: none;
 
@@ -77,7 +70,21 @@
     @include respond(lg) {
       display: none;
     }
+
+    .app-header__nav-list {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
+}
+
+.app-header__nav-list {
+  display: flex;
+  gap: $spacing-6;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .app-header__nav-link {
