@@ -1,4 +1,4 @@
-<div class="form-group">
+<fieldset class="form-group">
   <label [for]="id" class="form-label" *ngIf="label">
     {{ label }}
     <span class="required" *ngIf="required" aria-label="requerido">*</span>
@@ -27,4 +27,4 @@
 
   <p class="form-help" id="help-text" *ngIf="helpText">{{ helpText }}</p>
   <p class="form-error" id="error-text" *ngIf="error" role="alert">{{ error }}</p>
-</div>
+</fieldset>
