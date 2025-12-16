@@ -27,13 +27,41 @@
 
 .style-guide__nav {
   display: flex;
-  gap: $spacing-2;
+  gap: $spacing-3;
   margin-bottom: $spacing-10;
   flex-wrap: wrap;
-  padding: $spacing-4;
+  padding: $spacing-6;
   background: white;
   border-radius: $radius-lg;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid $border-default;
+
+  button {
+    padding: $spacing-3 $spacing-5;
+    border-radius: $radius-md;
+    transition: all 0.3s ease;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+    border: none;
+    cursor: pointer;
+    background-color: $gray-100;
+    color: $text-default;
+
+    &:hover {
+      background-color: $gray-200;
+    }
+
+    &.button--active {
+      background: linear-gradient(135deg, $color-primary 0%, #7b68ee 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba($color-primary, 0.3);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba($color-primary, 0.4);
+      }
+    }
+  }
 }
 
 .section {
@@ -106,7 +134,7 @@
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: $spacing-6;
   align-items: center;
-  padding: $spacing-4;
+  padding: $spacing-6;
   background: $gray-50;
   border-radius: $radius-md;
   min-height: 120px;
@@ -120,6 +148,122 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  // Estilos para botones en la galería de componentes
+  .button {
+    padding: $spacing-3 $spacing-5;
+    border-radius: $radius-md;
+    border: none;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &--primary {
+      background: linear-gradient(135deg, $color-primary 0%, #7b68ee 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba($color-primary, 0.2);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($color-primary, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    &--secondary {
+      background-color: $gray-200;
+      color: $text-default;
+      border: 1px solid $gray-300;
+
+      &:hover {
+        background-color: $gray-300;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+    }
+
+    &--tertiary {
+      background-color: transparent;
+      color: $color-primary;
+      border: 2px solid $color-primary;
+
+      &:hover {
+        background-color: rgba($color-primary, 0.1);
+      }
+    }
+
+    &--success {
+      background-color: $success;
+      color: white;
+      box-shadow: 0 2px 8px rgba($success, 0.2);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($success, 0.3);
+      }
+    }
+
+    &--error {
+      background-color: $error;
+      color: white;
+      box-shadow: 0 2px 8px rgba($error, 0.2);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($error, 0.3);
+      }
+    }
+
+    &--warning {
+      background-color: $warning;
+      color: white;
+      box-shadow: 0 2px 8px rgba($warning, 0.2);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($warning, 0.3);
+      }
+    }
+
+    &--info {
+      background-color: $info;
+      color: white;
+      box-shadow: 0 2px 8px rgba($info, 0.2);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($info, 0.3);
+      }
+    }
+
+    &--small {
+      padding: $spacing-2 $spacing-4;
+      font-size: $font-size-xs;
+    }
+
+    &--medium {
+      padding: $spacing-3 $spacing-5;
+      font-size: $font-size-sm;
+    }
+
+    &--large {
+      padding: $spacing-4 $spacing-6;
+      font-size: $font-size-base;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    &--full-width {
+      width: 100%;
+    }
   }
 }
 

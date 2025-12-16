@@ -1,95 +1,79 @@
-@use '../../../../styles/00-settings/variables' as vars;
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
 
 .alert {
+  padding: $spacing-4;
+  border-radius: $radius-md;
+  border-left: 4px solid;
   display: flex;
-  gap: vars.$spacing-4;
-  padding: vars.$spacing-4 vars.$spacing-6;
-  border-radius: vars.$radius-md;
-  border: 1px solid;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
-  line-height: 1.5;
+  gap: $spacing-3;
+  align-items: flex-start;
 
   &--success {
-    background-color: rgba(vars.$success, 0.1);
-    border-color: vars.$success;
-    color: darken(vars.$success, 20%);
-
-    .alert__icon {
-      color: vars.$success;
-    }
-  }
-
-  &--warning {
-    background-color: rgba(vars.$warning, 0.1);
-    border-color: vars.$warning;
-    color: darken(vars.$warning, 20%);
-
-    .alert__icon {
-      color: vars.$warning;
-    }
+    background-color: rgba($success, 0.1);
+    border-color: $success;
+    color: darken($success, 20%);
   }
 
   &--error {
-    background-color: rgba(vars.$error, 0.1);
-    border-color: vars.$error;
-    color: darken(vars.$error, 20%);
+    background-color: rgba($error, 0.1);
+    border-color: $error;
+    color: darken($error, 20%);
+  }
 
-    .alert__icon {
-      color: vars.$error;
-    }
+  &--warning {
+    background-color: rgba($warning, 0.1);
+    border-color: $warning;
+    color: darken($warning, 30%);
   }
 
   &--info {
-    background-color: rgba(vars.$info, 0.1);
-    border-color: vars.$info;
-    color: darken(vars.$info, 20%);
+    background-color: rgba($info, 0.1);
+    border-color: $info;
+    color: darken($info, 20%);
+  }
+}
 
-    .alert__icon {
-      color: vars.$info;
-    }
+.alert__icon {
+  display: flex;
+  align-items: flex-start;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.alert__icon-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.alert__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.alert__close {
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  @include transition;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 0.7;
   }
 
-  &__icon {
-    display: flex;
-    align-items: flex-start;
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-  }
-
-  &__icon-svg {
+  svg {
     width: 100%;
     height: 100%;
-  }
-
-  &__content {
-    flex: 1;
-    display: flex;
-    align-items: center;
-  }
-
-  &__close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity vars.$transition-base;
-    flex-shrink: 0;
-
-    &:hover {
-      opacity: 1;
-    }
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
   }
 }

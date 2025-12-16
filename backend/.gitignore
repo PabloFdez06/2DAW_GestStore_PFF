@@ -1,0 +1,68 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+.flattened-pom.xml
+*.releaseBackup
+
+# IDE - IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# IDE - Visual Studio Code
+.vscode/
+*.code-workspace
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+*.launch
+
+# IDE - NetBeans
+nbactions.xml
+.nb-gradle/
+
+# Compiled sources
+*.class
+*.jar
+*.jar.original
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.swo
+
+# Build directories
+build/
+dist/
+
+# Spring Boot
+application-local.properties
+.m2/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
