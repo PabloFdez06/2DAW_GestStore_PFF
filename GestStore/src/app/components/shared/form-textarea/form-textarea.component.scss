@@ -16,17 +16,16 @@
   }
 }
 
-.form-textarea {
+.form-input,
+.form-textarea,
+.form-select {
   width: 100%;
   padding: $spacing-3 $spacing-4;
   border: $border-thin solid $border-default;
   border-radius: $radius-md;
   font-family: $font-primary;
   font-size: $font-size-base;
-  line-height: $line-normal;
   @include transition;
-  resize: vertical;
-  min-height: 120px;
 
   &:focus {
     outline: none;
@@ -49,18 +48,19 @@
   }
 }
 
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
 .form-help {
   @include text-style($font-size-xs, $font-weight-regular);
   margin-top: $spacing-2;
   color: $gray-500;
-  margin: 0;
-  padding: 0;
 }
 
 .form-error {
   @include text-style($font-size-xs, $font-weight-regular);
   margin-top: $spacing-2;
   color: $error;
-  margin: 0;
-  padding: 0;
 }

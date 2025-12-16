@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'success' | 'warning';
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'success' | 'warning' | 'info' | 'error';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
 @Component({
@@ -23,9 +23,17 @@ export class ButtonComponent {
   @Input() size: ButtonSize = 'medium';
   @Input() disabled: boolean = false;
   @Input() fullWidth: boolean = false;
+  @Input() active: boolean = false;
 
   getButtonClasses(): string {
-    return `button button--${this.variant} button--${this.size} ${this.fullWidth ? 'button--full-width' : ''}`;
+    const classes = [
+      'button',
+      `button--${this.variant}`,
+      `button--${this.size}`,
+      this.fullWidth ? 'button--full-width' : '',
+      this.active ? 'button--active' : ''
+    ].filter(c => c);
+    return classes.join(' ');
   }
 
   onClick(): void {
