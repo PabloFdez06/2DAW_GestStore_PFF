@@ -11,118 +11,242 @@
     <section class="register-content__form-section">
         <h2 class="register-modal__title">Registrarme</h2>
         
-        <form class="register-modal__form" (ngSubmit)="onSubmit($event)">
+        <!-- Mensajes de estado del formulario -->
+        @if (submitSuccess()) {
+          <div class="form-success-banner" role="alert">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="form-success-banner__icon">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            ¡Registro completado con éxito!
+          </div>
+        }
+        
+        @if (submitError()) {
+          <div class="form-error-banner" role="alert">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="form-error-banner__icon">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            {{ submitError() }}
+          </div>
+        }
+        
+        <form class="register-modal__form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <fieldset>
             <legend>Datos de registro</legend>
+            
+            <!-- Nombre -->
             <label class="form-group">
-              <input type="text" 
-                     id="nombre"
-                     class="form-input form-input--with-icon" 
-                     placeholder="Introduce el nombre"
-                     [(ngModel)]="nombre"
-                     name="nombre"
-                     [class.form-input--error]="errors['nombre']">
-              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
-              </svg>
-              @if (errors['nombre']) {
-                <p class="form-error">{{ errors['nombre'] }}</p>
+              <span class="form-input-wrapper">
+                <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+                </svg>
+                <input type="text" 
+                       id="nombre"
+                       class="form-input" 
+                       placeholder="Introduce el nombre"
+                       formControlName="nombre"
+                       [class.form-input--error]="hasFieldError('nombre')"
+                       [class.form-input--valid]="isFieldValid('nombre')"
+                       autocomplete="given-name">
+                @if (isFieldValid('nombre')) {
+                  <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                }
+              </span>
+              @if (hasFieldError('nombre')) {
+                <span class="form-error" role="alert">{{ getFieldError('nombre') }}</span>
               }
             </label>
 
+            <!-- Apellido -->
             <label class="form-group">
-              <input type="text" 
-                     id="apellido"
-                     class="form-input form-input--with-icon" 
-                     placeholder="Introduce el apellido"
-                     [(ngModel)]="apellido"
-                     name="apellido"
-                     [class.form-input--error]="errors['apellido']">
-              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
-              </svg>
-              @if (errors['apellido']) {
-                <p class="form-error">{{ errors['apellido'] }}</p>
+              <span class="form-input-wrapper">
+                <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+                </svg>
+                <input type="text" 
+                       id="apellido"
+                       class="form-input" 
+                       placeholder="Introduce el apellido"
+                       formControlName="apellido"
+                       [class.form-input--error]="hasFieldError('apellido')"
+                       [class.form-input--valid]="isFieldValid('apellido')"
+                       autocomplete="family-name">
+                @if (isFieldValid('apellido')) {
+                  <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                }
+              </span>
+              @if (hasFieldError('apellido')) {
+                <span class="form-error" role="alert">{{ getFieldError('apellido') }}</span>
               }
             </label>
 
+            <!-- Usuario con validación asíncrona -->
             <label class="form-group">
-              <input type="text" 
-                     id="usuario"
-                     class="form-input form-input--with-icon" 
-                     placeholder="Introduce nombre de usuario"
-                     [(ngModel)]="usuario"
-                     name="usuario"
-                     [class.form-input--error]="errors['usuario']">
-              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
-              </svg>
-              @if (errors['usuario']) {
-                <p class="form-error">{{ errors['usuario'] }}</p>
+              <span class="form-input-wrapper">
+                <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="8.5" cy="7" r="4"/>
+                  <line x1="20" y1="8" x2="20" y2="14"/>
+                  <line x1="23" y1="11" x2="17" y2="11"/>
+                </svg>
+                <input type="text" 
+                       id="usuario"
+                       class="form-input" 
+                       placeholder="Introduce nombre de usuario"
+                       formControlName="usuario"
+                       [class.form-input--error]="hasFieldError('usuario')"
+                       [class.form-input--valid]="isFieldValid('usuario')"
+                       [class.form-input--validating]="isFieldValidating('usuario')"
+                       autocomplete="username">
+                @if (isFieldValidating('usuario')) {
+                  <span class="form-input__spinner"></span>
+                }
+                @if (isFieldValid('usuario') && !isFieldValidating('usuario')) {
+                  <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                }
+              </span>
+              @if (isFieldValidating('usuario')) {
+                <span class="form-hint">Verificando disponibilidad...</span>
+              }
+              @if (hasFieldError('usuario')) {
+                <span class="form-error" role="alert">{{ getFieldError('usuario') }}</span>
               }
             </label>
 
+            <!-- Email con validación asíncrona -->
             <label class="form-group">
-              <input type="email" 
-                     id="email"
-                     class="form-input form-input--with-icon" 
-                     placeholder="Introduce el email"
-                     [(ngModel)]="email"
-                     name="email"
-                     [class.form-input--error]="errors['email']">
-              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="2" y="4" width="20" height="16" rx="2"/>
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-              </svg>
-              @if (errors['email']) {
-                <p class="form-error">{{ errors['email'] }}</p>
+              <span class="form-input-wrapper">
+                <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+                <input type="email" 
+                       id="email"
+                       class="form-input" 
+                       placeholder="Introduce el email"
+                       formControlName="email"
+                       [class.form-input--error]="hasFieldError('email')"
+                       [class.form-input--valid]="isFieldValid('email')"
+                       [class.form-input--validating]="isFieldValidating('email')"
+                       autocomplete="email">
+                @if (isFieldValidating('email')) {
+                  <span class="form-input__spinner"></span>
+                }
+                @if (isFieldValid('email') && !isFieldValidating('email')) {
+                  <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                }
+              </span>
+              @if (isFieldValidating('email')) {
+                <span class="form-hint">Verificando disponibilidad...</span>
+              }
+              @if (hasFieldError('email')) {
+                <span class="form-error" role="alert">{{ getFieldError('email') }}</span>
               }
             </label>
 
+            <!-- Password con indicador de fortaleza -->
             <label class="form-group">
-              <input type="password" 
-                     id="password"
-                     class="form-input form-input--with-icon" 
-                     placeholder="Contraseña"
-                     [(ngModel)]="password"
-                     name="password"
-                     [class.form-input--error]="errors['password']">
-              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              @if (errors['password']) {
-                <p class="form-error">{{ errors['password'] }}</p>
+              <span class="form-input-wrapper">
+                <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input type="password" 
+                       id="password"
+                       class="form-input" 
+                       placeholder="Contraseña"
+                       formControlName="password"
+                       [class.form-input--error]="hasFieldError('password')"
+                       [class.form-input--valid]="isFieldValid('password')"
+                       autocomplete="new-password">
+                @if (isFieldValid('password')) {
+                  <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                }
+              </span>
+              <!-- Indicador de fortaleza de contraseña -->
+              @if (registerForm.get('password')?.value) {
+                <div class="password-strength">
+                  <div class="password-strength__bar">
+                    <div 
+                      class="password-strength__fill" 
+                      [style.width.%]="getPasswordStrength().percentage"
+                      [style.backgroundColor]="getPasswordStrength().color">
+                    </div>
+                  </div>
+                  <span class="password-strength__label" [style.color]="getPasswordStrength().color">
+                    {{ getPasswordStrength().level }}
+                  </span>
+                </div>
+              }
+              @if (hasFieldError('password')) {
+                <span class="form-error" role="alert">{{ getFieldError('password') }}</span>
               }
             </label>
 
+            <!-- Confirmar Password -->
             <label class="form-group">
-              <input type="password" 
-                     id="confirmPassword"
-                     class="form-input form-input--with-icon" 
-                     placeholder="Confirmar contraseña"
-                     [(ngModel)]="confirmPassword"
-                     name="confirmPassword"
-                     [class.form-input--error]="errors['confirmPassword']">
-              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              @if (errors['confirmPassword']) {
-                <p class="form-error">{{ errors['confirmPassword'] }}</p>
+              <span class="form-input-wrapper">
+                <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input type="password" 
+                       id="confirmPassword"
+                       class="form-input" 
+                       placeholder="Confirmar contraseña"
+                       formControlName="confirmPassword"
+                       [class.form-input--error]="hasFieldError('confirmPassword') || getFormError()"
+                       [class.form-input--valid]="isFieldValid('confirmPassword') && !getFormError()"
+                       autocomplete="new-password">
+                @if (isFieldValid('confirmPassword') && !getFormError()) {
+                  <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                }
+              </span>
+              @if (hasFieldError('confirmPassword')) {
+                <span class="form-error" role="alert">{{ getFieldError('confirmPassword') }}</span>
+              }
+              @if (getFormError() && registerForm.get('confirmPassword')?.touched) {
+                <span class="form-error" role="alert">{{ getFormError() }}</span>
               }
             </label>
 
-            <label class="form-checkbox">
+            <!-- Términos y condiciones -->
+            <label class="form-checkbox" [class.form-checkbox--error]="hasFieldError('agreeTerms')">
               <input type="checkbox" 
                      id="agree-terms" 
-                     [(ngModel)]="agreeTerms"
-                     name="agreeTerms"
+                     formControlName="agreeTerms"
                      class="form-checkbox__input">
               <span class="form-checkbox__label">De acuerdo con las condiciones</span>
             </label>
+            @if (hasFieldError('agreeTerms')) {
+              <span class="form-error form-error--checkbox" role="alert">Debes aceptar los términos y condiciones</span>
+            }
 
-            <button type="submit" class="button button--primary">Register</button>
+            <!-- Botón de registro -->
+            <button 
+              type="submit" 
+              class="button button--primary"
+              [disabled]="isSubmitting()"
+              [class.button--loading]="isSubmitting()">
+              @if (isSubmitting()) {
+                <span class="button__spinner"></span>
+                Registrando...
+              } @else {
+                Registrarme
+              }
+            </button>
           </fieldset>
         </form>
 

@@ -679,3 +679,351 @@
     }
   }
 }
+
+// ==========================================
+// Estilos para Fase 3 - Formularios
+// ==========================================
+
+.demo-form {
+  background: $bg-default;
+  padding: $spacing-6;
+  border-radius: $radius-lg;
+  border: 1px solid $border-default;
+  
+  &--array {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+  
+  &__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-6;
+  }
+  
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+    
+    &--small {
+      max-width: 120px;
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-3;
+    padding-top: $spacing-4;
+    border-top: 1px solid $border-default;
+  }
+}
+
+.form-label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-default;
+}
+
+.form-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: $spacing-3;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $text-default;
+  background: $bg-default;
+  transition: border-color $transition-base, box-shadow $transition-base;
+  
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.15);
+  }
+  
+  &--error {
+    border-color: $error;
+    
+    &:focus {
+      border-color: $error;
+      box-shadow: 0 0 0 3px rgba($error, 0.15);
+    }
+  }
+  
+  &--valid {
+    border-color: $success;
+    padding-right: $spacing-10;
+  }
+  
+  &--validating {
+    padding-right: $spacing-10;
+  }
+}
+
+.form-input__icon-status {
+  position: absolute;
+  right: $spacing-3;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  
+  &--valid {
+    color: $success;
+  }
+  
+  &--error {
+    color: $error;
+  }
+}
+
+.form-input__spinner {
+  position: absolute;
+  right: $spacing-3;
+  width: 18px;
+  height: 18px;
+  border: 2px solid $gray-300;
+  border-radius: 50%;
+  border-top-color: $color-primary;
+  animation: spin 0.8s linear infinite;
+}
+
+.form-error {
+  font-size: $font-size-xs;
+  color: $error;
+  margin-top: $spacing-1;
+}
+
+.form-hint {
+  font-size: $font-size-xs;
+  color: $gray-500;
+  margin-top: $spacing-1;
+  
+  &--validating {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.form-success-banner {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-4;
+  background: rgba($success, 0.1);
+  border: 1px solid rgba($success, 0.3);
+  border-radius: $radius-md;
+  color: $success;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  
+  &__icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.validators-catalog {
+  margin-top: $spacing-6;
+  padding: $spacing-4;
+  background: $gray-50;
+  border-radius: $radius-md;
+  
+  h4 {
+    margin: 0 0 $spacing-3;
+    font-size: $font-size-base;
+    color: $text-default;
+  }
+  
+  [data-theme='dark'] & {
+    background: $gray-800;
+  }
+}
+
+.validators-list {
+  margin: 0;
+  padding-left: $spacing-5;
+  
+  li {
+    margin-bottom: $spacing-2;
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    
+    code {
+      background: rgba($color-primary, 0.1);
+      color: $color-primary;
+      padding: $spacing-1 $spacing-2;
+      border-radius: $radius-sm;
+      font-family: 'Fira Code', monospace;
+      font-size: $font-size-xs;
+    }
+    
+    strong {
+      color: $text-default;
+    }
+  }
+}
+
+// FormArray Demo
+.demo-array-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  h4 {
+    margin: 0;
+    font-size: $font-size-base;
+    color: $text-default;
+  }
+}
+
+.demo-array-empty {
+  padding: $spacing-8;
+  text-align: center;
+  background: $gray-50;
+  border-radius: $radius-md;
+  border: 2px dashed $gray-300;
+  
+  p {
+    margin: 0;
+    color: $gray-500;
+  }
+  
+  [data-theme='dark'] & {
+    background: $gray-800;
+    border-color: $gray-600;
+  }
+}
+
+.demo-array-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.demo-array-item {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: $gray-50;
+  border-radius: $radius-md;
+  border: 1px solid $border-default;
+  
+  &__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: $color-primary;
+    color: white;
+    border-radius: 50%;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-sm;
+    flex-shrink: 0;
+  }
+  
+  &__fields {
+    display: flex;
+    gap: $spacing-4;
+    flex: 1;
+    
+    @include respond(sm) {
+      flex-direction: column;
+    }
+  }
+  
+  &__remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: rgba($error, 0.1);
+    color: $error;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-base;
+    flex-shrink: 0;
+    
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    &:hover {
+      background: rgba($error, 0.2);
+    }
+  }
+  
+  [data-theme='dark'] & {
+    background: $gray-800;
+  }
+}
+
+// Links a formularios
+.forms-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-4;
+}
+
+.form-link-card {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-4;
+  padding: $spacing-5;
+  background: $bg-default;
+  border: 1px solid $border-default;
+  border-radius: $radius-lg;
+  text-decoration: none;
+  color: inherit;
+  transition: all $transition-base;
+  
+  svg {
+    width: 40px;
+    height: 40px;
+    color: $color-primary;
+    flex-shrink: 0;
+  }
+  
+  &__content {
+    h4 {
+      margin: 0 0 $spacing-1;
+      font-size: $font-size-lg;
+      color: $text-default;
+    }
+    
+    p {
+      margin: 0;
+      font-size: $font-size-sm;
+      color: $gray-500;
+    }
+  }
+  
+  &:hover {
+    border-color: $color-primary;
+    box-shadow: 0 4px 12px rgba($color-primary, 0.15);
+    transform: translateY(-2px);
+    
+    svg {
+      color: color-primary(normal-hover);
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

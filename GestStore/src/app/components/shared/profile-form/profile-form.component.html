@@ -1,0 +1,426 @@
+<section class="profile-container">
+  <button class="profile-container__back" aria-label="Volver" (click)="onBack()">
+    ← Volver
+  </button>
+
+  <section class="profile-content">
+    <h1 class="profile__title">Mi Perfil</h1>
+    <p class="profile__subtitle">Gestiona tu información personal y direcciones de envío</p>
+
+    <!-- Mensajes de estado -->
+    @if (submitSuccess()) {
+      <div class="form-success-banner" role="alert">
+        <svg viewBox="0 0 24 24" fill="currentColor" class="form-success-banner__icon">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        ¡Perfil actualizado correctamente!
+      </div>
+    }
+
+    @if (submitError()) {
+      <div class="form-error-banner" role="alert">
+        <svg viewBox="0 0 24 24" fill="currentColor" class="form-error-banner__icon">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        {{ submitError() }}
+      </div>
+    }
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+      <!-- Sección: Datos Personales -->
+      <section class="form-section" formGroupName="personalInfo">
+        <h2 class="form-section__title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="form-section__icon">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          Datos Personales
+        </h2>
+
+        <div class="form-grid">
+          <!-- Nombre -->
+          <div class="form-group">
+            <label for="nombre" class="form-label">Nombre *</label>
+            <span class="form-input-wrapper">
+              <input
+                type="text"
+                id="nombre"
+                class="form-input"
+                formControlName="nombre"
+                placeholder="Tu nombre"
+                [class.form-input--error]="hasFieldError('personalInfo.nombre')"
+                [class.form-input--valid]="isFieldValid('personalInfo.nombre')"
+                autocomplete="given-name"
+              />
+              @if (isFieldValid('personalInfo.nombre')) {
+                <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              }
+            </span>
+            @if (hasFieldError('personalInfo.nombre')) {
+              <span class="form-error" role="alert">{{ getFieldError('personalInfo.nombre') }}</span>
+            }
+          </div>
+
+          <!-- Apellidos -->
+          <div class="form-group">
+            <label for="apellidos" class="form-label">Apellidos *</label>
+            <span class="form-input-wrapper">
+              <input
+                type="text"
+                id="apellidos"
+                class="form-input"
+                formControlName="apellidos"
+                placeholder="Tus apellidos"
+                [class.form-input--error]="hasFieldError('personalInfo.apellidos')"
+                [class.form-input--valid]="isFieldValid('personalInfo.apellidos')"
+                autocomplete="family-name"
+              />
+              @if (isFieldValid('personalInfo.apellidos')) {
+                <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              }
+            </span>
+            @if (hasFieldError('personalInfo.apellidos')) {
+              <span class="form-error" role="alert">{{ getFieldError('personalInfo.apellidos') }}</span>
+            }
+          </div>
+
+          <!-- NIF/NIE -->
+          <div class="form-group">
+            <label for="nif" class="form-label">NIF/NIE *</label>
+            <span class="form-input-wrapper">
+              <input
+                type="text"
+                id="nif"
+                class="form-input"
+                formControlName="nif"
+                placeholder="12345678A"
+                [class.form-input--error]="hasFieldError('personalInfo.nif')"
+                [class.form-input--valid]="isFieldValid('personalInfo.nif')"
+                maxlength="9"
+              />
+              @if (isFieldValid('personalInfo.nif')) {
+                <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              }
+            </span>
+            @if (hasFieldError('personalInfo.nif')) {
+              <span class="form-error" role="alert">{{ getFieldError('personalInfo.nif') }}</span>
+            }
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email" class="form-label">Email *</label>
+            <span class="form-input-wrapper">
+              <input
+                type="email"
+                id="email"
+                class="form-input"
+                formControlName="email"
+                placeholder="tu@email.com"
+                [class.form-input--error]="hasFieldError('personalInfo.email')"
+                [class.form-input--valid]="isFieldValid('personalInfo.email')"
+                [class.form-input--validating]="isFieldValidating('personalInfo.email')"
+                autocomplete="email"
+              />
+              @if (isFieldValidating('personalInfo.email')) {
+                <span class="form-input__spinner"></span>
+              }
+              @if (isFieldValid('personalInfo.email') && !isFieldValidating('personalInfo.email')) {
+                <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              }
+            </span>
+            @if (isFieldValidating('personalInfo.email')) {
+              <span class="form-hint">Verificando disponibilidad...</span>
+            }
+            @if (hasFieldError('personalInfo.email')) {
+              <span class="form-error" role="alert">{{ getFieldError('personalInfo.email') }}</span>
+            }
+          </div>
+
+          <!-- Teléfono -->
+          <div class="form-group">
+            <label for="telefono" class="form-label">Teléfono *</label>
+            <span class="form-input-wrapper">
+              <input
+                type="tel"
+                id="telefono"
+                class="form-input"
+                formControlName="telefono"
+                placeholder="612 345 678"
+                [class.form-input--error]="hasFieldError('personalInfo.telefono')"
+                [class.form-input--valid]="isFieldValid('personalInfo.telefono')"
+                autocomplete="tel"
+              />
+              @if (isFieldValid('personalInfo.telefono')) {
+                <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              }
+            </span>
+            @if (hasFieldError('personalInfo.telefono')) {
+              <span class="form-error" role="alert">{{ getFieldError('personalInfo.telefono') }}</span>
+            }
+          </div>
+
+          <!-- Teléfono secundario -->
+          <div class="form-group">
+            <label for="telefonoSecundario" class="form-label">Teléfono secundario</label>
+            <span class="form-input-wrapper">
+              <input
+                type="tel"
+                id="telefonoSecundario"
+                class="form-input"
+                formControlName="telefonoSecundario"
+                placeholder="Opcional"
+                [class.form-input--error]="hasFieldError('personalInfo.telefonoSecundario')"
+                [class.form-input--valid]="isFieldValid('personalInfo.telefonoSecundario')"
+              />
+              @if (isFieldValid('personalInfo.telefonoSecundario')) {
+                <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              }
+            </span>
+            @if (hasFieldError('personalInfo.telefonoSecundario')) {
+              <span class="form-error" role="alert">{{ getFieldError('personalInfo.telefonoSecundario') }}</span>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección: Direcciones (FormArray) -->
+      <section class="form-section">
+        <div class="form-section__header">
+          <h2 class="form-section__title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="form-section__icon">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Direcciones de Envío
+          </h2>
+          <button
+            type="button"
+            class="btn-add-address"
+            (click)="addAddress()"
+            [disabled]="direcciones.length >= 5"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Añadir dirección
+          </button>
+        </div>
+
+        @if (direcciones.length >= 5) {
+          <p class="form-hint">Máximo 5 direcciones permitidas</p>
+        }
+
+        <!-- Lista de direcciones -->
+        <div formArrayName="direcciones" class="addresses-list">
+          @for (address of direcciones.controls; track address; let i = $index) {
+            <div class="address-card" [formGroupName]="i" [class.address-card--main]="address.get('isMain')?.value">
+              <div class="address-card__header">
+                <h3 class="address-card__title">
+                  Dirección {{ i + 1 }}
+                  @if (address.get('isMain')?.value) {
+                    <span class="address-badge address-badge--main">Principal</span>
+                  }
+                </h3>
+                <div class="address-card__actions">
+                  @if (!address.get('isMain')?.value) {
+                    <button
+                      type="button"
+                      class="btn-icon btn-icon--primary"
+                      (click)="setMainAddress(i)"
+                      title="Establecer como principal"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                    </button>
+                  }
+                  @if (direcciones.length > 1) {
+                    <button
+                      type="button"
+                      class="btn-icon btn-icon--danger"
+                      (click)="removeAddress(i)"
+                      title="Eliminar dirección"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                      </svg>
+                    </button>
+                  }
+                </div>
+              </div>
+
+              <div class="form-grid form-grid--address">
+                <!-- Calle -->
+                <div class="form-group form-group--full">
+                  <label [for]="'street-' + i" class="form-label">Calle *</label>
+                  <span class="form-input-wrapper">
+                    <input
+                      type="text"
+                      [id]="'street-' + i"
+                      class="form-input"
+                      formControlName="street"
+                      placeholder="Nombre de la calle"
+                      [class.form-input--error]="hasAddressFieldError(i, 'street')"
+                      [class.form-input--valid]="isAddressFieldValid(i, 'street')"
+                    />
+                  </span>
+                  @if (hasAddressFieldError(i, 'street')) {
+                    <span class="form-error" role="alert">{{ getAddressFieldError(i, 'street') }}</span>
+                  }
+                </div>
+
+                <!-- Número -->
+                <div class="form-group">
+                  <label [for]="'number-' + i" class="form-label">Número *</label>
+                  <span class="form-input-wrapper">
+                    <input
+                      type="text"
+                      [id]="'number-' + i"
+                      class="form-input"
+                      formControlName="number"
+                      placeholder="123"
+                      [class.form-input--error]="hasAddressFieldError(i, 'number')"
+                      [class.form-input--valid]="isAddressFieldValid(i, 'number')"
+                    />
+                  </span>
+                  @if (hasAddressFieldError(i, 'number')) {
+                    <span class="form-error" role="alert">{{ getAddressFieldError(i, 'number') }}</span>
+                  }
+                </div>
+
+                <!-- Piso -->
+                <div class="form-group">
+                  <label [for]="'floor-' + i" class="form-label">Piso</label>
+                  <span class="form-input-wrapper">
+                    <input
+                      type="text"
+                      [id]="'floor-' + i"
+                      class="form-input"
+                      formControlName="floor"
+                      placeholder="2º"
+                    />
+                  </span>
+                </div>
+
+                <!-- Puerta -->
+                <div class="form-group">
+                  <label [for]="'door-' + i" class="form-label">Puerta</label>
+                  <span class="form-input-wrapper">
+                    <input
+                      type="text"
+                      [id]="'door-' + i"
+                      class="form-input"
+                      formControlName="door"
+                      placeholder="A"
+                    />
+                  </span>
+                </div>
+
+                <!-- Ciudad -->
+                <div class="form-group">
+                  <label [for]="'city-' + i" class="form-label">Ciudad *</label>
+                  <span class="form-input-wrapper">
+                    <input
+                      type="text"
+                      [id]="'city-' + i"
+                      class="form-input"
+                      formControlName="city"
+                      placeholder="Tu ciudad"
+                      [class.form-input--error]="hasAddressFieldError(i, 'city')"
+                      [class.form-input--valid]="isAddressFieldValid(i, 'city')"
+                    />
+                  </span>
+                  @if (hasAddressFieldError(i, 'city')) {
+                    <span class="form-error" role="alert">{{ getAddressFieldError(i, 'city') }}</span>
+                  }
+                </div>
+
+                <!-- Código Postal -->
+                <div class="form-group">
+                  <label [for]="'postalCode-' + i" class="form-label">Código Postal *</label>
+                  <span class="form-input-wrapper">
+                    <input
+                      type="text"
+                      [id]="'postalCode-' + i"
+                      class="form-input"
+                      formControlName="postalCode"
+                      placeholder="28001"
+                      maxlength="5"
+                      [class.form-input--error]="hasAddressFieldError(i, 'postalCode')"
+                      [class.form-input--valid]="isAddressFieldValid(i, 'postalCode')"
+                    />
+                  </span>
+                  @if (hasAddressFieldError(i, 'postalCode')) {
+                    <span class="form-error" role="alert">{{ getAddressFieldError(i, 'postalCode') }}</span>
+                  }
+                </div>
+
+                <!-- Provincia -->
+                <div class="form-group">
+                  <label [for]="'province-' + i" class="form-label">Provincia *</label>
+                  <span class="form-input-wrapper">
+                    <select
+                      [id]="'province-' + i"
+                      class="form-input form-select"
+                      formControlName="province"
+                      [class.form-input--error]="hasAddressFieldError(i, 'province')"
+                      [class.form-input--valid]="isAddressFieldValid(i, 'province')"
+                    >
+                      <option value="">Selecciona provincia</option>
+                      @for (provincia of provincias; track provincia) {
+                        <option [value]="provincia">{{ provincia }}</option>
+                      }
+                    </select>
+                  </span>
+                  @if (hasAddressFieldError(i, 'province')) {
+                    <span class="form-error" role="alert">{{ getAddressFieldError(i, 'province') }}</span>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn--secondary"
+          (click)="resetForm()"
+          [disabled]="isSubmitting()"
+        >
+          Restablecer
+        </button>
+        <button
+          type="submit"
+          class="btn btn--primary"
+          [disabled]="isSubmitting()"
+          [class.btn--loading]="isSubmitting()"
+        >
+          @if (isSubmitting()) {
+            <span class="btn__spinner"></span>
+            Guardando...
+          } @else {
+            Guardar Perfil
+          }
+        </button>
+      </div>
+    </form>
+  </section>
+</section>

@@ -11,10 +11,21 @@
     <section class="login-content__form-section">
         <h1 class="login-modal__title">Iniciar Sesión</h1>
 
-        <form class="login-form" (ngSubmit)="onSubmit($event)">
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <fieldset>
             <legend>Datos de acceso</legend>
-            <!-- Usuario Input -->
+            
+            <!-- Error general del formulario -->
+            @if (submitError()) {
+              <div class="form-error-banner" role="alert">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="form-error-banner__icon">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                {{ submitError() }}
+              </div>
+            }
+            
+            <!-- Email Input -->
             <label class="form-group">
               <span class="form-input-wrapper">
                 <svg
@@ -28,15 +39,24 @@
                   />
                 </svg>
                 <input
-                  type="text"
+                  type="email"
                   id="login-email"
                   class="form-input"
-                  placeholder="Introduce el nombre"
-                  [(ngModel)]="email"
-                  name="email"
-                  [class.form-input--error]="errors['email']"
+                  placeholder="Introduce tu email"
+                  formControlName="email"
+                  [class.form-input--error]="hasFieldError('email')"
+                  [class.form-input--valid]="isFieldValid('email')"
+                  autocomplete="email"
                 />
+                @if (isFieldValid('email')) {
+                  <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                }
               </span>
+              @if (hasFieldError('email')) {
+                <span class="form-error" role="alert">{{ getFieldError('email') }}</span>
+              }
             </label>
 
             <!-- Password Input -->
@@ -56,11 +76,20 @@
                   id="login-password"
                   class="form-input"
                   placeholder="Introduce la contraseña"
-                  [(ngModel)]="password"
-                  name="password"
-                  [class.form-input--error]="errors['password']"
+                  formControlName="password"
+                  [class.form-input--error]="hasFieldError('password')"
+                  [class.form-input--valid]="isFieldValid('password')"
+                  autocomplete="current-password"
                 />
+                @if (isFieldValid('password')) {
+                  <svg class="form-input__icon-status form-input__icon-status--valid" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
+                }
               </span>
+              @if (hasFieldError('password')) {
+                <span class="form-error" role="alert">{{ getFieldError('password') }}</span>
+              }
             </label>
 
             <!-- Remember Me -->
@@ -68,8 +97,7 @@
               <input
                 type="checkbox"
                 id="remember"
-                [(ngModel)]="rememberMe"
-                name="rememberMe"
+                formControlName="rememberMe"
                 class="form-checkbox__input"
               />
               <span class="form-checkbox__label">
@@ -81,8 +109,15 @@
             <button
               type="submit"
               class="button button--primary"
+              [disabled]="isSubmitting()"
+              [class.button--loading]="isSubmitting()"
             >
-              Login
+              @if (isSubmitting()) {
+                <span class="button__spinner"></span>
+                Iniciando sesión...
+              } @else {
+                Login
+              }
             </button>
           </fieldset>
         </form>

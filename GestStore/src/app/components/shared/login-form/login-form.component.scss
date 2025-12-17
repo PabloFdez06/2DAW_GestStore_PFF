@@ -147,6 +147,87 @@
   pointer-events: none;
 }
 
+// Estados de validación
+.form-input--valid {
+  border-color: $success;
+  padding-right: $spacing-10;
+}
+
+.form-input--error {
+  border-color: $error;
+  
+  &:focus {
+    border-color: $error;
+    box-shadow: 0 0 0 3px rgba($error, 0.15);
+  }
+}
+
+.form-input__icon-status {
+  position: absolute;
+  right: $spacing-3;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  
+  &--valid {
+    color: $success;
+  }
+  
+  &--error {
+    color: $error;
+  }
+}
+
+.form-error {
+  display: block;
+  font-size: $font-size-sm;
+  color: $error;
+  margin-top: $spacing-1;
+  font-weight: $font-weight-medium;
+}
+
+.form-error-banner {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-4;
+  background-color: rgba($error, 0.1);
+  border: 1px solid rgba($error, 0.3);
+  border-radius: $radius-md;
+  color: $error;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-4;
+  
+  &__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+// Loading state del botón
+.button--loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.button__spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .form-checkbox {
   display: flex;
   align-items: center;

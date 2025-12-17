@@ -146,8 +146,15 @@
   margin-bottom: $spacing-3;
 }
 
+.form-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .form-input {
-  padding: $spacing-2 $spacing-2 $spacing-2 $spacing-3;
+  width: 100%;
+  padding: $spacing-2 $spacing-3 $spacing-2 $spacing-10;
   border: 1px solid $border-default;
   border-radius: $radius-md;
   font-family: inherit;
@@ -170,6 +177,20 @@
 
   &--error {
     border-color: $error;
+    
+    &:focus {
+      border-color: $error;
+      box-shadow: 0 0 0 3px rgba($error, 0.15);
+    }
+  }
+  
+  &--valid {
+    border-color: $success;
+    padding-right: $spacing-10;
+  }
+  
+  &--validating {
+    padding-right: $spacing-10;
   }
 }
 
@@ -184,10 +205,130 @@
   pointer-events: none;
 }
 
+.form-input__icon-status {
+  position: absolute;
+  right: $spacing-3;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  
+  &--valid {
+    color: $success;
+  }
+  
+  &--error {
+    color: $error;
+  }
+}
+
+.form-input__spinner {
+  position: absolute;
+  right: $spacing-3;
+  width: 18px;
+  height: 18px;
+  border: 2px solid $gray-300;
+  border-radius: 50%;
+  border-top-color: $color-primary;
+  animation: spin 0.8s linear infinite;
+}
+
 .form-error {
   color: $error;
   font-size: 0.75rem;
   margin: 0;
+  
+  &--checkbox {
+    margin-top: -$spacing-2;
+    margin-bottom: $spacing-2;
+  }
+}
+
+.form-hint {
+  color: $color-primary;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+// Banners de estado
+.form-error-banner,
+.form-success-banner {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-4;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  margin-bottom: $spacing-4;
+  
+  &__icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+.form-error-banner {
+  background-color: rgba($error, 0.1);
+  border: 1px solid rgba($error, 0.3);
+  color: $error;
+}
+
+.form-success-banner {
+  background-color: rgba($success, 0.1);
+  border: 1px solid rgba($success, 0.3);
+  color: $success;
+}
+
+// Indicador de fortaleza de contraseña
+.password-strength {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  margin-top: $spacing-1;
+  
+  &__bar {
+    flex: 1;
+    height: 4px;
+    background-color: $gray-200;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  
+  &__fill {
+    height: 100%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    border-radius: 2px;
+  }
+  
+  &__label {
+    font-size: 0.7rem;
+    font-weight: $font-weight-medium;
+    min-width: 70px;
+    text-align: right;
+  }
+}
+
+// Loading state del botón
+.button--loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.button__spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .form-checkbox {
