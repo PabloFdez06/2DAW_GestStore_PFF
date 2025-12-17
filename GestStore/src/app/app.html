@@ -1,1 +1,12 @@
+<!-- Spinner global de carga -->
+<app-spinner 
+  mode="global" 
+  [fullscreen]="true" 
+  [overlay]="true">
+</app-spinner>
+
+<!-- Contenido principal de la aplicación -->
 <router-outlet></router-outlet>
+
+<!-- Contenedor de notificaciones toast -->
+<app-toast-container></app-toast-container>

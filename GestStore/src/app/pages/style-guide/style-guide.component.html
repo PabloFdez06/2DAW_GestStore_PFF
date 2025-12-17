@@ -44,6 +44,12 @@
       [class.button--active]="currentView === 'page'">
       Página
     </button>
+    <button 
+      class="button button--secondary" 
+      (click)="switchView('services')"
+      [class.button--active]="currentView === 'services'">
+      Servicios (Fase 2)
+    </button>
   </nav>
 
   @if (currentView === 'components') {
@@ -779,6 +785,205 @@
       </section>
     </app-main>
     <app-footer></app-footer>
+  }
+
+  <!-- SERVICIOS FASE 2 -->
+  @if (currentView === 'services') {
+    <section class="section">
+      <h2 class="section__title">Servicios - Fase 2</h2>
+      <p class="section__description">Demostración de los servicios de comunicación implementados en la Fase 2 del proyecto</p>
+
+      <!-- NOTIFICACIONES TOAST -->
+      <section class="subsection">
+        <h3 class="subsection__title">Sistema de Notificaciones (Toast)</h3>
+        <p class="subsection__description">NotificationService permite mostrar notificaciones en cualquier parte de la aplicación</p>
+        
+        <figure class="component-showcase">
+          <button class="button button--success" (click)="showSuccessToast()">
+            ✓ Toast Success
+          </button>
+          <button class="button button--danger" (click)="showErrorToast()">
+            ✕ Toast Error
+          </button>
+          <button class="button button--warning" (click)="showWarningToast()">
+            ⚠ Toast Warning
+          </button>
+          <button class="button button--primary" (click)="showInfoToast()">
+            ℹ Toast Info
+          </button>
+          <button class="button button--secondary" (click)="showMultipleToasts()">
+            Múltiples Toasts
+          </button>
+        </figure>
+      </section>
+
+      <!-- LOADING STATES -->
+      <section class="subsection">
+        <h3 class="subsection__title">Estados de Carga (Loading)</h3>
+        <p class="subsection__description">LoadingService gestiona estados de carga globales y locales</p>
+        
+        <figure class="component-showcase component-showcase--column">
+          <div class="demo-row">
+            <button class="button button--primary" (click)="simulateGlobalLoading()">
+              Simular Loading Global (2s)
+            </button>
+            <span class="demo-hint">Muestra un spinner fullscreen con overlay</span>
+          </div>
+
+          <div class="demo-row">
+            <button 
+              class="button button--secondary" 
+              (click)="simulateButtonLoading()"
+              [disabled]="isButtonLoading()">
+              @if (isButtonLoading()) {
+                <app-button-spinner></app-button-spinner>
+                Enviando...
+              } @else {
+                Enviar Formulario
+              }
+            </button>
+            <span class="demo-hint">Spinner dentro de un botón</span>
+          </div>
+
+          <div class="demo-row">
+            <button class="button button--tertiary" (click)="simulateLocalLoading()">
+              Activar Spinner Local
+            </button>
+            <div class="local-spinner-demo">
+              <app-spinner 
+                mode="local" 
+                [loadingKey]="localSpinnerKey" 
+                size="small">
+              </app-spinner>
+            </div>
+          </div>
+        </figure>
+
+        <h4>Spinners - Tamaños</h4>
+        <figure class="component-showcase">
+          <div class="spinner-demo">
+            <app-spinner mode="local" [show]="true" size="small"></app-spinner>
+            <span>Small</span>
+          </div>
+          <div class="spinner-demo">
+            <app-spinner mode="local" [show]="true" size="medium"></app-spinner>
+            <span>Medium</span>
+          </div>
+          <div class="spinner-demo">
+            <app-spinner mode="local" [show]="true" size="large"></app-spinner>
+            <span>Large</span>
+          </div>
+        </figure>
+      </section>
+
+      <!-- EVENT BUS -->
+      <section class="subsection">
+        <h3 class="subsection__title">Bus de Eventos (EventBus)</h3>
+        <p class="subsection__description">EventBusService permite comunicación desacoplada entre componentes</p>
+        
+        <figure class="component-showcase component-showcase--column">
+          <div class="demo-row">
+            <button class="button button--primary" (click)="emitCustomEvent()">
+              Emitir Evento Personalizado
+            </button>
+            <button class="button button--secondary" (click)="emitUserEvent()">
+              Emitir Evento de Usuario
+            </button>
+            <button class="button button--tertiary" (click)="clearEventLog()">
+              Limpiar Log
+            </button>
+          </div>
+          
+          <div class="event-log">
+            <h5>Log de Eventos:</h5>
+            @if (eventLog().length === 0) {
+              <p class="event-log__empty">No hay eventos registrados</p>
+            } @else {
+              @for (log of eventLog(); track log) {
+                <div class="event-log__item">{{ log }}</div>
+              }
+            }
+          </div>
+        </figure>
+      </section>
+
+      <!-- STATE SERVICE -->
+      <section class="subsection">
+        <h3 class="subsection__title">Gestión de Estado (StateService)</h3>
+        <p class="subsection__description">StateService mantiene el estado global de la aplicación</p>
+        
+        <figure class="component-showcase component-showcase--column">
+          <div class="state-display">
+            <div class="state-item">
+              <span class="state-label">Sidebar:</span>
+              <span class="state-value" [class.state-value--active]="isSidebarOpen">
+                {{ isSidebarOpen ? 'Abierto' : 'Cerrado' }}
+              </span>
+            </div>
+            <div class="state-item">
+              <span class="state-label">Título de Página:</span>
+              <span class="state-value">{{ currentPageTitle }}</span>
+            </div>
+          </div>
+          
+          <div class="demo-row">
+            <button class="button button--primary" (click)="toggleSidebar()">
+              Toggle Sidebar
+            </button>
+            <button class="button button--secondary" (click)="setPageTitle()">
+              Cambiar Título
+            </button>
+          </div>
+        </figure>
+      </section>
+
+      <!-- RESUMEN DE SERVICIOS -->
+      <section class="subsection">
+        <h3 class="subsection__title">Resumen de Servicios Implementados</h3>
+        
+        <div class="services-summary">
+          <div class="service-card">
+            <h4>NotificationService</h4>
+            <ul>
+              <li>Notificaciones toast con Subject/Observable</li>
+              <li>Tipos: success, error, warning, info</li>
+              <li>Auto-dismiss configurable</li>
+              <li>Máximo de notificaciones simultáneas</li>
+            </ul>
+          </div>
+          
+          <div class="service-card">
+            <h4>LoadingService</h4>
+            <ul>
+              <li>Loading global con contador de referencias</li>
+              <li>Loading local por claves únicas</li>
+              <li>Wrappers async: withGlobalLoading(), withLocalLoading()</li>
+              <li>Compatible con Signals y Observables</li>
+            </ul>
+          </div>
+          
+          <div class="service-card">
+            <h4>EventBusService</h4>
+            <ul>
+              <li>Patrón Publish/Subscribe</li>
+              <li>emit(), on(), onPrefix()</li>
+              <li>Eventos del sistema predefinidos</li>
+              <li>Historial opcional para debugging</li>
+            </ul>
+          </div>
+          
+          <div class="service-card">
+            <h4>StateService</h4>
+            <ul>
+              <li>Store centralizado con Signals</li>
+              <li>Selectores computados</li>
+              <li>Persistencia en localStorage</li>
+              <li>Sistema de caché con timestamps</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </section>
   }
 </main>
 
