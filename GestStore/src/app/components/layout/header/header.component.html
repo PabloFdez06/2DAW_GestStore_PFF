@@ -16,7 +16,9 @@
 
     <!-- Mobile Hamburger Button -->
     <button 
+      #hamburgerButton
       class="app-header__hamburger" 
+      [class.app-header__hamburger--open]="isMenuOpen()"
       aria-label="Abrir menú de navegación" 
       (click)="toggleMenu()"
       [attr.aria-expanded]="isMenuOpen()"
@@ -26,8 +28,10 @@
       <span class="hamburger__line hamburger__line--bottom" aria-hidden="true"></span>
     </button>
 
-    <!-- Language & Login (Desktop) -->
+    <!-- Language, Theme Switcher & Login (Desktop) -->
     <div class="app-header__actions app-header__actions--desktop">
+      <app-theme-switcher></app-theme-switcher>
+      
       <label for="language-desktop" class="visually-hidden">Seleccionar idioma</label>
       <select id="language-desktop" class="app-header__language">
         <option value="es">ES (ES)</option>
@@ -41,9 +45,21 @@
     </div>
   </div>
 
-  <!-- Mobile Menu -->
+  <!-- Mobile Menu with Overlay -->
   @if (isMenuOpen()) {
-    <nav id="mobile-menu" class="app-header__nav app-header__nav--mobile" aria-label="Navegación móvil">
+    <div 
+      class="app-header__overlay" 
+      (click)="closeMenu()"
+      aria-hidden="true">
+    </div>
+    
+    <nav 
+      #mobileMenu
+      id="mobile-menu" 
+      class="app-header__nav app-header__nav--mobile" 
+      aria-label="Navegación móvil"
+      role="dialog"
+      aria-modal="true">
       <ul class="app-header__nav-list">
         <li><a routerLink="/" class="app-header__nav-link" (click)="closeMenu()">Inicio</a></li>
         <li><a href="#" class="app-header__nav-link" (click)="closeMenu()">Productos</a></li>
@@ -51,6 +67,8 @@
       </ul>
       
       <div class="app-header__mobile-actions">
+        <app-theme-switcher></app-theme-switcher>
+        
         <label for="language-mobile" class="visually-hidden">Seleccionar idioma</label>
         <select id="language-mobile" class="app-header__language">
           <option value="es">ES (ES)</option>

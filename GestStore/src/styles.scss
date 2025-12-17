@@ -1,11 +1,11 @@
 // ITCSS: de menor a mayor especificidad
 
 // 1) Settings
-@use './styles/00-settings/variables';
+@use './styles/00-settings/variables' as *;
 @use './styles/00-settings/css-variables';
 
 // 2) Tools
-@use './styles/01-tools/mixins';
+@use './styles/01-tools/mixins' as *;
 
 // 3) Generic
 @use './styles/02-generic/reset';
@@ -15,3 +15,112 @@
 
 // 5) Objects (layout)
 @use './styles/04-objects/layout';
+
+// ============================================================================
+// ESTILOS GLOBALES PARA COMPONENTES DINÁMICOS
+// ============================================================================
+
+// Tooltip (generado dinámicamente por TooltipDirective)
+.tooltip {
+  position: fixed;
+  z-index: 10000;
+  padding: $spacing-2 $spacing-3;
+  background: $gray-900;
+  color: $color-white;
+  font-size: $font-size-sm;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  max-width: 250px;
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-word;
+  
+  &--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  // Flecha según posición
+  &::before {
+    content: '';
+    position: absolute;
+    border: 6px solid transparent;
+  }
+  
+  &--top {
+    transform: translateY(-4px);
+    
+    &.tooltip--visible {
+      transform: translateY(0);
+    }
+    
+    &::before {
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-color: $gray-900;
+    }
+  }
+  
+  &--bottom {
+    transform: translateY(4px);
+    
+    &.tooltip--visible {
+      transform: translateY(0);
+    }
+    
+    &::before {
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: $gray-900;
+    }
+  }
+  
+  &--left {
+    transform: translateX(-4px);
+    
+    &.tooltip--visible {
+      transform: translateX(0);
+    }
+    
+    &::before {
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: $gray-900;
+    }
+  }
+  
+  &--right {
+    transform: translateX(4px);
+    
+    &.tooltip--visible {
+      transform: translateX(0);
+    }
+    
+    &::before {
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-right-color: $gray-900;
+    }
+  }
+}
+
+// Clase de utilidad para ocultar visualmente pero mantener accesibilidad
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

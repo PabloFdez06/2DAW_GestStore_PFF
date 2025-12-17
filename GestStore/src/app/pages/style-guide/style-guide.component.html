@@ -10,6 +10,12 @@
     </button>
     <button 
       class="button button--secondary" 
+      (click)="switchView('interactive')"
+      [class.button--active]="currentView === 'interactive'">
+      Interactivos
+    </button>
+    <button 
+      class="button button--secondary" 
       (click)="switchView('colors')"
       [class.button--active]="currentView === 'colors'">
       Colores
@@ -531,6 +537,220 @@
           <span class="typography-weight">Regular</span>
           <p>Este es un párrafo regular con texto de ejemplo usando Body 1. IBM Plex Sans es la fuente principal del proyecto.</p>
         </article>
+      </section>
+    </section>
+  }
+
+  <!-- COMPONENTES INTERACTIVOS -->
+  @if (currentView === 'interactive') {
+    <!-- THEME SWITCHER -->
+    <section class="section">
+      <h2 class="section__title">Theme Switcher</h2>
+      <p class="section__description">Componente para alternar entre tema claro y oscuro. Detecta la preferencia del sistema y persiste la elección del usuario en localStorage.</p>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Toggle de Tema</h3>
+        <figure class="component-showcase component-showcase--centered">
+          <app-theme-switcher></app-theme-switcher>
+        </figure>
+        <p class="subsection__note">El tema seleccionado se guardará y aplicará automáticamente en futuras visitas.</p>
+      </section>
+    </section>
+
+    <!-- MODAL -->
+    <section class="section">
+      <h2 class="section__title">Modal</h2>
+      <p class="section__description">Ventanas modales interactivas con soporte para cierre con ESC, click fuera y focus trap para accesibilidad.</p>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Ejemplos de Modal</h3>
+        <figure class="component-showcase">
+          <button class="button button--primary" (click)="openDemoModal()">
+            Abrir Modal Demo
+          </button>
+          <button class="button button--secondary" (click)="openConfirmModal()">
+            Modal de Confirmación
+          </button>
+        </figure>
+      </section>
+    </section>
+    
+    <!-- Modal Demo -->
+    <app-modal 
+      #demoModal
+      title="Modal de Demostración"
+      size="medium"
+      (closed)="onModalClosed()">
+      <p>Este es un modal de ejemplo que demuestra las capacidades del componente:</p>
+      <ul>
+        <li>Cierre con tecla ESC</li>
+        <li>Cierre al hacer click fuera (en el overlay)</li>
+        <li>Focus trap para navegación con teclado</li>
+        <li>Animaciones de entrada y salida</li>
+        <li>Soporte para ARIA y lectores de pantalla</li>
+      </ul>
+    </app-modal>
+    
+    <!-- Modal de Confirmación -->
+    <app-modal 
+      #confirmModal
+      title="Confirmar Acción"
+      size="small"
+      [showFooter]="true">
+      <p>¿Estás seguro de que deseas realizar esta acción? Esta operación no se puede deshacer.</p>
+      <div modal-footer>
+        <button class="button button--secondary" (click)="confirmModal.close()">Cancelar</button>
+        <button class="button button--primary" (click)="onConfirmAction()">Confirmar</button>
+      </div>
+    </app-modal>
+
+    <!-- ACCORDION -->
+    <section class="section">
+      <h2 class="section__title">Acordeón</h2>
+      <p class="section__description">Secciones expandibles/colapsables con navegación por teclado y soporte ARIA.</p>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Acordeón Simple</h3>
+        <figure class="component-showcase component-showcase--vertical component-showcase--full">
+          <app-accordion>
+            <app-accordion-item title="¿Qué es GestStore?">
+              <p>GestStore es una aplicación de gestión de inventario diseñada para pequeñas y medianas empresas. Permite controlar productos, categorías, proveedores y realizar seguimiento de stock en tiempo real.</p>
+            </app-accordion-item>
+            <app-accordion-item title="¿Cómo funciona el sistema de inventario?">
+              <p>El sistema permite registrar entradas y salidas de productos, generar alertas de stock bajo, y crear informes detallados sobre el movimiento de mercancía.</p>
+            </app-accordion-item>
+            <app-accordion-item title="¿Puedo exportar los datos?">
+              <p>Sí, GestStore permite exportar datos en múltiples formatos incluyendo CSV, Excel y PDF para facilitar el análisis y la integración con otros sistemas.</p>
+            </app-accordion-item>
+          </app-accordion>
+        </figure>
+      </section>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Acordeón con Expansión Única</h3>
+        <figure class="component-showcase component-showcase--vertical component-showcase--full">
+          <app-accordion [singleExpand]="true">
+            <app-accordion-item title="Política de Privacidad" [expanded]="true">
+              <p>Respetamos tu privacidad. Los datos recopilados se utilizan únicamente para mejorar la experiencia del usuario y nunca se comparten con terceros sin consentimiento.</p>
+            </app-accordion-item>
+            <app-accordion-item title="Términos de Uso">
+              <p>Al utilizar GestStore, aceptas nuestros términos de servicio que incluyen el uso responsable de la plataforma y el respeto a los derechos de otros usuarios.</p>
+            </app-accordion-item>
+            <app-accordion-item title="Contacto y Soporte">
+              <p>Nuestro equipo de soporte está disponible de lunes a viernes de 9:00 a 18:00. Puedes contactarnos a través del formulario de contacto o enviando un email a soporte@geststore.com.</p>
+            </app-accordion-item>
+          </app-accordion>
+        </figure>
+      </section>
+    </section>
+
+    <!-- TABS -->
+    <section class="section">
+      <h2 class="section__title">Tabs (Pestañas)</h2>
+      <p class="section__description">Sistema de pestañas con navegación por teclado, animaciones y múltiples variantes visuales.</p>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Tabs Default</h3>
+        <figure class="component-showcase component-showcase--vertical component-showcase--full">
+          <app-tabs (tabChanged)="onTabChanged($event)">
+            <app-tab-panel label="Información General">
+              <h4>Información General</h4>
+              <p>GestStore es una solución completa para la gestión de inventario. Con una interfaz intuitiva y características avanzadas, facilita el control de stock para negocios de cualquier tamaño.</p>
+            </app-tab-panel>
+            <app-tab-panel label="Características">
+              <h4>Características Principales</h4>
+              <ul>
+                <li>Gestión de productos y categorías</li>
+                <li>Control de proveedores</li>
+                <li>Alertas de stock bajo</li>
+                <li>Informes y estadísticas</li>
+                <li>Exportación de datos</li>
+              </ul>
+            </app-tab-panel>
+            <app-tab-panel label="Precios">
+              <h4>Planes de Precios</h4>
+              <p>Ofrecemos planes flexibles adaptados a las necesidades de cada negocio, desde el plan gratuito para pequeños emprendedores hasta el plan enterprise para grandes organizaciones.</p>
+            </app-tab-panel>
+          </app-tabs>
+        </figure>
+      </section>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Tabs Variante Pills</h3>
+        <figure class="component-showcase component-showcase--vertical component-showcase--full">
+          <app-tabs variant="pills">
+            <app-tab-panel label="Dashboard">
+              <p>Panel principal con métricas y estadísticas en tiempo real sobre el estado del inventario.</p>
+            </app-tab-panel>
+            <app-tab-panel label="Productos">
+              <p>Gestión completa del catálogo de productos con búsqueda, filtros y edición masiva.</p>
+            </app-tab-panel>
+            <app-tab-panel label="Configuración" [disabled]="true">
+              <p>Opciones de configuración del sistema (deshabilitado en demo).</p>
+            </app-tab-panel>
+          </app-tabs>
+        </figure>
+      </section>
+    </section>
+
+    <!-- TOOLTIP -->
+    <section class="section">
+      <h2 class="section__title">Tooltips</h2>
+      <p class="section__description">Información contextual que aparece al pasar el cursor o al recibir focus. Accesibles con teclado.</p>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Posiciones</h3>
+        <figure class="component-showcase component-showcase--spaced">
+          <button 
+            class="button button--secondary"
+            appTooltip="Tooltip arriba"
+            tooltipPosition="top">
+            Arriba
+          </button>
+          <button 
+            class="button button--secondary"
+            appTooltip="Tooltip abajo"
+            tooltipPosition="bottom">
+            Abajo
+          </button>
+          <button 
+            class="button button--secondary"
+            appTooltip="Tooltip izquierda"
+            tooltipPosition="left">
+            Izquierda
+          </button>
+          <button 
+            class="button button--secondary"
+            appTooltip="Tooltip derecha"
+            tooltipPosition="right">
+            Derecha
+          </button>
+        </figure>
+      </section>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Usos Prácticos</h3>
+        <figure class="component-showcase component-showcase--spaced">
+          <button 
+            class="button button--primary"
+            appTooltip="Guarda todos los cambios realizados en el formulario"
+            tooltipPosition="top">
+            Guardar
+          </button>
+          <button 
+            class="button button--error"
+            appTooltip="Elimina permanentemente este registro. Esta acción no se puede deshacer."
+            tooltipPosition="top">
+            Eliminar
+          </button>
+          <span 
+            class="info-icon"
+            tabindex="0"
+            appTooltip="Haz clic aquí para obtener más información sobre esta funcionalidad"
+            tooltipPosition="right">
+            ℹ️
+          </span>
+        </figure>
       </section>
     </section>
   }

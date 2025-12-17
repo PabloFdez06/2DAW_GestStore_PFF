@@ -456,3 +456,63 @@
 .color-swatch--text-secondary { background-color: $text-secondary; }
 .color-swatch--text-muted { background-color: $text-muted; }
 .color-swatch--border-default { background-color: $border-default; }
+
+// ============================================================================
+// ESTILOS PARA COMPONENTES INTERACTIVOS
+// ============================================================================
+
+.component-showcase--centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.component-showcase--full {
+  padding: $spacing-4;
+  
+  app-accordion,
+  app-tabs {
+    width: 100%;
+  }
+}
+
+.component-showcase--spaced {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+  justify-content: center;
+  align-items: center;
+}
+
+.subsection__note {
+  margin-top: $spacing-4;
+  padding: $spacing-3 $spacing-4;
+  background: rgba($color-primary, 0.08);
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  border-left: 3px solid $color-primary;
+}
+
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  cursor: help;
+  border-radius: $radius-full;
+  background: $gray-100;
+  @include transition;
+  
+  &:hover,
+  &:focus {
+    background: $gray-200;
+    outline: none;
+  }
+  
+  &:focus-visible {
+    box-shadow: 0 0 0 2px $color-primary;
+  }
+}

@@ -115,6 +115,7 @@
   cursor: pointer;
   padding: $spacing-2;
   align-items: center;
+  z-index: 200;
 
   @include respond(lg) {
     display: none;
@@ -122,6 +123,22 @@
 
   &:focus-visible {
     @include focus-visible;
+  }
+  
+  // Estado abierto - animación X
+  &--open {
+    .hamburger__line--top {
+      transform: rotate(45deg) translateY(0);
+    }
+    
+    .hamburger__line--middle {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    
+    .hamburger__line--bottom {
+      transform: rotate(-45deg) translateY(0);
+    }
   }
 }
 
@@ -135,10 +152,27 @@
   &--top {
     transform: translateY(calc(-#{$spacing-1} - 0.125rem));
   }
+  
+  &--middle {
+    opacity: 1;
+    transform: scaleX(1);
+  }
 
   &--bottom {
     transform: translateY(calc(#{$spacing-1} + 0.125rem));
   }
+}
+
+// Overlay para cerrar el menú al click fuera
+.app-header__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+  animation: fadeIn 0.2s ease-out;
 }
 
 // Desktop Actions
@@ -166,6 +200,10 @@
   padding-top: $spacing-4;
   border-top: 1px solid $border-default;
   width: 100%;
+  
+  app-theme-switcher {
+    align-self: center;
+  }
 }
 
 .app-header__language {
@@ -206,6 +244,15 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

@@ -1,0 +1,121 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.tabs {
+  width: 100%;
+}
+
+.tabs__list {
+  display: flex;
+  position: relative;
+  border-bottom: 2px solid var(--border-default);
+  gap: $spacing-1;
+  
+  .tabs--pills & {
+    border-bottom: none;
+    background: var(--gray-100);
+    padding: $spacing-1;
+    border-radius: $radius-lg;
+  }
+  
+  .tabs--underline & {
+    border-bottom: 1px solid var(--border-default);
+  }
+}
+
+.tabs__tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-4;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--text-default);
+  opacity: 0.7;
+  @include transition;
+  white-space: nowrap;
+  z-index: 1;
+  
+  &:hover:not(:disabled) {
+    opacity: 1;
+    color: $color-primary;
+  }
+  
+  &:focus-visible {
+    @include focus-visible;
+    outline-offset: -2px;
+  }
+  
+  &--active {
+    opacity: 1;
+    color: $color-primary;
+  }
+  
+  &--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  
+  // Variante pills
+  .tabs--pills & {
+    border-radius: $radius-md;
+    
+    &--active {
+      background: var(--bg-default);
+      box-shadow: $shadow-sm;
+    }
+  }
+}
+
+.tabs__tab-icon {
+  font-size: 1.1em;
+}
+
+.tabs__tab-label {
+  line-height: 1.2;
+}
+
+// Indicador animado (solo para variante default y underline)
+.tabs__indicator {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  height: 2px;
+  background: $color-primary;
+  @include transition;
+  transition-property: transform, width;
+  border-radius: $radius-full;
+  
+  .tabs--pills & {
+    display: none;
+  }
+  
+  .tabs--underline & {
+    bottom: -1px;
+  }
+}
+
+.tabs__panels {
+  padding-top: $spacing-4;
+  color: var(--text-default);
+}
+
+// Animación de contenido
+.tab-panel {
+  animation: tabFadeIn 0.2s ease-out;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
