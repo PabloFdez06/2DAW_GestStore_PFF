@@ -2,30 +2,46 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .login-container {
+  // 1️⃣ POSICIONAMIENTO
+  position: relative;
+
+  // 3️⃣ BOX MODEL
   width: 100%;
-  max-width: 1200px;
+  max-width: 75rem;
   margin: $spacing-8 auto;
   padding: $spacing-6;
-  position: relative;
 }
 
 .login-container__back {
-  background: transparent;
-  border: none;
-  font-size: $font-size-base;
-  font-weight: $font-weight-medium;
-  color: $color-primary;
-  cursor: pointer;
-  padding: $spacing-2 $spacing-4;
-  margin-bottom: $spacing-6;
+  // 2️⃣ DISPLAY
   display: inline-flex;
   align-items: center;
   gap: $spacing-2;
+
+  // 3️⃣ BOX MODEL
+  margin-bottom: $spacing-6;
+  padding: $spacing-2 $spacing-4;
+
+  // 4️⃣ BACKGROUND
+  background: transparent;
+
+  // 5️⃣ BORDER
+  border: none;
+
+  // 6️⃣ TIPOGRAFÍA
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-primary;
+
+  // 7️⃣ EFECTOS VISUALES
+  cursor: pointer;
+
+  // 8️⃣ TRANSICIONES
   transition: all $transition-base;
 
   &:hover {
     color: color-primary(normal-hover);
-    transform: translateX(-4px);
+    transform: translateX(-0.25rem);
   }
 
   &:focus-visible {
@@ -34,14 +50,23 @@
 }
 
 .login-content {
+  // 2️⃣ DISPLAY
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: $spacing-8;
+
+  // 3️⃣ BOX MODEL
+  min-height: 31.25rem;
+
+  // 4️⃣ BACKGROUND
   background: $bg-default;
+
+  // 5️⃣ BORDER
   border-radius: $radius-lg;
+
+  // 7️⃣ EFECTOS VISUALES
   overflow: hidden;
   box-shadow: $shadow-lg;
-  min-height: 500px;
 
   @include respond(md) {
     gap: $spacing-4;
@@ -62,16 +87,21 @@
 }
 
 .login-content__illustration {
+  // 2️⃣ DISPLAY
   display: flex;
   align-items: center;
   justify-content: center;
+
+  // 3️⃣ BOX MODEL
+  min-height: 25rem;
   padding: $spacing-8;
+
+  // 4️⃣ BACKGROUND
   background: linear-gradient(
     135deg,
-    rgba(107, 90, 255, 0.05) 0%,
-    rgba(107, 90, 255, 0.1) 100%
+    rgba($color-primary, 0.05) 0%,
+    rgba($color-primary, 0.1) 100%
   );
-  min-height: 400px;
 
   @include respond(md) {
     padding: $spacing-4;
@@ -79,18 +109,21 @@
 
   img {
     width: 100%;
+    max-width: 25rem;
     height: auto;
-    max-width: 400px;
     object-fit: contain;
   }
 }
 
 .login-modal__title {
-  font-family: 'Montserrat', sans-serif;
+  // 3️⃣ BOX MODEL
+  margin: 0;
+
+  // 6️⃣ TIPOGRAFÍA
+  font-family: $font-primary;
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
-  color: #353535;
-  margin: 0;
+  color: $gray-900;
 }
 
 .login-form {
@@ -113,16 +146,25 @@
 }
 
 .form-input {
+  // 3️⃣ BOX MODEL
   width: 100%;
   padding: $spacing-3 $spacing-3 $spacing-3 $spacing-10;
-  border: 1px solid #464646;
-  border-radius: $radius-md;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  color: #353535;
+
+  // 4️⃣ BACKGROUND
   background: $bg-default;
-  transition: border-color $transition-base, box-shadow $transition-base;
+
+  // 5️⃣ BORDER
+  border: $border-thin solid $gray-800;
+  border-radius: $radius-md;
+
+  // 6️⃣ TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: $font-size-base;
   font-weight: $font-weight-medium;
+  color: $gray-900;
+
+  // 8️⃣ TRANSICIONES
+  transition: border-color $transition-base, box-shadow $transition-base;
 
   &:focus {
     @include focus-visible;
@@ -130,7 +172,7 @@
   }
 
   &::placeholder {
-    color: #757575;
+    color: $gray-400;
   }
 
   &--error {
@@ -139,11 +181,18 @@
 }
 
 .form-input__icon {
+  // 1️⃣ POSICIONAMIENTO
   position: absolute;
   left: $spacing-3;
-  width: 30px;
-  height: 30px;
-  color: #464646;
+
+  // 3️⃣ BOX MODEL
+  width: 1.875rem;
+  height: 1.875rem;
+
+  // 6️⃣ TIPOGRAFÍA
+  color: $gray-800;
+
+  // 7️⃣ EFECTOS VISUALES
   pointer-events: none;
 }
 
@@ -155,11 +204,15 @@
 }
 
 .form-checkbox__input {
-  width: 18px;
-  height: 18px;
+  // 3️⃣ BOX MODEL
+  width: 1.125rem;
+  height: 1.125rem;
+
+  // 5️⃣ BORDER
+  border: $border-thin solid $gray-800;
+
+  // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
-  border: 1px solid #464646;
-  @include focus-visible;
   outline: none;
   box-shadow: none;
 
@@ -169,14 +222,17 @@
 }
 
 .form-checkbox__label {
-  cursor: pointer;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  color: #353535;
+  // 6️⃣ TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: $font-size-base;
   font-weight: $font-weight-medium;
+  color: $gray-900;
+
+  // 7️⃣ EFECTOS VISUALES
+  cursor: pointer;
 
   &:hover {
-    color: #464646;
+    color: $gray-800;
   }
 }
 
@@ -201,7 +257,7 @@ fieldset .button {
 
   &.button--primary {
     background-color: $color-primary;
-    color: white;
+    color: $color-white;
 
     &:hover {
       background-color: darken($color-primary, 10%);
@@ -227,32 +283,53 @@ fieldset .button {
 }
 
 .login-social__label {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  font-weight: $font-weight-medium;
-  color: #353535;
+  // 3️⃣ BOX MODEL
   margin: 0;
+
+  // 6️⃣ TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $gray-900;
 }
 
 .login-social__links {
+  // 2️⃣ DISPLAY
   display: flex;
-  gap: $spacing-3;
   align-items: center;
-  list-style: none;
+  gap: $spacing-3;
+
+  // 3️⃣ BOX MODEL
   margin: 0;
   padding: 0;
+
+  // 7️⃣ EFECTOS VISUALES
+  list-style: none;
 }
 
 .login-social__link {
+  // 2️⃣ DISPLAY
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+
+  // 3️⃣ BOX MODEL
+  width: 1.875rem;
+  height: 1.875rem;
+
+  // 4️⃣ BACKGROUND
   background: transparent;
+
+  // 5️⃣ BORDER
   border: none;
-  cursor: pointer;
+
+  // 6️⃣ TIPOGRAFÍA
   color: $gray-500;
+
+  // 7️⃣ EFECTOS VISUALES
+  cursor: pointer;
+
+  // 8️⃣ TRANSICIONES
   transition: all $transition-base;
 
   &:hover {
@@ -271,14 +348,17 @@ fieldset .button {
 }
 
 .login-register-link {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  font-weight: $font-weight-medium;
-  color: #353535;
+  // 3️⃣ BOX MODEL
   margin: 0;
 
+  // 6️⃣ TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $gray-900;
+
   .link-register {
-    color: #008bd9;
+    color: $info;
     text-decoration: none;
     cursor: pointer;
 
@@ -293,10 +373,15 @@ fieldset .button {
 }
 
 .login-illustration-img {
-  max-width: 100%;
-  height: auto;
-  width: 100%;
-  max-height: 500px;
-  object-fit: contain;
+  // 2️⃣ DISPLAY
   display: block;
+
+  // 3️⃣ BOX MODEL
+  width: 100%;
+  max-width: 100%;
+  max-height: 31.25rem;
+  height: auto;
+
+  // 7️⃣ EFECTOS VISUALES
+  object-fit: contain;
 }

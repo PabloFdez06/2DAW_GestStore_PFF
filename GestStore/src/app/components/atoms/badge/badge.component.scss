@@ -1,28 +1,33 @@
 @use '../../../../styles/00-settings/variables' as vars;
 
 .badge {
+  // 2️⃣ DISPLAY
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  // 5️⃣ BORDER
   border-radius: vars.$radius-full;
-  font-family: 'Montserrat', sans-serif;
+
+  // 6️⃣ TIPOGRAFÍA
+  font-family: vars.$font-primary;
   font-weight: vars.$font-weight-medium;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.03125rem;
   white-space: nowrap;
 
   &--small {
     padding: vars.$spacing-1 vars.$spacing-2;
-    font-size: 0.75rem;
+    font-size: vars.$font-size-xs;
   }
 
   &--medium {
     padding: vars.$spacing-2 vars.$spacing-3;
-    font-size: 0.875rem;
+    font-size: vars.$font-size-sm;
   }
 
   &--primary {
     background-color: vars.$color-primary;
-    color: white;
+    color: vars.$color-white;
   }
 
   &--secondary {
@@ -32,21 +37,21 @@
 
   &--success {
     background-color: vars.$success;
-    color: white;
+    color: vars.$color-white;
   }
 
   &--warning {
     background-color: vars.$warning;
-    color: white;
+    color: vars.$color-white;
   }
 
   &--error {
     background-color: vars.$error;
-    color: white;
+    color: vars.$color-white;
   }
 
   &--info {
     background-color: vars.$info;
-    color: white;
+    color: vars.$color-white;
   }
 }

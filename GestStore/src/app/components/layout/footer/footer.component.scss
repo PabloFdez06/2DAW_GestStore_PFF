@@ -68,19 +68,30 @@
 }
 
 .app-footer__social-link {
+  // 2️⃣ DISPLAY
   @include flex-center;
-  width: 40px;
-  height: 40px;
-  border-radius: $radius-md;
+
+  // 3️⃣ BOX MODEL
+  width: $spacing-10;
+  height: $spacing-10;
+
+  // 4️⃣ BACKGROUND
   background-color: $color-primary;
-  color: $text-inverse;
+
+  // 5️⃣ BORDER
+  border-radius: $radius-md;
+
+  // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-base;
-  @include transition;
+  color: $text-inverse;
   text-decoration: none;
+
+  // 8️⃣ TRANSICIONES
+  @include transition;
 
   &:hover {
     background-color: color-primary(normal-hover);
-    transform: translateY(-2px);
+    transform: translateY(-0.125rem);
   }
 
   &:focus-visible {

@@ -32,10 +32,10 @@ Se utiliza la metodología **BEM (Block Element Modifier)** para nombrar las cla
 
 Ejemplo:
 ```html
-<div class="card card--featured">
+<article class="card card--featured">
   <h2 class="card__title">Título</h2>
   <p class="card__content">Contenido</p>
-</div>
+</article>
 ```
 
 ---
@@ -140,24 +140,58 @@ La ausencia de la propiedad `encapsulation` indica que se está usando la opció
 En la aplicación se emplean los siguientes elementos semánticos para estructurar el contenido:
 
 - `<header>`: Encabezado principal, contiene el logo, navegación y acciones de usuario.
-- `<nav>`: Navegación principal y secundaria.
+- `<nav>`: Navegación principal y secundaria, menús de enlaces.
 - `<main>`: Contenedor del contenido principal de cada página.
-- `<section>`: Agrupa bloques de contenido relacionados, como enlaces legales o redes sociales en el footer.
-- `<footer>`: Pie de página con información legal y de contacto.
+- `<section>`: Agrupa bloques de contenido relacionados temáticamente.
+- `<article>`: Contenido independiente y autocontenido (tarjetas de tareas, posts).
+- `<aside>`: Contenido complementario o secundario.
+- `<footer>`: Pie de página con información legal, contacto y enlaces.
+- `<figure>`: Contenedores de elementos visuales (logos, imágenes, fondos decorativos).
+- `<address>`: Información de contacto y direcciones.
+- `<menu>`: Listas de comandos o acciones (dropdowns, menús contextuales).
 - `<form>`: Para formularios de login y registro.
 - `<fieldset>` y `<legend>`: Para agrupar y describir campos relacionados en formularios.
-- `<aside>`: Opcional, para contenido secundario si el diseño lo requiere.
+- `<button>`: Botones interactivos con atributo type="button".
+- `<a>`: Enlaces de navegación con routerLink o href.
 
-**Ejemplo de código:**
+**Principio fundamental:** No se utilizan `<article>` genéricos excepto cuando no existe una etiqueta semántica más apropiada. Cada elemento HTML debe reflejar su propósito y significado.
+
+**Ejemplo de código del Header:**
 ```html
 <header class="app-header">
-  <nav> ... </nav>
+  <figure class="app-header__logo">
+    <img src="logo.png" alt="GestStore Logo" />
+  </figure>
+  <nav class="app-header__nav">
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/products">Productos</a>
+  </nav>
+  <button type="button" class="app-header__user-menu">Menú</button>
 </header>
-<main class="app-main">
-  <section> ... </section>
-</main>
+```
+
+**Ejemplo de código del Footer:**
+```html
 <footer class="app-footer">
-  <section> ... </section>
+  <section class="app-footer__content">
+    <article class="app-footer__brand">
+      <figure class="app-footer__logo">
+        <h2>GestStore</h2>
+        <img src="logo.png" alt="Logo" />
+      </figure>
+      <address>
+        <p>Copyright © 2025 GestStore Ltd</p>
+        <p>soportegeststore@gmail.com</p>
+      </address>
+    </article>
+    <nav class="app-footer__links">
+      <h3>Enlaces</h3>
+      <ul>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </nav>
+  </section>
 </footer>
 ```
 
@@ -191,7 +225,7 @@ Los formularios usan `<form>`, `<fieldset>`, `<legend>`, y el componente `form-i
 <form class="register-modal__form" (ngSubmit)="onSubmit($event)">
     <fieldset>
     <legend>Datos de registro</legend>
-    <div class="form-group">
+    <article class="form-group">
         <input type="text" 
                 class="form-input form-input--with-icon" 
                 placeholder="Introduce el nombre"
@@ -204,11 +238,155 @@ Los formularios usan `<form>`, `<fieldset>`, `<legend>`, y el componente `form-i
         @if (errors['nombre']) {
         <p class="form-error">{{ errors['nombre'] }}</p>
         }
-    </div>
+    </article>
 
 ```
 
 ![Register](image-1.png)
+
+---
+
+## 2.4 Componentes Home Header y Home Footer
+
+Se han implementado dos componentes moleculares para la página de inicio que demuestran el uso correcto de HTML semántico:
+
+### Home Header Component
+
+Componente de encabezado para landing page con:
+- Fondo decorativo con imagen (usando `<figure>`)
+- Logo y navegación con selector de idioma funcional
+- Sección hero con título, descripción y CTA
+
+**Estructura semántica:**
+```html
+<header class="home-header">
+  <!-- Fondos decorativos -->
+  <figure class="home-header__background"></figure>
+  <figure class="home-header__background-img">
+    <img [src]="backgroundImg" alt="Background" />
+  </figure>
+
+  <!-- Barra de navegación -->
+  <section class="home-header__content">
+    <figure class="home-header__brand">
+      <img [src]="logoImg" alt="GestStore Logo" />
+      <h1 class="home-header__logo-text">GestStore</h1>
+    </figure>
+
+    <nav class="home-header__nav">
+      <!-- Selector de idioma con dropdown -->
+      <button type="button" class="home-header__language">
+        <span>{{ currentLanguage.flag }} {{ currentLanguage.code }}</span>
+        <menu class="home-header__language-dropdown">
+          <li><button type="button">Español</button></li>
+        </menu>
+      </button>
+      <a routerLink="/login">LogIn</a>
+    </nav>
+  </section>
+
+  <!-- Sección Hero -->
+  <section class="home-header__hero">
+    <h2 class="home-header__hero-title">
+      Organiza tus tareas y controla tu inventario
+    </h2>
+    <article class="home-header__hero-description">
+      <p>Gestiona tus productos...</p>
+    </article>
+    <a routerLink="/register" class="home-header__register-btn">
+      <span>REGÍSTRATE GRATIS!</span>
+    </a>
+  </section>
+</header>
+```
+
+**Decisiones semánticas:**
+- `<figure>` para elementos decorativos y logos
+- `<section>` para agrupaciones de contenido relacionado
+- `<article>` para bloques de texto autocontenidos
+- `<menu>` + `<li>` para el dropdown de idiomas
+- `<button type="button">` para interacciones que no envían formularios
+- `<h1>` solo para el nombre de la marca en el header
+- `<h2>` para el título principal del hero
+
+### Home Footer Component
+
+Componente de pie de página con:
+- Columna de marca con logo, copyright y badges de apps
+- Tres columnas de navegación (GestStore, Legal, Redes Sociales)
+- Grid layout responsive mantenido en todos los breakpoints
+
+**Estructura semántica:**
+```html
+<footer class="home-footer">
+  <section class="home-footer__content">
+    <!-- Columna de marca -->
+    <article class="home-footer__brand">
+      <figure class="home-footer__logo">
+        <h2>GestStore</h2>
+        <img [src]="logoImg" alt="Logo" />
+      </figure>
+      
+      <address class="home-footer__copyright">
+        <p>Copyright © 2025 GestStore Ltd - Cádiz, España</p>
+        <p>Asistencia: soportegeststore@gmail.com</p>
+      </address>
+
+      <nav class="home-footer__apps">
+        <a href="#">
+          <img [src]="androidBadge" alt="Google Play" />
+        </a>
+        <a href="#">
+          <img [src]="appleBadge" alt="App Store" />
+        </a>
+      </nav>
+    </article>
+
+    <!-- Columnas de navegación -->
+    <nav class="home-footer__column">
+      <h3>GestStore</h3>
+      <ul>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+    </nav>
+
+    <nav class="home-footer__column">
+      <h3>Legal</h3>
+      <ul>
+        <li><a href="#">Términos de uso</a></li>
+        <li><a href="#">Cookies</a></li>
+        <li><a href="#">Política de Privacidad</a></li>
+      </ul>
+    </nav>
+
+    <nav class="home-footer__column">
+      <h3>Redes Sociales</h3>
+      <ul>
+        <li>
+          <a href="#" class="home-footer__social-link">
+            <img [src]="instagramLogo" alt="Instagram" />
+            <span>Instagram</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </section>
+</footer>
+```
+
+**Decisiones semánticas:**
+- `<footer>` como contenedor principal
+- `<section>` para el grid de contenido
+- `<article>` para la columna de marca (contenido autocontenido)
+- `<figure>` para el logo
+- `<address>` para información de contacto y copyright (uso correcto según HTML5)
+- `<nav>` para todas las columnas de enlaces y badges de apps
+- `<h2>` para el nombre de marca en footer
+- `<h3>` para títulos de columnas
+
+**Componentes ubicados en:** `src/app/components/molecules/home-header/` y `src/app/components/molecules/home-footer/`
 
 ---
 
@@ -311,17 +489,17 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [class]="getCardClasses()">
-      <div *ngIf="title" class="card__header">
+    <article [class]="getCardClasses()">
+      <article *ngIf="title" class="card__header">
         <h3 class="card__title">{{ title }}</h3>
-      </div>
-      <div class="card__body">
+      </article>
+      <article class="card__body">
         <ng-content></ng-content>
-      </div>
-      <div *ngIf="footer" class="card__footer">
+      </article>
+      <article *ngIf="footer" class="card__footer">
         <ng-content select="[card-footer]"></ng-content>
-      </div>
-    </div>
+      </article>
+    </article>
   `,
   styleUrl: './card.component.scss'
 })
@@ -382,16 +560,16 @@ export type AlertType = 'success' | 'warning' | 'error' | 'info';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [class]="getAlertClasses()" role="alert">
-      <div class="alert__icon">
+    <article [class]="getAlertClasses()" role="alert">
+      <article class="alert__icon">
         <svg class="alert__icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <!-- SVG dinámico según tipo -->
         </svg>
-      </div>
-      <div class="alert__content">
+      </article>
+      <article class="alert__content">
         <ng-content></ng-content>
-      </div>
-    </div>
+      </article>
+    </article>
   `,
   styleUrl: './alert.component.scss'
 })
@@ -468,7 +646,7 @@ export class FormInputComponent {
 
 **HTML  del componente:**
 ```html
-<div class="form-group">
+<article class="form-group">
   <label [for]="id" class="form-label" *ngIf="label">
     {{ label }}
     <span class="required" *ngIf="required" aria-label="requerido">*</span>
@@ -490,7 +668,7 @@ export class FormInputComponent {
 
   <p class="form-help" id="help-text" *ngIf="helpText">{{ helpText }}</p>
   <p class="form-error" id="error-text" *ngIf="error" role="alert">{{ error }}</p>
-</div>
+</article>
 ```
 
 **Uso en template del proyecto:**
@@ -572,7 +750,7 @@ export class FormTextareaComponent {
 
 **HTML  del componente:**
 ```html
-<div class="form-group">
+<article class="form-group">
   <label [for]="id" class="form-label" *ngIf="label">
     {{ label }}
     <span class="required" *ngIf="required" aria-label="requerido">*</span>
@@ -594,7 +772,7 @@ export class FormTextareaComponent {
 
   <p class="form-help" id="help-text" *ngIf="helpText">{{ helpText }}</p>
   <p class="form-error" id="error-text" *ngIf="error" role="alert">{{ error }}</p>
-</div>
+</article>
 ```
 
 **Uso en template del proyecto:**
@@ -720,7 +898,7 @@ selectOptions: SelectOption[] = [
 
 ---
 
-### Componentes Adicionales (4/4)
+### Componentes Adicionales (5/5)
 
 #### **Badge** (`src/app/components/atoms/badge/`)
 Etiqueta pequeña para estados, categorías y notificaciones.
@@ -851,6 +1029,112 @@ export class IconComponent {
 <app-icon name="home" size="medium"></app-icon>
 <app-icon name="check" size="small"></app-icon>
 <app-icon name="warning" size="large" [color]="'red'"></app-icon>
+```
+
+---
+
+#### **Task Card** (`src/app/components/molecules/task-card/`)
+Tarjeta de tarea con estado visual, descripción, timestamp e imagen opcional. Diseñada según el mockup de Figma.
+
+**Estados:** Completed (verde), Pending (amarillo), In-Progress (azul), Cancelled (rojo)
+**Características:** Icono de estado dinámico, título, descripción truncada, timestamp relativo, thumbnail opcional, menú de opciones
+
+**Código del componente TypeScript:**
+```typescript
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+export type TaskStatus = 'completed' | 'pending' | 'in-progress' | 'cancelled';
+
+@Component({
+  selector: 'app-task-card',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <article class="task-card" [class.task-card--hoverable]="hoverable">
+      <article class="task-card__content">
+        <article class="task-card__status-icon" [class]="'task-card__status-icon--' + status">
+          <svg viewBox="0 0 12 12">
+            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </article>
+        <article class="task-card__info">
+          <h3 class="task-card__title">{{ title }}</h3>
+          <p class="task-card__description">{{ description }}</p>
+          <p class="task-card__status-text">
+            Estatus: <span [class]="'task-card__status-value--' + status">{{ getStatusLabel() }}</span>
+          </p>
+          <p class="task-card__timestamp">{{ getTimestamp() }}</p>
+        </article>
+      </article>
+      <article class="task-card__thumbnail" *ngIf="imageUrl">
+        <img [src]="imageUrl" [alt]="title" />
+      </article>
+      <button class="task-card__menu" (click)="onMenuClick($event)">⋯</button>
+    </article>
+  `,
+  styleUrl: './task-card.component.scss'
+})
+export class TaskCardComponent {
+  @Input() title: string = '';
+  @Input() description: string = '';
+  @Input() status: TaskStatus = 'pending';
+  @Input() completedAt?: Date;
+  @Input() imageUrl?: string;
+  @Input() hoverable: boolean = true;
+
+  @Output() menuClick = new EventEmitter<void>();
+
+  getStatusLabel(): string {
+    const labels: Record<TaskStatus, string> = {
+      'completed': 'Completada',
+      'pending': 'Pendiente',
+      'in-progress': 'En progreso',
+      'cancelled': 'Cancelada'
+    };
+    return labels[this.status];
+  }
+}
+```
+
+**Uso en template del proyecto:**
+```html
+<app-task-card 
+  title="Revisión cableado"
+  description="En la obra de calle x, revisar y terminar cableado."
+  status="completed"
+  [completedAt]="taskDate"
+  (menuClick)="onTaskMenu()"
+/>
+
+<app-task-card 
+  title="Inspección equipos"
+  description="Revisar estado de los equipos del almacén."
+  status="pending"
+/>
+
+<app-task-card 
+  title="Actualizar inventario"
+  description="Registrar nuevos productos recibidos."
+  status="in-progress"
+/>
+```
+
+**Nomenclatura BEM:**
+```scss
+.task-card {                          // Bloque
+  &--hoverable { }                    // Modificador: interactivo
+  &__content { }                      // Elemento: contenedor principal
+  &__status-icon { }                  // Elemento: icono de estado
+  &__status-icon--completed { }       // Modificador: estado completado
+  &__status-icon--pending { }         // Modificador: estado pendiente
+  &__info { }                         // Elemento: información
+  &__title { }                        // Elemento: título
+  &__description { }                  // Elemento: descripción
+  &__timestamp { }                    // Elemento: fecha/hora
+  &__thumbnail { }                    // Elemento: imagen
+  &__menu { }                         // Elemento: botón menú
+}
 ```
 
 ---
@@ -1056,7 +1340,7 @@ Se ha creado una página de Style Guide interactiva en `/style-guide` que funcio
 
 ### Estructura del Style Guide
 
-El Style Guide está dividido en **6 secciones principales:**
+El Style Guide está articleidido en **6 secciones principales:**
 
 #### **1. Componentes**
 Muestra todos los componentes UI con sus variantes, tamaños y estados:
@@ -1180,7 +1464,7 @@ Todos los componentes cumplen con estándares WCAG 2.1:
 
 ### Form Input
 ```html
-<div class="form-input">
+<article class="form-input">
   <label for="email" class="form-input__label">
     Email {{ required ? '*' : '' }}
   </label>
@@ -1196,15 +1480,15 @@ Todos los componentes cumplen con estándares WCAG 2.1:
       {{ helpText }}
     </span>
   }
-</div>
+</article>
 ```
 
 ### Alert
 ```html
-<div class="alert alert--success" role="alert">
+<article class="alert alert--success" role="alert">
   <svg class="alert__icon" aria-hidden="true">...</svg>
   <p class="alert__message">{{ message }}</p>
-</div>
+</article>
 ```
 
 ### Button
@@ -1225,7 +1509,7 @@ Todos los componentes cumplen con estándares WCAG 2.1:
 
 **Componentes Implementados:** 9/9 (100%)
 - 5 Componentes Obligatorios (Button, Card, Alert, Form Input, Form Textarea, Form Select)
-- 4 Componentes Adicionales (Badge, Tag, Icon, Mejoras en Header)
+- 5 Componentes Adicionales (Badge, Tag, Icon, Task Card, Mejoras en Header)
 
 **Funcionalidades:**
 - Todos los componentes con variantes, tamaños y estados completos

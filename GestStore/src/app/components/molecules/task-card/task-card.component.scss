@@ -1,0 +1,282 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ============================================================================
+// TASK CARD - Tarjeta de tarea con estado, descripción e imagen
+// ============================================================================
+
+.task-card {
+  // 1️⃣ POSICIONAMIENTO
+  position: relative;
+
+  // 2️⃣ DISPLAY
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-4;
+
+  // 3️⃣ BOX MODEL
+  padding: $spacing-4;
+
+  // 4️⃣ BACKGROUND
+  background-color: $bg-default;
+
+  // 5️⃣ BORDER
+  border: $border-thin solid $border-default;
+  border-radius: $radius-lg;
+
+  // 8️⃣ TRANSICIONES
+  @include transition;
+
+  &:hover {
+    border-color: $color-primary;
+  }
+
+  // Modificador: hoverable
+  &--hoverable {
+    // 7️⃣ EFECTOS VISUALES
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: $shadow-md;
+
+      // 8️⃣ TRANSICIONES
+      transform: translateY(-0.125rem);
+    }
+  }
+}
+
+// ============================================================================
+// CONTENIDO PRINCIPAL
+// ============================================================================
+
+.task-card__content {
+  // 2️⃣ DISPLAY
+  display: flex;
+  flex: 1;
+  gap: $spacing-3;
+
+  // 3️⃣ BOX MODEL
+  min-width: 0;
+}
+
+// ============================================================================
+// ICONO DE ESTADO
+// ============================================================================
+
+.task-card__status-icon {
+  // 2️⃣ DISPLAY
+  flex-shrink: 0;
+
+  // 3️⃣ BOX MODEL
+  width: $spacing-3;
+  height: $spacing-3;
+  margin-top: $spacing-1;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  // Variantes de estado
+  &--completed {
+    color: $success;
+  }
+
+  &--pending {
+    color: $warning;
+  }
+
+  &--in-progress {
+    color: $info;
+  }
+
+  &--cancelled {
+    color: $error;
+  }
+}
+
+// ============================================================================
+// INFORMACIÓN DE LA TAREA
+// ============================================================================
+
+.task-card__info {
+  // 2️⃣ DISPLAY
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: $spacing-1;
+
+  // 3️⃣ BOX MODEL
+  min-width: 0;
+}
+
+.task-card__title {
+  // 3️⃣ BOX MODEL
+  margin: 0;
+
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-base, $font-weight-semibold);
+  color: $gray-900;
+  @include truncate;
+}
+
+.task-card__description {
+  // 2️⃣ DISPLAY
+  display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
+  -webkit-box-orient: vertical; /* stylelint-disable-line property-no-vendor-prefix */
+
+  // 3️⃣ BOX MODEL
+  margin: 0;
+
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-sm, $font-weight-regular);
+  line-clamp: 2;
+  -webkit-line-clamp: 2; /* stylelint-disable-line property-no-vendor-prefix */
+  color: $gray-600;
+
+  // 7️⃣ EFECTOS VISUALES
+  overflow: hidden;
+}
+
+.task-card__status-text {
+  // 3️⃣ BOX MODEL
+  margin: 0;
+
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-xs, $font-weight-regular);
+  color: $gray-900;
+}
+
+// Valores de estado con colores
+.task-card__status-value {
+  &--completed {
+    font-weight: $font-weight-medium;
+    color: $success;
+  }
+
+  &--pending {
+    font-weight: $font-weight-medium;
+    color: $warning;
+  }
+
+  &--in-progress {
+    font-weight: $font-weight-medium;
+    color: $info;
+  }
+
+  &--cancelled {
+    font-weight: $font-weight-medium;
+    color: $error;
+  }
+}
+
+.task-card__timestamp {
+  // 3️⃣ BOX MODEL
+  margin: 0;
+
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-xs, $font-weight-medium);
+  color: $gray-500;
+}
+
+// ============================================================================
+// THUMBNAIL
+// ============================================================================
+
+.task-card__thumbnail {
+  // 2️⃣ DISPLAY
+  flex-shrink: 0;
+
+  // 3️⃣ BOX MODEL
+  width: 5.5rem;
+  height: 5.5rem;
+
+  // 4️⃣ BACKGROUND
+  background-color: $gray-200;
+
+  // 5️⃣ BORDER
+  border-radius: $radius-lg;
+
+  // 7️⃣ EFECTOS VISUALES
+  overflow: hidden;
+
+  &--placeholder {
+    background-color: $gray-200;
+  }
+}
+
+.task-card__image {
+  // 3️⃣ BOX MODEL
+  width: 100%;
+  height: 100%;
+
+  // 7️⃣ EFECTOS VISUALES
+  object-fit: cover;
+}
+
+// ============================================================================
+// MENÚ DE OPCIONES
+// ============================================================================
+
+.task-card__menu {
+  // 1️⃣ POSICIONAMIENTO
+  position: absolute;
+  top: $spacing-3;
+  right: $spacing-3;
+
+  // 2️⃣ DISPLAY
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // 3️⃣ BOX MODEL
+  width: $spacing-6;
+  height: $spacing-6;
+  padding: 0;
+
+  // 4️⃣ BACKGROUND
+  background: transparent;
+
+  // 5️⃣ BORDER
+  border: none;
+  border-radius: $radius-sm;
+
+  // 6️⃣ TIPOGRAFÍA
+  color: $gray-500;
+
+  // 7️⃣ EFECTOS VISUALES
+  cursor: pointer;
+
+  // 8️⃣ TRANSICIONES
+  @include transition;
+
+  &:hover {
+    background-color: $gray-100;
+    color: $gray-700;
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+
+  svg {
+    width: $spacing-4;
+    height: $spacing-1;
+  }
+}
+
+// ============================================================================
+// RESPONSIVE
+// ============================================================================
+
+@include respond(sm) {
+  .task-card {
+    flex-direction: column;
+  }
+
+  .task-card__thumbnail {
+    width: 100%;
+    height: 7.5rem;
+    order: -1;
+  }
+}

@@ -2,12 +2,17 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .alert {
-  padding: $spacing-4;
-  border-radius: $radius-md;
-  border-left: 4px solid;
+  // 2️⃣ DISPLAY
   display: flex;
-  gap: $spacing-3;
   align-items: flex-start;
+  gap: $spacing-3;
+
+  // 3️⃣ BOX MODEL
+  padding: $spacing-4;
+
+  // 5️⃣ BORDER
+  border-left: $border-thick solid;
+  border-radius: $radius-md;
 
   &--success {
     background-color: rgba($success, 0.1);
@@ -35,11 +40,14 @@
 }
 
 .alert__icon {
+  // 2️⃣ DISPLAY
   display: flex;
-  align-items: flex-start;
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  align-items: flex-start;
+
+  // 3️⃣ BOX MODEL
+  width: $spacing-6;
+  height: $spacing-6;
 }
 
 .alert__icon-svg {
@@ -54,19 +62,32 @@
 }
 
 .alert__close {
-  margin-left: auto;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  @include transition;
-  color: inherit;
+  // 2️⃣ DISPLAY
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
+
+  // 3️⃣ BOX MODEL
+  width: $spacing-6;
+  height: $spacing-6;
+  margin-left: auto;
+  padding: 0;
+
+  // 4️⃣ BACKGROUND
+  background: none;
+
+  // 5️⃣ BORDER
+  border: none;
+
+  // 6️⃣ TIPOGRAFÍA
+  color: inherit;
+
+  // 7️⃣ EFECTOS VISUALES
+  cursor: pointer;
+
+  // 8️⃣ TRANSICIONES
+  @include transition;
 
   &:hover {
     opacity: 0.7;

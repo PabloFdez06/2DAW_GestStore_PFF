@@ -2,17 +2,28 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .button {
-  @include text-style($font-size-sm, $font-weight-medium);
+  // 2️⃣ DISPLAY
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: $spacing-2;
-  border-radius: $radius-md;
-  border: $border-thin solid transparent;
+
+  // 3️⃣ BOX MODEL
   padding: $spacing-3 $spacing-5;
+
+  // 5️⃣ BORDER
+  border: $border-thin solid transparent;
+  border-radius: $radius-md;
+
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-sm, $font-weight-medium);
+
+  // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
+
+  // 8️⃣ TRANSICIONES
   @include transition;
-  
+
   &:focus-visible {
     @include focus-visible;
   }

@@ -2,12 +2,19 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .app-header {
-  background: linear-gradient(135deg, #E5D5FF 0%, #F0E6FF 100%);
-  border-bottom: 1px solid #D4C5FF;
+  // 1️⃣ POSICIONAMIENTO
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 10;
+
+  // 3️⃣ BOX MODEL
   padding: $spacing-3 0;
+
+  // 4️⃣ BACKGROUND
+  background: linear-gradient(135deg, $color-primary-light 0%, rgba($color-primary, 0.08) 100%);
+
+  // 5️⃣ BORDER
+  border-bottom: $border-thin solid rgba($color-primary, 0.2);
 }
 
 .app-header__container {
@@ -55,16 +62,29 @@
   }
 
   &--mobile {
+    // 1️⃣ POSICIONAMIENTO
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border-bottom: 1px solid $border-default;
+
+    // 2️⃣ DISPLAY
     flex-direction: column;
-    padding: $spacing-4;
     gap: $spacing-3;
+
+    // 3️⃣ BOX MODEL
+    padding: $spacing-4;
+
+    // 4️⃣ BACKGROUND
+    background: $bg-default;
+
+    // 5️⃣ BORDER
+    border-bottom: $border-thin solid $border-default;
+
+    // 7️⃣ EFECTOS VISUALES
     box-shadow: $shadow-md;
+
+    // 8️⃣ ANIMACIÓN
     animation: slideDown $transition-base ease-out;
 
     @include respond(lg) {
@@ -126,9 +146,14 @@
 }
 
 .hamburger__line {
-  width: 24px;
-  height: 2px;
+  // 3️⃣ BOX MODEL
+  width: $spacing-6;
+  height: 0.125rem;
+
+  // 4️⃣ BACKGROUND
   background-color: $text-default;
+
+  // 8️⃣ TRANSICIONES
   @include transition;
   transform-origin: center;
 
@@ -169,13 +194,24 @@
 }
 
 .app-header__language {
+  // 3️⃣ BOX MODEL
   padding: $spacing-1 $spacing-2;
-  border: 1px solid $border-default;
-  border-radius: $radius-md;
-  font-size: 0.875rem;
-  color: $gray-500;
+
+  // 4️⃣ BACKGROUND
   background: $bg-default;
+
+  // 5️⃣ BORDER
+  border: $border-thin solid $border-default;
+  border-radius: $radius-md;
+
+  // 6️⃣ TIPOGRAFÍA
+  font-size: $font-size-sm;
+  color: $gray-500;
+
+  // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
+
+  // 8️⃣ TRANSICIONES
   @include transition;
   @include focus-visible;
 
@@ -201,8 +237,9 @@
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-0.625rem);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

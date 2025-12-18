@@ -1,0 +1,70 @@
+<!-- HOME HEADER -->
+<header class="home-header">
+  <!-- Background con imagen -->
+  <figure class="home-header__background"></figure>
+  <figure class="home-header__background-img">
+    <img [src]="backgroundImg" alt="Background" />
+  </figure>
+
+  <!-- Contenido del Header -->
+  <section class="home-header__content">
+    <!-- Logo y nombre -->
+    <figure class="home-header__brand">
+      <img [src]="logoImg" alt="GestStore Logo" class="home-header__logo-img" />
+      <h1 class="home-header__logo-text">GestStore</h1>
+    </figure>
+
+    <!-- Navegación derecha -->
+    <nav class="home-header__nav">
+      <!-- Selector de idioma -->
+      <button type="button" class="home-header__language" (click)="toggleLanguageMenu()">
+        <span class="home-header__language-text">{{ currentLanguage.flag }} {{ currentLanguage.code }}</span>
+        <span class="home-header__language-arrow" [class.home-header__language-arrow--open]="isLanguageMenuOpen">></span>
+        
+        <!-- Dropdown de idiomas -->
+        @if (isLanguageMenuOpen) {
+          <menu class="home-header__language-dropdown">
+            @for (lang of languages; track lang.code) {
+              <li>
+                <button 
+                  type="button"
+                  class="home-header__language-option"
+                  [class.home-header__language-option--active]="currentLanguage.code === lang.code"
+                  (click)="selectLanguage(lang); $event.stopPropagation()">
+                  <span class="home-header__language-flag">{{ lang.flag }}</span>
+                  <span>{{ lang.name }}</span>
+                </button>
+              </li>
+            }
+          </menu>
+        }
+      </button>
+
+      <!-- Botón Login -->
+      <a routerLink="/login" class="home-header__login-btn">
+        <span>LogIn</span>
+      </a>
+    </nav>
+  </section>
+
+  <!-- Contenido principal del hero -->
+  <section class="home-header__hero">
+    <h2 class="home-header__hero-title">
+      Organiza tus tareas y controla tu inventario desde un solo lugar.
+    </h2>
+    
+    <article class="home-header__hero-description">
+      <p>
+        Gestiona tus productos, asigna responsabilidades y mantén tu almacén siempre en orden.
+        Ya somos miles optimizando su trabajo con nuestra plataforma.
+      </p>
+      <p>
+        ¡Únete hoy y lleva tu gestión al siguiente nivel!
+      </p>
+    </article>
+
+    <a routerLink="/register" class="home-header__register-btn">
+      <span>REGÍSTRATE GRATIS!</span>
+    </a>
+  </section>
+</header>

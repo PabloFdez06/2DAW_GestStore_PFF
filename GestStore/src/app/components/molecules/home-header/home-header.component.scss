@@ -1,0 +1,377 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ============================================================================
+// HOME HEADER
+// ============================================================================
+
+.home-header {
+  // POSICIONAMIENTO
+  position: relative;
+
+  // BOX MODEL
+  min-height: 45.6875rem; // 731px
+  padding: $spacing-10 $spacing-20;
+
+  // EFECTOS VISUALES
+  overflow: hidden;
+}
+
+.home-header__background {
+  // POSICIONAMIENTO
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  // BOX MODEL
+  width: 100%;
+  height: 100%;
+
+  // BACKGROUND
+  background-color: map-get($color-primary-scale, light-active);
+}
+
+.home-header__background-img {
+  // POSICIONAMIENTO
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+
+  // BOX MODEL
+  width: 100%;
+  height: 100%;
+
+  // BORDER
+  border: $border-thin solid $gray-950;
+
+  // EFECTOS VISUALES
+  opacity: 0.4;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.home-header__content {
+  // POSICIONAMIENTO
+  position: relative;
+  z-index: 3;
+
+  // DISPLAY
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  // BOX MODEL
+  margin-bottom: $spacing-16;
+}
+
+.home-header__brand {
+  // DISPLAY
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+}
+
+.home-header__logo-img {
+  // BOX MODEL
+  width: 4.48rem; // ~71.73px
+  height: 4.48rem;
+}
+
+.home-header__logo-text {
+  // BOX MODEL
+  margin: 0;
+
+  // TIPOGRAFÍA
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 3rem; // 48px
+  font-weight: $font-weight-regular;
+  color: $gray-950;
+}
+
+.home-header__nav {
+  // DISPLAY
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+}
+
+.home-header__language {
+  // POSICIONAMIENTO
+  position: relative;
+
+  // DISPLAY
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+
+  // BOX MODEL
+  padding: $spacing-2 $spacing-3;
+
+  // BORDER
+  border-radius: 0.25rem;
+
+  // EFECTOS VISUALES
+  cursor: pointer;
+
+  // TRANSICIONES
+  @include transition;
+
+  &:hover {
+    background-color: rgba($color-white, 0.1);
+  }
+}
+
+.home-header__language-text {
+  // TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: 1.25rem;
+  font-weight: $font-weight-regular;
+  color: $gray-950;
+}
+
+.home-header__language-arrow {
+  // DISPLAY
+  display: inline-block;
+
+  // TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: 1.25rem;
+  font-weight: $font-weight-light;
+  color: $gray-950;
+
+  // TRANSICIONES
+  transform: rotate(90deg);
+  @include transition(transform);
+}
+
+.home-header__language-arrow--open {
+  // TRANSICIONES
+  transform: rotate(270deg);
+}
+
+.home-header__language-dropdown {
+  // POSICIONAMIENTO
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 10;
+
+  // BOX MODEL
+  min-width: 12.5rem;
+  margin-top: $spacing-2;
+  padding: $spacing-2;
+
+  // BACKGROUND
+  background-color: $color-white;
+
+  // BORDER
+  border: $border-thin solid $gray-300;
+  border-radius: 0.5rem;
+
+  // EFECTOS VISUALES
+  box-shadow: 0 0.5rem 1rem rgba($color-black, 0.15);
+}
+
+.home-header__language-option {
+  // POSICIONAMIENTO
+  position: relative;
+
+  // DISPLAY
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+
+  // BOX MODEL
+  width: 100%;
+  padding: $spacing-3;
+
+  // BACKGROUND
+  background-color: transparent;
+
+  // BORDER
+  border: none;
+  border-radius: 0.25rem;
+
+  // TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: $font-size-base;
+  font-weight: $font-weight-regular;
+  color: $gray-950;
+  text-align: left;
+
+  // EFECTOS VISUALES
+  cursor: pointer;
+
+  // TRANSICIONES
+  @include transition;
+
+  &:hover {
+    background-color: $gray-100;
+  }
+}
+
+.home-header__language-option--active {
+  // BACKGROUND
+  background-color: rgba($color-primary, 0.1);
+
+  // TIPOGRAFÍA
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.home-header__language-flag {
+  // TIPOGRAFÍA
+  font-size: 1.25rem;
+}
+
+.home-header__login-btn {
+  // DISPLAY
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  // BOX MODEL
+  width: 6.69rem; // ~107.1px
+  height: 3.06rem; // ~49px
+  padding: $spacing-2 $spacing-4;
+
+  // BACKGROUND
+  background-color: $color-primary;
+
+  // BORDER
+  border: $border-thin solid $gray-950;
+  border-radius: 0.3125rem; // 5px
+
+  // TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: 2rem; // 32px
+  font-weight: $font-weight-regular;
+  color: $color-white;
+  text-decoration: none;
+
+  // EFECTOS VISUALES
+  cursor: pointer;
+
+  // TRANSICIONES
+  @include transition;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
+}
+
+.home-header__hero {
+  // POSICIONAMIENTO
+  position: relative;
+  z-index: 3;
+
+  // DISPLAY
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+
+  // BOX MODEL
+  max-width: 38.59rem; // ~617.4px
+}
+
+.home-header__hero-title {
+  // BOX MODEL
+  margin: 0;
+
+  // TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: 2rem; // 32px
+  font-weight: $font-weight-regular;
+  line-height: 1.5;
+  color: $gray-950;
+}
+
+.home-header__hero-description {
+  // DISPLAY
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+
+  p {
+    margin: 0;
+    font-family: $font-primary;
+    font-size: 1.5rem; // 24px
+    font-weight: $font-weight-regular;
+    line-height: 1.5;
+    color: $gray-950;
+  }
+}
+
+.home-header__register-btn {
+  // DISPLAY
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  // BOX MODEL
+  width: 22.64rem; // ~362.25px
+  height: 3.81rem; // ~61px
+  padding: $spacing-3 $spacing-6;
+
+  // BACKGROUND
+  background-color: $color-primary;
+
+  // BORDER
+  border-radius: 0.625rem; // 10px
+
+  // TIPOGRAFÍA
+  font-family: $font-primary;
+  font-size: 2rem; // 32px
+  font-weight: $font-weight-regular;
+  color: $color-white;
+  text-decoration: none;
+
+  // EFECTOS VISUALES
+  cursor: pointer;
+
+  // TRANSICIONES
+  @include transition;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+    transform: translateY(-0.125rem);
+  }
+}
+
+// ============================================================================
+// RESPONSIVE
+// ============================================================================
+
+@include respond(lg) {
+  .home-header {
+    padding: $spacing-8 $spacing-12;
+  }
+}
+
+@include respond(md) {
+  .home-header {
+    padding: $spacing-6 $spacing-6;
+  }
+
+  .home-header__logo-text {
+    font-size: 2rem;
+  }
+
+  .home-header__language-text,
+  .home-header__login-btn,
+  .home-header__hero-title,
+  .home-header__register-btn {
+    font-size: 1.5rem;
+  }
+
+  .home-header__hero-description p {
+    font-size: 1.125rem;
+  }
+}

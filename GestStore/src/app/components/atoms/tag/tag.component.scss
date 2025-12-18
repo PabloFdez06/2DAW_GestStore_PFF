@@ -1,17 +1,26 @@
 @use '../../../../styles/00-settings/variables' as vars;
 
 .tag {
+  // 2️⃣ DISPLAY
   display: inline-flex;
   align-items: center;
   gap: vars.$spacing-2;
+
+  // 3️⃣ BOX MODEL
   padding: vars.$spacing-2 vars.$spacing-3;
-  border-radius: vars.$radius-sm;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.875rem;
-  font-weight: vars.$font-weight-medium;
+
+  // 4️⃣ BACKGROUND
   background-color: vars.$gray-100;
+
+  // 5️⃣ BORDER
+  border: vars.$border-thin solid vars.$border-default;
+  border-radius: vars.$radius-sm;
+
+  // 6️⃣ TIPOGRAFÍA
+  font-family: vars.$font-primary;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-medium;
   color: vars.$text-default;
-  border: 1px solid vars.$border-default;
 
   &--primary {
     background-color: rgba(vars.$color-primary, 0.1);
@@ -39,16 +48,23 @@
 
   &--removable {
     padding-right: vars.$spacing-2;
-    
+
     .tag__close {
-      cursor: pointer;
+      // 2️⃣ DISPLAY
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 16px;
-      height: 16px;
+
+      // 3️⃣ BOX MODEL
+      width: vars.$spacing-4;
+      height: vars.$spacing-4;
       margin-left: vars.$spacing-1;
+
+      // 7️⃣ EFECTOS VISUALES
+      cursor: pointer;
       opacity: 0.7;
+
+      // 8️⃣ TRANSICIONES
       transition: opacity vars.$transition-base;
 
       &:hover {

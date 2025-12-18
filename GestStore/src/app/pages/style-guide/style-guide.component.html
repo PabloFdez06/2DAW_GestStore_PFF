@@ -149,6 +149,46 @@
       </section>
     </section>
 
+    <!-- TASK CARDS -->
+    <section class="section">
+      <h2 class="section__title">Task Cards</h2>
+      <p class="section__description">Tarjetas de tarea con estado, descripción, timestamp e imagen opcional</p>
+      
+      <section class="subsection">
+        <h3 class="subsection__title">Estados de Tarea</h3>
+        <figure class="component-showcase component-showcase--vertical">
+          <app-task-card 
+            [title]="taskExamples.completed.title"
+            [description]="taskExamples.completed.description"
+            [status]="taskExamples.completed.status"
+            [completedAt]="taskExamples.completed.completedAt"
+            (menuClick)="onTaskMenuClick('completed')"
+          />
+          <app-task-card 
+            [title]="taskExamples.pending.title"
+            [description]="taskExamples.pending.description"
+            [status]="taskExamples.pending.status"
+            [completedAt]="taskExamples.pending.completedAt"
+            (menuClick)="onTaskMenuClick('pending')"
+          />
+          <app-task-card 
+            [title]="taskExamples.inProgress.title"
+            [description]="taskExamples.inProgress.description"
+            [status]="taskExamples.inProgress.status"
+            [completedAt]="taskExamples.inProgress.completedAt"
+            (menuClick)="onTaskMenuClick('inProgress')"
+          />
+          <app-task-card 
+            [title]="taskExamples.cancelled.title"
+            [description]="taskExamples.cancelled.description"
+            [status]="taskExamples.cancelled.status"
+            [completedAt]="taskExamples.cancelled.completedAt"
+            (menuClick)="onTaskMenuClick('cancelled')"
+          />
+        </figure>
+      </section>
+    </section>
+
     <!-- FORM INPUTS -->
     <section class="section">
       <h2 class="section__title">Form Inputs</h2>
@@ -547,19 +587,27 @@
 
   <!-- PÁGINA COMPLETA -->
   @if (currentView === 'page') {
-    <app-header></app-header>
-    <app-main>
-      <h1 class="page-demo__title">Contenido Principal</h1>
-      <p class="page-demo__description">Esta es la vista de página completa mostrando el Header, Main y Footer en su disposición natural.</p>
+    <div class="page-demo">
+      <app-home-header />
+      
+      <!-- Contenido de ejemplo -->
       <section class="page-demo__content">
-        <section class="page-demo__section">
-          <h2>Sección de Ejemplo</h2>
-          <p>Aquí puedes ver cómo se estructura la página con todos los componentes de layout trabajando juntos.</p>
-        </section>
+        <h2 class="page-demo__section-title">Ejemplo de contenido</h2>
+        <div class="page-demo__task-wrapper">
+          <app-task-card
+            [title]="taskExamples.completed.title"
+            [description]="taskExamples.completed.description"
+            [status]="taskExamples.completed.status"
+            [completedAt]="taskExamples.completed.completedAt"
+            (menuClick)="onTaskMenuClick('completed')">
+          </app-task-card>
+        </div>
       </section>
-    </app-main>
-    <app-footer></app-footer>
+      
+      <app-home-footer />
+    </div>
   }
+
 </main>
 
 

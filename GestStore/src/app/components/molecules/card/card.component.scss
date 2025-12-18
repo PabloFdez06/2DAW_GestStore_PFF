@@ -2,10 +2,17 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .card {
+  // 4️⃣ BACKGROUND
   background-color: $bg-default;
+
+  // 5️⃣ BORDER
   border: $border-thin solid $border-default;
   border-radius: $radius-lg;
+
+  // 7️⃣ EFECTOS VISUALES
   overflow: hidden;
+
+  // 8️⃣ TRANSICIONES
   @include transition;
 
   &:hover {
@@ -13,32 +20,37 @@
   }
 
   &--shadow-small {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow-sm;
   }
 
   &--shadow-medium {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    box-shadow: $shadow-md;
   }
 
   &--shadow-large {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: $shadow-xl;
   }
 
   &--hoverable {
     cursor: pointer;
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.06);
+      box-shadow: $shadow-xl;
+      transform: translateY(-0.25rem);
     }
   }
 }
 
 .card__image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+  // 2️⃣ DISPLAY
   display: block;
+
+  // 3️⃣ BOX MODEL
+  width: 100%;
+  height: 12.5rem;
+
+  // 7️⃣ EFECTOS VISUALES
+  object-fit: cover;
 }
 
 .card__header {
