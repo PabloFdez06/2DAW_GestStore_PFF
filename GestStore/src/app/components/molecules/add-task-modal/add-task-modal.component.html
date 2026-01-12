@@ -1,0 +1,108 @@
+<div class="add-task-modal">
+  <div class="add-task-modal__header">
+    <div class="add-task-modal__title-section">
+      <h2 class="add-task-modal__title">Añadir nueva Tarea</h2>
+      <div class="add-task-modal__title-underline"></div>
+    </div>
+    <button class="add-task-modal__back-link" (click)="onCancel()">
+      Volver
+    </button>
+  </div>
+
+  <div class="add-task-modal__content">
+    <form class="add-task-modal__form" (ngSubmit)="onSubmit()">
+      <!-- Left Column -->
+      <div class="add-task-modal__left-column">
+        <!-- Título -->
+        <div class="add-task-modal__field">
+          <label class="add-task-modal__label">Titulo</label>
+          <input 
+            type="text" 
+            class="add-task-modal__input"
+            [(ngModel)]="title"
+            name="title"
+            required>
+        </div>
+
+        <!-- Fecha -->
+        <div class="add-task-modal__field">
+          <label class="add-task-modal__label">Fecha</label>
+          <div class="add-task-modal__input-wrapper">
+            <input 
+              type="date" 
+              class="add-task-modal__input add-task-modal__input--date"
+              [(ngModel)]="date"
+              name="date"
+              required>
+            <app-icon name="calendar" size="small" class="add-task-modal__calendar-icon"></app-icon>
+          </div>
+        </div>
+
+        <!-- Prioridad -->
+        <div class="add-task-modal__field">
+          <label class="add-task-modal__label">Prioridad</label>
+          <div class="add-task-modal__priorities">
+            <label 
+              *ngFor="let priority of priorities" 
+              class="add-task-modal__priority-option">
+              <span 
+                class="add-task-modal__priority-dot"
+                [style.background-color]="priority.color"></span>
+              <span class="add-task-modal__priority-label">{{ priority.label }}</span>
+              <input 
+                type="checkbox" 
+                class="add-task-modal__priority-checkbox"
+                [checked]="selectedPriority === priority.value"
+                (change)="selectPriority(priority.value)">
+            </label>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="add-task-modal__field add-task-modal__field--description">
+          <label class="add-task-modal__label">Descripción de la Tarea</label>
+          <textarea 
+            class="add-task-modal__textarea"
+            [(ngModel)]="description"
+            name="description"
+            rows="8"
+            required></textarea>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="add-task-modal__right-column">
+        <!-- Asignar trabajadores -->
+        <div class="add-task-modal__assign-section">
+          <label class="add-task-modal__label">Asignar trabajadores</label>
+          <div class="add-task-modal__assign-box">
+            <p class="add-task-modal__assign-text">
+              Asigna los trabajadores que si van a encargar de esta tarea.
+            </p>
+            <button type="button" class="add-task-modal__assign-btn">
+              Asignar
+            </button>
+          </div>
+        </div>
+
+        <!-- Asignar productos -->
+        <div class="add-task-modal__assign-section">
+          <label class="add-task-modal__label">Asignar productos</label>
+          <div class="add-task-modal__assign-box add-task-modal__assign-box--tall">
+            <p class="add-task-modal__assign-text">
+              Asignar objetos del almacen, selecciona los objetos que se necesitaran para esta tarea.
+            </p>
+            <button type="button" class="add-task-modal__assign-btn">
+              Asignar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="add-task-modal__submit-btn">
+        Listo
+      </button>
+    </form>
+  </div>
+</div>

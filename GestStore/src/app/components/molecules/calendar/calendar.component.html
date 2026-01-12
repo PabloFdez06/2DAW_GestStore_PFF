@@ -1,0 +1,62 @@
+<div class="calendar">
+  <!-- Header -->
+  <div class="calendar__header">
+    <h3 class="calendar__title">{{ monthName }}, {{ year }}</h3>
+    <div class="calendar__nav">
+      <button class="calendar__nav-btn" (click)="previousMonth()" aria-label="Mes anterior">
+        <app-icon name="chevron-left" size="small"></app-icon>
+      </button>
+      <button class="calendar__nav-btn" (click)="nextMonth()" aria-label="Mes siguiente">
+        <app-icon name="chevron-right" size="small"></app-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Week Days -->
+  <div class="calendar__weekdays">
+    <span 
+      *ngFor="let day of weekDays" 
+      class="calendar__weekday"
+      [class.calendar__weekday--active]="day === getCurrentDayOfWeek()">
+      {{ day }}
+    </span>
+  </div>
+
+  <!-- Days Grid -->
+  <div class="calendar__days">
+    <button
+      *ngFor="let calendarDay of calendarDays"
+      class="calendar__day"
+      [class.calendar__day--other-month]="!calendarDay.isCurrentMonth"
+      [class.calendar__day--selected]="calendarDay.isSelected"
+      [class.calendar__day--today]="calendarDay.isToday"
+      (click)="selectDay(calendarDay)">
+      {{ calendarDay.day }}
+    </button>
+  </div>
+
+  <!-- Selected Info -->
+  <div class="calendar__selected-info" *ngIf="selectedDate">
+    <span class="calendar__selected-badge calendar__selected-badge--month">
+      {{ monthName }}
+    </span>
+    <span class="calendar__selected-badge calendar__selected-badge--weekday">
+      {{ getCurrentDayOfWeek() }}
+    </span>
+    <span class="calendar__selected-badge calendar__selected-badge--day">
+      {{ selectedDate.getDate() }}
+    </span>
+  </div>
+
+  <!-- Actions -->
+  <div class="calendar__actions">
+    <button class="calendar__btn calendar__btn--outline" (click)="onRemove()">
+      <app-icon name="x" size="small"></app-icon>
+      <span>Remove</span>
+    </button>
+    <button class="calendar__btn calendar__btn--primary" (click)="onDone()">
+      <app-icon name="check" size="small"></app-icon>
+      <span>Done</span>
+    </button>
+  </div>
+</div>

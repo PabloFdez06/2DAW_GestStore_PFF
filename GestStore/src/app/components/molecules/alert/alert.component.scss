@@ -1,5 +1,6 @@
 @use '../../../../styles/00-settings/variables' as *;
 @use '../../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
 
 .alert {
   // 2️⃣ DISPLAY
@@ -17,25 +18,25 @@
   &--success {
     background-color: rgba($success, 0.1);
     border-color: $success;
-    color: darken($success, 20%);
+    color: color.scale($success, $lightness: -30%);
   }
 
   &--error {
     background-color: rgba($error, 0.1);
     border-color: $error;
-    color: darken($error, 20%);
+    color: color.scale($error, $lightness: -30%);
   }
 
   &--warning {
     background-color: rgba($warning, 0.1);
     border-color: $warning;
-    color: darken($warning, 30%);
+    color: color.scale($warning, $lightness: -40%);
   }
 
   &--info {
     background-color: rgba($info, 0.1);
     border-color: $info;
-    color: darken($info, 20%);
+    color: color.scale($info, $lightness: -30%);
   }
 }
 

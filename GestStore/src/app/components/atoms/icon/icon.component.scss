@@ -6,19 +6,44 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  
+  // Estilos para i-lucide
+  i-lucide,
+  ::ng-deep svg {
+    display: block;
+  }
 
   &--small {
-    width: vars.$spacing-4;
-    height: vars.$spacing-4;
+    width: 16px;
+    height: 16px;
+    
+    i-lucide,
+    ::ng-deep svg {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   &--medium {
-    width: vars.$spacing-6;
-    height: vars.$spacing-6;
+    width: 20px;
+    height: 20px;
+    
+    i-lucide,
+    ::ng-deep svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   &--large {
-    width: vars.$spacing-8;
-    height: vars.$spacing-8;
+    width: 24px;
+    height: 24px;
+    
+    i-lucide,
+    ::ng-deep svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 }
+

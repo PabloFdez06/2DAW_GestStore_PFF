@@ -1,0 +1,245 @@
+<div class="dashboard">
+  <!-- Top Navigation Bar -->
+  <nav class="dashboard__nav">
+    <h1 class="dashboard__logo">
+      <span class="dashboard__logo-gest">Gest</span><span class="dashboard__logo-store">Store</span>
+    </h1>
+
+    <div class="dashboard__search">
+      <input 
+        type="text" 
+        class="dashboard__search-input" 
+        placeholder="Busca tu tarea aqui..."
+      />
+      <button class="dashboard__search-btn" aria-label="Buscar">
+        <app-icon name="search" size="small"></app-icon>
+      </button>
+    </div>
+
+    <div class="dashboard__nav-actions">
+      <button class="dashboard__nav-btn" aria-label="Notificaciones">
+        <app-icon name="bell" size="small"></app-icon>
+      </button>
+      <button class="dashboard__nav-btn" (click)="toggleCalendar()" aria-label="Calendario">
+        <app-icon name="calendar" size="small"></app-icon>
+      </button>
+      <div class="dashboard__date">
+        <p class="dashboard__date-day">{{ currentDayName }}</p>
+        <p class="dashboard__date-full">{{ currentDate }}</p>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Calendar Modal Overlay -->
+  <div *ngIf="isCalendarOpen" class="dashboard__calendar-overlay" (click)="closeCalendar()">
+    <div class="dashboard__calendar-modal" (click)="$event.stopPropagation()">
+      <app-calendar (close)="closeCalendar()"></app-calendar>
+    </div>
+  </div>
+  
+  <!-- Add Task Modal Overlay -->
+  <div *ngIf="isTaskModalOpen" class="dashboard__calendar-overlay" (click)="closeTaskModal()">
+    <div class="dashboard__calendar-modal" (click)="$event.stopPropagation()">
+      <app-add-task-modal 
+        (close)="closeTaskModal()" 
+        (taskAdded)="handleTaskAdded($event)">
+      </app-add-task-modal>
+    </div>
+  </div>
+
+  <!-- Side Navigation -->
+  <aside class="dashboard__sidebar">
+    <div class="dashboard__user">
+      <div class="dashboard__user-avatar"></div>
+      <div class="dashboard__user-info">
+        <p class="dashboard__user-name">Pablo Fernández</p>
+        <p class="dashboard__user-email">holahola&#64;g.educaand.es</p>
+      </div>
+    </div>
+
+    <nav class="dashboard__sidebar-nav">
+      <a href="/dashboard" class="dashboard__sidebar-link dashboard__sidebar-link--active">
+        <app-icon name="home" size="small"></app-icon>
+        <span>Dashboard</span>
+      </a>
+      <a href="/tareas-importantes" class="dashboard__sidebar-link">
+        <app-icon name="star" size="small"></app-icon>
+        <span>Tareas Importantes</span>
+      </a>
+      <a href="/tareas" class="dashboard__sidebar-link">
+        <app-icon name="check-square" size="small"></app-icon>
+        <span>Tareas</span>
+      </a>
+      <a href="/categorias" class="dashboard__sidebar-link">
+        <app-icon name="folder" size="small"></app-icon>
+        <span>Categorias de Tareas</span>
+      </a>
+      <a href="/almacen" class="dashboard__sidebar-link">
+        <app-icon name="package" size="small"></app-icon>
+        <span>Almacen</span>
+      </a>
+      <a href="/ajustes" class="dashboard__sidebar-link">
+        <app-icon name="settings" size="small"></app-icon>
+        <span>Ajustes</span>
+      </a>
+    </nav>
+
+    <button class="dashboard__logout">
+      <app-icon name="log-out" size="small"></app-icon>
+      <span>Cerrar Sesión</span>
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dashboard__main">
+    <!-- Welcome Header -->
+    <header class="dashboard__welcome">
+      <h2 class="dashboard__welcome-title">Bienvenido de nuevo, Pablo</h2>
+      
+      <div class="dashboard__team">
+        <div class="dashboard__team-avatars">
+          <div class="dashboard__team-avatar"></div>
+          <div class="dashboard__team-avatar"></div>
+          <div class="dashboard__team-avatar"></div>
+          <div class="dashboard__team-avatar"></div>
+          <div class="dashboard__team-more">+4</div>
+        </div>
+        <button class="dashboard__invite-btn">
+          <app-icon name="user-plus" size="small"></app-icon>
+          <span>Invitar</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Grid -->
+    <div class="dashboard__content-grid">
+      <!-- To-Do Section (Left) -->
+      <section class="dashboard__section dashboard__section--todo">
+        <div class="dashboard__section-header">
+          <div class="dashboard__section-title-wrap">
+            <app-icon name="clipboard" size="small" class="dashboard__section-icon"></app-icon>
+            <h3 class="dashboard__section-title">To-Do</h3>
+          </div>
+          <p class="dashboard__section-date">{{ currentDate }}</p>
+        </div>
+
+        <div class="dashboard__section-subheader">
+          <p class="dashboard__section-date">{{ currentDate }}</p>
+          <span class="dashboard__separator">•</span>
+          <p class="dashboard__section-today">Hoy</p>
+        </div>
+
+        <div class="dashboard__tasks">
+          <article *ngFor="let task of todoTasks; let i = index" class="dashboard__task-card">
+            <div class="dashboard__task-image"></div>
+            <div class="dashboard__task-menu-wrapper">
+              <button class="dashboard__task-menu" (click)="toggleTaskMenu(i, $event)" aria-label="Menú">
+                <app-icon name="more-vertical" size="small"></app-icon>
+              </button>
+              <div *ngIf="openTaskMenuIndex === i" class="dashboard__task-menu-dropdown">
+                <app-task-menu (action)="handleTaskAction($event, i)"></app-task-menu>
+              </div>
+            </div>
+            <div class="dashboard__task-priority" [class]="'dashboard__task-priority--' + task.priorityColor"></div>
+            <div class="dashboard__task-content">
+              <h4 class="dashboard__task-title">{{ task.title }}</h4>
+              <p class="dashboard__task-description">{{ task.description }}</p>
+              <div class="dashboard__task-meta">
+                <p class="dashboard__task-info">
+                  <span class="dashboard__task-label">Prioridad:</span>
+                  <span [class]="'dashboard__task-value--' + task.priorityColor">{{ task.priority }}</span>
+                </p>
+                <p class="dashboard__task-info">
+                  <span class="dashboard__task-label">Estatus:</span>
+                  <span [class]="'dashboard__task-value--' + task.statusColor">{{ task.status }}</span>
+                </p>
+              </div>
+              <p class="dashboard__task-created">Creada en: {{ task.createdAt }}</p>
+            </div>
+          </article>
+        </div>
+
+        <button class="dashboard__add-task" (click)="toggleTaskModal()">
+          <app-icon name="plus" size="small"></app-icon>
+          <span>Añadir Tarea</span>
+        </button>
+      </section>
+
+      <!-- Status Charts Section (Top Right) -->
+      <section class="dashboard__section dashboard__section--status">
+        <div class="dashboard__section-header">
+          <app-icon name="check-circle" size="small" class="dashboard__section-icon"></app-icon>
+          <h3 class="dashboard__section-title">Estatus de Tareas</h3>
+        </div>
+
+        <div class="dashboard__status-charts">
+          <div class="dashboard__status-chart">
+            <div class="dashboard__status-circle-wrap">
+              <svg class="dashboard__status-svg" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
+                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--completed" [attr.stroke-dasharray]="84 * 3.77 + ' ' + (100 - 84) * 3.77"></circle>
+              </svg>
+              <p class="dashboard__status-percent">84%</p>
+            </div>
+            <div class="dashboard__status-legend">
+              <span class="dashboard__status-dot dashboard__status-dot--completed"></span>
+              <span class="dashboard__status-label">Completada</span>
+            </div>
+          </div>
+
+          <div class="dashboard__status-chart">
+            <div class="dashboard__status-circle-wrap">
+              <svg class="dashboard__status-svg" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
+                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--inprogress" [attr.stroke-dasharray]="46 * 3.77 + ' ' + (100 - 46) * 3.77"></circle>
+              </svg>
+              <p class="dashboard__status-percent">46%</p>
+            </div>
+            <div class="dashboard__status-legend">
+              <span class="dashboard__status-dot dashboard__status-dot--inprogress"></span>
+              <span class="dashboard__status-label">En Progreso</span>
+            </div>
+          </div>
+
+          <div class="dashboard__status-chart">
+            <div class="dashboard__status-circle-wrap">
+              <svg class="dashboard__status-svg" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
+                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--notstarted" [attr.stroke-dasharray]="13 * 3.77 + ' ' + (100 - 13) * 3.77"></circle>
+              </svg>
+              <p class="dashboard__status-percent">13%</p>
+            </div>
+            <div class="dashboard__status-legend">
+              <span class="dashboard__status-dot dashboard__status-dot--notstarted"></span>
+              <span class="dashboard__status-label">Sin Comenzar</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Completed Tasks Section (Bottom Right) -->
+      <section class="dashboard__section dashboard__section--completed">
+        <div class="dashboard__section-header">
+          <app-icon name="book-open" size="small" class="dashboard__section-icon dashboard__section-icon--completed"></app-icon>
+          <h3 class="dashboard__section-title dashboard__section-title--completed">Tareas Completadas</h3>
+        </div>
+
+        <div class="dashboard__completed-tasks">
+          <article *ngFor="let task of completedTasks" class="dashboard__completed-card">
+            <div class="dashboard__completed-image"></div>
+            <button class="dashboard__completed-menu" aria-label="Menú">
+              <app-icon name="more-vertical" size="small"></app-icon>
+            </button>
+            <div class="dashboard__completed-check"></div>
+            <div class="dashboard__completed-content">
+              <h4 class="dashboard__completed-title">{{ task.title }}</h4>
+              <p class="dashboard__completed-description">{{ task.description }}</p>
+              <p class="dashboard__completed-status">Estatus: <span class="dashboard__completed-status-value">{{ task.status }}</span></p>
+              <p class="dashboard__completed-date">Completada hace {{ task.completedAgo }}.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

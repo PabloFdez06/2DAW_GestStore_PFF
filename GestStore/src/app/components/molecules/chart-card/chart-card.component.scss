@@ -1,0 +1,329 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ============================================================================
+// CHART CARD - BLOCK
+// ============================================================================
+.chart-card {
+  // 2️⃣ DISPLAY
+  display: flex;
+  flex-direction: column;
+
+  // 4️⃣ BACKGROUND
+  background-color: $color-white;
+
+  // 5️⃣ BORDER
+  border: $border-thin solid $border-light;
+  border-radius: $radius-lg;
+
+  // 7️⃣ EFECTOS VISUALES
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+
+  // 8️⃣ TRANSICIONES
+  @include transition(box-shadow);
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+}
+
+// ============================================================================
+// CHART CARD HEADER
+// ============================================================================
+.chart-card__header {
+  @include flex-between;
+  gap: $spacing-4;
+  padding: $spacing-6;
+  border-bottom: $border-thin solid $border-light;
+}
+
+.chart-card__title-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.chart-card__title {
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-lg, $font-weight-semibold, $line-normal);
+  color: $text-default;
+  margin: 0;
+}
+
+.chart-card__subtitle {
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: $text-secondary;
+  margin: 0;
+}
+
+.chart-card__actions {
+  display: flex;
+  gap: $spacing-2;
+}
+
+.chart-card__action-btn {
+  // 1️⃣ RESET
+  all: unset;
+
+  // 2️⃣ DISPLAY
+  @include flex-center;
+
+  // 3️⃣ BOX MODEL
+  width: 2rem;
+  height: 2rem;
+  padding: $spacing-2;
+
+  // 4️⃣ BACKGROUND
+  background-color: transparent;
+
+  // 5️⃣ BORDER
+  border-radius: $radius-md;
+
+  // 6️⃣ CURSOR
+  cursor: pointer;
+  color: $text-secondary;
+
+  // 8️⃣ TRANSICIONES
+  @include transition(all);
+
+  &:hover {
+    background-color: $gray-100;
+    color: $text-default;
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+
+  &:active {
+    background-color: $gray-200;
+  }
+}
+
+// ============================================================================
+// CHART CARD BODY
+// ============================================================================
+.chart-card__body {
+  flex: 1;
+  padding: $spacing-6;
+  min-height: 250px;
+
+  @include respond(md) {
+    min-height: 300px;
+  }
+}
+
+.chart-card__chart {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+// ============================================================================
+// CHART PLACEHOLDER (hasta integrar librería de gráficos)
+// ============================================================================
+.chart-card__placeholder {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-4;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  background: linear-gradient(135deg, $gray-50 0%, $color-white 100%);
+  border: 2px dashed $border-light;
+  border-radius: $radius-md;
+  @include transition(all);
+
+  .chart-card:hover & {
+    border-color: $color-primary;
+    background: linear-gradient(135deg, $color-primary-light 0%, $color-white 100%);
+  }
+}
+
+.chart-card__placeholder-icon {
+  width: 4rem;
+  height: 4rem;
+  color: $text-muted;
+  opacity: 0.5;
+  @include transition(all);
+
+  .chart-card:hover & {
+    color: $color-primary;
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.chart-card__placeholder-text {
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  color: $text-muted;
+  margin: 0;
+
+  .chart-card:hover & {
+    color: $color-primary;
+  }
+}
+
+// ============================================================================
+// CHART CARD FOOTER
+// ============================================================================
+.chart-card__footer {
+  padding: $spacing-4 $spacing-6;
+  border-top: $border-thin solid $border-light;
+  background-color: $gray-50;
+}
+
+.chart-card__legend {
+  display: flex;
+  gap: $spacing-6;
+  flex-wrap: wrap;
+}
+
+.chart-card__legend-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.chart-card__legend-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+
+  &--primary {
+    background-color: $color-primary;
+  }
+
+  &--secondary {
+    background-color: $color-accent-2;
+  }
+
+  &--warning {
+    background-color: $warning;
+  }
+
+  &--error {
+    background-color: $error;
+  }
+
+  &--info {
+    background-color: $info;
+  }
+}
+
+.chart-card__legend-label {
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: $text-secondary;
+}
+
+// ============================================================================
+// RESPONSIVE ADJUSTMENTS
+// ============================================================================
+@include respond(sm) {
+  .chart-card__header {
+    padding: $spacing-7;
+  }
+
+  .chart-card__body {
+    padding: $spacing-7;
+  }
+
+  .chart-card__footer {
+    padding: $spacing-5 $spacing-7;
+  }
+}
+
+// ============================================================================
+// DARK MODE SUPPORT
+// ============================================================================
+@media (prefers-color-scheme: dark) {
+  .chart-card {
+    background-color: $gray-900;
+    border-color: $gray-800;
+
+    &:hover {
+      box-shadow: $shadow-lg;
+    }
+  }
+
+  .chart-card__header,
+  .chart-card__footer {
+    border-color: $gray-800;
+  }
+
+  .chart-card__title {
+    color: $color-white;
+  }
+
+  .chart-card__subtitle,
+  .chart-card__legend-label {
+    color: $gray-400;
+  }
+
+  .chart-card__action-btn {
+    color: $gray-400;
+
+    &:hover {
+      background-color: $gray-800;
+      color: $color-white;
+    }
+
+    &:active {
+      background-color: $gray-700;
+    }
+  }
+
+  .chart-card__footer {
+    background-color: $gray-950;
+  }
+
+  .chart-card__placeholder {
+    background: linear-gradient(135deg, $gray-800 0%, $gray-900 100%);
+    border-color: $gray-700;
+
+    .chart-card:hover & {
+      border-color: $color-primary;
+      background: linear-gradient(135deg, rgba($color-primary, 0.1) 0%, $gray-900 100%);
+    }
+  }
+
+  .chart-card__placeholder-icon {
+    color: $gray-600;
+
+    .chart-card:hover & {
+      color: $color-primary;
+    }
+  }
+
+  .chart-card__placeholder-text {
+    color: $gray-500;
+
+    .chart-card:hover & {
+      color: $color-primary;
+    }
+  }
+}
+
+// ============================================================================
+// ANIMACIONES
+// ============================================================================
+@keyframes chartFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.chart-card {
+  animation: chartFadeIn 0.5s ease-out;
+}

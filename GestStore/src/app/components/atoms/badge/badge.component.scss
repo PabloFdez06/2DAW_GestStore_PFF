@@ -35,6 +35,11 @@
     color: vars.$text-default;
   }
 
+  &--default {
+    background-color: vars.$gray-200;
+    color: vars.$text-default;
+  }
+
   &--success {
     background-color: vars.$success;
     color: vars.$color-white;

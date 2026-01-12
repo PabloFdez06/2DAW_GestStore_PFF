@@ -1,5 +1,6 @@
 @use '../../../../styles/00-settings/variables' as *;
 @use '../../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
 
 .button {
   // 2️⃣ DISPLAY
@@ -34,11 +35,11 @@
     color: $text-inverse;
 
     &:hover {
-      background-color: darken($color-primary, 10%);
+      background-color: color.scale($color-primary, $lightness: -15%);
     }
 
     &:active {
-      background-color: darken($color-primary, 20%);
+      background-color: color.scale($color-primary, $lightness: -25%);
     }
   }
 
@@ -66,6 +67,18 @@
     }
   }
 
+  &--outline {
+    background-color: transparent;
+    color: $text-default;
+    border-color: $border-default;
+
+    &:hover {
+      background-color: $gray-50;
+      border-color: $color-primary;
+      color: $color-primary;
+    }
+  }
+
   &--ghost {
     background-color: transparent;
     color: $color-primary;
@@ -81,7 +94,7 @@
     color: $text-inverse;
 
     &:hover {
-      background-color: darken($error, 10%);
+      background-color: color.scale($error, $lightness: -15%);
     }
   }
 
@@ -90,7 +103,7 @@
     color: $text-inverse;
 
     &:hover {
-      background-color: darken($success, 10%);
+      background-color: color.scale($success, $lightness: -15%);
     }
   }
 
@@ -99,7 +112,7 @@
     color: $text-inverse;
 
     &:hover {
-      background-color: darken($warning, 10%);
+      background-color: color.scale($warning, $lightness: -15%);
     }
   }
 
@@ -108,7 +121,7 @@
     color: $text-inverse;
 
     &:hover {
-      background-color: darken($info, 10%);
+      background-color: color.scale($info, $lightness: -15%);
     }
   }
 
@@ -117,7 +130,7 @@
     color: $text-inverse;
 
     &:hover {
-      background-color: darken($error, 10%);
+      background-color: color.scale($error, $lightness: -15%);
     }
   }
 
@@ -128,7 +141,7 @@
     border-color: $color-primary;
 
     &:hover {
-      background-color: darken($color-primary, 10%);
+      background-color: color.scale($color-primary, $lightness: -15%);
     }
   }
 

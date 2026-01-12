@@ -1,0 +1,232 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ============================================================================
+// STAT CARD - BLOCK
+// ============================================================================
+.stat-card {
+  // 2️⃣ DISPLAY
+  display: flex;
+  align-items: center;
+  gap: $spacing-5;
+
+  // 3️⃣ BOX MODEL
+  padding: $spacing-6;
+
+  // 4️⃣ BACKGROUND
+  background-color: $color-white;
+
+  // 5️⃣ BORDER
+  border: $border-thin solid $border-light;
+  border-radius: $radius-lg;
+
+  // 7️⃣ EFECTOS VISUALES
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+
+  // 8️⃣ TRANSICIONES
+  @include transition(all);
+
+  // Modifier: Hoverable
+  &--hoverable {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: $shadow-lg;
+      transform: translateY(-4px);
+      border-color: $color-primary;
+
+      .stat-card__icon-wrapper {
+        transform: scale(1.05);
+      }
+    }
+
+    &:active {
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+    }
+  }
+
+  // Focus state para accesibilidad
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// STAT CARD ICON
+// ============================================================================
+.stat-card__icon-wrapper {
+  // 2️⃣ DISPLAY
+  @include flex-center;
+  flex-shrink: 0;
+
+  // 3️⃣ BOX MODEL
+  width: 4rem;
+  height: 4rem;
+
+  // 5️⃣ BORDER
+  border-radius: $radius-lg;
+
+  // 8️⃣ TRANSICIONES
+  @include transition(transform);
+
+  // Modificadores por color
+  &--primary {
+    background-color: $color-primary-light;
+    color: $color-primary;
+  }
+
+  &--success {
+    background-color: rgba($success, 0.15);
+    color: $success;
+  }
+
+  &--warning {
+    background-color: rgba($warning, 0.15);
+    color: $warning;
+  }
+
+  &--info {
+    background-color: rgba($info, 0.15);
+    color: $info;
+  }
+
+  &--error {
+    background-color: rgba($error, 0.15);
+    color: $error;
+  }
+}
+
+.stat-card__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+// ============================================================================
+// STAT CARD CONTENT
+// ============================================================================
+.stat-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  min-width: 0; // Permite que el texto se trunque si es necesario
+}
+
+.stat-card__title {
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: $text-secondary;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-card__value {
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-3xl, $font-weight-bold, $line-tight);
+  color: $text-default;
+  margin: 0;
+}
+
+// ============================================================================
+// STAT CARD TREND
+// ============================================================================
+.stat-card__trend {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+
+  // Modificadores de tipo de tendencia
+  &--positive {
+    color: $success;
+  }
+
+  &--negative {
+    color: $error;
+  }
+
+  &--neutral {
+    color: $text-muted;
+  }
+}
+
+.stat-card__trend-label {
+  // 6️⃣ TIPOGRAFÍA
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: $text-muted;
+  margin-left: $spacing-1;
+}
+
+// ============================================================================
+// RESPONSIVE ADJUSTMENTS
+// ============================================================================
+@include respond(sm) {
+  .stat-card {
+    padding: $spacing-7;
+  }
+
+  .stat-card__icon-wrapper {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+
+  .stat-card__value {
+    font-size: $font-size-4xl;
+  }
+}
+
+@include respond(md) {
+  .stat-card {
+    gap: $spacing-6;
+  }
+}
+
+// ============================================================================
+// DARK MODE SUPPORT
+// ============================================================================
+@media (prefers-color-scheme: dark) {
+  .stat-card {
+    background-color: $gray-900;
+    border-color: $gray-800;
+
+    &--hoverable:hover {
+      background-color: $gray-800;
+      border-color: $color-primary;
+    }
+  }
+
+  .stat-card__title {
+    color: $gray-400;
+  }
+
+  .stat-card__value {
+    color: $color-white;
+  }
+
+  .stat-card__trend-label {
+    color: $gray-500;
+  }
+}
+
+// ============================================================================
+// ANIMACIÓN DE CARGA
+// ============================================================================
+@keyframes statCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.stat-card {
+  animation: statCardSlideIn 0.4s ease-out;
+}

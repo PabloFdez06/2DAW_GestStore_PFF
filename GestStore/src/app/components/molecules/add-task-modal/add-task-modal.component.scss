@@ -1,0 +1,326 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ============================================================================
+// ADD TASK MODAL - BASADO EN FIGMA
+// ============================================================================
+.add-task-modal {
+  background-color: $color-white;
+  border-radius: 0.3125rem;
+  box-shadow: $shadow-xl;
+  padding: $spacing-12;
+  width: 57.375rem;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+// ============================================================================
+// HEADER
+// ============================================================================
+.add-task-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-8;
+}
+
+.add-task-modal__title-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.add-task-modal__title {
+  @include text-style($font-size-base, $font-weight-semibold, $line-normal);
+  color: $gray-950;
+  margin: 0;
+}
+
+.add-task-modal__title-underline {
+  width: 8.125rem;
+  height: $border-medium;
+  background-color: $color-primary;
+}
+
+.add-task-modal__back-link {
+  all: unset;
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: $gray-950;
+  text-decoration: underline;
+  cursor: pointer;
+  @include transition(color);
+  
+  &:hover {
+    color: $color-primary;
+  }
+  
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// CONTENT & FORM
+// ============================================================================
+.add-task-modal__content {
+  border: $border-thin solid rgba($gray-400, 0.64);
+  border-radius: $radius-md;
+  padding: $spacing-8;
+  position: relative;
+}
+
+.add-task-modal__form {
+  display: grid;
+  grid-template-columns: 31.9375rem 1fr;
+  gap: $spacing-8;
+  position: relative;
+}
+
+// ============================================================================
+// LEFT COLUMN
+// ============================================================================
+.add-task-modal__left-column {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+}
+
+.add-task-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  
+  &--description {
+    flex: 1;
+  }
+}
+
+.add-task-modal__label {
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: $gray-950;
+}
+
+.add-task-modal__input {
+  all: unset;
+  width: 100%;
+  height: 2.3125rem;
+  padding: 0 $spacing-3;
+  border: $border-thin solid $gray-400;
+  border-radius: $radius-md;
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: $gray-950;
+  box-sizing: border-box;
+  
+  &:focus {
+    border-color: $color-primary;
+    outline: $border-medium solid rgba($color-primary, 0.2);
+  }
+  
+  &--date {
+    padding-right: $spacing-10;
+  }
+}
+
+.add-task-modal__input-wrapper {
+  position: relative;
+}
+
+.add-task-modal__calendar-icon {
+  position: absolute;
+  right: $spacing-3;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $gray-400;
+  pointer-events: none;
+}
+
+.add-task-modal__textarea {
+  all: unset;
+  width: 100%;
+  min-height: 12.8125rem;
+  padding: $spacing-3;
+  border: $border-thin solid $gray-400;
+  border-radius: $radius-md;
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: $gray-950;
+  resize: vertical;
+  box-sizing: border-box;
+  
+  &:focus {
+    border-color: $color-primary;
+    outline: $border-medium solid rgba($color-primary, 0.2);
+  }
+}
+
+// ============================================================================
+// PRIORITIES
+// ============================================================================
+.add-task-modal__priorities {
+  display: flex;
+  gap: $spacing-8;
+  align-items: center;
+}
+
+.add-task-modal__priority-option {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  cursor: pointer;
+  position: relative;
+}
+
+.add-task-modal__priority-dot {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: $radius-full;
+}
+
+.add-task-modal__priority-label {
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: $gray-400;
+}
+
+.add-task-modal__priority-checkbox {
+  appearance: none;
+  width: 0.9375rem;
+  height: 0.9375rem;
+  border: $border-thin solid $gray-400;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  position: relative;
+  @include transition(all);
+  
+  &:checked {
+    background-color: $color-primary;
+    border-color: $color-primary;
+    
+    &::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: $color-white;
+      font-size: 0.625rem;
+      font-weight: $font-weight-bold;
+    }
+  }
+  
+  &:hover {
+    border-color: $color-primary;
+  }
+  
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// RIGHT COLUMN
+// ============================================================================
+.add-task-modal__right-column {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-6;
+}
+
+.add-task-modal__assign-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.add-task-modal__assign-box {
+  border: $border-thin solid $gray-400;
+  border-radius: $radius-md;
+  padding: $spacing-6;
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-4;
+  min-height: 11.5625rem;
+  
+  &--tall {
+    min-height: 12.8125rem;
+  }
+}
+
+.add-task-modal__assign-text {
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: $gray-400;
+  text-align: center;
+  max-width: 8.75rem;
+  margin: 0;
+}
+
+.add-task-modal__assign-btn {
+  all: unset;
+  padding: $spacing-2 $spacing-4;
+  border: $border-thin solid $gray-400;
+  border-radius: $radius-md;
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: $gray-400;
+  cursor: pointer;
+  @include transition(all);
+  
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+    background-color: $color-primary-light;
+  }
+  
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// SUBMIT BUTTON
+// ============================================================================
+.add-task-modal__submit-btn {
+  all: unset;
+  grid-column: 1;
+  background-color: $color-primary;
+  color: $color-white;
+  padding: $spacing-2 $spacing-6;
+  border-radius: $radius-md;
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  cursor: pointer;
+  text-align: center;
+  width: 5.625rem;
+  margin-top: $spacing-6;
+  @include transition(all);
+  box-sizing: border-box;
+  
+  &:hover {
+    background-color: color-primary(normal-hover);
+    transform: translateY(-0.0625rem);
+    box-shadow: $shadow-md;
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// RESPONSIVE
+// ============================================================================
+@media (max-width: $breakpoint-md) {
+  .add-task-modal {
+    width: 100%;
+    padding: $spacing-6;
+  }
+  
+  .add-task-modal__form {
+    grid-template-columns: 1fr;
+  }
+  
+  .add-task-modal__submit-btn {
+    width: 100%;
+  }
+}

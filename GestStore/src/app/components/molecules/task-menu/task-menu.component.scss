@@ -1,0 +1,45 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ============================================================================
+// TASK MENU - DROPDOWN MENU FOR TASK ACTIONS
+// ============================================================================
+.task-menu {
+  background-color: $color-white;
+  border-radius: $radius-md;
+  border: $border-thin solid rgba($color-black, 0.08);
+  box-shadow: $shadow-lg;
+  padding: $spacing-2 $spacing-1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  min-width: 9.375rem;
+}
+
+// ============================================================================
+// MENU ITEMS
+// ============================================================================
+.task-menu__item {
+  all: unset;
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: $gray-950;
+  cursor: pointer;
+  padding: $spacing-1 0;
+  @include transition(color, background-color);
+  text-align: left;
+  border-radius: $radius-sm;
+  
+  &:hover {
+    color: $color-primary;
+    background-color: $color-primary-light;
+    padding-left: $spacing-1;
+  }
+  
+  &:active {
+    background-color: rgba($color-primary, 0.1);
+  }
+  
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
