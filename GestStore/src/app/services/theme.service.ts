@@ -1,4 +1,4 @@
-import { Injectable, signal, effect, PLATFORM_ID, Inject } from '@angular/core';
+import { Injectable, signal, effect, PLATFORM_ID, Inject, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 export type Theme = 'light' | 'dark';
@@ -15,11 +15,12 @@ export type Theme = 'light' | 'dark';
 @Injectable({
   providedIn: 'root'
 })
-export class ThemeService {
+export class ThemeService implements OnDestroy {
   private readonly STORAGE_KEY = 'geststore-theme';
   private readonly isBrowser: boolean;
+  private mediaQueryListener: ((event: MediaQueryListEvent) => void) | null = null;
+  private mediaQuery: MediaQueryList | null = null;
   
-  // Signal reactivo para el tema actual
   currentTheme = signal<Theme>('light');
   
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
@@ -76,14 +77,16 @@ export class ThemeService {
    */
   private listenToSystemPreference(): void {
     if (this.isBrowser && window.matchMedia) {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      this.mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       
-      mediaQuery.addEventListener('change', (event: MediaQueryListEvent) => {
-        // Solo actualizar si no hay preferencia guardada
-        if (!this.getThemeFromStorage()) {
+      this.mediaQueryListener = (event: MediaQueryListEvent) => {
+        const savedTheme = this.getThemeFromStorage();
+        if (!savedTheme) {
           this.currentTheme.set(event.matches ? 'dark' : 'light');
         }
-      });
+      };
+      
+      this.mediaQuery.addEventListener('change', this.mediaQueryListener);
     }
   }
   
@@ -165,5 +168,11 @@ export class ThemeService {
       }
     }
     this.currentTheme.set(this.getSystemPreference());
+  }
+  
+  ngOnDestroy(): void {
+    if (this.mediaQuery && this.mediaQueryListener) {
+      this.mediaQuery.removeEventListener('change', this.mediaQueryListener);
+    }
   }
 }

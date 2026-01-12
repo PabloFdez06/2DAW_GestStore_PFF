@@ -29,7 +29,8 @@ export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 export class TooltipDirective implements OnDestroy {
   @Input('appTooltip') tooltipText: string = '';
   @Input() tooltipPosition: TooltipPosition = 'top';
-  @Input() tooltipDelay: number = 200;
+  @Input() tooltipShowDelay: number = 200;
+  @Input() tooltipHideDelay: number = 100;
   @Input() tooltipDisabled: boolean = false;
   
   private elementRef = inject(ElementRef);
@@ -60,6 +61,7 @@ export class TooltipDirective implements OnDestroy {
    * Muestra el tooltip al recibir focus (accesibilidad)
    */
   @HostListener('focus')
+  @HostListener('focusin')
   onFocus(): void {
     if (this.tooltipDisabled || !this.tooltipText) return;
     this.scheduleShow();
@@ -69,6 +71,7 @@ export class TooltipDirective implements OnDestroy {
    * Oculta el tooltip al perder focus
    */
   @HostListener('blur')
+  @HostListener('focusout')
   onBlur(): void {
     this.scheduleHide();
   }
@@ -79,6 +82,13 @@ export class TooltipDirective implements OnDestroy {
   @HostListener('keydown.escape')
   onEscape(): void {
     this.hideTooltip();
+  }
+  
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (this.tooltipElement) {
+      this.positionTooltip();
+    }
   }
   
   ngOnDestroy(): void {
@@ -93,7 +103,7 @@ export class TooltipDirective implements OnDestroy {
     this.clearTimeouts();
     this.showTimeout = setTimeout(() => {
       this.showTooltip();
-    }, this.tooltipDelay);
+    }, this.tooltipShowDelay);
   }
   
   /**
@@ -103,7 +113,7 @@ export class TooltipDirective implements OnDestroy {
     this.clearTimeouts();
     this.hideTimeout = setTimeout(() => {
       this.hideTooltip();
-    }, 100);
+    }, this.tooltipHideDelay);
   }
   
   /**

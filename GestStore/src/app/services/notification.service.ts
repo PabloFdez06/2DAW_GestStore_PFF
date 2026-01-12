@@ -74,6 +74,9 @@ export class NotificationService {
   
   // Observable público para suscribirse a eliminaciones
   readonly dismiss$: Observable<string> = this.dismissSubject.asObservable();
+  
+  // Observable para cambios en el array de notificaciones
+  readonly notifications$ = new Subject<Notification[]>();
 
   constructor() {
     // Suscribirse internamente para gestionar el array de notificaciones
@@ -185,15 +188,15 @@ export class NotificationService {
    */
   private addNotification(notification: Notification): void {
     this.notificationsSignal.update(notifications => {
-      // Limitar el número máximo de notificaciones
       let updated = [...notifications, notification];
       if (updated.length > this.config.maxNotifications) {
         updated = updated.slice(updated.length - this.config.maxNotifications);
       }
       return updated;
     });
+    
+    this.notifications$.next(this.notificationsSignal());
 
-    // Auto-dismiss si tiene duración configurada
     if (notification.duration && notification.duration > 0) {
       setTimeout(() => {
         this.dismiss(notification.id);
@@ -208,6 +211,7 @@ export class NotificationService {
     this.notificationsSignal.update(notifications => 
       notifications.filter(n => n.id !== id)
     );
+    this.notifications$.next(this.notificationsSignal());
   }
 
   /**

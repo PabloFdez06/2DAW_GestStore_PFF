@@ -22,11 +22,22 @@ export class FormInputComponent {
   @Input() helpText: string = '';
   
   @Output() valueChange = new EventEmitter<string>();
+  @Output() enterPressed = new EventEmitter<string>();
+  @Output() keyUp = new EventEmitter<KeyboardEvent>();
 
   onInput(event: any): void {
     const newValue = event.target.value;
     this.value = newValue;
     this.valueChange.emit(newValue);
+  }
+  
+  onKeyUp(event: KeyboardEvent): void {
+    this.keyUp.emit(event);
+  }
+  
+  onEnterKey(event: KeyboardEvent): void {
+    event.preventDefault();
+    this.enterPressed.emit(this.value);
   }
 
   getAriaDescribedBy(): string | null {

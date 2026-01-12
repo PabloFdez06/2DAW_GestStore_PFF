@@ -6,7 +6,8 @@ import {
   ViewChild, 
   inject,
   OnDestroy,
-  AfterViewInit
+  AfterViewInit,
+  Renderer2
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
@@ -35,6 +36,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   
   private router = inject(Router);
   private elementRef = inject(ElementRef);
+  private renderer = inject(Renderer2);
   
   isMenuOpen = signal(false);
   private previousFocusElement: HTMLElement | null = null;
@@ -73,8 +75,14 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   onEscapeKey(): void {
     if (this.isMenuOpen()) {
       this.closeMenu();
-      // Devolver focus al botón hamburguesa
       this.hamburgerButton?.nativeElement?.focus();
+    }
+  }
+  
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (window.innerWidth >= 768 && this.isMenuOpen()) {
+      this.closeMenu();
     }
   }
 
@@ -148,21 +156,16 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
     this.closeMenu();
   }
 
-  /**
-   * Deshabilita el scroll del body cuando el menú está abierto
-   */
+
   private disableBodyScroll(): void {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
+    this.renderer.setStyle(document.body, 'overflow', 'hidden');
+    this.renderer.setStyle(document.body, 'position', 'fixed');
+    this.renderer.setStyle(document.body, 'width', '100%');
   }
 
-  /**
-   * Habilita el scroll del body cuando el menú se cierra
-   */
   private enableBodyScroll(): void {
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
+    this.renderer.removeStyle(document.body, 'overflow');
+    this.renderer.removeStyle(document.body, 'position');
+    this.renderer.removeStyle(document.body, 'width');
   }
 }

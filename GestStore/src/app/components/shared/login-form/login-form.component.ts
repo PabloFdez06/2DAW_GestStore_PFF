@@ -97,7 +97,6 @@ export class LoginFormComponent implements OnInit {
    * Maneja el envío del formulario
    */
   async onSubmit(): Promise<void> {
-    // Marcar todos los campos como touched para mostrar errores
     this.loginForm.markAllAsTouched();
     
     if (this.loginForm.invalid) {
@@ -108,7 +107,6 @@ export class LoginFormComponent implements OnInit {
     this.submitError.set(null);
     
     try {
-      // Simular llamada al servidor
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       const formValue = this.loginForm.value;
@@ -117,13 +115,20 @@ export class LoginFormComponent implements OnInit {
         rememberMe: formValue.rememberMe
       });
       
-      // Aquí iría la navegación al dashboard o página principal
-      // this.router.navigate(['/dashboard']);
-      
     } catch (error) {
       this.submitError.set('Error al iniciar sesión. Por favor, inténtalo de nuevo.');
     } finally {
       this.isSubmitting.set(false);
+    }
+  }
+  
+  onFormEnter(event: KeyboardEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.tagName !== 'BUTTON' && target.tagName !== 'TEXTAREA') {
+      event.preventDefault();
+      if (this.loginForm.valid) {
+        this.onSubmit();
+      }
     }
   }
   

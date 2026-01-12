@@ -9,7 +9,8 @@ import {
   OnInit,
   OnDestroy,
   inject,
-  signal
+  signal,
+  Renderer2
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -97,6 +98,8 @@ export class ModalComponent implements OnInit, OnDestroy {
   
   isOpen = signal(false);
   isClosing = signal(false);
+  
+  private renderer = inject(Renderer2);
   
   readonly titleId = `modal-title-${Math.random().toString(36).substr(2, 9)}`;
   readonly descriptionId = `modal-desc-${Math.random().toString(36).substr(2, 9)}`;
@@ -219,17 +222,18 @@ export class ModalComponent implements OnInit, OnDestroy {
     );
   }
 
-  /**
-   * Deshabilita el scroll del body
-   */
-  private disableBodyScroll(): void {
-    document.body.style.overflow = 'hidden';
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (this.isOpen() && this.modalContent) {
+      this.updateFocusableElements();
+    }
   }
 
-  /**
-   * Habilita el scroll del body
-   */
+  private disableBodyScroll(): void {
+    this.renderer.setStyle(document.body, 'overflow', 'hidden');
+  }
+
   private enableBodyScroll(): void {
-    document.body.style.overflow = '';
+    this.renderer.removeStyle(document.body, 'overflow');
   }
 }
