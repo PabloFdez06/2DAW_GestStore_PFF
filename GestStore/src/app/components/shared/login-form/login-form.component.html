@@ -11,7 +11,7 @@
     <section class="login-content__form-section">
         <h1 class="login-modal__title">Iniciar Sesión</h1>
 
-        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" (keydown.enter)="onFormEnter($event)">
+        <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" (keydown.enter)="onFormEnter($any($event))">
           <fieldset>
             <legend>Datos de acceso</legend>
             

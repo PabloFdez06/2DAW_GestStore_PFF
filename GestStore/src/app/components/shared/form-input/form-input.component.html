@@ -18,8 +18,8 @@
     [attr.aria-describedby]="getAriaDescribedBy()"
     class="form-input"
     (input)="onInput($event)"
-    (keyup)="onKeyUp($event)"
-    (keydown.enter)="onEnterKey($event)"
+    (keyup)="onKeyUp($any($event))"
+    (keydown.enter)="onEnterKey($any($event))"
   />
 
   <p class="form-help" [id]="id + '-help'" *ngIf="helpText">{{ helpText }}</p>
