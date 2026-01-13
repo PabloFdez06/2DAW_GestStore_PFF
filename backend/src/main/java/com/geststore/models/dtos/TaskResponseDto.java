@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class TaskResponseDto {
-    private Long id;
+    private String id;
     private String title;
     private String description;
     private TaskStatus status;

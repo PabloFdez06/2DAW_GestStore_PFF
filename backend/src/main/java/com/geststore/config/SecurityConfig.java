@@ -37,19 +37,14 @@ public class SecurityConfig {
 
     /**
      * Configuración de la cadena de filtros de seguridad
+     * MODO DESARROLLO: Todas las peticiones permitidas sin autenticación
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests()
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/public/**").permitAll()
-                    .anyRequest().authenticated()
-                .and()
-                .httpBasic();
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
         return http.build();
     }

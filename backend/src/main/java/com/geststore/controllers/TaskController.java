@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -20,27 +19,16 @@ import java.util.List;
 
 /**
  * Controlador REST para operaciones con tareas
- * Endpoints: /api/tasks
- * 
- * LÓGICA DE NEGOCIO IMPLEMENTADA:
- * - No permitir asignar más de 10 tareas activas a un trabajador
- * - Validar stock disponible al asignar productos
- * - No permitir completar tarea sin usar todos los productos
- * - Liberar stock reservado al cancelar tarea
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
 @Validated
 public class TaskController {
 
     private final TaskService taskService;
 
-    /**
-     * GET /api/tasks - Obtener todas las tareas (paginado)
-     * Acceso: ADMIN, MANAGER, WORKER
-     */
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
     public ResponseEntity<ApiResponse<Page<TaskResponseDto>>> getAllTasks(Pageable pageable) {
@@ -48,47 +36,38 @@ public class TaskController {
         Page<TaskResponseDto> tasks = taskService.getAllTasks(pageable);
         return ResponseEntity.ok(ApiResponse.success("Tareas obtenidas exitosamente", tasks));
     }
+    
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getAllTasksList() {
+        log.info("GET /api/tasks/all - Obteniendo todas las tareas sin paginación");
+        List<TaskResponseDto> tasks = taskService.getAllTasksList();
+        return ResponseEntity.ok(ApiResponse.success("Tareas obtenidas exitosamente", tasks));
+    }
 
-    /**
-     * GET /api/tasks/{id} - Obtener una tarea por ID
-     * Acceso: ADMIN, MANAGER, WORKER (solo su propia tarea)
-     */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
-    public ResponseEntity<ApiResponse<TaskResponseDto>> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TaskResponseDto>> getTaskById(@PathVariable String id) {
         log.info("GET /api/tasks/{} - Obteniendo tarea", id);
         TaskResponseDto task = taskService.getTaskById(id);
         return ResponseEntity.ok(ApiResponse.success("Tarea obtenida exitosamente", task));
     }
 
-    /**
-     * GET /api/tasks/user/{userId} - Obtener tareas asignadas a un usuario
-     * Acceso: ADMIN, MANAGER
-     */
     @GetMapping("/user/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getTasksByAssignedUser(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getTasksByAssignedUser(@PathVariable String userId) {
         log.info("GET /api/tasks/user/{} - Obteniendo tareas del usuario", userId);
         List<TaskResponseDto> tasks = taskService.getTasksByAssignedUser(userId);
         return ResponseEntity.ok(ApiResponse.success("Tareas obtenidas exitosamente", tasks));
     }
 
-    /**
-     * GET /api/tasks/created-by/{userId} - Obtener tareas creadas por un usuario
-     * Acceso: ADMIN, MANAGER
-     */
     @GetMapping("/created-by/{userId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getTasksCreatedByUser(@PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getTasksCreatedByUser(@PathVariable String userId) {
         log.info("GET /api/tasks/created-by/{} - Obteniendo tareas creadas", userId);
         List<TaskResponseDto> tasks = taskService.getTasksCreatedByUser(userId);
         return ResponseEntity.ok(ApiResponse.success("Tareas obtenidas exitosamente", tasks));
     }
 
-    /**
-     * GET /api/tasks/unassigned - Obtener tareas sin asignar
-     * Acceso: ADMIN, MANAGER
-     */
     @GetMapping("/unassigned")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getUnassignedTasks() {
@@ -97,10 +76,6 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success("Tareas sin asignar obtenidas", tasks));
     }
 
-    /**
-     * GET /api/tasks/in-progress - Obtener tareas en progreso
-     * Acceso: ADMIN, MANAGER
-     */
     @GetMapping("/in-progress")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getTasksInProgress() {
@@ -109,10 +84,6 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success("Tareas en progreso obtenidas", tasks));
     }
 
-    /**
-     * GET /api/tasks/overdue - Obtener tareas vencidas
-     * Acceso: ADMIN, MANAGER
-     */
     @GetMapping("/overdue")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getOverdueTasks() {
@@ -121,10 +92,6 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success("Tareas vencidas obtenidas", tasks));
     }
 
-    /**
-     * GET /api/tasks/high-priority - Obtener tareas de alta prioridad sin completar
-     * Acceso: ADMIN, MANAGER
-     */
     @GetMapping("/high-priority")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<List<TaskResponseDto>>> getHighPriorityActiveTasks() {
@@ -133,10 +100,6 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success("Tareas de alta prioridad obtenidas", tasks));
     }
 
-    /**
-     * GET /api/tasks/search?q=texto - Buscar tareas por título o descripción
-     * Acceso: ADMIN, MANAGER
-     */
     @GetMapping("/search")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<List<TaskResponseDto>>> searchTasks(@RequestParam String q) {
@@ -145,85 +108,51 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success("Búsqueda completada", tasks));
     }
 
-    /**
-     * POST /api/tasks - Crear una nueva tarea
-     * Acceso: ADMIN, MANAGER
-     * 
-     * LÓGICA: La tarea se crea con el usuario autenticado como creador
-     */
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<TaskResponseDto>> createTask(
             @Valid @RequestBody TaskRequestDto requestDto,
-            Authentication authentication) {
+            @RequestParam(required = false, defaultValue = "default") String createdByUserId) {
         log.info("POST /api/tasks - Creando nueva tarea");
-        
-        // Extraer ID del usuario autenticado (en implementación real, obtener de JWT)
-        Long createdByUserId = 1L; // Placeholder - en production obtener del token JWT
-        
         TaskResponseDto task = taskService.createTask(requestDto, createdByUserId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Tarea creada exitosamente", task));
     }
 
-    /**
-     * PUT /api/tasks/{id} - Actualizar una tarea
-     * Acceso: ADMIN, MANAGER
-     */
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTask(
-            @PathVariable Long id,
+            @PathVariable String id,
             @Valid @RequestBody TaskRequestDto requestDto) {
         log.info("PUT /api/tasks/{} - Actualizando tarea", id);
         TaskResponseDto task = taskService.updateTask(id, requestDto);
         return ResponseEntity.ok(ApiResponse.success("Tarea actualizada exitosamente", task));
     }
 
-    /**
-     * POST /api/tasks/{id}/start - Iniciar una tarea (cambiar a IN_PROGRESS)
-     * Acceso: ADMIN, MANAGER, WORKER (solo asignado)
-     */
     @PostMapping("/{id}/start")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
-    public ResponseEntity<ApiResponse<TaskResponseDto>> startTask(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TaskResponseDto>> startTask(@PathVariable String id) {
         log.info("POST /api/tasks/{}/start - Iniciando tarea", id);
         TaskResponseDto task = taskService.startTask(id);
         return ResponseEntity.ok(ApiResponse.success("Tarea iniciada exitosamente", task));
     }
 
-    /**
-     * POST /api/tasks/{id}/complete - Completar una tarea
-     * Acceso: ADMIN, MANAGER, WORKER (solo asignado)
-     * 
-     * LÓGICA COMPLEJA: No permitir completar si no están utilizados todos los productos
-     */
     @PostMapping("/{id}/complete")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
-    public ResponseEntity<ApiResponse<TaskResponseDto>> completeTask(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TaskResponseDto>> completeTask(@PathVariable String id) {
         log.info("POST /api/tasks/{}/complete - Completando tarea", id);
         TaskResponseDto task = taskService.completeTask(id);
         return ResponseEntity.ok(ApiResponse.success("Tarea completada exitosamente", task));
     }
 
-    /**
-     * POST /api/tasks/{id}/cancel - Cancelar una tarea
-     * Acceso: ADMIN, MANAGER
-     * 
-     * LÓGICA: Libera automáticamente el stock reservado
-     */
     @PostMapping("/{id}/cancel")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseEntity<ApiResponse<TaskResponseDto>> cancelTask(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<TaskResponseDto>> cancelTask(@PathVariable String id) {
         log.info("POST /api/tasks/{}/cancel - Cancelando tarea", id);
         TaskResponseDto task = taskService.cancelTask(id);
         return ResponseEntity.ok(ApiResponse.success("Tarea cancelada exitosamente", task));
     }
 
-    /**
-     * GET /api/tasks/statistics - Obtener estadísticas de tareas
-     * Acceso: ADMIN, MANAGER
-     */
     @GetMapping("/statistics")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<TaskService.TaskStatistics>> getTaskStatistics() {

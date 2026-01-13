@@ -25,5 +25,5 @@ public class TaskRequestDto {
     private LocalDateTime endDate;
     private String notes;
     private Boolean completed;
-    private Long assignedUserId;
+    private String assignedUserId;
 }

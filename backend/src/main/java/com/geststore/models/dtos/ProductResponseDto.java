@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ProductResponseDto {
-    private Long id;
+    private String id;
     private String name;
     private String sku;
     private String description;
@@ -24,5 +24,7 @@ public class ProductResponseDto {
     private Boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private StockResponseDto stock;
+    private Integer stockQuantity;
+    private Integer minStockLevel;
+    private String locationInWarehouse;
 }

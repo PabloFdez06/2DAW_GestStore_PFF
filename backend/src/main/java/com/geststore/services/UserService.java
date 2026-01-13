@@ -10,18 +10,15 @@ import com.geststore.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Servicio de lógica de negocio para usuarios
- * Maneja operaciones CRUD y validaciones
  */
 @Slf4j
 @Service
@@ -44,7 +41,7 @@ public class UserService {
     /**
      * Obtiene un usuario por ID
      */
-    public UserResponseDto getUserById(Long id) {
+    public UserResponseDto getUserById(String id) {
         log.info("Buscando usuario con ID: {}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
@@ -96,15 +93,10 @@ public class UserService {
 
     /**
      * Crea un nuevo usuario
-     * LÓGICA DE NEGOCIO:
-     * - El email debe ser único
-     * - La contraseña se debe hashear
-     * - Por defecto el usuario es activo
      */
     public UserResponseDto createUser(UserRequestDto requestDto) {
         log.info("Creando nuevo usuario con email: {}", requestDto.getEmail());
 
-        // Validar que el email sea único
         if (userRepository.existsByEmail(requestDto.getEmail())) {
             throw new BusinessLogicException(
                     "El email ya está registrado: " + requestDto.getEmail(),
@@ -112,7 +104,6 @@ public class UserService {
             );
         }
 
-        // Validar que tenga rol
         if (requestDto.getRole() == null) {
             throw new BusinessLogicException(
                     "El rol de usuario es obligatorio",
@@ -120,7 +111,6 @@ public class UserService {
             );
         }
 
-        // Crear usuario
         User user = User.builder()
                 .name(requestDto.getName())
                 .email(requestDto.getEmail())
@@ -131,6 +121,7 @@ public class UserService {
                 .active(true)
                 .build();
 
+        user.onCreate();
         User savedUser = userRepository.save(user);
         log.info("Usuario creado exitosamente con ID: {}", savedUser.getId());
 
@@ -139,17 +130,13 @@ public class UserService {
 
     /**
      * Actualiza un usuario
-     * LÓGICA DE NEGOCIO:
-     * - No se puede cambiar el email si ya existe otro usuario con ese email
-     * - Si se actualiza la contraseña, se debe hashear
      */
-    public UserResponseDto updateUser(Long id, UserRequestDto requestDto) {
+    public UserResponseDto updateUser(String id, UserRequestDto requestDto) {
         log.info("Actualizando usuario con ID: {}", id);
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
 
-        // Si cambia el email, validar que sea único
         if (!user.getEmail().equals(requestDto.getEmail()) &&
                 userRepository.existsByEmail(requestDto.getEmail())) {
             throw new BusinessLogicException(
@@ -158,7 +145,6 @@ public class UserService {
             );
         }
 
-        // Actualizar campos
         user.setName(requestDto.getName());
         user.setEmail(requestDto.getEmail());
         if (requestDto.getPassword() != null && !requestDto.getPassword().isBlank()) {
@@ -170,6 +156,7 @@ public class UserService {
         if (requestDto.getActive() != null) {
             user.setActive(requestDto.getActive());
         }
+        user.onUpdate();
 
         User updatedUser = userRepository.save(user);
         log.info("Usuario actualizado exitosamente con ID: {}", id);
@@ -179,30 +166,15 @@ public class UserService {
 
     /**
      * Desactiva un usuario (soft delete)
-     * LÓGICA DE NEGOCIO:
-     * - El usuario debe existir
-     * - Se marca como inactivo en lugar de eliminar
      */
-    public UserResponseDto deactivateUser(Long id) {
+    public UserResponseDto deactivateUser(String id) {
         log.info("Desactivando usuario con ID: {}", id);
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
 
-        // Si el usuario tiene tareas activas, no se puede desactivar
-        long activeTasks = user.getAssignedTasks().stream()
-                .filter(task -> task.getStatus().name().equals("IN_PROGRESS") ||
-                                task.getStatus().name().equals("PENDING"))
-                .count();
-
-        if (activeTasks > 0) {
-            throw new BusinessLogicException(
-                    "No se puede desactivar un usuario con " + activeTasks + " tarea(s) activa(s)",
-                    "USER_HAS_ACTIVE_TASKS"
-            );
-        }
-
         user.setActive(false);
+        user.onUpdate();
         User updatedUser = userRepository.save(user);
         log.info("Usuario desactivado exitosamente con ID: {}", id);
 
@@ -212,13 +184,14 @@ public class UserService {
     /**
      * Activa un usuario previamente desactivado
      */
-    public UserResponseDto activateUser(Long id) {
+    public UserResponseDto activateUser(String id) {
         log.info("Activando usuario con ID: {}", id);
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
 
         user.setActive(true);
+        user.onUpdate();
         User updatedUser = userRepository.save(user);
         log.info("Usuario activado exitosamente con ID: {}", id);
 

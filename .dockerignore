@@ -1,0 +1,9 @@
+# .env local (no subir a git)
+.env
+
+# Logs de Docker
+logs/
+
+# Volúmenes de datos locales
+mysql_data/
+backend_logs/

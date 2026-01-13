@@ -4,18 +4,14 @@ import com.geststore.exceptions.BusinessLogicException;
 import com.geststore.exceptions.ResourceNotFoundException;
 import com.geststore.models.dtos.ProductRequestDto;
 import com.geststore.models.dtos.ProductResponseDto;
-import com.geststore.models.dtos.StockResponseDto;
 import com.geststore.models.entities.Product;
-import com.geststore.models.entities.Stock;
 import com.geststore.repositories.ProductRepository;
-import com.geststore.repositories.StockRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,21 +26,20 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final StockRepository stockRepository;
 
     /**
      * Obtiene todos los productos activos
      */
     public Page<ProductResponseDto> getAllProducts(Pageable pageable) {
         log.info("Obteniendo todos los productos activos, página: {}", pageable.getPageNumber());
-        Page<Product> products = productRepository.findByActive(true);
+        Page<Product> products = productRepository.findAll(pageable);
         return products.map(this::convertToDto);
     }
 
     /**
      * Obtiene un producto por ID
      */
-    public ProductResponseDto getProductById(Long id) {
+    public ProductResponseDto getProductById(String id) {
         log.info("Buscando producto con ID: {}", id);
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto", id));
@@ -118,15 +113,10 @@ public class ProductService {
 
     /**
      * Crea un nuevo producto
-     * LÓGICA DE NEGOCIO:
-     * - El SKU debe ser único
-     * - Se crea automáticamente un registro de Stock
-     * - El producto es activo por defecto
      */
     public ProductResponseDto createProduct(ProductRequestDto requestDto) {
         log.info("Creando nuevo producto con SKU: {}", requestDto.getSku());
 
-        // Validar que el SKU sea único
         if (productRepository.existsBySku(requestDto.getSku())) {
             throw new BusinessLogicException(
                     "El SKU ya existe: " + requestDto.getSku(),
@@ -134,7 +124,6 @@ public class ProductService {
             );
         }
 
-        // Crear producto
         Product product = Product.builder()
                 .name(requestDto.getName())
                 .sku(requestDto.getSku())
@@ -142,21 +131,12 @@ public class ProductService {
                 .unitPrice(requestDto.getUnitPrice())
                 .category(requestDto.getCategory())
                 .active(true)
+                .stockQuantity(0)
+                .minStockLevel(10)
                 .build();
 
+        product.onCreate();
         Product savedProduct = productRepository.save(product);
-
-        // Crear registro de stock automáticamente
-        Stock stock = Stock.builder()
-                .product(savedProduct)
-                .quantityAvailable(0)
-                .quantityReserved(0)
-                .minimumLevel(10)
-                .lastUpdated(LocalDateTime.now())
-                .build();
-
-        stockRepository.save(stock);
-        savedProduct.setStock(stock);
 
         log.info("Producto creado exitosamente con ID: {}", savedProduct.getId());
 
@@ -165,16 +145,13 @@ public class ProductService {
 
     /**
      * Actualiza un producto
-     * LÓGICA DE NEGOCIO:
-     * - No se puede cambiar el SKU si ya existe otro producto con ese SKU
      */
-    public ProductResponseDto updateProduct(Long id, ProductRequestDto requestDto) {
+    public ProductResponseDto updateProduct(String id, ProductRequestDto requestDto) {
         log.info("Actualizando producto con ID: {}", id);
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto", id));
 
-        // Si cambia el SKU, validar que sea único
         if (!product.getSku().equals(requestDto.getSku()) &&
                 productRepository.existsBySku(requestDto.getSku())) {
             throw new BusinessLogicException(
@@ -188,6 +165,7 @@ public class ProductService {
         product.setDescription(requestDto.getDescription());
         product.setUnitPrice(requestDto.getUnitPrice());
         product.setCategory(requestDto.getCategory());
+        product.onUpdate();
 
         Product updatedProduct = productRepository.save(product);
         log.info("Producto actualizado exitosamente con ID: {}", id);
@@ -197,24 +175,15 @@ public class ProductService {
 
     /**
      * Desactiva un producto (soft delete)
-     * LÓGICA DE NEGOCIO:
-     * - No se puede desactivar si tiene stock reservado
      */
-    public ProductResponseDto deactivateProduct(Long id) {
+    public ProductResponseDto deactivateProduct(String id) {
         log.info("Desactivando producto con ID: {}", id);
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto", id));
 
-        // Validar que no tenga stock reservado
-        if (product.getStock() != null && product.getStock().getQuantityReserved() > 0) {
-            throw new BusinessLogicException(
-                    "No se puede desactivar un producto con " + product.getStock().getQuantityReserved() + " unidad(es) reservada(s)",
-                    "PRODUCT_HAS_RESERVED_STOCK"
-            );
-        }
-
         product.setActive(false);
+        product.onUpdate();
         Product updatedProduct = productRepository.save(product);
         log.info("Producto desactivado exitosamente con ID: {}", id);
 
@@ -227,17 +196,18 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductStatistics getProductStatistics() {
         log.info("Obteniendo estadísticas de productos");
-
-        List<Product> allProducts = productRepository.findByActive(true);
-        List<Product> lowStockProducts = productRepository.findLowStockProducts();
-        List<Product> outOfStockProducts = productRepository.findOutOfStockProducts();
-        Long distinctCategories = productRepository.countDistinctCategories();
+        
+        long totalProducts = productRepository.count();
+        long activeProducts = productRepository.findByActive(true).size();
+        long lowStockProducts = productRepository.findLowStockProducts().size();
+        long outOfStockProducts = productRepository.findOutOfStockProducts().size();
 
         return ProductStatistics.builder()
-                .totalProducts((long) allProducts.size())
-                .lowStockCount((long) lowStockProducts.size())
-                .outOfStockCount((long) outOfStockProducts.size())
-                .distinctCategories(distinctCategories)
+                .totalProducts(totalProducts)
+                .activeProducts(activeProducts)
+                .inactiveProducts(totalProducts - activeProducts)
+                .lowStockProducts(lowStockProducts)
+                .outOfStockProducts(outOfStockProducts)
                 .build();
     }
 
@@ -245,21 +215,6 @@ public class ProductService {
      * Convierte una entidad Product a ProductResponseDto
      */
     private ProductResponseDto convertToDto(Product product) {
-        StockResponseDto stockDto = null;
-        if (product.getStock() != null) {
-            Stock stock = product.getStock();
-            stockDto = StockResponseDto.builder()
-                    .id(stock.getId())
-                    .quantityAvailable(stock.getQuantityAvailable())
-                    .quantityReserved(stock.getQuantityReserved())
-                    .minimumLevel(stock.getMinimumLevel())
-                    .location(stock.getLocation())
-                    .totalQuantity(stock.getTotalQuantity())
-                    .lowStock(stock.isLowStock())
-                    .lastUpdated(stock.getLastUpdated())
-                    .build();
-        }
-
         return ProductResponseDto.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -270,7 +225,9 @@ public class ProductService {
                 .active(product.getActive())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
-                .stock(stockDto)
+                .stockQuantity(product.getStockQuantity())
+                .minStockLevel(product.getMinStockLevel())
+                .locationInWarehouse(product.getLocationInWarehouse())
                 .build();
     }
 
@@ -283,8 +240,9 @@ public class ProductService {
     @lombok.Builder
     public static class ProductStatistics {
         private long totalProducts;
-        private long lowStockCount;
-        private long outOfStockCount;
-        private long distinctCategories;
+        private long activeProducts;
+        private long inactiveProducts;
+        private long lowStockProducts;
+        private long outOfStockProducts;
     }
 }

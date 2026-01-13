@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class TaskProductResponseDto {
-    private Long id;
+    private String id;
     private Integer quantity;
     private Integer quantityUsed;
     private String notes;

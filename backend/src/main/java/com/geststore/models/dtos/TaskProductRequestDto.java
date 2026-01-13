@@ -16,5 +16,5 @@ public class TaskProductRequestDto {
     private Integer quantity;
     private Integer quantityUsed;
     private String notes;
-    private Long productId;
+    private String productId;
 }

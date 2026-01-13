@@ -10,6 +10,11 @@ public class ResourceNotFoundException extends GestStoreException {
                 "RESOURCE_NOT_FOUND");
     }
 
+    public ResourceNotFoundException(String resourceName, String id) {
+        super(String.format("%s no encontrado con ID: %s", resourceName, id),
+                "RESOURCE_NOT_FOUND");
+    }
+
     public ResourceNotFoundException(String resourceName, Long id) {
         super(String.format("%s no encontrado con ID: %d", resourceName, id),
                 "RESOURCE_NOT_FOUND");

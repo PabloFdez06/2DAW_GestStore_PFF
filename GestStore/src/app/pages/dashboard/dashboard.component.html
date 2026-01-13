@@ -129,8 +129,30 @@
           <p class="dashboard__section-today">Hoy</p>
         </div>
 
-        <div class="dashboard__tasks">
-          <article *ngFor="let task of todoTasks; let i = index" class="dashboard__task-card">
+        <!-- Estado de carga -->
+        <div *ngIf="isLoadingTasks" class="dashboard__loading">
+          <p>Cargando tareas...</p>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div *ngIf="errorMessage" class="dashboard__error">
+          <p>{{ errorMessage }}</p>
+          <button (click)="loadTasks()" class="dashboard__retry-btn">Reintentar</button>
+        </div>
+
+        <!-- Mensaje cuando no hay tareas -->
+        <div *ngIf="!isLoadingTasks && !errorMessage && tasks.length === 0" class="dashboard__empty-state">
+          <app-icon name="inbox" size="large" class="dashboard__empty-icon"></app-icon>
+          <p class="dashboard__empty-text">Aún no existen tareas</p>
+          <button class="dashboard__empty-create-btn" (click)="toggleTaskModal()">
+            <app-icon name="plus" size="small"></app-icon>
+            <span>Crear Primera Tarea</span>
+          </button>
+        </div>
+
+        <!-- Lista de tareas -->
+        <div *ngIf="!isLoadingTasks && !errorMessage && tasks.length > 0" class="dashboard__tasks">
+          <article *ngFor="let task of tasks; let i = index" class="dashboard__task-card">
             <div class="dashboard__task-image"></div>
             <div class="dashboard__task-menu-wrapper">
               <button class="dashboard__task-menu" (click)="toggleTaskMenu(i, $event)" aria-label="Menú">
@@ -140,21 +162,21 @@
                 <app-task-menu (action)="handleTaskAction($event, i)"></app-task-menu>
               </div>
             </div>
-            <div class="dashboard__task-priority" [class]="'dashboard__task-priority--' + task.priorityColor"></div>
+            <div class="dashboard__task-priority" [class]="'dashboard__task-priority--' + getPriorityColor(task.priority)"></div>
             <div class="dashboard__task-content">
               <h4 class="dashboard__task-title">{{ task.title }}</h4>
               <p class="dashboard__task-description">{{ task.description }}</p>
               <div class="dashboard__task-meta">
                 <p class="dashboard__task-info">
                   <span class="dashboard__task-label">Prioridad:</span>
-                  <span [class]="'dashboard__task-value--' + task.priorityColor">{{ task.priority }}</span>
+                  <span [class]="'dashboard__task-value--' + getPriorityColor(task.priority)">{{ getPriorityText(task.priority) }}</span>
                 </p>
                 <p class="dashboard__task-info">
                   <span class="dashboard__task-label">Estatus:</span>
-                  <span [class]="'dashboard__task-value--' + task.statusColor">{{ task.status }}</span>
+                  <span [class]="'dashboard__task-value--' + getStatusColor(task.status)">{{ getStatusText(task.status) }}</span>
                 </p>
               </div>
-              <p class="dashboard__task-created">Creada en: {{ task.createdAt }}</p>
+              <p class="dashboard__task-created">Creada en: {{ formatDate(task.createdAt) }}</p>
             </div>
           </article>
         </div>
@@ -177,13 +199,14 @@
             <div class="dashboard__status-circle-wrap">
               <svg class="dashboard__status-svg" viewBox="0 0 140 140">
                 <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
-                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--completed" [attr.stroke-dasharray]="84 * 3.77 + ' ' + (100 - 84) * 3.77"></circle>
+                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--completed" 
+                  [attr.stroke-dasharray]="(statistics?.completionRate || 0) * 3.77 + ' ' + (100 - (statistics?.completionRate || 0)) * 3.77"></circle>
               </svg>
-              <p class="dashboard__status-percent">84%</p>
+              <p class="dashboard__status-percent">{{ statistics?.completionRate || 0 }}%</p>
             </div>
             <div class="dashboard__status-legend">
               <span class="dashboard__status-dot dashboard__status-dot--completed"></span>
-              <span class="dashboard__status-label">Completada</span>
+              <span class="dashboard__status-label">Completada ({{ statistics?.completedTasks || 0 }})</span>
             </div>
           </div>
 
@@ -191,13 +214,14 @@
             <div class="dashboard__status-circle-wrap">
               <svg class="dashboard__status-svg" viewBox="0 0 140 140">
                 <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
-                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--inprogress" [attr.stroke-dasharray]="46 * 3.77 + ' ' + (100 - 46) * 3.77"></circle>
+                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--inprogress" 
+                  [attr.stroke-dasharray]="(statistics && statistics.totalTasks > 0 ? (statistics.inProgressTasks / statistics.totalTasks * 100) : 0) * 3.77 + ' ' + (100 - (statistics && statistics.totalTasks > 0 ? (statistics.inProgressTasks / statistics.totalTasks * 100) : 0)) * 3.77"></circle>
               </svg>
-              <p class="dashboard__status-percent">46%</p>
+              <p class="dashboard__status-percent">{{ statistics && statistics.totalTasks > 0 ? ((statistics.inProgressTasks / statistics.totalTasks * 100) | number:'1.0-0') : 0 }}%</p>
             </div>
             <div class="dashboard__status-legend">
               <span class="dashboard__status-dot dashboard__status-dot--inprogress"></span>
-              <span class="dashboard__status-label">En Progreso</span>
+              <span class="dashboard__status-label">En Progreso ({{ statistics?.inProgressTasks || 0 }})</span>
             </div>
           </div>
 
@@ -205,13 +229,14 @@
             <div class="dashboard__status-circle-wrap">
               <svg class="dashboard__status-svg" viewBox="0 0 140 140">
                 <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
-                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--notstarted" [attr.stroke-dasharray]="13 * 3.77 + ' ' + (100 - 13) * 3.77"></circle>
+                <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--notstarted" 
+                  [attr.stroke-dasharray]="(statistics && statistics.totalTasks > 0 ? (statistics.pendingTasks / statistics.totalTasks * 100) : 0) * 3.77 + ' ' + (100 - (statistics && statistics.totalTasks > 0 ? (statistics.pendingTasks / statistics.totalTasks * 100) : 0)) * 3.77"></circle>
               </svg>
-              <p class="dashboard__status-percent">13%</p>
+              <p class="dashboard__status-percent">{{ statistics && statistics.totalTasks > 0 ? ((statistics.pendingTasks / statistics.totalTasks * 100) | number:'1.0-0') : 0 }}%</p>
             </div>
             <div class="dashboard__status-legend">
               <span class="dashboard__status-dot dashboard__status-dot--notstarted"></span>
-              <span class="dashboard__status-label">Sin Comenzar</span>
+              <span class="dashboard__status-label">Sin Comenzar ({{ statistics?.pendingTasks || 0 }})</span>
             </div>
           </div>
         </div>
@@ -224,8 +249,13 @@
           <h3 class="dashboard__section-title dashboard__section-title--completed">Tareas Completadas</h3>
         </div>
 
-        <div class="dashboard__completed-tasks">
-          <article *ngFor="let task of completedTasks" class="dashboard__completed-card">
+        <!-- Mensaje cuando no hay tareas completadas -->
+        <div *ngIf="!isLoadingTasks && completedTasksData.length === 0" class="dashboard__empty-state dashboard__empty-state--small">
+          <p class="dashboard__empty-text">No hay tareas completadas aún</p>
+        </div>
+
+        <div *ngIf="completedTasksData.length > 0" class="dashboard__completed-tasks">
+          <article *ngFor="let task of completedTasksData" class="dashboard__completed-card">
             <div class="dashboard__completed-image"></div>
             <button class="dashboard__completed-menu" aria-label="Menú">
               <app-icon name="more-vertical" size="small"></app-icon>
@@ -234,8 +264,8 @@
             <div class="dashboard__completed-content">
               <h4 class="dashboard__completed-title">{{ task.title }}</h4>
               <p class="dashboard__completed-description">{{ task.description }}</p>
-              <p class="dashboard__completed-status">Estatus: <span class="dashboard__completed-status-value">{{ task.status }}</span></p>
-              <p class="dashboard__completed-date">Completada hace {{ task.completedAgo }}.</p>
+              <p class="dashboard__completed-status">Estatus: <span class="dashboard__completed-status-value">{{ getStatusText(task.status) }}</span></p>
+              <p class="dashboard__completed-date">Completada hace {{ getCompletedAgo(task.endDate || task.updatedAt) }}.</p>
             </div>
           </article>
         </div>

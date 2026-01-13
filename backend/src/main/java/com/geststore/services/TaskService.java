@@ -11,7 +11,6 @@ import com.geststore.repositories.TaskRepository;
 import com.geststore.repositories.UserRepository;
 import com.geststore.repositories.TaskProductRepository;
 import com.geststore.repositories.ProductRepository;
-import com.geststore.repositories.StockRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 
 /**
  * Servicio de lógica de negocio para tareas
- * Maneja operaciones CRUD y validaciones complejas
  */
 @Slf4j
 @Service
@@ -36,25 +34,34 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
-    private final StockRepository stockRepository;
     private final TaskProductRepository taskProductRepository;
-    private final StockService stockService;
 
     private static final int MAX_ACTIVE_TASKS_PER_WORKER = 10;
 
     /**
-     * Obtiene todas las tareas
+     * Obtiene todas las tareas (paginado)
      */
     public Page<TaskResponseDto> getAllTasks(Pageable pageable) {
         log.info("Obteniendo todas las tareas, página: {}", pageable.getPageNumber());
         Page<Task> tasks = taskRepository.findAll(pageable);
         return tasks.map(this::convertToDto);
     }
+    
+    /**
+     * Obtiene todas las tareas sin paginación
+     */
+    public List<TaskResponseDto> getAllTasksList() {
+        log.info("Obteniendo todas las tareas sin paginación");
+        List<Task> tasks = taskRepository.findAll();
+        return tasks.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
     /**
      * Obtiene una tarea por ID
      */
-    public TaskResponseDto getTaskById(Long id) {
+    public TaskResponseDto getTaskById(String id) {
         log.info("Buscando tarea con ID: {}", id);
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarea", id));
@@ -64,10 +71,9 @@ public class TaskService {
     /**
      * Obtiene tareas de un usuario asignado
      */
-    public List<TaskResponseDto> getTasksByAssignedUser(Long userId) {
+    public List<TaskResponseDto> getTasksByAssignedUser(String userId) {
         log.info("Obteniendo tareas asignadas al usuario ID: {}", userId);
 
-        // Validar que el usuario existe
         userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", userId));
 
@@ -80,10 +86,9 @@ public class TaskService {
     /**
      * Obtiene tareas creadas por un usuario
      */
-    public List<TaskResponseDto> getTasksCreatedByUser(Long userId) {
+    public List<TaskResponseDto> getTasksCreatedByUser(String userId) {
         log.info("Obteniendo tareas creadas por usuario ID: {}", userId);
 
-        // Validar que el usuario existe
         userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", userId));
 
@@ -139,29 +144,19 @@ public class TaskService {
 
     /**
      * Crea una nueva tarea
-     * LÓGICA DE NEGOCIO:
-     * - La tarea debe tener un usuario creador
-     * - Si se asigna a un usuario, no puede tener más de MAX_ACTIVE_TASKS activas
-     * - Si la tarea tiene productos, reserva automáticamente el stock
      */
-    public TaskResponseDto createTask(TaskRequestDto requestDto, Long createdByUserId) {
+    public TaskResponseDto createTask(TaskRequestDto requestDto, String createdByUserId) {
         log.info("Creando nueva tarea");
 
-        // Validar usuario creador
         User createdByUser = userRepository.findById(createdByUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario creador", createdByUserId));
 
-        // Validar usuario asignado (si se proporciona)
         User assignedUser = null;
         if (requestDto.getAssignedUserId() != null) {
             assignedUser = userRepository.findById(requestDto.getAssignedUserId())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario asignado", requestDto.getAssignedUserId()));
-
-            // LÓGICA DE NEGOCIO: No permitir asignar más tareas activas
-            validateMaxActiveTasks(assignedUser);
         }
 
-        // Crear tarea
         Task task = Task.builder()
                 .title(requestDto.getTitle())
                 .description(requestDto.getDescription())
@@ -176,6 +171,7 @@ public class TaskService {
                 .createdByUser(createdByUser)
                 .build();
 
+        task.onCreate();
         Task savedTask = taskRepository.save(task);
         log.info("Tarea creada exitosamente con ID: {}", savedTask.getId());
 
@@ -185,20 +181,18 @@ public class TaskService {
     /**
      * Actualiza una tarea
      */
-    public TaskResponseDto updateTask(Long id, TaskRequestDto requestDto) {
+    public TaskResponseDto updateTask(String id, TaskRequestDto requestDto) {
         log.info("Actualizando tarea con ID: {}", id);
 
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarea", id));
 
-        // Si cambia el usuario asignado, validar
         if (requestDto.getAssignedUserId() != null &&
                 (task.getAssignedUser() == null || !task.getAssignedUser().getId().equals(requestDto.getAssignedUserId()))) {
 
             User newAssignedUser = userRepository.findById(requestDto.getAssignedUserId())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario", requestDto.getAssignedUserId()));
 
-            validateMaxActiveTasks(newAssignedUser);
             task.setAssignedUser(newAssignedUser);
         }
 
@@ -208,6 +202,7 @@ public class TaskService {
         task.setPriority(requestDto.getPriority() != null ? requestDto.getPriority() : task.getPriority());
         task.setDueDate(requestDto.getDueDate());
         task.setNotes(requestDto.getNotes());
+        task.onUpdate();
 
         Task updatedTask = taskRepository.save(task);
         log.info("Tarea actualizada exitosamente con ID: {}", id);
@@ -216,9 +211,9 @@ public class TaskService {
     }
 
     /**
-     * Inicia una tarea (cambia estado a IN_PROGRESS)
+     * Inicia una tarea
      */
-    public TaskResponseDto startTask(Long id) {
+    public TaskResponseDto startTask(String id) {
         log.info("Iniciando tarea con ID: {}", id);
 
         Task task = taskRepository.findById(id)
@@ -233,6 +228,7 @@ public class TaskService {
 
         task.setStatus(TaskStatus.IN_PROGRESS);
         task.setStartDate(LocalDateTime.now());
+        task.onUpdate();
 
         Task updatedTask = taskRepository.save(task);
         log.info("Tarea iniciada exitosamente");
@@ -242,11 +238,8 @@ public class TaskService {
 
     /**
      * Completa una tarea
-     * LÓGICA DE NEGOCIO:
-     * - Solo se pueden completar tareas en IN_PROGRESS
-     * - Todos los productos deben ser utilizados (quantityUsed == quantity)
      */
-    public TaskResponseDto completeTask(Long id) {
+    public TaskResponseDto completeTask(String id) {
         log.info("Completando tarea con ID: {}", id);
 
         Task task = taskRepository.findById(id)
@@ -259,27 +252,10 @@ public class TaskService {
             );
         }
 
-        // Validar que todos los productos se hayan utilizado
-        boolean allProductsUsed = task.getTaskProducts().stream()
-                .allMatch(tp -> tp.getQuantityUsed().equals(tp.getQuantity()));
-
-        if (!allProductsUsed) {
-            throw new BusinessLogicException(
-                    "No se puede completar la tarea. Todos los productos deben ser utilizados completamente.",
-                    "INCOMPLETE_PRODUCTS"
-            );
-        }
-
         task.setStatus(TaskStatus.COMPLETED);
         task.setCompleted(true);
         task.setEndDate(LocalDateTime.now());
-
-        // Liberar stock reservado y descontar lo utilizado
-        for (TaskProduct tp : task.getTaskProducts()) {
-            Stock stock = tp.getProduct().getStock();
-            // Descontar del reservado
-            stockService.releaseReservedStock(stock.getId(), tp.getQuantityUsed());
-        }
+        task.onUpdate();
 
         Task updatedTask = taskRepository.save(task);
         log.info("Tarea completada exitosamente");
@@ -290,7 +266,7 @@ public class TaskService {
     /**
      * Cancela una tarea
      */
-    public TaskResponseDto cancelTask(Long id) {
+    public TaskResponseDto cancelTask(String id) {
         log.info("Cancelando tarea con ID: {}", id);
 
         Task task = taskRepository.findById(id)
@@ -303,13 +279,8 @@ public class TaskService {
             );
         }
 
-        // Liberar stock reservado
-        for (TaskProduct tp : task.getTaskProducts()) {
-            Stock stock = tp.getProduct().getStock();
-            stockService.releaseReservedStock(stock.getId(), tp.getQuantity() - tp.getQuantityUsed());
-        }
-
         task.setStatus(TaskStatus.CANCELLED);
+        task.onUpdate();
         Task updatedTask = taskRepository.save(task);
         log.info("Tarea cancelada exitosamente");
 
@@ -353,37 +324,21 @@ public class TaskService {
     }
 
     /**
-     * LÓGICA DE NEGOCIO: Valida que un usuario no tenga más de MAX_ACTIVE_TASKS activas
-     * Similar al ejemplo de biblioteca: no permitir más de X tareas activas
-     */
-    private void validateMaxActiveTasks(User user) {
-        long activeTasksCount = user.getAssignedTasks().stream()
-                .filter(task -> !task.getStatus().equals(TaskStatus.COMPLETED) &&
-                              !task.getStatus().equals(TaskStatus.CANCELLED))
-                .count();
-
-        if (activeTasksCount >= MAX_ACTIVE_TASKS_PER_WORKER) {
-            throw new BusinessLogicException(
-                    "El usuario ya tiene " + MAX_ACTIVE_TASKS_PER_WORKER + " tareas activas. No se pueden asignar más.",
-                    "MAX_ACTIVE_TASKS_EXCEEDED"
-            );
-        }
-    }
-
-    /**
      * Convierte una entidad Task a TaskResponseDto
      */
     private TaskResponseDto convertToDto(Task task) {
-        Set<TaskProductResponseDto> taskProductDtos = task.getTaskProducts().stream()
-                .map(tp -> TaskProductResponseDto.builder()
-                        .id(tp.getId())
-                        .quantity(tp.getQuantity())
-                        .quantityUsed(tp.getQuantityUsed())
-                        .notes(tp.getNotes())
-                        .createdAt(tp.getCreatedAt())
-                        .product(convertProductToDto(tp.getProduct()))
-                        .build())
-                .collect(Collectors.toSet());
+        Set<TaskProductResponseDto> taskProductDtos = task.getTaskProducts() != null ?
+                task.getTaskProducts().stream()
+                        .map(tp -> TaskProductResponseDto.builder()
+                                .id(tp.getId())
+                                .quantity(tp.getQuantity())
+                                .quantityUsed(tp.getQuantityUsed())
+                                .notes(tp.getNotes())
+                                .createdAt(tp.getCreatedAt())
+                                .product(convertProductToDto(tp.getProduct()))
+                                .build())
+                        .collect(Collectors.toSet())
+                : Set.of();
 
         return TaskResponseDto.builder()
                 .id(task.getId())
@@ -399,7 +354,7 @@ public class TaskService {
                 .createdAt(task.getCreatedAt())
                 .updatedAt(task.getUpdatedAt())
                 .assignedUser(task.getAssignedUser() != null ? convertUserToDto(task.getAssignedUser()) : null)
-                .createdByUser(convertUserToDto(task.getCreatedByUser()))
+                .createdByUser(task.getCreatedByUser() != null ? convertUserToDto(task.getCreatedByUser()) : null)
                 .taskProducts(taskProductDtos)
                 .build();
     }
@@ -429,6 +384,9 @@ public class TaskService {
                 .active(product.getActive())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
+                .stockQuantity(product.getStockQuantity())
+                .minStockLevel(product.getMinStockLevel())
+                .locationInWarehouse(product.getLocationInWarehouse())
                 .build();
     }
 

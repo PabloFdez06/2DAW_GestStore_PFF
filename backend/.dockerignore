@@ -1,0 +1,45 @@
+# Archivos y directorios de Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Archivos de IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+*~
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Archivos de test
+test-output/
+
+# Archivos de configuración local
+application-local.properties
+
+# Documentación generada
+docs/generated/
+
+# Archivos temporales
+*.tmp
+*.bak

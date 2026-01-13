@@ -1,0 +1,45 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos compilados
+dist/
+.angular/
+.cache/
+
+# Archivos de IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de test
+coverage/
+.nyc_output/
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Archivos temporales
+*.tmp
+*.bak
+
+# Documentación
+docs/
+
+# README
+README.md
