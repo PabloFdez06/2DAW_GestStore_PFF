@@ -112,9 +112,21 @@ public class TaskController {
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<TaskResponseDto>> createTask(
             @Valid @RequestBody TaskRequestDto requestDto,
-            @RequestParam(required = false, defaultValue = "default") String createdByUserId) {
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
         log.info("POST /api/tasks - Creando nueva tarea");
-        TaskResponseDto task = taskService.createTask(requestDto, createdByUserId);
+        
+        if (userId == null || userId.isEmpty()) {
+            log.error("No se proporcionó el ID del usuario");
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.<TaskResponseDto>builder()
+                            .success(false)
+                            .message("Se requiere el ID del usuario para crear una tarea")
+                            .timestamp(java.time.LocalDateTime.now())
+                            .build());
+        }
+        
+        log.info("Usuario desde header: {}", userId);
+        TaskResponseDto task = taskService.createTask(requestDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Tarea creada exitosamente", task));
     }
@@ -126,6 +138,16 @@ public class TaskController {
             @Valid @RequestBody TaskRequestDto requestDto) {
         log.info("PUT /api/tasks/{} - Actualizando tarea", id);
         TaskResponseDto task = taskService.updateTask(id, requestDto);
+        return ResponseEntity.ok(ApiResponse.success("Tarea actualizada exitosamente", task));
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
+    public ResponseEntity<ApiResponse<TaskResponseDto>> patchTask(
+            @PathVariable String id,
+            @RequestBody java.util.Map<String, Object> updates) {
+        log.info("PATCH /api/tasks/{} - Actualizando parcialmente tarea", id);
+        TaskResponseDto task = taskService.patchTask(id, updates);
         return ResponseEntity.ok(ApiResponse.success("Tarea actualizada exitosamente", task));
     }
 
@@ -153,11 +175,26 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success("Tarea cancelada exitosamente", task));
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<ApiResponse<Void>> deleteTask(@PathVariable String id) {
+        log.info("DELETE /api/tasks/{} - Eliminando tarea", id);
+        taskService.deleteTask(id);
+        return ResponseEntity.ok(ApiResponse.<Void>success("Tarea eliminada exitosamente", null));
+    }
+
     @GetMapping("/statistics")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<TaskService.TaskStatistics>> getTaskStatistics() {
         log.info("GET /api/tasks/statistics - Obteniendo estadísticas");
         TaskService.TaskStatistics stats = taskService.getTaskStatistics();
         return ResponseEntity.ok(ApiResponse.success("Estadísticas obtenidas", stats));
+    }
+
+    @GetMapping("/statistics/user/{userId}")
+    public ResponseEntity<ApiResponse<TaskService.TaskStatistics>> getTaskStatisticsByUser(@PathVariable String userId) {
+        log.info("GET /api/tasks/statistics/user/{} - Obteniendo estadísticas del usuario", userId);
+        TaskService.TaskStatistics stats = taskService.getTaskStatisticsByUser(userId);
+        return ResponseEntity.ok(ApiResponse.success("Estadísticas del usuario obtenidas", stats));
     }
 }

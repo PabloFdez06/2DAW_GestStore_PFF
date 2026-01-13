@@ -1,64 +1,66 @@
-<div class="dashboard">
+<article class="dashboard">
   <!-- Top Navigation Bar -->
-  <nav class="dashboard__nav">
+  <nav class="dashboard__nav" role="navigation" aria-label="Navegación principal">
     <h1 class="dashboard__logo">
       <span class="dashboard__logo-gest">Gest</span><span class="dashboard__logo-store">Store</span>
     </h1>
 
-    <div class="dashboard__search">
+    <search class="dashboard__search" role="search">
       <input 
-        type="text" 
+        type="search" 
         class="dashboard__search-input" 
         placeholder="Busca tu tarea aqui..."
+        [(ngModel)]="searchTerm"
+        aria-label="Buscar tareas"
       />
-      <button class="dashboard__search-btn" aria-label="Buscar">
+      <button class="dashboard__search-btn" type="button" aria-label="Buscar">
         <app-icon name="search" size="small"></app-icon>
       </button>
-    </div>
+    </search>
 
-    <div class="dashboard__nav-actions">
-      <button class="dashboard__nav-btn" aria-label="Notificaciones">
+    <section class="dashboard__nav-actions" aria-label="Acciones rápidas">
+      <button class="dashboard__nav-btn" type="button" aria-label="Notificaciones">
         <app-icon name="bell" size="small"></app-icon>
       </button>
-      <button class="dashboard__nav-btn" (click)="toggleCalendar()" aria-label="Calendario">
+      <button class="dashboard__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
         <app-icon name="calendar" size="small"></app-icon>
       </button>
-      <div class="dashboard__date">
+      <time class="dashboard__date" [attr.dateTime]="currentDate">
         <p class="dashboard__date-day">{{ currentDayName }}</p>
         <p class="dashboard__date-full">{{ currentDate }}</p>
-      </div>
-    </div>
+      </time>
+    </section>
   </nav>
   
   <!-- Calendar Modal Overlay -->
-  <div *ngIf="isCalendarOpen" class="dashboard__calendar-overlay" (click)="closeCalendar()">
-    <div class="dashboard__calendar-modal" (click)="$event.stopPropagation()">
+  <dialog *ngIf="isCalendarOpen" class="dashboard__modal-overlay" (click)="closeCalendar()" open>
+    <section class="dashboard__modal-content" (click)="$event.stopPropagation()">
       <app-calendar (close)="closeCalendar()"></app-calendar>
-    </div>
-  </div>
+    </section>
+  </dialog>
   
   <!-- Add Task Modal Overlay -->
-  <div *ngIf="isTaskModalOpen" class="dashboard__calendar-overlay" (click)="closeTaskModal()">
-    <div class="dashboard__calendar-modal" (click)="$event.stopPropagation()">
+  <dialog *ngIf="isTaskModalOpen" class="dashboard__modal-overlay" (click)="closeTaskModal()" open>
+    <section class="dashboard__modal-content" (click)="$event.stopPropagation()">
       <app-add-task-modal 
         (close)="closeTaskModal()" 
         (taskAdded)="handleTaskAdded($event)">
       </app-add-task-modal>
-    </div>
-  </div>
+    </section>
+  </dialog>
 
   <!-- Side Navigation -->
-  <aside class="dashboard__sidebar">
-    <div class="dashboard__user">
-      <div class="dashboard__user-avatar"></div>
-      <div class="dashboard__user-info">
-        <p class="dashboard__user-name">Pablo Fernández</p>
-        <p class="dashboard__user-email">holahola&#64;g.educaand.es</p>
-      </div>
-    </div>
+  <aside class="dashboard__sidebar" role="complementary" aria-label="Menú lateral">
+    <header class="dashboard__user">
+      <figure class="dashboard__user-avatar" role="img" aria-label="Avatar del usuario"></figure>
+      <hgroup class="dashboard__user-info">
+        <p class="dashboard__user-name">{{ currentUser?.name || 'Usuario' }}</p>
+        <p class="dashboard__user-email">{{ currentUser?.email || '' }}</p>
+      </hgroup>
+    </header>
 
-    <nav class="dashboard__sidebar-nav">
-      <a href="/dashboard" class="dashboard__sidebar-link dashboard__sidebar-link--active">
+    <nav class="dashboard__sidebar-nav" aria-label="Navegación del menú">
+      <a href="/dashboard" class="dashboard__sidebar-link dashboard__sidebar-link--active" aria-current="page">
         <app-icon name="home" size="small"></app-icon>
         <span>Dashboard</span>
       </a>
@@ -84,192 +86,194 @@
       </a>
     </nav>
 
-    <button class="dashboard__logout">
-      <app-icon name="log-out" size="small"></app-icon>
-      <span>Cerrar Sesión</span>
-    </button>
+    <footer class="dashboard__sidebar-footer">
+      <button type="button" class="dashboard__logout" (click)="onLogout($event)">
+        <app-icon name="log-out" size="small"></app-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </footer>
   </aside>
 
   <!-- Main Content -->
-  <main class="dashboard__main">
+  <main class="dashboard__main" role="main">
     <!-- Welcome Header -->
     <header class="dashboard__welcome">
-      <h2 class="dashboard__welcome-title">Bienvenido de nuevo, Pablo</h2>
+      <h2 class="dashboard__welcome-title">Bienvenido de nuevo, {{ currentUser?.name || 'Usuario' }}</h2>
       
-      <div class="dashboard__team">
-        <div class="dashboard__team-avatars">
-          <div class="dashboard__team-avatar"></div>
-          <div class="dashboard__team-avatar"></div>
-          <div class="dashboard__team-avatar"></div>
-          <div class="dashboard__team-avatar"></div>
-          <div class="dashboard__team-more">+4</div>
-        </div>
-        <button class="dashboard__invite-btn">
+      <section class="dashboard__team" aria-label="Equipo">
+        <ul class="dashboard__team-avatars" role="list">
+          <li class="dashboard__team-avatar" role="listitem"></li>
+          <li class="dashboard__team-avatar" role="listitem"></li>
+          <li class="dashboard__team-avatar" role="listitem"></li>
+          <li class="dashboard__team-avatar" role="listitem"></li>
+          <li class="dashboard__team-more" role="listitem">+4</li>
+        </ul>
+        <button class="dashboard__invite-btn" type="button">
           <app-icon name="user-plus" size="small"></app-icon>
           <span>Invitar</span>
         </button>
-      </div>
+      </section>
     </header>
 
     <!-- Content Grid -->
-    <div class="dashboard__content-grid">
+    <section class="dashboard__content-grid" aria-label="Contenido principal">
       <!-- To-Do Section (Left) -->
-      <section class="dashboard__section dashboard__section--todo">
-        <div class="dashboard__section-header">
-          <div class="dashboard__section-title-wrap">
+      <section class="dashboard__section dashboard__section--todo" aria-labelledby="todo-title">
+        <header class="dashboard__section-header">
+          <hgroup class="dashboard__section-title-wrap">
             <app-icon name="clipboard" size="small" class="dashboard__section-icon"></app-icon>
-            <h3 class="dashboard__section-title">To-Do</h3>
-          </div>
-          <p class="dashboard__section-date">{{ currentDate }}</p>
-        </div>
+            <h3 id="todo-title" class="dashboard__section-title">To-Do</h3>
+          </hgroup>
+          <time class="dashboard__section-date" [attr.dateTime]="currentDate">{{ currentDate }}</time>
+        </header>
 
-        <div class="dashboard__section-subheader">
-          <p class="dashboard__section-date">{{ currentDate }}</p>
-          <span class="dashboard__separator">•</span>
-          <p class="dashboard__section-today">Hoy</p>
-        </div>
+        <header class="dashboard__section-subheader">
+          <time class="dashboard__section-date" [attr.dateTime]="currentDate">{{ currentDate }}</time>
+          <span class="dashboard__separator" aria-hidden="true">•</span>
+          <mark class="dashboard__section-today">Hoy</mark>
+        </header>
 
         <!-- Estado de carga -->
-        <div *ngIf="isLoadingTasks" class="dashboard__loading">
+        <output *ngIf="isLoadingTasks" class="dashboard__loading" role="status" aria-live="polite">
           <p>Cargando tareas...</p>
-        </div>
+        </output>
 
         <!-- Mensaje de error -->
-        <div *ngIf="errorMessage" class="dashboard__error">
+        <aside *ngIf="errorMessage" class="dashboard__error" role="alert">
           <p>{{ errorMessage }}</p>
-          <button (click)="loadTasks()" class="dashboard__retry-btn">Reintentar</button>
-        </div>
+          <button (click)="loadTasks()" class="dashboard__retry-btn" type="button">Reintentar</button>
+        </aside>
 
         <!-- Mensaje cuando no hay tareas -->
-        <div *ngIf="!isLoadingTasks && !errorMessage && tasks.length === 0" class="dashboard__empty-state">
+        <section *ngIf="!isLoadingTasks && !errorMessage && tasks.length === 0" class="dashboard__empty-state">
           <app-icon name="inbox" size="large" class="dashboard__empty-icon"></app-icon>
           <p class="dashboard__empty-text">Aún no existen tareas</p>
-          <button class="dashboard__empty-create-btn" (click)="toggleTaskModal()">
+          <button class="dashboard__empty-create-btn" type="button" (click)="toggleTaskModal()">
             <app-icon name="plus" size="small"></app-icon>
-            <span>Crear Primera Tarea</span>
+            <span>Crear tarea</span>
           </button>
-        </div>
+        </section>
 
         <!-- Lista de tareas -->
-        <div *ngIf="!isLoadingTasks && !errorMessage && tasks.length > 0" class="dashboard__tasks">
-          <article *ngFor="let task of tasks; let i = index" class="dashboard__task-card">
-            <div class="dashboard__task-image"></div>
-            <div class="dashboard__task-menu-wrapper">
-              <button class="dashboard__task-menu" (click)="toggleTaskMenu(i, $event)" aria-label="Menú">
-                <app-icon name="more-vertical" size="small"></app-icon>
-              </button>
-              <div *ngIf="openTaskMenuIndex === i" class="dashboard__task-menu-dropdown">
-                <app-task-menu (action)="handleTaskAction($event, i)"></app-task-menu>
-              </div>
-            </div>
-            <div class="dashboard__task-priority" [class]="'dashboard__task-priority--' + getPriorityColor(task.priority)"></div>
-            <div class="dashboard__task-content">
-              <h4 class="dashboard__task-title">{{ task.title }}</h4>
-              <p class="dashboard__task-description">{{ task.description }}</p>
-              <div class="dashboard__task-meta">
-                <p class="dashboard__task-info">
-                  <span class="dashboard__task-label">Prioridad:</span>
-                  <span [class]="'dashboard__task-value--' + getPriorityColor(task.priority)">{{ getPriorityText(task.priority) }}</span>
-                </p>
-                <p class="dashboard__task-info">
-                  <span class="dashboard__task-label">Estatus:</span>
-                  <span [class]="'dashboard__task-value--' + getStatusColor(task.status)">{{ getStatusText(task.status) }}</span>
-                </p>
-              </div>
-              <p class="dashboard__task-created">Creada en: {{ formatDate(task.createdAt) }}</p>
-            </div>
-          </article>
-        </div>
+        <ul *ngIf="!isLoadingTasks && !errorMessage && tasks.length > 0" class="dashboard__tasks" role="list">
+          <li *ngFor="let task of filteredTasks; let i = index" role="listitem">
+            <article class="dashboard__task-card">
+              <figure class="dashboard__task-image" role="img" aria-label="Imagen de la tarea"></figure>
+              <nav class="dashboard__task-menu-wrapper" aria-label="Acciones de tarea">
+                <button class="dashboard__task-menu" type="button" (click)="toggleTaskMenu(i, $event)" aria-label="Menú" aria-haspopup="true">
+                  <app-icon name="more-vertical" size="small"></app-icon>
+                </button>
+                <menu *ngIf="openTaskMenuIndex === i" class="dashboard__task-menu-dropdown">
+                  <app-task-menu [isImportant]="task.important || false" (action)="handleTaskAction($event, i)"></app-task-menu>
+                </menu>
+              </nav>
+              <mark class="dashboard__task-priority" [class]="'dashboard__task-priority--' + getPriorityColor(task.priority)"></mark>
+              <section class="dashboard__task-content">
+                <h4 class="dashboard__task-title">{{ task.title }}</h4>
+                <p class="dashboard__task-description">{{ task.description }}</p>
+                <dl class="dashboard__task-meta">
+                  <dt class="dashboard__task-label">Prioridad: </dt>
+                  <dd [class]="'dashboard__task-value--' + getPriorityColor(task.priority)">{{ getPriorityText(task.priority) }}</dd>
+                  <dt class="dashboard__task-label">Estatus: </dt>
+                  <dd [class]="'dashboard__task-value--' + getStatusColor(task.status)">{{ getStatusText(task.status) }}</dd>
+                </dl>
+                <time class="dashboard__task-created" [attr.dateTime]="task.createdAt">Creada en: {{ formatDate(task.createdAt) }}</time>
+              </section>
+            </article>
+          </li>
+        </ul>
 
-        <button class="dashboard__add-task" (click)="toggleTaskModal()">
+        <button class="dashboard__add-task" type="button" (click)="toggleTaskModal()">
           <app-icon name="plus" size="small"></app-icon>
           <span>Añadir Tarea</span>
         </button>
       </section>
 
       <!-- Status Charts Section (Top Right) -->
-      <section class="dashboard__section dashboard__section--status">
-        <div class="dashboard__section-header">
+      <section class="dashboard__section dashboard__section--status" aria-labelledby="status-title">
+        <header class="dashboard__section-header">
           <app-icon name="check-circle" size="small" class="dashboard__section-icon"></app-icon>
-          <h3 class="dashboard__section-title">Estatus de Tareas</h3>
-        </div>
+          <h3 id="status-title" class="dashboard__section-title">Estatus de Tareas</h3>
+        </header>
 
-        <div class="dashboard__status-charts">
-          <div class="dashboard__status-chart">
-            <div class="dashboard__status-circle-wrap">
-              <svg class="dashboard__status-svg" viewBox="0 0 140 140">
+        <ul class="dashboard__status-charts" role="list">
+          <li class="dashboard__status-chart" role="listitem">
+            <figure class="dashboard__status-circle-wrap">
+              <svg class="dashboard__status-svg" viewBox="0 0 140 140" role="img" aria-label="Gráfico de tareas completadas">
                 <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
                 <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--completed" 
                   [attr.stroke-dasharray]="(statistics?.completionRate || 0) * 3.77 + ' ' + (100 - (statistics?.completionRate || 0)) * 3.77"></circle>
               </svg>
-              <p class="dashboard__status-percent">{{ statistics?.completionRate || 0 }}%</p>
-            </div>
-            <div class="dashboard__status-legend">
-              <span class="dashboard__status-dot dashboard__status-dot--completed"></span>
+              <data class="dashboard__status-percent" [value]="statistics?.completionRate || 0">{{ statistics?.completionRate || 0 }}%</data>
+            </figure>
+            <figcaption class="dashboard__status-legend">
+              <span class="dashboard__status-dot dashboard__status-dot--completed" aria-hidden="true"></span>
               <span class="dashboard__status-label">Completada ({{ statistics?.completedTasks || 0 }})</span>
-            </div>
-          </div>
+            </figcaption>
+          </li>
 
-          <div class="dashboard__status-chart">
-            <div class="dashboard__status-circle-wrap">
-              <svg class="dashboard__status-svg" viewBox="0 0 140 140">
+          <li class="dashboard__status-chart" role="listitem">
+            <figure class="dashboard__status-circle-wrap">
+              <svg class="dashboard__status-svg" viewBox="0 0 140 140" role="img" aria-label="Gráfico de tareas en progreso">
                 <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
                 <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--inprogress" 
                   [attr.stroke-dasharray]="(statistics && statistics.totalTasks > 0 ? (statistics.inProgressTasks / statistics.totalTasks * 100) : 0) * 3.77 + ' ' + (100 - (statistics && statistics.totalTasks > 0 ? (statistics.inProgressTasks / statistics.totalTasks * 100) : 0)) * 3.77"></circle>
               </svg>
-              <p class="dashboard__status-percent">{{ statistics && statistics.totalTasks > 0 ? ((statistics.inProgressTasks / statistics.totalTasks * 100) | number:'1.0-0') : 0 }}%</p>
-            </div>
-            <div class="dashboard__status-legend">
-              <span class="dashboard__status-dot dashboard__status-dot--inprogress"></span>
+              <data class="dashboard__status-percent" [value]="statistics && statistics.totalTasks > 0 ? (statistics.inProgressTasks / statistics.totalTasks * 100) : 0">{{ statistics && statistics.totalTasks > 0 ? ((statistics.inProgressTasks / statistics.totalTasks * 100) | number:'1.0-0') : 0 }}%</data>
+            </figure>
+            <figcaption class="dashboard__status-legend">
+              <span class="dashboard__status-dot dashboard__status-dot--inprogress" aria-hidden="true"></span>
               <span class="dashboard__status-label">En Progreso ({{ statistics?.inProgressTasks || 0 }})</span>
-            </div>
-          </div>
+            </figcaption>
+          </li>
 
-          <div class="dashboard__status-chart">
-            <div class="dashboard__status-circle-wrap">
-              <svg class="dashboard__status-svg" viewBox="0 0 140 140">
+          <li class="dashboard__status-chart" role="listitem">
+            <figure class="dashboard__status-circle-wrap">
+              <svg class="dashboard__status-svg" viewBox="0 0 140 140" role="img" aria-label="Gráfico de tareas sin comenzar">
                 <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
                 <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--notstarted" 
                   [attr.stroke-dasharray]="(statistics && statistics.totalTasks > 0 ? (statistics.pendingTasks / statistics.totalTasks * 100) : 0) * 3.77 + ' ' + (100 - (statistics && statistics.totalTasks > 0 ? (statistics.pendingTasks / statistics.totalTasks * 100) : 0)) * 3.77"></circle>
               </svg>
-              <p class="dashboard__status-percent">{{ statistics && statistics.totalTasks > 0 ? ((statistics.pendingTasks / statistics.totalTasks * 100) | number:'1.0-0') : 0 }}%</p>
-            </div>
-            <div class="dashboard__status-legend">
-              <span class="dashboard__status-dot dashboard__status-dot--notstarted"></span>
+              <data class="dashboard__status-percent" [value]="statistics && statistics.totalTasks > 0 ? (statistics.pendingTasks / statistics.totalTasks * 100) : 0">{{ statistics && statistics.totalTasks > 0 ? ((statistics.pendingTasks / statistics.totalTasks * 100) | number:'1.0-0') : 0 }}%</data>
+            </figure>
+            <figcaption class="dashboard__status-legend">
+              <span class="dashboard__status-dot dashboard__status-dot--notstarted" aria-hidden="true"></span>
               <span class="dashboard__status-label">Sin Comenzar ({{ statistics?.pendingTasks || 0 }})</span>
-            </div>
-          </div>
-        </div>
+            </figcaption>
+          </li>
+        </ul>
       </section>
 
       <!-- Completed Tasks Section (Bottom Right) -->
-      <section class="dashboard__section dashboard__section--completed">
-        <div class="dashboard__section-header">
+      <section class="dashboard__section dashboard__section--completed" aria-labelledby="completed-title">
+        <header class="dashboard__section-header">
           <app-icon name="book-open" size="small" class="dashboard__section-icon dashboard__section-icon--completed"></app-icon>
-          <h3 class="dashboard__section-title dashboard__section-title--completed">Tareas Completadas</h3>
-        </div>
+          <h3 id="completed-title" class="dashboard__section-title dashboard__section-title--completed">Tareas Completadas</h3>
+        </header>
 
         <!-- Mensaje cuando no hay tareas completadas -->
-        <div *ngIf="!isLoadingTasks && completedTasksData.length === 0" class="dashboard__empty-state dashboard__empty-state--small">
+        <section *ngIf="!isLoadingTasks && completedTasksData.length === 0" class="dashboard__empty-state dashboard__empty-state--small">
           <p class="dashboard__empty-text">No hay tareas completadas aún</p>
-        </div>
+        </section>
 
-        <div *ngIf="completedTasksData.length > 0" class="dashboard__completed-tasks">
-          <article *ngFor="let task of completedTasksData" class="dashboard__completed-card">
-            <div class="dashboard__completed-image"></div>
-            <button class="dashboard__completed-menu" aria-label="Menú">
-              <app-icon name="more-vertical" size="small"></app-icon>
-            </button>
-            <div class="dashboard__completed-check"></div>
-            <div class="dashboard__completed-content">
-              <h4 class="dashboard__completed-title">{{ task.title }}</h4>
-              <p class="dashboard__completed-description">{{ task.description }}</p>
-              <p class="dashboard__completed-status">Estatus: <span class="dashboard__completed-status-value">{{ getStatusText(task.status) }}</span></p>
-              <p class="dashboard__completed-date">Completada hace {{ getCompletedAgo(task.endDate || task.updatedAt) }}.</p>
-            </div>
-          </article>
-        </div>
+        <ul *ngIf="completedTasksData.length > 0" class="dashboard__completed-tasks" role="list">
+          <li *ngFor="let task of filteredCompletedTasks" role="listitem">
+            <article class="dashboard__completed-card">
+              <figure class="dashboard__completed-image" role="img" aria-label="Imagen de tarea completada"></figure>
+              <button class="dashboard__completed-menu" type="button" aria-label="Menú">
+                <app-icon name="more-vertical" size="small"></app-icon>
+              </button>
+              <mark class="dashboard__completed-check" aria-label="Completada"></mark>
+              <section class="dashboard__completed-content">
+                <h4 class="dashboard__completed-title">{{ task.title }}</h4>
+                <p class="dashboard__completed-description">{{ task.description }}</p>
+                <p class="dashboard__completed-status">Estatus: <data class="dashboard__completed-status-value" value="completed">{{ getStatusText(task.status) }}</data></p>
+                <time class="dashboard__completed-date" [attr.dateTime]="task.endDate || task.updatedAt">Completada hace {{ getCompletedAgo(task.endDate || task.updatedAt) }}.</time>
+              </section>
+            </article>
+          </li>
+        </ul>
       </section>
-    </div>
+    </section>
   </main>
-</div>
+</article>

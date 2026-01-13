@@ -97,6 +97,15 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-3;
+
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+  }
 }
 
 .register-content__illustration {

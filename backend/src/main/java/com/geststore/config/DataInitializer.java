@@ -16,6 +16,10 @@ import java.util.List;
 /**
  * Inicializador de datos para MongoDB
  * Solo se ejecuta en perfiles 'dev' o 'prod'
+ * 
+ * IMPORTANTE: Estos datos de prueba solo se crean una vez cuando la BD está vacía.
+ * Las tareas de prueba solo estarán disponibles para los usuarios creados aquí.
+ * Los nuevos usuarios registrados empezarán sin tareas.
  */
 @Configuration
 @RequiredArgsConstructor
@@ -30,13 +34,19 @@ public class DataInitializer {
     @Profile({"dev", "prod"})
     CommandLineRunner initDatabase() {
         return args -> {
-            // Solo inicializar si la BD está vacía
+            // Inicialización de datos deshabilitada
+            // Los usuarios se registran a través del sistema de autenticación
+            System.out.println("ℹ️  Inicialización de datos de prueba deshabilitada.");
+            System.out.println("✅ Sistema listo. Registra usuarios a través de /auth/register");
+            
+            /* DATOS DE PRUEBA DESHABILITADOS
             if (userRepository.count() == 0) {
                 System.out.println("🌱 Iniciando datos de prueba en MongoDB...");
+                System.out.println("ℹ️  Estos datos solo se crean una vez. Los usuarios registrados empezarán sin tareas.");
 
-                // Crear usuarios
+                // Crear usuarios de prueba
                 User admin = User.builder()
-                        .name("Administrador")
+                        .name("Usuario Demo Admin")
                         .email("admin@geststore.com")
                         .password(passwordEncoder.encode("admin123"))
                         .role(Role.ADMIN)
@@ -47,9 +57,9 @@ public class DataInitializer {
                 admin.onCreate();
 
                 User trabajador1 = User.builder()
-                        .name("Carlos Martínez")
-                        .email("carlos@geststore.com")
-                        .password(passwordEncoder.encode("carlos123"))
+                        .name("Usuario Demo Trabajador")
+                        .email("demo@geststore.com")
+                        .password(passwordEncoder.encode("demo123"))
                         .role(Role.WORKER)
                         .phone("600000002")
                         .department("Almacén")
@@ -69,7 +79,10 @@ public class DataInitializer {
                 trabajador2.onCreate();
 
                 userRepository.saveAll(List.of(admin, trabajador1, trabajador2));
-                System.out.println("✅ Usuarios creados");
+                System.out.println("✅ Usuarios de prueba creados:");
+                System.out.println("   - admin@geststore.com / admin123 (ADMIN con tareas)");
+                System.out.println("   - demo@geststore.com / demo123 (WORKER con tareas)");
+                System.out.println("   - ana@geststore.com / ana123 (WORKER con tareas)");
 
                 // Crear productos
                 Product producto1 = Product.builder()
@@ -245,6 +258,7 @@ public class DataInitializer {
             } else {
                 System.out.println("ℹ️  Base de datos ya contiene datos, omitiendo inicialización");
             }
+            */
         };
     }
 }

@@ -3,6 +3,39 @@
 @use 'sass:color';
 
 // ============================================================================
+// RESET ELEMENTOS SEMÁNTICOS - Eliminar estilos por defecto del navegador
+// ============================================================================
+.dashboard {
+  // Reset de elementos semánticos dentro del dashboard
+  figure,
+  figcaption,
+  hgroup,
+  menu {
+    margin: 0;
+    padding: 0;
+  }
+
+  mark {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  dl,
+  dt,
+  dd {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// ============================================================================
 // DASHBOARD - LAYOUT PRINCIPAL BASADO EN FIGMA
 // ============================================================================
 .dashboard {
@@ -238,6 +271,10 @@
   }
 }
 
+.dashboard__sidebar-footer {
+  margin-top: auto;
+}
+
 // ============================================================================
 // MAIN CONTENT AREA
 // ============================================================================
@@ -399,7 +436,7 @@
 .dashboard__section-today {
   @include text-style($font-size-xs, $font-weight-regular, $line-normal);
   color: $gray-300;
-  margin: 0;
+  background-color: transparent;
 }
 
 // ============================================================================
@@ -515,18 +552,21 @@
 
 .dashboard__task-meta {
   display: flex;
-  gap: $spacing-3;
+  flex-wrap: wrap;
+  gap: $spacing-1;
   margin-top: $spacing-2;
-}
-
-.dashboard__task-info {
-  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
-  color: $gray-950;
-  margin: 0;
 }
 
 .dashboard__task-label {
   @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: $gray-950;
+  display: inline;
+}
+
+.dashboard__task-meta dd {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  display: inline;
+  margin-right: $spacing-3;
 }
 
 .dashboard__task-value {
@@ -534,8 +574,20 @@
     color: #42ade2;
   }
   
+  &--high {
+    color: $error;
+  }
+
+  &--low {
+    color: $success;
+  }
+  
   &--notstarted {
     color: $error;
+  }
+
+  &--completed {
+    color: $success;
   }
   
   &--inprogress {
@@ -775,8 +827,43 @@
 }
 
 // ============================================================================
-// CALENDAR MODAL OVERLAY
+// MODAL OVERLAY (para Calendar y Add Task)
 // ============================================================================
+.dashboard__modal-overlay {
+  // Reset de dialog
+  border: none;
+  padding: 0;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  
+  // Posicionamiento
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  
+  // Estilos
+  background-color: rgba($gray-950, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+
+  &::backdrop {
+    background-color: transparent;
+  }
+}
+
+.dashboard__modal-content {
+  animation: slideInDown 0.3s ease-out;
+}
+
+// LEGACY - mantener por compatibilidad
 .dashboard__calendar-overlay {
   position: fixed;
   top: 0;

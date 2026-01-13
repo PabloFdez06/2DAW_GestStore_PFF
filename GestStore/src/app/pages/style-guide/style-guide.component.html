@@ -587,13 +587,13 @@
 
   <!-- PÁGINA COMPLETA -->
   @if (currentView === 'page') {
-    <div class="page-demo">
+    <article class="page-demo">
       <app-home-header />
       
       <!-- Contenido de ejemplo -->
       <section class="page-demo__content">
         <h2 class="page-demo__section-title">Ejemplo de contenido</h2>
-        <div class="page-demo__task-wrapper">
+        <figure class="page-demo__task-wrapper">
           <app-task-card
             [title]="taskExamples.completed.title"
             [description]="taskExamples.completed.description"
@@ -601,11 +601,11 @@
             [completedAt]="taskExamples.completed.completedAt"
             (menuClick)="onTaskMenuClick('completed')">
           </app-task-card>
-        </div>
+        </figure>
       </section>
       
       <app-home-footer />
-    </div>
+    </article>
   }
 
 </main>

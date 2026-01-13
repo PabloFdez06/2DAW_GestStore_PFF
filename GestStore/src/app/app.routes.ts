@@ -3,15 +3,18 @@ import { StyleGuideComponent } from './pages/style-guide/style-guide.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { LoginFormComponent } from './components/shared/login-form/login-form.component';
 import { RegisterFormComponent } from './components/shared/register-form/register-form.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    component: StyleGuideComponent
+    redirectTo: '/dashboard',
+    pathMatch: 'full'
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'login',

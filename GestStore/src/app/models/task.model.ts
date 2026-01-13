@@ -42,6 +42,7 @@ export interface Task {
   endDate?: string;
   notes?: string;
   completed: boolean;
+  important?: boolean;
   createdAt: string;
   updatedAt: string;
   assignedUser?: User;
@@ -60,6 +61,7 @@ export interface TaskRequest {
   endDate?: string;
   notes?: string;
   assignedUserId?: number;
+  important?: boolean;
 }
 
 // Response wrapper de la API

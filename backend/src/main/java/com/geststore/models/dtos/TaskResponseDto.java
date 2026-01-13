@@ -27,6 +27,7 @@ public class TaskResponseDto {
     private LocalDateTime endDate;
     private String notes;
     private Boolean completed;
+    private Boolean important;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private UserResponseDto assignedUser;

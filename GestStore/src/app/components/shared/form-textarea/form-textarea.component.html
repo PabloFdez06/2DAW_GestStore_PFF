@@ -1,9 +1,9 @@
-<div class="form-group">
-  <label [for]="id" class="form-label" *ngIf="label">
+<label class="form-group">
+  <span class="form-label" *ngIf="label">
     {{ label }}
-    <span class="required" *ngIf="required" aria-hidden="true">*</span>
+    <abbr class="required" *ngIf="required" title="Campo requerido" aria-hidden="true">*</abbr>
     <span class="visually-hidden" *ngIf="required">(campo requerido)</span>
-  </label>
+  </span>
   
   <textarea
     [id]="id"
@@ -20,6 +20,6 @@
     (input)="onInput($event)"
   ></textarea>
 
-  <p class="form-help" [id]="id + '-help'" *ngIf="helpText">{{ helpText }}</p>
-  <p class="form-error" [id]="id + '-error'" *ngIf="error" role="alert">{{ error }}</p>
-</div>
+  <small class="form-help" [id]="id + '-help'" *ngIf="helpText">{{ helpText }}</small>
+  <output class="form-error" [id]="id + '-error'" *ngIf="error" role="alert">{{ error }}</output>
+</label>

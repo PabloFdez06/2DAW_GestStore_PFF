@@ -18,8 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -146,7 +145,7 @@ public class TaskService {
      * Crea una nueva tarea
      */
     public TaskResponseDto createTask(TaskRequestDto requestDto, String createdByUserId) {
-        log.info("Creando nueva tarea");
+        log.info("Creando nueva tarea para usuario ID: {}", createdByUserId);
 
         User createdByUser = userRepository.findById(createdByUserId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario creador", createdByUserId));
@@ -202,10 +201,52 @@ public class TaskService {
         task.setPriority(requestDto.getPriority() != null ? requestDto.getPriority() : task.getPriority());
         task.setDueDate(requestDto.getDueDate());
         task.setNotes(requestDto.getNotes());
+        if (requestDto.getImportant() != null) {
+            task.setImportant(requestDto.getImportant());
+        }
         task.onUpdate();
 
         Task updatedTask = taskRepository.save(task);
         log.info("Tarea actualizada exitosamente con ID: {}", id);
+
+        return convertToDto(updatedTask);
+    }
+
+    /**
+     * Actualiza parcialmente una tarea (PATCH)
+     */
+    public TaskResponseDto patchTask(String id, java.util.Map<String, Object> updates) {
+        log.info("Actualizando parcialmente tarea con ID: {}", id);
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tarea", id));
+
+        // Actualizar solo los campos proporcionados
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "isImportant":
+                case "important":
+                    task.setImportant((Boolean) value);
+                    log.info("Actualizando important a: {}", value);
+                    break;
+                case "title":
+                    task.setTitle((String) value);
+                    break;
+                case "description":
+                    task.setDescription((String) value);
+                    break;
+                case "notes":
+                    task.setNotes((String) value);
+                    break;
+                // Agregar más campos según sea necesario
+                default:
+                    log.warn("Campo desconocido en PATCH: {}", key);
+            }
+        });
+
+        task.onUpdate();
+        Task updatedTask = taskRepository.save(task);
+        log.info("Tarea actualizada parcialmente con éxito");
 
         return convertToDto(updatedTask);
     }
@@ -245,10 +286,17 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Tarea", id));
 
-        if (!task.getStatus().equals(TaskStatus.IN_PROGRESS)) {
+        if (task.getStatus().equals(TaskStatus.COMPLETED)) {
             throw new BusinessLogicException(
-                    "Solo se pueden completar tareas en estado IN_PROGRESS",
-                    "INVALID_TASK_STATE"
+                    "La tarea ya está completada",
+                    "TASK_ALREADY_COMPLETED"
+            );
+        }
+
+        if (task.getStatus().equals(TaskStatus.CANCELLED)) {
+            throw new BusinessLogicException(
+                    "No se puede completar una tarea cancelada",
+                    "TASK_CANCELLED"
             );
         }
 
@@ -288,6 +336,22 @@ public class TaskService {
     }
 
     /**
+     * Elimina una tarea permanentemente
+     */
+    public void deleteTask(String id) {
+        log.info("Eliminando tarea con ID: {}", id);
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tarea", id));
+
+        // Eliminar relaciones con productos si existen
+        taskProductRepository.deleteByTaskId(id);
+        
+        taskRepository.delete(task);
+        log.info("Tarea eliminada exitosamente con ID: {}", id);
+    }
+
+    /**
      * Busca tareas por título o descripción
      */
     public List<TaskResponseDto> searchTasks(String searchText) {
@@ -313,6 +377,9 @@ public class TaskService {
 
         List<Task> overdueTasks = taskRepository.findOverdueTasks();
 
+        // Calcular tasa de completitud
+        double completionRate = totalTasks > 0 ? Math.round((completedTasks * 100.0 / totalTasks) * 100) / 100.0 : 0;
+
         return TaskStatistics.builder()
                 .totalTasks(totalTasks)
                 .pendingTasks(pendingTasks)
@@ -320,6 +387,64 @@ public class TaskService {
                 .completedTasks(completedTasks)
                 .cancelledTasks(cancelledTasks)
                 .overdueTasksCount((long) overdueTasks.size())
+                .completionRate(completionRate)
+                .build();
+    }
+
+    /**
+     * Obtiene las estadísticas de tareas para un usuario específico
+     */
+    public TaskStatistics getTaskStatisticsByUser(String userId) {
+        log.info("Obteniendo estadísticas de tareas para usuario ID: {}", userId);
+
+        // Verificar que el usuario existe
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", userId));
+
+        // Obtener todas las tareas del usuario (creadas o asignadas)
+        List<Task> createdTasks = taskRepository.findTasksCreatedByUser(userId);
+        List<Task> assignedTasks = taskRepository.findTasksByAssignedUser(userId);
+        
+        // Combinar y eliminar duplicados
+        Set<String> taskIds = new HashSet<>();
+        List<Task> allUserTasks = new ArrayList<>();
+        
+        for (Task task : createdTasks) {
+            if (taskIds.add(task.getId())) {
+                allUserTasks.add(task);
+            }
+        }
+        
+        for (Task task : assignedTasks) {
+            if (taskIds.add(task.getId())) {
+                allUserTasks.add(task);
+            }
+        }
+
+        // Calcular estadísticas
+        long totalTasks = allUserTasks.size();
+        long pendingTasks = allUserTasks.stream().filter(t -> t.getStatus() == TaskStatus.PENDING).count();
+        long inProgressTasks = allUserTasks.stream().filter(t -> t.getStatus() == TaskStatus.IN_PROGRESS).count();
+        long completedTasks = allUserTasks.stream().filter(t -> t.getStatus() == TaskStatus.COMPLETED).count();
+        long cancelledTasks = allUserTasks.stream().filter(t -> t.getStatus() == TaskStatus.CANCELLED).count();
+        
+        LocalDateTime now = LocalDateTime.now();
+        long overdueTasks = allUserTasks.stream()
+                .filter(t -> t.getDueDate() != null && t.getDueDate().isBefore(now) 
+                        && t.getStatus() != TaskStatus.COMPLETED && t.getStatus() != TaskStatus.CANCELLED)
+                .count();
+
+        // Calcular tasa de completitud
+        double completionRate = totalTasks > 0 ? Math.round((completedTasks * 100.0 / totalTasks) * 100) / 100.0 : 0;
+
+        return TaskStatistics.builder()
+                .totalTasks(totalTasks)
+                .pendingTasks(pendingTasks)
+                .inProgressTasks(inProgressTasks)
+                .completedTasks(completedTasks)
+                .cancelledTasks(cancelledTasks)
+                .overdueTasksCount(overdueTasks)
+                .completionRate(completionRate)
                 .build();
     }
 
@@ -351,6 +476,7 @@ public class TaskService {
                 .endDate(task.getEndDate())
                 .notes(task.getNotes())
                 .completed(task.getCompleted())
+                .important(task.getImportant())
                 .createdAt(task.getCreatedAt())
                 .updatedAt(task.getUpdatedAt())
                 .assignedUser(task.getAssignedUser() != null ? convertUserToDto(task.getAssignedUser()) : null)
@@ -404,5 +530,6 @@ public class TaskService {
         private long completedTasks;
         private long cancelledTasks;
         private long overdueTasksCount;
+        private double completionRate;
     }
 }

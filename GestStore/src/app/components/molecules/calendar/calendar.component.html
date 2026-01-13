@@ -1,62 +1,67 @@
-<div class="calendar">
+<article class="calendar" role="application" aria-label="Calendario">
   <!-- Header -->
-  <div class="calendar__header">
+  <header class="calendar__header">
     <h3 class="calendar__title">{{ monthName }}, {{ year }}</h3>
-    <div class="calendar__nav">
-      <button class="calendar__nav-btn" (click)="previousMonth()" aria-label="Mes anterior">
+    <nav class="calendar__nav" aria-label="Navegación del calendario">
+      <button class="calendar__nav-btn" type="button" (click)="previousMonth()" aria-label="Mes anterior">
         <app-icon name="chevron-left" size="small"></app-icon>
       </button>
-      <button class="calendar__nav-btn" (click)="nextMonth()" aria-label="Mes siguiente">
+      <button class="calendar__nav-btn" type="button" (click)="nextMonth()" aria-label="Mes siguiente">
         <app-icon name="chevron-right" size="small"></app-icon>
       </button>
-    </div>
-  </div>
+    </nav>
+  </header>
 
   <!-- Week Days -->
-  <div class="calendar__weekdays">
-    <span 
+  <ul class="calendar__weekdays" role="list" aria-label="Días de la semana">
+    <li 
       *ngFor="let day of weekDays" 
       class="calendar__weekday"
-      [class.calendar__weekday--active]="day === getCurrentDayOfWeek()">
+      [class.calendar__weekday--active]="day === getCurrentDayOfWeek()"
+      role="listitem">
       {{ day }}
-    </span>
-  </div>
+    </li>
+  </ul>
 
   <!-- Days Grid -->
-  <div class="calendar__days">
+  <section class="calendar__days" role="grid" aria-label="Días del mes">
     <button
       *ngFor="let calendarDay of calendarDays"
       class="calendar__day"
+      type="button"
+      role="gridcell"
       [class.calendar__day--other-month]="!calendarDay.isCurrentMonth"
       [class.calendar__day--selected]="calendarDay.isSelected"
       [class.calendar__day--today]="calendarDay.isToday"
+      [attr.aria-selected]="calendarDay.isSelected"
+      [attr.aria-current]="calendarDay.isToday ? 'date' : null"
       (click)="selectDay(calendarDay)">
       {{ calendarDay.day }}
     </button>
-  </div>
+  </section>
 
   <!-- Selected Info -->
-  <div class="calendar__selected-info" *ngIf="selectedDate">
-    <span class="calendar__selected-badge calendar__selected-badge--month">
+  <output class="calendar__selected-info" *ngIf="selectedDate" role="status" aria-live="polite">
+    <mark class="calendar__selected-badge calendar__selected-badge--month">
       {{ monthName }}
-    </span>
-    <span class="calendar__selected-badge calendar__selected-badge--weekday">
+    </mark>
+    <mark class="calendar__selected-badge calendar__selected-badge--weekday">
       {{ getCurrentDayOfWeek() }}
-    </span>
-    <span class="calendar__selected-badge calendar__selected-badge--day">
+    </mark>
+    <mark class="calendar__selected-badge calendar__selected-badge--day">
       {{ selectedDate.getDate() }}
-    </span>
-  </div>
+    </mark>
+  </output>
 
   <!-- Actions -->
-  <div class="calendar__actions">
-    <button class="calendar__btn calendar__btn--outline" (click)="onRemove()">
+  <footer class="calendar__actions">
+    <button class="calendar__btn calendar__btn--outline" type="button" (click)="onRemove()">
       <app-icon name="x" size="small"></app-icon>
       <span>Remove</span>
     </button>
-    <button class="calendar__btn calendar__btn--primary" (click)="onDone()">
+    <button class="calendar__btn calendar__btn--primary" type="button" (click)="onDone()">
       <app-icon name="check" size="small"></app-icon>
       <span>Done</span>
     </button>
-  </div>
-</div>
+  </footer>
+</article>

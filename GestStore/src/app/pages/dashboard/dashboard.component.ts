@@ -1,18 +1,23 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { AddTaskModalComponent } from '../../components/molecules/add-task-modal/add-task-modal.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
 import { TaskService } from '../../services/task.service';
+import { AuthService } from '../../services/auth.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest, TaskStatistics } from '../../models/task.model';
+import { User } from '../../models/auth.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     HttpClientModule,
     IconComponent,
     CalendarComponent,
@@ -41,6 +46,9 @@ export class DashboardComponent implements OnInit {
   tasks: Task[] = [];
   completedTasksData: Task[] = [];
   
+  // Búsqueda
+  searchTerm: string = '';
+  
   // Estados de carga
   isLoadingTasks: boolean = false;
   isLoadingStats: boolean = false;
@@ -49,12 +57,78 @@ export class DashboardComponent implements OnInit {
   // Estadísticas
   statistics: TaskStatistics | null = null;
   
-  constructor(private taskService: TaskService) {}
+  // Usuario actual
+  currentUser: User | null = null;
+  
+  constructor(
+    private taskService: TaskService,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) {}
   
   ngOnInit() {
     this.updateCurrentDate();
-    this.loadTasks();
-    this.loadStatistics();
+    this.loadCurrentUser(); // Esto cargará las tareas cuando el usuario esté disponible
+  }
+  
+  /**
+   * Getter para filtrar tareas por término de búsqueda
+   */
+  get filteredTasks(): Task[] {
+    if (!this.searchTerm.trim()) {
+      return this.tasks;
+    }
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.tasks.filter(task => 
+      task.title.toLowerCase().includes(term) ||
+      (task.description && task.description.toLowerCase().includes(term))
+    );
+  }
+  
+  /**
+   * Getter para filtrar tareas completadas por término de búsqueda
+   */
+  get filteredCompletedTasks(): Task[] {
+    if (!this.searchTerm.trim()) {
+      return this.completedTasksData;
+    }
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.completedTasksData.filter(task => 
+      task.title.toLowerCase().includes(term) ||
+      (task.description && task.description.toLowerCase().includes(term))
+    );
+  }
+  
+  /**
+   * Cargar información del usuario actual
+   */
+  loadCurrentUser() {
+    this.authService.currentUser.subscribe(user => {
+      this.ngZone.run(() => {
+        this.currentUser = user;
+        this.cdr.detectChanges();
+        // Cuando cambie el usuario, recargar las tareas
+        if (user) {
+          this.loadTasks();
+          this.loadStatistics();
+        }
+      });
+    });
+  }
+  
+  /**
+   * Cerrar sesión
+   */
+  onLogout(event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
+    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+      this.authService.logout();
+    }
   }
   
   @HostListener('document:click', ['$event'])
@@ -91,25 +165,43 @@ export class DashboardComponent implements OnInit {
   }
   
   /**
-   * Cargar todas las tareas desde la API
+   * Cargar todas las tareas del usuario actual desde la API
    */
   loadTasks() {
+    if (!this.currentUser || !this.currentUser.id) {
+      console.log('No hay usuario logueado, no se cargarán tareas');
+      return;
+    }
+
     this.isLoadingTasks = true;
     this.errorMessage = '';
+    this.cdr.detectChanges();
     
-    this.taskService.getAllTasks().subscribe({
-      next: (tasks) => {
-        this.tasks = tasks.filter(t => t.status !== TaskStatus.COMPLETED);
-        this.completedTasksData = tasks.filter(t => t.status === TaskStatus.COMPLETED);
+    // Cargar tareas creadas por el usuario y asignadas a él
+    const createdTasks$ = this.taskService.getTasksCreatedByUser(this.currentUser.id);
+    const assignedTasks$ = this.taskService.getTasksByAssignedUser(this.currentUser.id);
+    
+    // Combinar ambas listas eliminando duplicados usando forkJoin (mejor que Promise.all)
+    forkJoin([createdTasks$, assignedTasks$]).subscribe({
+      next: ([created, assigned]) => {
+        // Combinar y eliminar duplicados por ID
+        const allTasks = [...(created || []), ...(assigned || [])];
+        const uniqueTasks = allTasks.filter((task, index, self) =>
+          index === self.findIndex((t) => t.id === task.id)
+        );
+        
+        this.tasks = uniqueTasks.filter(t => t.status !== TaskStatus.COMPLETED);
+        this.completedTasksData = uniqueTasks.filter(t => t.status === TaskStatus.COMPLETED);
         this.isLoadingTasks = false;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error al cargar tareas:', error);
         this.errorMessage = 'Error al cargar las tareas. Por favor, intenta de nuevo.';
         this.isLoadingTasks = false;
-        // Usar datos de respaldo si falla la API
         this.tasks = [];
         this.completedTasksData = [];
+        this.cdr.detectChanges();
       }
     });
   }
@@ -118,16 +210,35 @@ export class DashboardComponent implements OnInit {
    * Cargar estadísticas desde la API
    */
   loadStatistics() {
+    if (!this.currentUser || !this.currentUser.id) {
+      console.warn('No hay usuario actual para cargar estadísticas');
+      return;
+    }
+
     this.isLoadingStats = true;
+    this.cdr.detectChanges();
     
-    this.taskService.getTaskStatistics().subscribe({
+    this.taskService.getTaskStatisticsByUser(this.currentUser.id).subscribe({
       next: (stats) => {
         this.statistics = stats;
+        console.log('Estadísticas cargadas:', stats);
         this.isLoadingStats = false;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error al cargar estadísticas:', error);
         this.isLoadingStats = false;
+        // Establecer estadísticas vacías por defecto
+        this.statistics = {
+          totalTasks: 0,
+          pendingTasks: 0,
+          inProgressTasks: 0,
+          completedTasks: 0,
+          cancelledTasks: 0,
+          overdueTasks: 0,
+          completionRate: 0
+        };
+        this.cdr.detectChanges();
       }
     });
   }
@@ -138,19 +249,26 @@ export class DashboardComponent implements OnInit {
       title: task.title,
       description: task.description,
       priority: this.convertPriorityFromModal(task.priority),
-      status: TaskStatus.PENDING
+      status: TaskStatus.PENDING,
+      dueDate: task.date ? `${task.date}T23:59:59` : undefined,
+      important: false
     };
+    
+    console.log('Creando tarea:', taskRequest);
     
     this.taskService.createTask(taskRequest).subscribe({
       next: (newTask) => {
+        console.log('Tarea creada exitosamente:', newTask);
         // Recargar las tareas después de crear una nueva
         this.loadTasks();
         this.loadStatistics();
         this.closeTaskModal();
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error al crear tarea:', error);
-        this.errorMessage = 'Error al crear la tarea. Por favor, intenta de nuevo.';
+        this.errorMessage = 'Error al crear la tarea: ' + (error.error?.message || error.message);
+        this.cdr.detectChanges();
       }
     });
   }
@@ -186,35 +304,60 @@ export class DashboardComponent implements OnInit {
     
     switch (action.type) {
       case 'important':
-        console.log('Quitar de importante:', task.title);
-        // TODO: Implementar funcionalidad de importante
-        break;
-      case 'edit':
-        console.log('Editar tarea:', task.title);
-        // TODO: Implementar edición de tarea
-        break;
-      case 'delete':
-        // Cancelar tarea en lugar de eliminar
-        this.taskService.cancelTask(task.id).subscribe({
-          next: () => {
+        const importantAction = task.important 
+          ? this.taskService.removeImportant(task.id)
+          : this.taskService.markAsImportant(task.id);
+        
+        importantAction.subscribe({
+          next: (updatedTask) => {
+            console.log('Tarea actualizada:', updatedTask);
             this.loadTasks();
-            this.loadStatistics();
+            this.cdr.detectChanges();
           },
           error: (error) => {
-            console.error('Error al cancelar tarea:', error);
-            this.errorMessage = 'Error al cancelar la tarea.';
+            console.error('Error al cambiar importancia:', error);
+            this.errorMessage = 'Error al cambiar la importancia de la tarea.';
+            this.cdr.detectChanges();
           }
         });
         break;
+        
+      case 'edit':
+        console.log('Editar tarea:', task.title);
+        // TODO: Implementar modal de edición
+        alert('La funcionalidad de edición estará disponible próximamente');
+        break;
+        
+      case 'delete':
+        if (confirm(`¿Estás seguro de eliminar la tarea "${task.title}"?`)) {
+          this.taskService.deleteTask(task.id).subscribe({
+            next: () => {
+              console.log('Tarea eliminada exitosamente');
+              this.loadTasks();
+              this.loadStatistics();
+              this.cdr.detectChanges();
+            },
+            error: (error) => {
+              console.error('Error al eliminar tarea:', error);
+              this.errorMessage = 'Error al eliminar la tarea.';
+              this.cdr.detectChanges();
+            }
+          });
+        }
+        break;
+        
       case 'complete':
         this.taskService.completeTask(task.id).subscribe({
-          next: () => {
+          next: (completedTask) => {
+            console.log('Tarea completada exitosamente:', completedTask);
             this.loadTasks();
             this.loadStatistics();
+            this.cdr.detectChanges();
           },
           error: (error) => {
             console.error('Error al completar tarea:', error);
-            this.errorMessage = 'Error al completar la tarea.';
+            this.errorMessage = 'Error al completar la tarea: ' + (error.error?.message || error.message);
+            this.cdr.detectChanges();
           }
         });
         break;

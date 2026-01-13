@@ -1,108 +1,120 @@
-<div class="add-task-modal">
-  <div class="add-task-modal__header">
-    <div class="add-task-modal__title-section">
-      <h2 class="add-task-modal__title">Añadir nueva Tarea</h2>
-      <div class="add-task-modal__title-underline"></div>
-    </div>
-    <button class="add-task-modal__back-link" (click)="onCancel()">
+<article class="add-task-modal" role="dialog" aria-labelledby="add-task-title">
+  <header class="add-task-modal__header">
+    <hgroup class="add-task-modal__title-section">
+      <h2 id="add-task-title" class="add-task-modal__title">Añadir nueva Tarea</h2>
+      <hr class="add-task-modal__title-underline" aria-hidden="true" />
+    </hgroup>
+    <button class="add-task-modal__back-link" type="button" (click)="onCancel()">
       Volver
     </button>
-  </div>
+  </header>
 
-  <div class="add-task-modal__content">
+  <section class="add-task-modal__content">
     <form class="add-task-modal__form" (ngSubmit)="onSubmit()">
       <!-- Left Column -->
-      <div class="add-task-modal__left-column">
+      <fieldset class="add-task-modal__left-column">
+        <legend class="visually-hidden">Información de la tarea</legend>
+        
         <!-- Título -->
-        <div class="add-task-modal__field">
-          <label class="add-task-modal__label">Titulo</label>
+        <label class="add-task-modal__field">
+          <span class="add-task-modal__label">Titulo</span>
           <input 
             type="text" 
             class="add-task-modal__input"
             [(ngModel)]="title"
             name="title"
-            required>
-        </div>
+            required
+            aria-required="true">
+        </label>
 
         <!-- Fecha -->
-        <div class="add-task-modal__field">
-          <label class="add-task-modal__label">Fecha</label>
-          <div class="add-task-modal__input-wrapper">
+        <label class="add-task-modal__field">
+          <span class="add-task-modal__label">Fecha</span>
+          <span class="add-task-modal__input-wrapper">
             <input 
               type="date" 
               class="add-task-modal__input add-task-modal__input--date"
               [(ngModel)]="date"
               name="date"
-              required>
+              required
+              aria-required="true">
             <app-icon name="calendar" size="small" class="add-task-modal__calendar-icon"></app-icon>
-          </div>
-        </div>
+          </span>
+        </label>
 
         <!-- Prioridad -->
-        <div class="add-task-modal__field">
-          <label class="add-task-modal__label">Prioridad</label>
-          <div class="add-task-modal__priorities">
-            <label 
-              *ngFor="let priority of priorities" 
-              class="add-task-modal__priority-option">
-              <span 
-                class="add-task-modal__priority-dot"
-                [style.background-color]="priority.color"></span>
-              <span class="add-task-modal__priority-label">{{ priority.label }}</span>
-              <input 
-                type="checkbox" 
-                class="add-task-modal__priority-checkbox"
-                [checked]="selectedPriority === priority.value"
-                (change)="selectPriority(priority.value)">
-            </label>
-          </div>
-        </div>
+        <fieldset class="add-task-modal__field">
+          <legend class="add-task-modal__label">Prioridad</legend>
+          <ul class="add-task-modal__priorities" role="list">
+            <li *ngFor="let priority of priorities">
+              <label class="add-task-modal__priority-option">
+                <mark 
+                  class="add-task-modal__priority-dot"
+                  [style.background-color]="priority.color"
+                  aria-hidden="true"></mark>
+                <span class="add-task-modal__priority-label">{{ priority.label }}</span>
+                <input 
+                  type="radio" 
+                  name="priority"
+                  class="add-task-modal__priority-checkbox"
+                  [value]="priority.value"
+                  [checked]="selectedPriority === priority.value"
+                  (change)="selectPriority(priority.value)">
+              </label>
+            </li>
+          </ul>
+        </fieldset>
 
         <!-- Descripción -->
-        <div class="add-task-modal__field add-task-modal__field--description">
-          <label class="add-task-modal__label">Descripción de la Tarea</label>
+        <label class="add-task-modal__field add-task-modal__field--description">
+          <span class="add-task-modal__label">Descripción de la Tarea</span>
           <textarea 
             class="add-task-modal__textarea"
             [(ngModel)]="description"
             name="description"
             rows="8"
-            required></textarea>
-        </div>
-      </div>
+            required
+            aria-required="true"></textarea>
+        </label>
+      </fieldset>
 
       <!-- Right Column -->
-      <div class="add-task-modal__right-column">
+      <fieldset class="add-task-modal__right-column">
+        <legend class="visually-hidden">Asignaciones</legend>
+        
         <!-- Asignar trabajadores -->
-        <div class="add-task-modal__assign-section">
-          <label class="add-task-modal__label">Asignar trabajadores</label>
-          <div class="add-task-modal__assign-box">
+        <section class="add-task-modal__assign-section" aria-labelledby="assign-workers-title">
+          <h3 id="assign-workers-title" class="add-task-modal__label">Asignar trabajadores</h3>
+          <article class="add-task-modal__assign-box">
             <p class="add-task-modal__assign-text">
               Asigna los trabajadores que si van a encargar de esta tarea.
             </p>
             <button type="button" class="add-task-modal__assign-btn">
               Asignar
             </button>
-          </div>
-        </div>
+          </article>
+        </section>
 
         <!-- Asignar productos -->
-        <div class="add-task-modal__assign-section">
-          <label class="add-task-modal__label">Asignar productos</label>
-          <div class="add-task-modal__assign-box add-task-modal__assign-box--tall">
+        <section class="add-task-modal__assign-section" aria-labelledby="assign-products-title">
+          <h3 id="assign-products-title" class="add-task-modal__label">Asignar productos</h3>
+          <article class="add-task-modal__assign-box add-task-modal__assign-box--tall">
             <p class="add-task-modal__assign-text">
               Asignar objetos del almacen, selecciona los objetos que se necesitaran para esta tarea.
             </p>
             <button type="button" class="add-task-modal__assign-btn">
               Asignar
             </button>
-          </div>
-        </div>
-      </div>
+          </article>
+        </section>
+      </fieldset>
 
       <!-- Submit Button -->
-      <button type="submit" class="add-task-modal__submit-btn">
-        Listo
-      </button>
+      <footer class="add-task-modal__footer">
+        <button type="submit" class="add-task-modal__submit-btn">
+          Listo
+        </button>
+      </footer>
     </form>
-  </div>
-</div>
+  </section>
+</article>

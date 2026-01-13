@@ -1,14 +1,22 @@
-<div class="task-menu">
-  <button class="task-menu__item" (click)="onRemoveImportant()">
-    Quitar de importante
-  </button>
-  <button class="task-menu__item" (click)="onEdit()">
-    Editar
-  </button>
-  <button class="task-menu__item" (click)="onDelete()">
-    Eliminar
-  </button>
-  <button class="task-menu__item" (click)="onComplete()">
-    Completar
-  </button>
-</div>
+<menu class="task-menu" role="menu" aria-label="Acciones de tarea">
+  <li role="menuitem">
+    <button class="task-menu__item" type="button" (click)="onToggleImportant()">
+      {{ isImportant ? 'Quitar de importante' : 'Marcar como importante' }}
+    </button>
+  </li>
+  <li role="menuitem">
+    <button class="task-menu__item" type="button" (click)="onEdit()">
+      Editar
+    </button>
+  </li>
+  <li role="menuitem">
+    <button class="task-menu__item" type="button" (click)="onDelete()">
+      Eliminar
+    </button>
+  </li>
+  <li role="menuitem">
+    <button class="task-menu__item" type="button" (click)="onComplete()">
+      Completar
+    </button>
+  </li>
+</menu>

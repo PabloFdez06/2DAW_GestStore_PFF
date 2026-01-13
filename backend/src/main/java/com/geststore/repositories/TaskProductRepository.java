@@ -55,4 +55,10 @@ public interface TaskProductRepository extends MongoRepository<TaskProduct, Stri
      */
     @Query(value = "{'task.$id': ObjectId(?0)}", count = true)
     Long countByTaskId(String taskId);
+
+    /**
+     * Elimina todos los productos asociados a una tarea
+     */
+    @Query(value = "{'task.$id': ObjectId(?0)}", delete = true)
+    void deleteByTaskId(String taskId);
 }

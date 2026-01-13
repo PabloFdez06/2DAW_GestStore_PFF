@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-register-form',
@@ -21,12 +22,18 @@ export class RegisterFormComponent {
   confirmPassword: string = '';
   agreeTerms: boolean = false;
   errors: { [key: string]: string } = {};
+  isLoading: boolean = false;
+  errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   onSubmit(event: any): void {
     event.preventDefault();
     this.errors = {};
+    this.errorMessage = '';
     
     if (!this.nombre.trim()) {
       this.errors['nombre'] = 'El nombre es requerido';
@@ -61,12 +68,25 @@ export class RegisterFormComponent {
     }
 
     if (Object.keys(this.errors).length === 0) {
-      console.log('Registro:', { 
-        nombre: this.nombre, 
-        apellido: this.apellido, 
-        usuario: this.usuario,
-        email: this.email, 
-        password: this.password 
+      this.isLoading = true;
+      
+      const fullName = `${this.nombre} ${this.apellido}`;
+      
+      this.authService.register({
+        name: fullName,
+        email: this.email,
+        password: this.password
+      }).subscribe({
+        next: (response) => {
+          console.log('Registro exitoso:', response);
+          this.isLoading = false;
+          this.router.navigate(['/dashboard']);
+        },
+        error: (error) => {
+          console.error('Error en registro:', error);
+          this.isLoading = false;
+          this.errorMessage = error.error?.message || 'Error al registrarse. El email puede estar ya registrado.';
+        }
       });
     }
   }

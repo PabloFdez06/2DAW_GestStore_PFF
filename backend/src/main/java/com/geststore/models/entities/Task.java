@@ -48,6 +48,8 @@ public class Task {
 
     private Boolean completed = false;
 
+    private Boolean important = false;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

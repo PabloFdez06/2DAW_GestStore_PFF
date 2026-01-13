@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface TaskMenuAction {
@@ -13,9 +13,10 @@ export interface TaskMenuAction {
   styleUrl: './task-menu.component.scss'
 })
 export class TaskMenuComponent {
+  @Input() isImportant: boolean = false;
   @Output() action = new EventEmitter<TaskMenuAction>();
 
-  onRemoveImportant() {
+  onToggleImportant() {
     this.action.emit({ type: 'important' });
   }
 

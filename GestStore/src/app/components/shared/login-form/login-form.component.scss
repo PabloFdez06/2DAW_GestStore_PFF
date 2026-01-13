@@ -130,6 +130,15 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-4;
+
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
 }
 
 .form-group {
