@@ -1,7 +1,9 @@
 package com.geststore.controllers;
 
 import com.geststore.models.dtos.UserRequestDto;
+import com.geststore.models.dtos.UserProfileUpdateDto;
 import com.geststore.models.dtos.UserResponseDto;
+import com.geststore.models.dtos.UpdatePasswordRequest;
 import com.geststore.services.UserService;
 import com.geststore.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,47 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponseDto>> getMe(
+            @RequestHeader(value = "X-User-Id", required = false) String userId
+    ) {
+        log.info("GET /api/users/me - Obteniendo perfil del usuario");
+        if (userId == null || userId.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("No se pudo identificar el usuario (X-User-Id)", null));
+        }
+        UserResponseDto user = userService.getUserById(userId);
+        return ResponseEntity.ok(ApiResponse.success("Perfil obtenido exitosamente", user));
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateMe(
+            @RequestHeader(value = "X-User-Id", required = false) String userId,
+            @Valid @RequestBody UserProfileUpdateDto requestDto
+    ) {
+        log.info("PUT /api/users/me - Actualizando perfil del usuario");
+        if (userId == null || userId.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("No se pudo identificar el usuario (X-User-Id)", null));
+        }
+        UserResponseDto user = userService.updateProfile(userId, requestDto);
+        return ResponseEntity.ok(ApiResponse.success("Perfil actualizado exitosamente", user));
+    }
+
+    @PutMapping("/me/password")
+    public ResponseEntity<ApiResponse<Void>> updateMyPassword(
+            @RequestHeader(value = "X-User-Id", required = false) String userId,
+            @Valid @RequestBody UpdatePasswordRequest request
+    ) {
+        log.info("PUT /api/users/me/password - Actualizando contraseña del usuario");
+        if (userId == null || userId.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("No se pudo identificar el usuario (X-User-Id)", null));
+        }
+        userService.updatePassword(userId, request.getCurrentPassword(), request.getNewPassword());
+        return ResponseEntity.ok(ApiResponse.success("Contraseña actualizada exitosamente", null));
+    }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")

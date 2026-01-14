@@ -1,6 +1,7 @@
 
 @use '../../../styles/00-settings/variables' as *;
 @use '../../../styles/01-tools/mixins' as *;
+@use 'sass:map';
 
 .style-guide {
   max-width: 1400px;
@@ -481,16 +482,16 @@
 // ============================================================================
 
 // Primary Scale - Usando el mapa $color-primary-scale
-.color-swatch--primary-light { background-color: map-get($color-primary-scale, light); }
-.color-swatch--primary-light-hover { background-color: map-get($color-primary-scale, light-hover); }
-.color-swatch--primary-light-active { background-color: map-get($color-primary-scale, light-active); }
-.color-swatch--primary-normal { background-color: map-get($color-primary-scale, normal); }
-.color-swatch--primary-hover { background-color: map-get($color-primary-scale, normal-hover); }
-.color-swatch--primary-active { background-color: map-get($color-primary-scale, normal-active); }
-.color-swatch--primary-dark { background-color: map-get($color-primary-scale, dark); }
-.color-swatch--primary-dark-hover { background-color: map-get($color-primary-scale, dark-hover); }
-.color-swatch--primary-dark-active { background-color: map-get($color-primary-scale, dark-active); }
-.color-swatch--primary-darker { background-color: map-get($color-primary-scale, darker); }
+.color-swatch--primary-light { background-color: map.get($color-primary-scale, light); }
+.color-swatch--primary-light-hover { background-color: map.get($color-primary-scale, light-hover); }
+.color-swatch--primary-light-active { background-color: map.get($color-primary-scale, light-active); }
+.color-swatch--primary-normal { background-color: map.get($color-primary-scale, normal); }
+.color-swatch--primary-hover { background-color: map.get($color-primary-scale, normal-hover); }
+.color-swatch--primary-active { background-color: map.get($color-primary-scale, normal-active); }
+.color-swatch--primary-dark { background-color: map.get($color-primary-scale, dark); }
+.color-swatch--primary-dark-hover { background-color: map.get($color-primary-scale, dark-hover); }
+.color-swatch--primary-dark-active { background-color: map.get($color-primary-scale, dark-active); }
+.color-swatch--primary-darker { background-color: map.get($color-primary-scale, darker); }
 
 // Neutral Scale - Usando variables $gray-*
 .color-swatch--white { 

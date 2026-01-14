@@ -1,0 +1,29 @@
+<section class="accordion" role="presentation">
+  <article *ngFor="let item of items; let i = index" class="accordion__item">
+    <h3 class="accordion__header">
+      <button
+        #headerBtn
+        type="button"
+        class="accordion__trigger"
+        (click)="toggle(i)"
+        (keydown)="onHeaderKeydown($event, i)"
+        [attr.aria-expanded]="isOpen(i)"
+        [attr.aria-controls]="'accordion-panel-' + item.id"
+        [attr.id]="'accordion-trigger-' + item.id">
+        <span class="accordion__title">{{ item.title }}</span>
+        <span class="accordion__chevron" aria-hidden="true" [class.accordion__chevron--open]="isOpen(i)">›</span>
+      </button>
+    </h3>
+
+    <section
+      #panelEl
+      class="accordion__panel"
+      role="region"
+      [attr.id]="'accordion-panel-' + item.id"
+      [attr.aria-labelledby]="'accordion-trigger-' + item.id">
+      <div class="accordion__panel-inner">
+        <p class="accordion__content">{{ item.content }}</p>
+      </div>
+    </section>
+  </article>
+</section>

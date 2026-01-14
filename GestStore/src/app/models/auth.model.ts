@@ -15,10 +15,13 @@ export interface RegisterRequest {
 export interface User {
   id: string;
   name: string;
+  lastName?: string;
   email: string;
   role: string;
   phone?: string;
+  address?: string;
   department?: string;
+  avatar?: string;
   active: boolean;
   createdAt: string;
   updatedAt: string;

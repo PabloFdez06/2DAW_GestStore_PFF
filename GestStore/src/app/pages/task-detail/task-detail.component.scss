@@ -1,0 +1,285 @@
+@use '../../../styles/00-settings/variables' as *;
+@use '../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
+
+// ============================================================================
+// TASK DETAIL - Página de detalle de tarea estilo Figma
+// ============================================================================
+
+.task-detail {
+  padding: $spacing-6;
+}
+
+// ============================================================================
+// HEADER
+// ============================================================================
+
+.task-detail__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-4;
+  margin-bottom: $spacing-6;
+}
+
+.task-detail__back {
+  margin: 0;
+  padding: 0;
+}
+
+.task-detail__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background: transparent;
+  border: 1px solid $gray-300;
+  border-radius: 8px;
+  color: $gray-600;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  @include transition;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.task-detail__actions {
+  display: flex;
+  gap: $spacing-3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-detail__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-4;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  @include transition;
+
+  &--primary {
+    background-color: $color-primary;
+    color: $color-white;
+
+    &:hover {
+      background-color: color.scale($color-primary, $lightness: -15%);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+// ============================================================================
+// CARD
+// ============================================================================
+
+.task-detail__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $spacing-6;
+  background-color: $color-white;
+  border: 1px solid $gray-300;
+  border-radius: 14px;
+  margin-bottom: $spacing-6;
+}
+
+.task-detail__card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+  padding-right: 110px;
+}
+
+.task-detail__importance {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+  color: $info;
+
+  &--high {
+    color: $error;
+  }
+}
+
+.task-detail__title {
+  margin: 0;
+  font-family: $font-primary;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $gray-950;
+  line-height: 1.3;
+}
+
+.task-detail__description {
+  margin: 0;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-regular;
+  color: $gray-500;
+  line-height: 1.5;
+  padding-right: 110px;
+}
+
+.task-detail__thumbnail {
+  position: absolute;
+  top: $spacing-6;
+  right: $spacing-6;
+  width: 90px;
+  height: 88px;
+  background-color: $gray-300;
+  border-radius: 14px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.task-detail__meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+  margin-top: $spacing-4;
+}
+
+.task-detail__meta {
+  font-family: $font-primary;
+  font-size: 10px;
+  font-weight: $font-weight-medium;
+  color: $gray-950;
+
+  em {
+    font-style: normal;
+  }
+}
+
+.task-detail__meta--date {
+  color: $gray-300;
+}
+
+// Priority colors
+.task-detail__priority--low {
+  color: $success;
+}
+
+.task-detail__priority--medium {
+  color: $medium;
+}
+
+.task-detail__priority--high {
+  color: $error;
+}
+
+// Status colors
+.task-detail__status--pending {
+  color: $error;
+}
+
+.task-detail__status--in_progress {
+  color: $info;
+}
+
+.task-detail__status--completed {
+  color: $success;
+}
+
+.task-detail__status--cancelled {
+  color: $gray-400;
+}
+
+// ============================================================================
+// QUICK ACTIONS
+// ============================================================================
+
+.task-detail__quick-actions {
+  padding: $spacing-4;
+  background-color: $color-white;
+  border: 1px solid $gray-300;
+  border-radius: 14px;
+}
+
+.task-detail__section-title {
+  margin: 0 0 $spacing-4;
+  font-family: $font-primary;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $gray-950;
+}
+
+.task-detail__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-detail__action-btn {
+  padding: $spacing-2 $spacing-4;
+  background-color: $gray-100;
+  border: 1px solid $gray-300;
+  border-radius: 8px;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $gray-700;
+  cursor: pointer;
+  @include transition;
+
+  &:hover:not(:disabled) {
+    background-color: $gray-200;
+    border-color: $gray-400;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--success {
+    background-color: rgba($success, 0.1);
+    border-color: $success;
+    color: $success;
+
+    &:hover:not(:disabled) {
+      background-color: rgba($success, 0.2);
+    }
+  }
+
+  &--danger {
+    background-color: rgba($error, 0.1);
+    border-color: $error;
+    color: $error;
+
+    &:hover:not(:disabled) {
+      background-color: rgba($error, 0.2);
+    }
+  }
+}

@@ -63,6 +63,83 @@ src/
     ```
     Los artefactos de construcción se almacenarán en el directorio `dist/`.
 
+## 🧩 Arquitectura de Eventos y Manipulación del DOM
+
+GestStore está construida como SPA con Angular, por lo que la interacción del usuario se gestiona principalmente mediante **event binding en templates** y handlers en componentes. El objetivo es mantener un flujo claro y predecible: el DOM dispara un evento, el template lo enruta al componente, el componente actualiza estado o llama a servicios, y Angular vuelve a renderizar la vista.
+
+### Flujo de eventos (de extremo a extremo)
+
+1. **Usuario interactúa** con un elemento (click, teclado, foco, hover).
+2. El **evento del navegador** llega al DOM.
+3. Angular lo captura mediante **bindings** en el template: `(click)`, `(keydown.enter)`, `(keyup)`, `(focus)`, `(blur)`, `(mouseenter)`, `(mouseleave)`, `(ngSubmit)`, etc.
+4. Se ejecuta un **handler del componente** (TypeScript), donde:
+     - Se valida el evento (por ejemplo, prevenir comportamiento por defecto en formularios).
+     - Se controla la propagación cuando hay overlays/menús (`stopPropagation()` en contenido para evitar cierres accidentales).
+     - Se actualiza el estado (signals/propiedades) o se llama a servicios (p. ej. creación/consulta de tareas).
+5. Angular actualiza el DOM de forma declarativa mediante **data binding** (`{{ }}`, `[class]`, `[attr.*]`, `*ngIf`).
+6. Para casos puntuales donde se necesita acceso al DOM nativo (foco, medidas, overlays), se usa **`@ViewChild`/`ElementRef`** y **`Renderer2`** para mantener una manipulación segura.
+
+### Diagrama de flujo de eventos
+
+```mermaid
+flowchart LR
+    U["Usuario"] --> E["Evento DOM (click/keydown/focus)"]
+    E --> B["Template Binding (evento)='handler($event)'"]
+    B --> C["Componente (TS): handler + estado"]
+    C --> S["Servicios/Estado (HTTP, signals)"]
+    S --> V["Angular Change Detection"]
+    V --> R["Vista re-render"]
+
+    C -. "preventDefault / stopPropagation" .-> E
+    C -. "@HostListener document/window" .-> E
+```
+
+### Buenas prácticas aplicadas
+
+- **Unidireccionalidad**: la UI dispara eventos, los componentes deciden acciones y el estado resultante vuelve a la vista.
+- **Accesibilidad**: los componentes interactivos incorporan roles/atributos ARIA (`aria-expanded`, `aria-controls`, `role="tablist"`, `role="tooltip"`, `aria-modal`) y soporte de teclado.
+- **Eventos globales con `@HostListener`**: para comportamientos esperables (cerrar menús con ESC, cerrar por click fuera, responder a resize/scroll).
+- **Manipulación del DOM segura**: cuando se necesita crear/posicionar elementos (tooltips, backdrops, indicadores), se usa `Renderer2` y se limpian listeners en `ngOnDestroy`.
+
+### Tabla de componentes y eventos
+
+| Componente/Directiva | Eventos en template | `@HostListener` | DOM/Renderer2 | Propósito |
+| --- | --- | --- | --- | --- |
+| `HeaderComponent` | `(click)`, `(keydown.enter)` | `document:click`, `document:keydown.escape`, `window:resize` | Backdrop dinámico + clases/atributos | Menú hamburguesa accesible + cierre por click fuera/ESC |
+| `DashboardComponent` | `(click)`, `(keydown.enter)` | `document:click`, `document:keydown.escape` | Bloqueo scroll (clase en body) | Modales y acciones del dashboard |
+| `AddTaskModalComponent` | `(ngSubmit)`, `(click)` | — | Focus trap + guards creados/eliminados | Modal de alta de tarea con teclado |
+| `TooltipDirective` | — (se aplica como atributo) | `window:resize`, `window:scroll`, `keydown.escape` | create/append/remove tooltip | Tooltip con hover y foco |
+| `TabsComponent` | `(click)`, `(keydown)` | — | Indicador creado dinámicamente | Pestañas con teclado |
+| `AccordionComponent` | `(click)`, `(keydown)` | — | `setStyle(max-height)` animado | Acordeón con teclado |
+| `FormInputComponent` | `(input)`, `(focus)`, `(blur)`, `(keyup)` | — | `setStyle/removeStyle` | Inputs con estados de foco |
+| `FormTextareaComponent` | `(input)`, `(focus)`, `(blur)`, `(keyup)` | — | `setStyle/removeStyle` | Textarea con estados de foco |
+| `FormSelectComponent` | `(change)`, `(focus)`, `(blur)`, `(keydown)` | — | `setStyle/removeStyle` | Select con estados de foco |
+
+### Theme switcher (claro/oscuro)
+
+El tema se controla mediante un servicio global que:
+
+- Detecta la preferencia del sistema con `matchMedia('(prefers-color-scheme: dark)')`.
+- Escucha cambios del sistema en tiempo real.
+- Persiste la preferencia del usuario en `localStorage`.
+- Aplica el modo activo en el atributo `data-theme` del elemento raíz (`<html>`), lo que activa variables CSS en `styles/00-settings/_css-variables.scss`.
+
+## 🌐 Compatibilidad de navegadores (eventos)
+
+Tabla orientativa para navegadores modernos (Desktop/Mobile). En el caso de `matchMedia`, existe fallback para navegadores antiguos que no soportan `addEventListener('change')`.
+
+| Evento/API | Chrome | Edge | Firefox | Safari |
+| --- | --- | --- | --- | --- |
+| `click`, `input`, `change`, `submit` | 80+ | 80+ | 80+ | 13+ |
+| `focus`/`blur`/`focusin`/`focusout` | 80+ | 80+ | 80+ | 13+ |
+| `keydown`/`keyup` (incl. `.enter`/`.escape`) | 80+ | 80+ | 80+ | 13+ |
+| `mouseenter`/`mouseleave` | 80+ | 80+ | 80+ | 13+ |
+| `@HostListener('document:click')` | 80+ | 80+ | 80+ | 13+ |
+| `@HostListener('window:resize')` / `window:scroll` | 80+ | 80+ | 80+ | 13+ |
+| `matchMedia('(prefers-color-scheme: dark)')` | 76+ | 79+ | 67+ | 12.1+ |
+| `MediaQueryList.addEventListener('change')` | 84+ | 84+ | 63+ | 14.1+ |
+| Fallback `MediaQueryList.addListener` | — | — | — | Soportado en Safari antiguo |
+
 ## 🧪 Calidad y Pruebas
 
 El proyecto incluye una suite de pruebas unitarias y e2e para asegurar la robustez del código.

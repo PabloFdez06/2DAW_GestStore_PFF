@@ -20,6 +20,7 @@ $color-accent-1: #F21E1E;
 $color-accent-2: #05A301;
 $color-accent-3: #0225FF;
 $color-accent-4: #FFC107;
+$color-accent-5: #42ADE2;  // Color para prioridad media y fecha
 $color-side-menu: #9747FF;
 
 $color-white: #FFFFFF;
@@ -45,6 +46,7 @@ $gray-900: #353535;
 $gray-950: #292929;
 
 $bg-default: $color-white;
+$bg-subtle: #F5F8FF;  // Fondo sutil con tinte del primary
 $text-default: #212529;
 $text-secondary: #495057;
 $text-muted: #868e96;
@@ -57,6 +59,7 @@ $success: $color-accent-2;
 $error: $color-accent-1;
 $warning: $color-accent-4;
 $info: $color-accent-3;
+$medium: $color-accent-5;  // Color semántico para prioridad media
 
 // ============================================================================
 // TIPOGRAFÍA
@@ -157,7 +160,9 @@ $transition-easing: ease-in-out;
 // ============================================================================
 // FUNCIONES ÚTILES
 // ============================================================================
+@use 'sass:map';
+
 @function color-primary($state: normal) {
-  @return map-get($color-primary-scale, $state);
+  @return map.get($color-primary-scale, $state);
 }
 

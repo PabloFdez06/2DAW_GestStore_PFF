@@ -18,10 +18,13 @@ import java.time.LocalDateTime;
 public class UserResponseDto {
     private String id;
     private String name;
+    private String lastName;
     private String email;
     private Role role;
     private String phone;
+    private String address;
     private String department;
+    private String avatar;
     private Boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

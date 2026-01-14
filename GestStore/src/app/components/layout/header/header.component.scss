@@ -145,6 +145,26 @@
   }
 }
 
+.app-header__theme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-2;
+  border-radius: $radius-md;
+  border: $border-thin solid rgba($color-primary, 0.2);
+  background: rgba($color-primary, 0.06);
+  color: $text-default;
+  @include transition;
+
+  &:hover {
+    background: rgba($color-primary, 0.12);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
 .hamburger__line {
   // 3️⃣ BOX MODEL
   width: $spacing-6;
@@ -163,6 +183,31 @@
 
   &--bottom {
     transform: translateY(calc(#{$spacing-1} + 0.125rem));
+  }
+}
+
+.app-header__hamburger.is-open {
+  .hamburger__line--top {
+    transform: translateY(0) rotate(45deg);
+  }
+
+  .hamburger__line--middle {
+    opacity: 0;
+  }
+
+  .hamburger__line--bottom {
+    transform: translateY(0) rotate(-45deg);
+  }
+}
+
+.app-header__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 9;
+
+  @include respond(lg) {
+    display: none;
   }
 }
 

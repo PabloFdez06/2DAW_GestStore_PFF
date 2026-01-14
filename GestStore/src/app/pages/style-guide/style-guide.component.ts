@@ -12,6 +12,9 @@ import { LoginFormComponent } from '../../components/shared/login-form/login-for
 import { RegisterFormComponent } from '../../components/shared/register-form/register-form.component';
 import { HomeHeaderComponent } from '../../components/molecules/home-header/home-header.component';
 import { HomeFooterComponent } from '../../components/molecules/home-footer/home-footer.component';
+import { AccordionComponent, AccordionItem } from '../../components/molecules/accordion/accordion.component';
+import { TabsComponent, TabItem } from '../../components/molecules/tabs/tabs.component';
+import { TooltipDirective } from '../../directives/tooltip.directive';
 
 @Component({
   selector: 'app-style-guide',
@@ -29,7 +32,10 @@ import { HomeFooterComponent } from '../../components/molecules/home-footer/home
     LoginFormComponent,
     RegisterFormComponent,
     HomeHeaderComponent,
-    HomeFooterComponent
+    HomeFooterComponent,
+    AccordionComponent,
+    TabsComponent,
+    TooltipDirective
   ],
   templateUrl: './style-guide.component.html',
   styleUrl: './style-guide.component.scss'
@@ -71,6 +77,42 @@ export class StyleGuideComponent {
       completedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
     }
   };
+
+  demoTabs: TabItem[] = [
+    {
+      id: 'resumen',
+      label: 'Resumen',
+      content: 'Vista rápida con métricas clave y accesos directos.'
+    },
+    {
+      id: 'tareas',
+      label: 'Tareas',
+      content: 'Listado de tareas con filtros y acciones.'
+    },
+    {
+      id: 'inventario',
+      label: 'Inventario',
+      content: 'Control de stock y movimientos del almacén.'
+    }
+  ];
+
+  demoAccordionItems: AccordionItem[] = [
+    {
+      id: 'a1',
+      title: '¿Cómo se crea una tarea?',
+      content: 'Desde el panel principal puedes abrir el modal, completar el formulario y guardar.'
+    },
+    {
+      id: 'a2',
+      title: '¿Cómo funciona la prioridad?',
+      content: 'La prioridad se refleja visualmente y permite organizar el trabajo por urgencia.'
+    },
+    {
+      id: 'a3',
+      title: '¿Puedo navegar con teclado?',
+      content: 'Sí, los componentes interactivos soportan navegación con teclas y enfoque visible.'
+    }
+  ];
 
   switchView(view: 'components' | 'colors' | 'typography' | 'login' | 'register' | 'page') {
     this.currentView = view;

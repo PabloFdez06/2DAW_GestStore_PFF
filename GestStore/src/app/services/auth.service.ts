@@ -64,7 +64,6 @@ export class AuthService {
           localStorage.setItem('token', authResponse.token);
           localStorage.setItem('currentUser', JSON.stringify(authResponse.user));
           this.currentUserSubject.next(authResponse.user);
-          console.log('Login exitoso:', authResponse.user);
         })
       );
   }
@@ -81,7 +80,6 @@ export class AuthService {
           localStorage.setItem('token', authResponse.token);
           localStorage.setItem('currentUser', JSON.stringify(authResponse.user));
           this.currentUserSubject.next(authResponse.user);
-          console.log('Registro exitoso:', authResponse.user);
         })
       );
   }
@@ -97,6 +95,13 @@ export class AuthService {
     
     // Redirigir al login
     this.router.navigate(['/login']);
-    console.log('Logout exitoso');
+  }
+
+  /**
+   * Actualiza el usuario actual (perfil editado) y persiste en localStorage.
+   */
+  setCurrentUser(user: User): void {
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    this.currentUserSubject.next(user);
   }
 }

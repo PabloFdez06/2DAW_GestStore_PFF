@@ -1,14 +1,17 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener, ChangeDetectorRef, NgZone, ElementRef, Renderer2, ViewChild, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
-import { AddTaskModalComponent } from '../../components/molecules/add-task-modal/add-task-modal.component';
+import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
 import { TaskService } from '../../services/task.service';
 import { AuthService } from '../../services/auth.service';
+import { ThemeService } from '../../services/theme.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest, TaskStatistics } from '../../models/task.model';
 import { User } from '../../models/auth.model';
 
@@ -19,6 +22,7 @@ import { User } from '../../models/auth.model';
     CommonModule,
     FormsModule,
     HttpClientModule,
+    RouterModule,
     IconComponent,
     CalendarComponent,
     AddTaskModalComponent,
@@ -36,8 +40,10 @@ export class DashboardComponent implements OnInit {
   // Control del calendario
   isCalendarOpen: boolean = false;
   
-  // Control del modal de añadir tarea
+  // Control del modal de añadir/editar tarea
   isTaskModalOpen: boolean = false;
+  isEditMode: boolean = false;
+  taskToEdit: Task | null = null;
   
   // Control del menú de tarea (índice de la tarea con menú abierto, -1 si ninguno)
   openTaskMenuIndex: number = -1;
@@ -59,17 +65,48 @@ export class DashboardComponent implements OnInit {
   
   // Usuario actual
   currentUser: User | null = null;
+
+  avatarUrl: string | null = null;
+
+  @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
+  @ViewChild('taskDialog', { read: ElementRef }) taskDialog?: ElementRef<HTMLDialogElement>;
   
   constructor(
     private taskService: TaskService,
     private authService: AuthService,
+    private themeService: ThemeService,
+    private router: Router,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone
   ) {}
+
+  get themeIcon(): string {
+    return this.themeService.mode() === 'dark' ? 'moon' : 'sun';
+  }
+
+  get themeAriaLabel(): string {
+    return this.themeService.mode() === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro';
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggle();
+  }
   
   ngOnInit() {
     this.updateCurrentDate();
+    this.loadAvatar();
     this.loadCurrentUser(); // Esto cargará las tareas cuando el usuario esté disponible
+  }
+
+  private loadAvatar(): void {
+    const stored = localStorage.getItem('geststore.avatar');
+    this.avatarUrl = stored && stored.trim().length > 0 ? stored : null;
+  }
+
+  ngOnDestroy(): void {
+    this.unlockScroll();
   }
   
   /**
@@ -138,6 +175,27 @@ export class DashboardComponent implements OnInit {
       this.closeTaskMenu();
     }
   }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscape(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+    if (this.isTaskModalOpen) {
+      keyboardEvent.preventDefault();
+      this.closeTaskModal();
+      return;
+    }
+
+    if (this.isCalendarOpen) {
+      keyboardEvent.preventDefault();
+      this.closeCalendar();
+      return;
+    }
+
+    if (this.openTaskMenuIndex !== -1) {
+      keyboardEvent.preventDefault();
+      this.closeTaskMenu();
+    }
+  }
   
   updateCurrentDate() {
     const now = new Date();
@@ -150,18 +208,62 @@ export class DashboardComponent implements OnInit {
   
   toggleCalendar() {
     this.isCalendarOpen = !this.isCalendarOpen;
+    this.syncModalSideEffects();
+    if (this.isCalendarOpen) {
+      queueMicrotask(() => this.calendarDialog?.nativeElement?.focus());
+    }
   }
   
   closeCalendar() {
     this.isCalendarOpen = false;
+    this.syncModalSideEffects();
   }
   
   toggleTaskModal() {
     this.isTaskModalOpen = !this.isTaskModalOpen;
+    if (!this.isTaskModalOpen) {
+      this.isEditMode = false;
+      this.taskToEdit = null;
+    }
+    this.syncModalSideEffects();
+    if (this.isTaskModalOpen) {
+      queueMicrotask(() => this.taskDialog?.nativeElement?.focus());
+    }
   }
   
   closeTaskModal() {
     this.isTaskModalOpen = false;
+    this.isEditMode = false;
+    this.taskToEdit = null;
+    this.syncModalSideEffects();
+  }
+
+  openEditModal(task: Task) {
+    this.taskToEdit = task;
+    this.isEditMode = true;
+    this.isTaskModalOpen = true;
+    this.syncModalSideEffects();
+    queueMicrotask(() => this.taskDialog?.nativeElement?.focus());
+  }
+
+  private syncModalSideEffects(): void {
+    if (this.isCalendarOpen || this.isTaskModalOpen) {
+      this.lockScroll();
+    } else {
+      this.unlockScroll();
+    }
+  }
+
+  private lockScroll(): void {
+    const body = this.document?.body;
+    if (!body) return;
+    this.renderer.addClass(body, 'is-scroll-locked');
+  }
+
+  private unlockScroll(): void {
+    const body = this.document?.body;
+    if (!body) return;
+    this.renderer.removeClass(body, 'is-scroll-locked');
   }
   
   /**
@@ -272,6 +374,35 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+  handleTaskUpdated(taskData: TaskFormData) {
+    if (!taskData.id) return;
+
+    const taskRequest: TaskRequest = {
+      title: taskData.title,
+      description: taskData.description,
+      priority: this.convertPriorityFromModal(taskData.priority),
+      dueDate: taskData.date ? `${taskData.date}T23:59:59` : undefined,
+      important: taskData.important
+    };
+    
+    console.log('Actualizando tarea:', taskData.id, taskRequest);
+    
+    this.taskService.updateTask(taskData.id, taskRequest).subscribe({
+      next: (updatedTask) => {
+        console.log('Tarea actualizada exitosamente:', updatedTask);
+        this.loadTasks();
+        this.loadStatistics();
+        this.closeTaskModal();
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error al actualizar tarea:', error);
+        this.errorMessage = 'Error al actualizar la tarea: ' + (error.error?.message || error.message);
+        this.cdr.detectChanges();
+      }
+    });
+  }
   
   /**
    * Convertir prioridad del modal al enum de la API
@@ -323,9 +454,7 @@ export class DashboardComponent implements OnInit {
         break;
         
       case 'edit':
-        console.log('Editar tarea:', task.title);
-        // TODO: Implementar modal de edición
-        alert('La funcionalidad de edición estará disponible próximamente');
+        this.openEditModal(task);
         break;
         
       case 'delete':
@@ -357,6 +486,22 @@ export class DashboardComponent implements OnInit {
           error: (error) => {
             console.error('Error al completar tarea:', error);
             this.errorMessage = 'Error al completar la tarea: ' + (error.error?.message || error.message);
+            this.cdr.detectChanges();
+          }
+        });
+        break;
+        
+      case 'start':
+        this.taskService.startTask(task.id).subscribe({
+          next: () => {
+            console.log('Tarea iniciada exitosamente');
+            this.loadTasks();
+            this.loadStatistics();
+            this.cdr.detectChanges();
+          },
+          error: (error) => {
+            console.error('Error al iniciar tarea:', error);
+            this.errorMessage = 'Error al iniciar la tarea: ' + (error.error?.message || error.message);
             this.cdr.detectChanges();
           }
         });

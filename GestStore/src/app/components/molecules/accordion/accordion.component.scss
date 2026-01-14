@@ -1,0 +1,66 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.accordion__item {
+  border: $border-thin solid $border-default;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: $bg-default;
+}
+
+.accordion__header {
+  margin: 0;
+}
+
+.accordion__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  padding: $spacing-3 $spacing-4;
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: $text-default;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+
+  &:hover {
+    background: rgba($color-primary, 0.06);
+  }
+}
+
+.accordion__chevron {
+  display: inline-block;
+  transition: transform 200ms ease;
+  font-size: $font-size-lg;
+  line-height: 1;
+}
+
+.accordion__chevron--open {
+  transform: rotate(90deg);
+}
+
+.accordion__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 250ms ease;
+  border-top: $border-thin solid $border-default;
+}
+
+.accordion__panel-inner {
+  padding: $spacing-3 $spacing-4;
+}
+
+.accordion__content {
+  margin: 0;
+  color: $text-secondary;
+}

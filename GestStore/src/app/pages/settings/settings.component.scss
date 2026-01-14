@@ -1,0 +1,579 @@
+@use '../../../styles/00-settings/variables' as *;
+@use '../../../styles/01-tools/mixins' as *;
+
+// ============================================================================
+// RESET ELEMENTOS SEMÁNTICOS
+// ============================================================================
+.settings-page {
+  figure,
+  figcaption,
+  hgroup,
+  menu {
+    margin: 0;
+    padding: 0;
+  }
+
+  mark {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  hr {
+    border: none;
+    margin: 0;
+  }
+
+  fieldset,
+  legend {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// ============================================================================
+// LAYOUT
+// ============================================================================
+.settings-page {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  grid-template-rows: 90px 1fr;
+  min-height: 100vh;
+  background-color: $color-white;
+  position: relative;
+}
+
+// ============================================================================
+// TOP NAV
+// ============================================================================
+.settings-page__nav {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $spacing-7;
+  background-color: $color-white;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.07);
+  position: relative;
+  z-index: 10;
+}
+
+.settings-page__logo {
+  @include text-style($font-size-3xl, $font-weight-semibold, $line-tight);
+  margin: 0;
+}
+
+.settings-page__logo-gest {
+  color: $color-primary;
+}
+
+.settings-page__logo-store {
+  color: $gray-950;
+}
+
+.settings-page__nav-actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+}
+
+.settings-page__nav-btn {
+  all: unset;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background-color: $color-primary;
+  color: $color-white;
+  cursor: pointer;
+  @include flex-center;
+  @include transition(all);
+
+  &:hover {
+    background-color: color-primary(normal-hover);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.settings-page__date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-left: $spacing-2;
+}
+
+.settings-page__date-day {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: $gray-950;
+  margin: 0;
+}
+
+.settings-page__date-full {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: $info;
+  margin: 0;
+}
+
+// ============================================================================
+// MODAL OVERLAY
+// ============================================================================
+.settings-page__modal-overlay {
+  position: fixed;
+  inset: 0;
+  border: none;
+  padding: 0;
+  background-color: rgba($color-black, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.settings-page__modal-content {
+  max-width: 95vw;
+  max-height: 90vh;
+}
+
+// ============================================================================
+// SIDEBAR
+// ============================================================================
+.settings-page__sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  background-color: $color-primary;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.08);
+  padding: $spacing-7 $spacing-6;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-8;
+}
+
+.settings-page__user {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: $spacing-4;
+  align-items: center;
+}
+
+.settings-page__user-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: $radius-full;
+  background-color: $gray-300;
+  overflow: hidden;
+}
+
+.settings-page__avatar-link {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: $color-primary;
+}
+
+.settings-page__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.settings-page__user-name {
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: $color-white;
+  margin: 0;
+}
+
+.settings-page__user-email {
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: $color-white;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.settings-page__sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.settings-page__sidebar-link {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  border-radius: 14px;
+  cursor: pointer;
+  color: $color-white;
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  @include transition(all);
+
+  &:hover {
+    background-color: rgba($color-white, 0.15);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+
+  &--active {
+    background-color: $color-white;
+    color: $color-primary;
+  }
+}
+
+.settings-page__sidebar-footer {
+  margin-top: auto;
+}
+
+.settings-page__logout {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  border-radius: 14px;
+  cursor: pointer;
+  color: $color-white;
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  @include transition(all);
+
+  &:hover {
+    background-color: rgba($color-white, 0.15);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// MAIN
+// ============================================================================
+.settings-page__main {
+  grid-column: 2;
+  grid-row: 2;
+  padding: $spacing-8 $spacing-10;
+}
+
+.settings-page__content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-7;
+}
+
+.settings-page__panel {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: $spacing-7;
+  align-items: start;
+}
+
+.settings-page__panel-title {
+  @include text-style($font-size-sm, $font-weight-bold, 22px);
+  color: $color-primary;
+  margin: 0 0 $spacing-2 0;
+}
+
+.settings-page__panel-subtitle {
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: $gray-950;
+  margin: 0;
+}
+
+.settings-page__card {
+  background-color: $color-white;
+  border: 1px solid $color-primary;
+  border-radius: 32px;
+  padding: $spacing-7;
+}
+
+.settings-page__form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-7;
+}
+
+.settings-page__fields {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-7;
+}
+
+.settings-page__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-5;
+}
+
+.settings-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.settings-page__label {
+  @include text-style($font-size-sm, $font-weight-bold, 20px);
+  color: $gray-950;
+}
+
+.settings-page__input-pill {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  min-height: 48px;
+  padding: $spacing-3 $spacing-4;
+  border: 1px solid $color-primary;
+  border-radius: 123px;
+  background-color: $color-white;
+}
+
+.settings-page__input-pill--compact {
+  height: 44px;
+  min-height: 44px;
+  padding: 0 $spacing-4;
+}
+
+.settings-page__input-pill--actions {
+  justify-content: flex-start;
+}
+
+.settings-page__value {
+  @include text-style($font-size-base, $font-weight-medium, 22px);
+  color: color-primary(dark);
+  white-space: nowrap;
+}
+
+.settings-page__pill-action {
+  all: unset;
+  cursor: pointer;
+  padding: $spacing-2 $spacing-4;
+  border-radius: 999px;
+  background-color: $color-primary;
+  color: $color-white;
+  @include text-style($font-size-sm, $font-weight-semibold, 20px);
+  @include transition(all);
+
+  margin-left: auto;
+
+  &:hover {
+    background-color: color-primary(normal-hover);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.settings-page__input-pill--toggle {
+  gap: $spacing-4;
+}
+
+.settings-page__toggle-text {
+  @include text-style($font-size-base, $font-weight-medium, 22px);
+  color: color-primary(dark);
+  white-space: nowrap;
+}
+
+.settings-page__switch {
+  all: unset;
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid $color-primary;
+  background-color: $gray-200;
+  position: relative;
+  cursor: pointer;
+  @include transition(all);
+
+  margin-left: auto;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background-color: $color-white;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.18);
+    @include transition(all);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.settings-page__switch[aria-checked='true'] {
+  background-color: $color-primary;
+
+  &::after {
+    left: 23px;
+  }
+}
+
+.settings-page__input-pill--split {
+  gap: $spacing-2;
+}
+
+.settings-page__prefix {
+  @include text-style($font-size-base, $font-weight-bold, 22px);
+  color: color-primary(normal-hover);
+}
+
+.settings-page__input,
+.settings-page__select {
+  all: unset;
+  flex: 1;
+  @include text-style($font-size-base, $font-weight-medium, 22px);
+  color: color-primary(dark);
+}
+
+.settings-page__input:focus-visible,
+.settings-page__select:focus-visible {
+  outline: 2px solid rgba($color-primary, 0.5);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.settings-page__input-icon {
+  color: color-primary(normal-hover);
+}
+
+.settings-page__avatar {
+  margin-top: $spacing-2;
+}
+
+.settings-page__avatar-title {
+  @include text-style($font-size-sm, $font-weight-bold, 20px);
+  color: color-primary(normal-hover);
+  margin: 0 0 $spacing-4 0;
+}
+
+.settings-page__avatar-row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: $spacing-6;
+  align-items: start;
+}
+
+.settings-page__avatar-preview {
+  width: 64px;
+  height: 64px;
+  border-radius: $radius-full;
+  background-color: $gray-300;
+  overflow: hidden;
+}
+
+.settings-page__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  padding: $spacing-6;
+  border: 1px dashed $color-primary;
+  border-radius: 32px;
+  background-color: $color-white;
+  cursor: pointer;
+  text-align: center;
+}
+
+.settings-page__file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.settings-page__dropzone-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 123px;
+  background-color: $gray-200;
+  @include flex-center;
+  color: $color-primary;
+}
+
+.settings-page__dropzone-text {
+  @include text-style($font-size-base, $font-weight-medium, 22px);
+  color: color-primary(normal-hover);
+  margin: 0;
+}
+
+.settings-page__dropzone-link {
+  @include text-style($font-size-base, $font-weight-bold, 22px);
+  color: $color-primary;
+}
+
+.settings-page__dropzone-hint {
+  @include text-style($font-size-sm, $font-weight-medium, 20px);
+  color: color-primary(normal-hover);
+  margin: 0;
+}
+
+.settings-page__divider {
+  height: 1px;
+  background-color: $color-primary;
+  opacity: 0.8;
+}
+
+.settings-page__footer {
+  height: 24px;
+  border-top: 1px solid $color-primary;
+}
+
+@media (max-width: $breakpoint-lg) {
+  .settings-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: 90px auto 1fr;
+  }
+
+  .settings-page__sidebar {
+    grid-column: 1;
+    grid-row: 2;
+    border-radius: 0;
+  }
+
+  .settings-page__main {
+    grid-column: 1;
+    grid-row: 3;
+    padding: $spacing-7;
+  }
+
+  .settings-page__panel {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-page__row {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-page__avatar-row {
+    grid-template-columns: 1fr;
+  }
+}

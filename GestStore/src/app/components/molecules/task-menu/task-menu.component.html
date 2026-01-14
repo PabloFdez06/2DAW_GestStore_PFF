@@ -1,21 +1,26 @@
 <menu class="task-menu" role="menu" aria-label="Acciones de tarea">
+  <li *ngIf="status === 'PENDING'" role="menuitem">
+    <button class="task-menu__item" type="button" (click)="onStart($event)">
+      Comenzar tarea
+    </button>
+  </li>
   <li role="menuitem">
-    <button class="task-menu__item" type="button" (click)="onToggleImportant()">
+    <button class="task-menu__item" type="button" (click)="onToggleImportant($event)">
       {{ isImportant ? 'Quitar de importante' : 'Marcar como importante' }}
     </button>
   </li>
   <li role="menuitem">
-    <button class="task-menu__item" type="button" (click)="onEdit()">
+    <button class="task-menu__item" type="button" (click)="onEdit($event)">
       Editar
     </button>
   </li>
   <li role="menuitem">
-    <button class="task-menu__item" type="button" (click)="onDelete()">
+    <button class="task-menu__item" type="button" (click)="onDelete($event)">
       Eliminar
     </button>
   </li>
   <li role="menuitem">
-    <button class="task-menu__item" type="button" (click)="onComplete()">
+    <button class="task-menu__item" type="button" (click)="onComplete($event)">
       Completar
     </button>
   </li>

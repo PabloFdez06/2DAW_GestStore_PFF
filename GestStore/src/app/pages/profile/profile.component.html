@@ -1,0 +1,159 @@
+<main class="profile">
+  <aside class="profile__sidebar" aria-label="Menú lateral">
+    <header class="profile__sidebar-header">
+      <a class="profile__brand" routerLink="/dashboard" aria-label="GestStore">
+        <app-icon name="check-circle" size="large"></app-icon>
+        <span class="profile__brand-text">GestStore</span>
+      </a>
+    </header>
+
+    <nav class="profile__nav" aria-label="Navegación principal">
+      <ul class="profile__nav-list">
+        <li class="profile__nav-item">
+          <a class="profile__nav-link" routerLink="/dashboard">
+            <app-icon name="home"></app-icon>
+            <span>Inicio</span>
+          </a>
+        </li>
+
+        <li class="profile__nav-item">
+          <a class="profile__nav-link" routerLink="/tareas">
+            <app-icon name="check-square"></app-icon>
+            <span>Tareas</span>
+          </a>
+        </li>
+
+        <li class="profile__nav-item">
+          <a class="profile__nav-link" routerLink="/tareas-importantes">
+            <app-icon name="star"></app-icon>
+            <span>Importantes</span>
+          </a>
+        </li>
+
+        <li class="profile__nav-item">
+          <a class="profile__nav-link" routerLink="/ajustes">
+            <app-icon name="settings"></app-icon>
+            <span>Ajustes</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <footer class="profile__sidebar-footer">
+      <a class="profile__user" routerLink="/perfil" aria-label="Ir a tu perfil">
+        <ng-container *ngIf="avatarUrl; else profileSidebarAvatarDefault">
+          <img class="profile__user-avatar" [src]="avatarUrl" alt="Avatar" />
+        </ng-container>
+        <ng-template #profileSidebarAvatarDefault>
+          <span class="profile__user-avatar profile__user-avatar--empty" aria-hidden="true">
+            <app-icon name="user" size="large"></app-icon>
+          </span>
+        </ng-template>
+        <span class="profile__user-name">{{ currentUser?.name || 'Usuario' }}</span>
+      </a>
+    </footer>
+  </aside>
+
+  <section class="profile__content" aria-label="Contenido">
+    <header class="profile__topbar">
+      <section class="profile__topbar-left" aria-label="Fecha">
+        <h1 class="profile__title">Perfil</h1>
+        <p class="profile__subtitle">{{ currentDayName }}, {{ currentDate }}</p>
+      </section>
+
+      <section class="profile__topbar-right" aria-label="Acciones">
+        <button class="profile__icon-button" type="button" (click)="toggleCalendar()" aria-label="Calendario">
+          <app-icon name="calendar"></app-icon>
+        </button>
+
+        <button class="profile__icon-button" type="button" (click)="toggleTheme()" [attr.aria-label]="themeAriaLabel">
+          <app-icon [name]="themeIcon"></app-icon>
+        </button>
+      </section>
+    </header>
+
+    <section class="profile__card" aria-label="Información de tu cuenta">
+      <header class="profile__card-header">
+        <a class="profile__back" href="#" (click)="onBack($event)">
+          <app-icon name="chevron-left"></app-icon>
+          <span>Volver</span>
+        </a>
+
+        <h2 class="profile__card-title">Información de tu Cuenta</h2>
+
+        <section class="profile__identity" aria-label="Identidad">
+          <ng-container *ngIf="avatarUrl; else profileIdentityAvatarDefault">
+            <img class="profile__identity-avatar" [src]="avatarUrl" alt="Avatar" />
+          </ng-container>
+          <ng-template #profileIdentityAvatarDefault>
+            <span class="profile__identity-avatar profile__identity-avatar--empty" aria-hidden="true">
+              <app-icon name="user" size="large"></app-icon>
+            </span>
+          </ng-template>
+
+          <section class="profile__identity-text" aria-label="Nombre y correo">
+            <p class="profile__identity-name">{{ name || currentUser?.name || 'Usuario' }} {{ lastName }}</p>
+            <p class="profile__identity-email">{{ email || currentUser?.email || '' }}</p>
+          </section>
+
+          <label class="profile__upload" aria-label="Subir avatar">
+            <input class="profile__upload-input" type="file" accept="image/png,image/jpeg,image/svg+xml" (change)="onAvatarSelected($event)" />
+            <span class="profile__upload-pill">
+              <app-icon name="upload"></app-icon>
+              <span>Subir</span>
+            </span>
+          </label>
+        </section>
+      </header>
+
+      <form class="profile__form" (submit)="onUpdateInfo($event)" aria-label="Formulario de perfil">
+        <fieldset class="profile__fieldset">
+          <legend class="profile__legend">Datos personales</legend>
+
+          <label class="profile__field" aria-label="Nombre">
+            <span class="profile__label">Nombre</span>
+            <input class="profile__input" type="text" name="name" [(ngModel)]="name" required />
+          </label>
+
+          <label class="profile__field" aria-label="Apellidos">
+            <span class="profile__label">Apellidos</span>
+            <input class="profile__input" type="text" name="lastName" [(ngModel)]="lastName" />
+          </label>
+
+          <label class="profile__field" aria-label="Correo electrónico">
+            <span class="profile__label">Correo Electrónico</span>
+            <input class="profile__input" type="email" name="email" [(ngModel)]="email" required />
+          </label>
+
+          <label class="profile__field" aria-label="Número de teléfono">
+            <span class="profile__label">Número de Teléfono</span>
+            <input class="profile__input" type="tel" name="phone" [(ngModel)]="phone" />
+          </label>
+
+          <label class="profile__field" aria-label="Dirección">
+            <span class="profile__label">Dirección</span>
+            <input class="profile__input" type="text" name="address" [(ngModel)]="address" />
+          </label>
+        </fieldset>
+
+        <p class="profile__success" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="profile__error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+        <section class="profile__actions" aria-label="Acciones">
+          <button class="profile__primary" type="submit" [disabled]="isSaving">
+            {{ isSaving ? 'Guardando…' : 'Actualizar Info' }}
+          </button>
+
+          <button class="profile__secondary" type="button" (click)="onGoToPassword($event)">
+            Cambiar Contraseña
+          </button>
+        </section>
+      </form>
+    </section>
+
+    <dialog class="profile__calendar" [open]="isCalendarOpen" aria-label="Calendario" #calendarDialog>
+      <app-calendar></app-calendar>
+      <button class="profile__calendar-close" type="button" (click)="closeCalendar()">Cerrar</button>
+    </dialog>
+  </section>
+</main>

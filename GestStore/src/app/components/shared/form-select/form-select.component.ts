@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -29,10 +29,32 @@ export class FormSelectComponent {
   
   @Output() valueChange = new EventEmitter<string | number>();
 
+  @ViewChild('selectEl', { read: ElementRef }) selectEl?: ElementRef<HTMLSelectElement>;
+
+  constructor(private renderer: Renderer2) {}
+
   onChange(event: any): void {
     const newValue = event.target.value;
     this.value = newValue;
     this.valueChange.emit(newValue);
+  }
+
+  onFocus(): void {
+    const el = this.selectEl?.nativeElement;
+    if (!el) return;
+    this.renderer.setStyle(el, 'boxShadow', '0 0 0 3px rgba(107, 90, 255, 0.1)');
+  }
+
+  onBlur(): void {
+    const el = this.selectEl?.nativeElement;
+    if (!el) return;
+    this.renderer.removeStyle(el, 'boxShadow');
+  }
+
+  onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      (event.target as HTMLSelectElement | null)?.blur();
+    }
   }
 
   getAriaDescribedBy(): string | null {

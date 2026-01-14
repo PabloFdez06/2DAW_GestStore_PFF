@@ -7,8 +7,8 @@ html {
 
 body {
   @include text-style($font-size-base, $font-weight-regular, $line-normal);
-  background-color: $bg-default;
-  color: $text-default;
+  background-color: var(--bg-default, #{$bg-default});
+  color: var(--text-default, #{$text-default});
   font-family: $font-primary;
 }
 

@@ -1,0 +1,66 @@
+@use '../00-settings/variables' as *;
+@use '../01-tools/mixins' as *;
+
+.gs-tooltip {
+  position: absolute;
+  z-index: 1000;
+  max-width: 16rem;
+  padding: $spacing-2 $spacing-3;
+  border-radius: $radius-md;
+  background: rgba($gray-950, 0.94);
+  color: $color-white;
+  font-size: $font-size-sm;
+  line-height: $line-normal;
+  box-shadow: $shadow-md;
+  opacity: 0;
+  transform: translateY(-2px);
+  pointer-events: none;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.gs-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gs-tooltip__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.gs-tooltip--top .gs-tooltip__arrow {
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba($gray-950, 0.94);
+}
+
+.gs-tooltip--bottom .gs-tooltip__arrow {
+  left: 50%;
+  top: -6px;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid rgba($gray-950, 0.94);
+}
+
+.gs-tooltip--left .gs-tooltip__arrow {
+  top: 50%;
+  right: -6px;
+  transform: translateY(-50%);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid rgba($gray-950, 0.94);
+}
+
+.gs-tooltip--right .gs-tooltip__arrow {
+  top: 50%;
+  left: -6px;
+  transform: translateY(-50%);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid rgba($gray-950, 0.94);
+}

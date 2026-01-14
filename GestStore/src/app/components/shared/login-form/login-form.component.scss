@@ -1,5 +1,6 @@
 @use '../../../../styles/00-settings/variables' as *;
 @use '../../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
 
 .login-container {
   // 1️⃣ POSICIONAMIENTO
@@ -269,11 +270,11 @@ fieldset .button {
     color: $color-white;
 
     &:hover {
-      background-color: darken($color-primary, 10%);
+      background-color: color.scale($color-primary, $lightness: -20%);
     }
 
     &:active {
-      background-color: darken($color-primary, 20%);
+      background-color: color.scale($color-primary, $lightness: -35%);
     }
 
     &:disabled {

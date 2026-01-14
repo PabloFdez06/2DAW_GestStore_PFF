@@ -25,6 +25,8 @@ public class User {
 
     private String name;
 
+    private String lastName;
+
     @Indexed(unique = true)
     private String email;
 
@@ -34,7 +36,15 @@ public class User {
 
     private String phone;
 
+    private String address;
+
     private String department;
+
+    /**
+     * Avatar del usuario.
+     * Se almacena como DataURL (base64) o URL.
+     */
+    private String avatar;
 
     private Boolean active = true;
 

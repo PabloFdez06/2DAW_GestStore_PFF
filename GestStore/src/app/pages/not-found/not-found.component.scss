@@ -1,0 +1,94 @@
+@use '../../../styles/00-settings/variables' as *;
+@use '../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
+
+.not-found {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: $spacing-8;
+  background-color: $bg-subtle;
+}
+
+.not-found__card {
+  width: min(560px, 100%);
+  padding: $spacing-8;
+  border-radius: 16px;
+  background: $color-white;
+  color: $gray-950;
+  border: 1px solid $gray-300;
+  text-align: center;
+}
+
+.not-found__code {
+  font-family: $font-primary;
+  font-size: 4rem;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.1em;
+  margin: 0 0 $spacing-2;
+  color: $color-primary;
+  opacity: 0.3;
+}
+
+.not-found__title {
+  margin: 0 0 $spacing-2;
+  font-family: $font-primary;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $gray-950;
+}
+
+.not-found__text {
+  margin: 0 0 $spacing-6;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  color: $gray-500;
+}
+
+.not-found__actions {
+  display: flex;
+  gap: $spacing-3;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-5;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+  cursor: pointer;
+  @include transition;
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.button--primary {
+  background-color: $color-primary;
+  color: $color-white;
+
+  &:hover {
+    background-color: color.scale($color-primary, $lightness: -15%);
+  }
+}
+
+.button--secondary {
+  background-color: $gray-100;
+  border: 1px solid $gray-300;
+  color: $gray-700;
+
+  &:hover {
+    background-color: $gray-200;
+    border-color: $gray-400;
+  }
+}

@@ -16,16 +16,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (userStr) {
     try {
       const user = JSON.parse(userStr);
-      if (user && user.id) {
-        headers['X-User-Id'] = String(user.id);
-        console.log('Interceptor: Añadiendo X-User-Id:', user.id);
+      const userId = user?.id ?? user?._id;
+      if (userId) {
+        headers['X-User-Id'] = String(userId);
       }
     } catch (e) {
-      console.error('Error al parsear usuario del localStorage', e);
     }
   }
-  
-  console.log('Interceptor: Headers a enviar:', headers);
   
   // Clonar la request con los nuevos headers si existen
   if (Object.keys(headers).length > 0) {

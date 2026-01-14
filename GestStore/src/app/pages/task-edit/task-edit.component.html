@@ -1,0 +1,95 @@
+<app-breadcrumbs />
+
+<section class="task-edit">
+  <header class="task-edit__header">
+    <hgroup>
+      <h1>Editar tarea</h1>
+      <p class="task-edit__muted">ID: {{ task?.id }}</p>
+    </hgroup>
+
+    <menu class="task-edit__actions">
+      <button class="button button--secondary" type="button" (click)="cancel()">Cancelar</button>
+      <button class="button button--primary" type="button" (click)="save()" [disabled]="isSaving">
+        Guardar
+      </button>
+    </menu>
+  </header>
+
+  <output class="task-edit__error" *ngIf="errorMessage" role="alert">
+    {{ errorMessage }}
+  </output>
+
+  <form class="task-edit__form" (submit)="$event.preventDefault(); save()">
+    <app-form-input
+      id="title"
+      name="title"
+      label="Título"
+      placeholder="Escribe un título"
+      [required]="true"
+      [value]="model.title"
+      (valueChange)="model.title = $event"
+    />
+
+    <app-form-textarea
+      id="description"
+      name="description"
+      label="Descripción"
+      placeholder="Describe la tarea"
+      [rows]="5"
+      [value]="model.description || ''"
+      (valueChange)="model.description = $event"
+    />
+
+    <fieldset class="task-edit__grid">
+      <app-form-select
+        id="status"
+        name="status"
+        label="Estado"
+        [options]="statusOptions"
+        [value]="model.status || ''"
+        (valueChange)="onStatusChange($event)"
+      />
+
+      <app-form-select
+        id="priority"
+        name="priority"
+        label="Prioridad"
+        [options]="priorityOptions"
+        [value]="model.priority || ''"
+        (valueChange)="onPriorityChange($event)"
+      />
+
+      <app-form-input
+        id="dueDate"
+        name="dueDate"
+        label="Fecha límite"
+        type="date"
+        [value]="model.dueDate || ''"
+        (valueChange)="model.dueDate = $event"
+      />
+
+      <label class="task-edit__checkbox">
+        <input type="checkbox" [checked]="model.important" (change)="model.important = ($any($event.target).checked)" />
+        <span>Importante</span>
+      </label>
+    </fieldset>
+
+    <app-form-textarea
+      id="notes"
+      name="notes"
+      label="Notas"
+      placeholder="Notas internas"
+      [rows]="4"
+      [value]="model.notes || ''"
+      (valueChange)="model.notes = $event"
+    />
+
+    <footer class="task-edit__footer">
+      <span class="task-edit__muted" *ngIf="isDirty()">Cambios pendientes</span>
+      <menu class="task-edit__actions">
+        <button class="button button--secondary" type="button" (click)="cancel()">Cancelar</button>
+        <button class="button button--primary" type="submit" [disabled]="isSaving">Guardar</button>
+      </menu>
+    </footer>
+  </form>
+</section>

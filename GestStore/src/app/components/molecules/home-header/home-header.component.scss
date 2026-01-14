@@ -1,5 +1,7 @@
 @use '../../../../styles/00-settings/variables' as *;
 @use '../../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
+@use 'sass:map';
 
 // ============================================================================
 // HOME HEADER
@@ -47,7 +49,7 @@
   height: 100%;
 
   // BACKGROUND
-  background-color: map-get($color-primary-scale, light-active);
+  background-color: map.get($color-primary-scale, light-active);
 }
 
 .home-header__background-img {
@@ -281,7 +283,7 @@
   @include transition;
 
   &:hover {
-    background-color: darken($color-primary, 10%);
+    background-color: color.scale($color-primary, $lightness: -20%);
   }
 }
 
@@ -358,7 +360,7 @@
   @include transition;
 
   &:hover {
-    background-color: darken($color-primary, 10%);
+    background-color: color.scale($color-primary, $lightness: -20%);
     transform: translateY(-0.125rem);
   }
 }

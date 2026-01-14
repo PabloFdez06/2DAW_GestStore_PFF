@@ -6,6 +6,7 @@
   </span>
   
   <textarea
+    #textareaEl
     [id]="id"
     [name]="name"
     [placeholder]="placeholder"
@@ -18,6 +19,9 @@
     [attr.aria-describedby]="getAriaDescribedBy()"
     class="form-textarea"
     (input)="onInput($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    (keyup)="onKeyup($event)"
   ></textarea>
 
   <small class="form-help" [id]="id + '-help'" *ngIf="helpText">{{ helpText }}</small>

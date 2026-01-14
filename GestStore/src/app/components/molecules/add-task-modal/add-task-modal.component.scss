@@ -219,6 +219,18 @@
   width: 0.4375rem;
   height: 0.4375rem;
   border-radius: $radius-full;
+
+  &--high {
+    background-color: $error;
+  }
+
+  &--medium {
+    background-color: $medium;
+  }
+
+  &--low {
+    background-color: $success;
+  }
 }
 
 .add-task-modal__priority-label {
@@ -342,7 +354,7 @@
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
   cursor: pointer;
   text-align: center;
-  width: 5.625rem;
+  min-width: 8rem;
   margin-top: $spacing-6;
   @include transition(all);
   box-sizing: border-box;

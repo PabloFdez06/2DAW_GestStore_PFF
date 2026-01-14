@@ -16,10 +16,13 @@ import java.time.LocalDateTime;
 @Builder
 public class UserRequestDto {
     private String name;
+    private String lastName;
     private String email;
     private String password;
     private Role role;
     private String phone;
+    private String address;
     private String department;
+    private String avatar;
     private Boolean active;
 }

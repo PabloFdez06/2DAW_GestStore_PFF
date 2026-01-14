@@ -22,6 +22,14 @@
       <button class="dashboard__nav-btn" type="button" aria-label="Notificaciones">
         <app-icon name="bell" size="small"></app-icon>
       </button>
+      <button
+        class="dashboard__nav-btn"
+        type="button"
+        (click)="toggleTheme()"
+        (keydown.enter)="toggleTheme(); $event.preventDefault()"
+        [attr.aria-label]="themeAriaLabel">
+        <app-icon [name]="themeIcon" size="small"></app-icon>
+      </button>
       <button class="dashboard__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
         <app-icon name="calendar" size="small"></app-icon>
       </button>
@@ -33,18 +41,37 @@
   </nav>
   
   <!-- Calendar Modal Overlay -->
-  <dialog *ngIf="isCalendarOpen" class="dashboard__modal-overlay" (click)="closeCalendar()" open>
+  <dialog
+    #calendarDialog
+    *ngIf="isCalendarOpen"
+    class="dashboard__modal-overlay"
+    (click)="closeCalendar()"
+    open
+    role="dialog"
+    aria-modal="true"
+    aria-label="Calendario">
     <section class="dashboard__modal-content" (click)="$event.stopPropagation()">
       <app-calendar (close)="closeCalendar()"></app-calendar>
     </section>
   </dialog>
   
   <!-- Add Task Modal Overlay -->
-  <dialog *ngIf="isTaskModalOpen" class="dashboard__modal-overlay" (click)="closeTaskModal()" open>
+  <dialog
+    #taskDialog
+    *ngIf="isTaskModalOpen"
+    class="dashboard__modal-overlay"
+    (click)="closeTaskModal()"
+    open
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="isEditMode ? 'Editar tarea' : 'Añadir tarea'">
     <section class="dashboard__modal-content" (click)="$event.stopPropagation()">
       <app-add-task-modal 
+        [task]="taskToEdit"
+        [isEditMode]="isEditMode"
         (close)="closeTaskModal()" 
-        (taskAdded)="handleTaskAdded($event)">
+        (taskAdded)="handleTaskAdded($event)"
+        (taskUpdated)="handleTaskUpdated($event)">
       </app-add-task-modal>
     </section>
   </dialog>
@@ -52,7 +79,16 @@
   <!-- Side Navigation -->
   <aside class="dashboard__sidebar" role="complementary" aria-label="Menú lateral">
     <header class="dashboard__user">
-      <figure class="dashboard__user-avatar" role="img" aria-label="Avatar del usuario"></figure>
+      <figure class="dashboard__user-avatar">
+        <a class="dashboard__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
+          <ng-container *ngIf="avatarUrl; else dashboardAvatarDefault">
+            <img class="dashboard__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" />
+          </ng-container>
+          <ng-template #dashboardAvatarDefault>
+            <app-icon name="user" size="large" aria-hidden="true"></app-icon>
+          </ng-template>
+        </a>
+      </figure>
       <hgroup class="dashboard__user-info">
         <p class="dashboard__user-name">{{ currentUser?.name || 'Usuario' }}</p>
         <p class="dashboard__user-email">{{ currentUser?.email || '' }}</p>
@@ -60,27 +96,27 @@
     </header>
 
     <nav class="dashboard__sidebar-nav" aria-label="Navegación del menú">
-      <a href="/dashboard" class="dashboard__sidebar-link dashboard__sidebar-link--active" aria-current="page">
+      <a routerLink="/dashboard" class="dashboard__sidebar-link dashboard__sidebar-link--active" aria-current="page">
         <app-icon name="home" size="small"></app-icon>
         <span>Dashboard</span>
       </a>
-      <a href="/tareas-importantes" class="dashboard__sidebar-link">
+      <a routerLink="/tareas-importantes" class="dashboard__sidebar-link">
         <app-icon name="star" size="small"></app-icon>
         <span>Tareas Importantes</span>
       </a>
-      <a href="/tareas" class="dashboard__sidebar-link">
+      <a routerLink="/tareas" class="dashboard__sidebar-link">
         <app-icon name="check-square" size="small"></app-icon>
         <span>Tareas</span>
       </a>
-      <a href="/categorias" class="dashboard__sidebar-link">
+      <a routerLink="/categorias" class="dashboard__sidebar-link">
         <app-icon name="folder" size="small"></app-icon>
         <span>Categorias de Tareas</span>
       </a>
-      <a href="/almacen" class="dashboard__sidebar-link">
+      <a routerLink="/almacen" class="dashboard__sidebar-link">
         <app-icon name="package" size="small"></app-icon>
         <span>Almacen</span>
       </a>
-      <a href="/ajustes" class="dashboard__sidebar-link">
+      <a routerLink="/ajustes" class="dashboard__sidebar-link">
         <app-icon name="settings" size="small"></app-icon>
         <span>Ajustes</span>
       </a>
@@ -164,12 +200,17 @@
                   <app-icon name="more-vertical" size="small"></app-icon>
                 </button>
                 <menu *ngIf="openTaskMenuIndex === i" class="dashboard__task-menu-dropdown">
-                  <app-task-menu [isImportant]="task.important || false" (action)="handleTaskAction($event, i)"></app-task-menu>
+                  <app-task-menu [isImportant]="task.important || false" [status]="task.status" (action)="handleTaskAction($event, i)"></app-task-menu>
                 </menu>
               </nav>
               <mark class="dashboard__task-priority" [class]="'dashboard__task-priority--' + getPriorityColor(task.priority)"></mark>
               <section class="dashboard__task-content">
-                <h4 class="dashboard__task-title">{{ task.title }}</h4>
+                <header class="dashboard__task-header">
+                  <h4 class="dashboard__task-title">{{ task.title }}</h4>
+                  <mark *ngIf="task.important" class="dashboard__task-important-badge" aria-label="Tarea importante">
+                    <app-icon name="star" size="small"></app-icon>
+                  </mark>
+                </header>
                 <p class="dashboard__task-description">{{ task.description }}</p>
                 <dl class="dashboard__task-meta">
                   <dt class="dashboard__task-label">Prioridad: </dt>

@@ -35,14 +35,10 @@ export class TaskService {
         const userId = user.id || user._id;
         if (userId) {
           headers = headers.set('X-User-Id', String(userId));
-          console.log('TaskService: Añadiendo X-User-Id:', userId);
         }
       } catch (e) {
-        console.error('Error al parsear usuario:', e);
       }
     }
-    
-    console.log('TaskService: Headers configurados');
     return headers;
   }
 

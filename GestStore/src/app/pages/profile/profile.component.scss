@@ -1,0 +1,362 @@
+@use '../../../styles/00-settings/variables' as *;
+@use '../../../styles/01-tools/mixins' as *;
+
+.profile {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+  background: $bg-default;
+  color: $text-default;
+}
+
+.profile__sidebar {
+  background: $color-primary;
+  color: $color-white;
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.profile__brand-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.profile__brand-text {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.profile__nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile__nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: $color-white;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.profile__sidebar-footer {
+  margin-top: auto;
+}
+
+.profile__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.profile__user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+}
+
+.profile__user-avatar--empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.profile__user-name {
+  font-weight: 600;
+}
+
+.profile__content {
+  padding: 26px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.profile__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile__title {
+  margin: 0;
+  font-size: 28px;
+}
+
+.profile__subtitle {
+  margin: 4px 0 0;
+  color: $text-muted;
+}
+
+.profile__icon-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid $border-default;
+  background: $bg-default;
+  color: $text-default;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: $gray-100-hover;
+  }
+}
+
+.profile__card {
+  border: 1px solid $border-default;
+  background: $bg-default;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.profile__card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  text-decoration: none;
+  color: $text-default;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.profile__card-title {
+  margin: 0;
+  font-size: 22px;
+}
+
+.profile__identity {
+  display: grid;
+  grid-template-columns: 70px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid $border-default;
+  background: $bg-subtle;
+}
+
+.profile__identity-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(0, 0, 0, 0.08);
+}
+
+.profile__identity-avatar--empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: $bg-default;
+  color: $text-muted;
+}
+
+.profile__identity-name {
+  margin: 0;
+  font-weight: 700;
+}
+
+.profile__identity-email {
+  margin: 4px 0 0;
+  color: $text-muted;
+}
+
+.profile__upload {
+  cursor: pointer;
+}
+
+.profile__upload-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.profile__upload-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid $border-default;
+  background: $bg-default;
+  color: $text-default;
+}
+
+.profile__form {
+  margin-top: 16px;
+}
+
+.profile__fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.profile__legend {
+  grid-column: 1 / -1;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.profile__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile__label {
+  font-size: 12px;
+  color: $text-muted;
+}
+
+.profile__input {
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid $border-default;
+  background: $bg-default;
+  color: $text-default;
+
+  &:focus {
+    outline: 2px solid rgba($color-primary, 0.35);
+    border-color: rgba($color-primary, 0.55);
+  }
+}
+
+.profile__error {
+  margin: 12px 0 0;
+  color: $error;
+  font-weight: 600;
+}
+
+.profile__success {
+  margin: 12px 0 0;
+  color: $success;
+  font-weight: 700;
+}
+
+.profile__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.profile__primary,
+.profile__secondary {
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid $border-default;
+  padding: 0 14px;
+  font-weight: 700;
+}
+
+.profile__primary {
+  background: $color-primary;
+  color: $color-white;
+  border-color: $color-primary;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.profile__secondary {
+  background: transparent;
+  color: $text-default;
+
+  &:hover {
+    background: $gray-100-hover;
+  }
+}
+
+.profile__calendar {
+  border: 1px solid $border-default;
+  border-radius: 16px;
+  padding: 12px;
+  background: $bg-default;
+  color: $text-default;
+}
+
+.profile__calendar-close {
+  margin-top: 10px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid $border-default;
+  background: $bg-default;
+}
+
+@media (max-width: 980px) {
+  .profile {
+    grid-template-columns: 1fr;
+  }
+
+  .profile__sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .profile__nav-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .profile__sidebar-footer {
+    margin-top: 0;
+    margin-left: auto;
+  }
+
+  .profile__fieldset {
+    grid-template-columns: 1fr;
+  }
+}

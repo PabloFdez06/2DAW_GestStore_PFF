@@ -1,0 +1,56 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+
+.tabs__list {
+  position: relative;
+  display: flex;
+  gap: $spacing-2;
+  border-bottom: $border-thin solid $border-default;
+}
+
+.tabs__tab {
+  position: relative;
+  padding: $spacing-2 $spacing-3;
+  border-radius: $radius-md $radius-md 0 0;
+  color: $text-default;
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+
+  &:hover {
+    background: rgba($color-primary, 0.06);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.tabs__tab--active {
+  color: $color-primary;
+}
+
+.tabs__indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: $color-primary;
+  transition: transform 200ms ease, width 200ms ease;
+}
+
+.tabs__panel {
+  padding: $spacing-3 $spacing-2;
+  border: $border-thin solid $border-default;
+  border-radius: 0 $radius-md $radius-md $radius-md;
+  background: $bg-default;
+}
+
+.tabs__content {
+  margin: 0;
+  color: $text-secondary;
+}

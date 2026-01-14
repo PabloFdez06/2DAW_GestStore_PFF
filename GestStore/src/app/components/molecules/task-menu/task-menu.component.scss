@@ -5,15 +5,25 @@
 // TASK MENU - DROPDOWN MENU FOR TASK ACTIONS
 // ============================================================================
 .task-menu {
+  // Reset menu element styles
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  
+  // Visual styles
   background-color: $color-white;
   border-radius: $radius-md;
   border: $border-thin solid rgba($color-black, 0.08);
   box-shadow: $shadow-lg;
-  padding: $spacing-2 $spacing-1;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-1;
-  min-width: 9.375rem;
+  padding: $spacing-2;
+  min-width: 10.5rem;
+  
+  // Reset list items
+  li {
+    all: unset;
+    display: block;
+  }
 }
 
 // ============================================================================
@@ -21,18 +31,20 @@
 // ============================================================================
 .task-menu__item {
   all: unset;
+  box-sizing: border-box;
   @include text-style($font-size-xs, $font-weight-regular, $line-normal);
   color: $gray-950;
   cursor: pointer;
-  padding: $spacing-1 0;
+  padding: $spacing-2 $spacing-3;
   @include transition(color, background-color);
   text-align: left;
   border-radius: $radius-sm;
+  display: block;
+  width: 100%;
   
   &:hover {
     color: $color-primary;
     background-color: $color-primary-light;
-    padding-left: $spacing-1;
   }
   
   &:active {

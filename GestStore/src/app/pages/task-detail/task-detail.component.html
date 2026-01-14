@@ -1,0 +1,64 @@
+<section class="task-detail" id="detalle">
+  <header class="task-detail__header">
+    <nav class="task-detail__back">
+      <button type="button" class="task-detail__back-btn" (click)="backToList()" aria-label="Volver al listado">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        <span>Volver</span>
+      </button>
+    </nav>
+
+    <menu class="task-detail__actions">
+      <button class="task-detail__btn task-detail__btn--primary" type="button" (click)="edit()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Editar
+      </button>
+    </menu>
+  </header>
+
+  <article class="task-detail__card">
+    <header class="task-detail__card-header">
+      <span class="task-detail__importance" [class.task-detail__importance--high]="task.important || task.priority === 'HIGH'" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="6" cy="6" r="5"/>
+        </svg>
+      </span>
+      <h1 class="task-detail__title">{{ task.title }}</h1>
+    </header>
+
+    <p class="task-detail__description">{{ task.description || 'Sin descripción' }}</p>
+
+    <figure class="task-detail__thumbnail" aria-hidden="true"></figure>
+
+    <footer class="task-detail__meta-row">
+      <span class="task-detail__meta">
+        Prioridad: <em [class]="'task-detail__priority--' + task.priority.toLowerCase()">{{ getPriorityLabel(task.priority) }}</em>
+      </span>
+      <span class="task-detail__meta">
+        Estatus: <em [class]="'task-detail__status--' + task.status.toLowerCase()">{{ getStatusLabel(task.status) }}</em>
+      </span>
+      <span class="task-detail__meta task-detail__meta--date">
+        Creada en: {{ task.createdAt | date:'dd/MM/yyyy' }}
+      </span>
+    </footer>
+  </article>
+
+  <section class="task-detail__quick-actions">
+    <h2 class="task-detail__section-title">Acciones rápidas</h2>
+    <menu class="task-detail__buttons">
+      <button class="task-detail__action-btn" type="button" (click)="start()" [disabled]="isLoadingAction || task.status === 'IN_PROGRESS'">
+        Iniciar
+      </button>
+      <button class="task-detail__action-btn task-detail__action-btn--success" type="button" (click)="complete()" [disabled]="isLoadingAction || task.status === 'COMPLETED'">
+        Completar
+      </button>
+      <button class="task-detail__action-btn task-detail__action-btn--danger" type="button" (click)="cancel()" [disabled]="isLoadingAction || task.status === 'CANCELLED'">
+        Cancelar
+      </button>
+    </menu>
+  </section>
+</section>

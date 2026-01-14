@@ -1,0 +1,29 @@
+<section class="tabs">
+  <nav #tabList class="tabs__list" role="tablist" aria-label="Pestañas">
+    <button
+      *ngFor="let tab of tabs; let i = index"
+      #tabBtn
+      type="button"
+      class="tabs__tab"
+      role="tab"
+      [class.tabs__tab--active]="activeIndex === i"
+      [attr.aria-selected]="activeIndex === i"
+      [attr.aria-controls]="'tab-panel-' + tab.id"
+      [attr.id]="'tab-' + tab.id"
+      [attr.tabindex]="activeIndex === i ? 0 : -1"
+      (click)="selectTab(i)"
+      (keydown)="onKeydown($event, i)">
+      {{ tab.label }}
+    </button>
+  </nav>
+
+  <section
+    *ngFor="let tab of tabs; let i = index"
+    class="tabs__panel"
+    role="tabpanel"
+    [attr.id]="'tab-panel-' + tab.id"
+    [attr.aria-labelledby]="'tab-' + tab.id"
+    [hidden]="activeIndex !== i">
+    <p class="tabs__content">{{ tab.content }}</p>
+  </section>
+</section>

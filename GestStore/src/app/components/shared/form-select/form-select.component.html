@@ -6,6 +6,7 @@
   </span>
   
   <select
+    #selectEl
     [id]="id"
     [name]="name"
     [required]="required"
@@ -16,6 +17,9 @@
     [attr.aria-describedby]="getAriaDescribedBy()"
     class="form-select"
     (change)="onChange($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    (keydown)="onKeydown($event)"
   >
     <option [value]="''" disabled selected *ngIf="!value">
       {{ placeholder }}

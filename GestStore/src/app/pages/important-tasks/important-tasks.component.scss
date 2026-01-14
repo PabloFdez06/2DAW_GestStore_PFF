@@ -1,0 +1,705 @@
+@use '../../../styles/00-settings/variables' as *;
+@use '../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
+
+// ============================================================================
+// RESET ELEMENTOS SEMÁNTICOS
+// ============================================================================
+.important-tasks-page {
+  figure,
+  figcaption,
+  hgroup,
+  menu {
+    margin: 0;
+    padding: 0;
+  }
+
+  mark {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  dl,
+  dt,
+  dd {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// ============================================================================
+// IMPORTANT TASKS PAGE - LAYOUT PRINCIPAL
+// ============================================================================
+.important-tasks-page {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  grid-template-rows: 100px 1fr;
+  min-height: 100vh;
+  background-color: $color-white;
+  position: relative;
+}
+
+// ============================================================================
+// TOP NAVIGATION BAR
+// ============================================================================
+.important-tasks-page__nav {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  padding: 0 $spacing-8;
+  background-color: $color-white;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.07);
+  position: relative;
+  z-index: 10;
+}
+
+.important-tasks-page__logo {
+  @include text-style($font-size-3xl, $font-weight-semibold, $line-tight);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.important-tasks-page__logo-gest {
+  color: $color-primary;
+}
+
+.important-tasks-page__logo-store {
+  color: $gray-950;
+}
+
+.important-tasks-page__search {
+  position: relative;
+  flex: 0 0 695px;
+  max-width: 695px;
+}
+
+.important-tasks-page__search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 $spacing-12 0 $spacing-4;
+  border: none;
+  border-radius: 8px;
+  background-color: $color-white;
+  box-shadow: -26px 108px 31px 0px rgba(0, 0, 0, 0),
+              -17px 69px 28px 0px rgba(0, 0, 0, 0.01),
+              -9px 39px 24px 0px rgba(0, 0, 0, 0.02),
+              -4px 17px 18px 0px rgba(0, 0, 0, 0.03),
+              -1px 4px 10px 0px rgba(0, 0, 0, 0.04);
+  
+  @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
+  color: $gray-300;
+  
+  &::placeholder {
+    color: $gray-300;
+  }
+  
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 0;
+  }
+}
+
+.important-tasks-page__search-btn {
+  all: unset;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: $gray-400;
+  @include transition(color);
+  
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.important-tasks-page__nav-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.important-tasks-page__nav-btn {
+  all: unset;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-primary;
+  border-radius: 8px;
+  color: $color-white;
+  cursor: pointer;
+  @include transition(background-color);
+  
+  &:hover {
+    background-color: color.scale($color-primary, $lightness: -10%);
+  }
+}
+
+.important-tasks-page__date {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  margin-left: $spacing-4;
+}
+
+.important-tasks-page__date-day {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: $gray-950;
+  margin: 0;
+}
+
+.important-tasks-page__date-full {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: $medium;
+  margin: 0;
+}
+
+// ============================================================================
+// SIDEBAR NAVIGATION
+// ============================================================================
+.important-tasks-page__sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  background-color: $color-primary;
+  padding: $spacing-8 $spacing-5;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.08);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  position: relative;
+  margin-left: -35px;
+  padding-left: calc($spacing-5 + 35px);
+}
+
+.important-tasks-page__user {
+  display: flex;
+  gap: $spacing-4;
+  align-items: center;
+  margin-bottom: $spacing-6;
+}
+
+.important-tasks-page__user-avatar {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background-color: $gray-300;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.important-tasks-page__avatar-link {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: $color-primary;
+}
+
+.important-tasks-page__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.important-tasks-page__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.important-tasks-page__user-name {
+  @include text-style($font-size-base, $font-weight-semibold, $line-normal);
+  color: $color-white;
+  margin: 0;
+}
+
+.important-tasks-page__user-email {
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: $color-white;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.important-tasks-page__sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  margin-bottom: auto;
+}
+
+.important-tasks-page__sidebar-link {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4 $spacing-5;
+  border-radius: 14px;
+  cursor: pointer;
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  color: $color-white;
+  @include transition(background-color);
+  
+  &:hover {
+    background-color: rgba($color-white, 0.1);
+  }
+  
+  &--active {
+    background-color: $color-white;
+    color: $color-primary;
+  }
+}
+
+.important-tasks-page__logout {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4 $spacing-5;
+  border-radius: 14px;
+  cursor: pointer;
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  color: $color-white;
+  margin-top: $spacing-16;
+  @include transition(background-color);
+  
+  &:hover {
+    background-color: rgba($color-white, 0.1);
+  }
+}
+
+.important-tasks-page__sidebar-footer {
+  margin-top: auto;
+}
+
+// ============================================================================
+// MAIN CONTENT AREA
+// ============================================================================
+.important-tasks-page__main {
+  grid-column: 2;
+  grid-row: 2;
+  padding: $spacing-8;
+  overflow-y: auto;
+}
+
+.important-tasks-page__section {
+  background-color: $color-white;
+  border-radius: 14px;
+  padding: $spacing-6;
+  box-shadow: 0px 121px 34px 0px rgba(0, 0, 0, 0),
+              0px 77px 31px 0px rgba(0, 0, 0, 0.01),
+              0px 44px 26px 0px rgba(0, 0, 0, 0.02),
+              0px 19px 19px 0px rgba(0, 0, 0, 0.03),
+              0px 5px 11px 0px rgba(0, 0, 0, 0.04);
+}
+
+.important-tasks-page__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  margin-bottom: $spacing-3;
+}
+
+.important-tasks-page__section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.important-tasks-page__section-icon {
+  color: $warning;
+}
+
+.important-tasks-page__section-title {
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  color: $color-primary;
+  margin: 0;
+}
+
+.important-tasks-page__add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: $gray-400;
+  font-family: $font-primary;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-regular;
+  cursor: pointer;
+  @include transition;
+
+  &:hover {
+    color: $color-primary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+    border-radius: $radius-sm;
+  }
+}
+
+.important-tasks-page__section-subheader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  margin-bottom: $spacing-5;
+}
+
+.important-tasks-page__section-date {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: $gray-950;
+}
+
+.important-tasks-page__separator {
+  color: $gray-400;
+}
+
+.important-tasks-page__section-today {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: $gray-400;
+}
+
+// ============================================================================
+// MODAL OVERLAY
+// ============================================================================
+.important-tasks-page__modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+}
+
+.important-tasks-page__modal-content {
+  max-width: 500px;
+  width: 90%;
+}
+
+// ============================================================================
+// STATES
+// ============================================================================
+.important-tasks-page__loading {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-8;
+  color: $gray-600;
+}
+
+.important-tasks-page__error {
+  text-align: center;
+  padding: $spacing-6;
+  color: $error;
+}
+
+.important-tasks-page__retry-btn {
+  margin-top: $spacing-4;
+  padding: $spacing-2 $spacing-4;
+  background-color: $color-primary;
+  color: $color-white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: color.scale($color-primary, $lightness: -10%);
+  }
+}
+
+.important-tasks-page__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-12;
+  text-align: center;
+}
+
+.important-tasks-page__empty-icon {
+  color: $warning;
+  margin-bottom: $spacing-4;
+}
+
+.important-tasks-page__empty-text {
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  color: $gray-500;
+  margin: 0 0 $spacing-2 0;
+}
+
+.important-tasks-page__empty-subtext {
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: $gray-400;
+  margin: 0 0 $spacing-6 0;
+}
+
+.important-tasks-page__empty-create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-5;
+  background-color: $color-primary;
+  color: $color-white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  @include transition(background-color);
+
+  &:hover {
+    background-color: color.scale($color-primary, $lightness: -10%);
+  }
+}
+
+// ============================================================================
+// TASKS GRID
+// ============================================================================
+.important-tasks-page__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-4;
+
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ============================================================================
+// TASK CARD
+// ============================================================================
+.task-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background-color: transparent;
+  border: 1px solid $gray-300;
+  border-radius: 14px;
+  cursor: pointer;
+  @include transition;
+
+  &:hover {
+    border-color: $color-primary;
+    box-shadow: $shadow-md;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.task-card__image {
+  position: absolute;
+  top: $spacing-4;
+  right: $spacing-4;
+  width: 90px;
+  height: 88px;
+  background-color: $gray-300;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.task-card__menu-wrapper {
+  position: absolute;
+  top: $spacing-4;
+  right: calc($spacing-4 + 100px);
+}
+
+.task-card__menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: $radius-sm;
+  color: $gray-400;
+  cursor: pointer;
+  @include transition;
+
+  &:hover {
+    color: $gray-600;
+    background-color: $gray-100;
+  }
+}
+
+.task-card__menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  z-index: 100;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-card__important-badge {
+  position: absolute;
+  top: $spacing-4;
+  left: $spacing-4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: $warning;
+}
+
+.task-card__priority-indicator {
+  position: absolute;
+  top: calc($spacing-4 + 28px);
+  left: calc($spacing-4 + 8px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: $info;
+
+  &--low {
+    background-color: $success;
+  }
+
+  &--medium {
+    background-color: $medium;
+  }
+
+  &--high {
+    background-color: $error;
+  }
+}
+
+.task-card__content {
+  padding-left: $spacing-5;
+  padding-right: 110px;
+  padding-top: $spacing-6;
+}
+
+.task-card__title {
+  margin: 0 0 $spacing-2 0;
+  @include text-style($font-size-base, $font-weight-semibold, $line-normal);
+  color: $gray-950;
+}
+
+.task-card__description {
+  margin: 0 0 $spacing-3 0;
+  @include text-style($font-size-sm, $font-weight-regular, 1.4);
+  color: $gray-500;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.task-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-3;
+  margin-top: auto;
+}
+
+.task-card__label {
+  display: inline;
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $gray-950;
+}
+
+.task-card__value--low {
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $success;
+}
+
+.task-card__value--medium {
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $medium;
+}
+
+.task-card__value--high {
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $error;
+}
+
+.task-card__value--status-pending {
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $error;
+}
+
+.task-card__value--status-in_progress {
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $info;
+}
+
+.task-card__value--status-completed {
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $success;
+}
+
+.task-card__value--status-cancelled {
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $gray-400;
+}
+
+.task-card__value--date {
+  @include text-style(10px, $font-weight-medium, $line-normal);
+  color: $gray-300;
+}
+
+// ============================================================================
+// VISUALLY HIDDEN (accesibilidad)
+// ============================================================================
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,6 +1,7 @@
 @use '../../../../styles/00-settings/variables' as *;
 @use '../../../../styles/01-tools/mixins' as *;
 @use 'sass:color';
+@use 'sass:map';
 
 // ============================================================================
 // CALENDAR COMPONENT - BASADO EN FIGMA
@@ -136,7 +137,7 @@
 .calendar__selected-badge {
   @include text-style($font-size-sm, $font-weight-regular, $line-normal);
   color: $color-primary;
-  background-color: #d1ccff;
+  background-color: map.get($color-primary-scale, light-active);
   padding: $spacing-2 $spacing-3;
   border-radius: 10px;
   

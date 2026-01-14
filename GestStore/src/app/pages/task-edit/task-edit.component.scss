@@ -1,0 +1,170 @@
+@use '../../../styles/00-settings/variables' as *;
+@use '../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
+
+// ============================================================================
+// TASK EDIT - Página de edición de tarea estilo Figma
+// ============================================================================
+
+.task-edit {
+  padding: $spacing-6;
+}
+
+// ============================================================================
+// HEADER
+// ============================================================================
+
+.task-edit__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $spacing-4;
+  margin-bottom: $spacing-6;
+}
+
+.task-edit__header h1 {
+  margin: 0;
+  font-family: $font-primary;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $gray-950;
+}
+
+.task-edit__muted {
+  margin: $spacing-1 0 0;
+  font-family: $font-primary;
+  font-size: $font-size-xs;
+  color: $gray-400;
+}
+
+.task-edit__actions {
+  display: flex;
+  gap: $spacing-3;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// ============================================================================
+// ERROR
+// ============================================================================
+
+.task-edit__error {
+  padding: $spacing-3 $spacing-4;
+  border-radius: 12px;
+  border: 1px solid rgba($error, 0.25);
+  background: rgba($error, 0.06);
+  margin-bottom: $spacing-4;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  color: $error;
+}
+
+// ============================================================================
+// FORM
+// ============================================================================
+
+.task-edit__form {
+  display: grid;
+  gap: $spacing-4;
+  padding: $spacing-6;
+  background-color: $color-white;
+  border: 1px solid $gray-300;
+  border-radius: 14px;
+}
+
+.task-edit__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-4;
+  align-items: end;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.task-edit__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  user-select: none;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  color: $gray-700;
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+    accent-color: $color-primary;
+    cursor: pointer;
+  }
+}
+
+// ============================================================================
+// FOOTER
+// ============================================================================
+
+.task-edit__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: 1px solid $gray-200;
+
+  .task-edit__muted {
+    margin: 0;
+    color: $warning;
+  }
+}
+
+// ============================================================================
+// BUTTONS
+// ============================================================================
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-4;
+  border: none;
+  border-radius: 8px;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  @include transition;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.button--primary {
+  background-color: $color-primary;
+  color: $color-white;
+
+  &:hover:not(:disabled) {
+    background-color: color.scale($color-primary, $lightness: -15%);
+  }
+}
+
+.button--secondary {
+  background-color: $gray-100;
+  border: 1px solid $gray-300;
+  color: $gray-700;
+
+  &:hover:not(:disabled) {
+    background-color: $gray-200;
+    border-color: $gray-400;
+  }
+}

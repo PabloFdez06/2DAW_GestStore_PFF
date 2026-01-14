@@ -3,6 +3,7 @@ package com.geststore.services;
 import com.geststore.exceptions.BusinessLogicException;
 import com.geststore.exceptions.ResourceNotFoundException;
 import com.geststore.models.dtos.UserRequestDto;
+import com.geststore.models.dtos.UserProfileUpdateDto;
 import com.geststore.models.dtos.UserResponseDto;
 import com.geststore.models.entities.User;
 import com.geststore.models.entities.Role;
@@ -146,13 +147,16 @@ public class UserService {
         }
 
         user.setName(requestDto.getName());
+        user.setLastName(requestDto.getLastName());
         user.setEmail(requestDto.getEmail());
         if (requestDto.getPassword() != null && !requestDto.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         }
         user.setRole(requestDto.getRole() != null ? requestDto.getRole() : user.getRole());
         user.setPhone(requestDto.getPhone());
+        user.setAddress(requestDto.getAddress());
         user.setDepartment(requestDto.getDepartment());
+        user.setAvatar(requestDto.getAvatar());
         if (requestDto.getActive() != null) {
             user.setActive(requestDto.getActive());
         }
@@ -162,6 +166,71 @@ public class UserService {
         log.info("Usuario actualizado exitosamente con ID: {}", id);
 
         return convertToDto(updatedUser);
+    }
+
+    /**
+     * Actualiza el perfil del propio usuario.
+     */
+    public UserResponseDto updateProfile(String id, UserProfileUpdateDto requestDto) {
+        log.info("Actualizando perfil del usuario con ID: {}", id);
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
+
+        if (requestDto.getEmail() != null && !requestDto.getEmail().isBlank()) {
+            if (!user.getEmail().equals(requestDto.getEmail()) && userRepository.existsByEmail(requestDto.getEmail())) {
+                throw new BusinessLogicException(
+                        "El email ya está registrado: " + requestDto.getEmail(),
+                        "DUPLICATE_EMAIL"
+                );
+            }
+            user.setEmail(requestDto.getEmail());
+        }
+
+        if (requestDto.getName() != null) {
+            user.setName(requestDto.getName());
+        }
+        if (requestDto.getLastName() != null) {
+            user.setLastName(requestDto.getLastName());
+        }
+        if (requestDto.getPhone() != null) {
+            user.setPhone(requestDto.getPhone());
+        }
+        if (requestDto.getAddress() != null) {
+            user.setAddress(requestDto.getAddress());
+        }
+        if (requestDto.getAvatar() != null) {
+            user.setAvatar(requestDto.getAvatar());
+        }
+
+        user.onUpdate();
+        User updatedUser = userRepository.save(user);
+        return convertToDto(updatedUser);
+    }
+
+    /**
+     * Actualiza la contraseña del propio usuario.
+     */
+    public void updatePassword(String id, String currentPassword, String newPassword) {
+        log.info("Actualizando contraseña del usuario con ID: {}", id);
+
+        if (currentPassword == null || currentPassword.isBlank()) {
+            throw new BusinessLogicException("La contraseña actual es obligatoria", "INVALID_PASSWORD");
+        }
+        if (newPassword == null || newPassword.isBlank()) {
+            throw new BusinessLogicException("La nueva contraseña es obligatoria", "INVALID_PASSWORD");
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new BusinessLogicException("La contraseña actual no es correcta", "INVALID_CREDENTIALS");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.onUpdate();
+        userRepository.save(user);
     }
 
     /**
@@ -256,10 +325,13 @@ public class UserService {
         return UserResponseDto.builder()
                 .id(user.getId())
                 .name(user.getName())
+                .lastName(user.getLastName())
                 .email(user.getEmail())
                 .role(user.getRole())
                 .phone(user.getPhone())
+                .address(user.getAddress())
                 .department(user.getDepartment())
+                .avatar(user.getAvatar())
                 .active(user.getActive())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())

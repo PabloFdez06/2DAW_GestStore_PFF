@@ -1,0 +1,252 @@
+<article class="settings-page">
+  <!-- Top Navigation Bar -->
+  <nav class="settings-page__nav" role="navigation" aria-label="Navegación principal">
+    <h1 class="settings-page__logo">
+      <span class="settings-page__logo-gest">Gest</span><span class="settings-page__logo-store">Store</span>
+    </h1>
+
+    <section class="settings-page__nav-actions" aria-label="Acciones rápidas">
+      <button class="settings-page__nav-btn" type="button" aria-label="Notificaciones">
+        <app-icon name="bell" size="small"></app-icon>
+      </button>
+      <button
+        class="settings-page__nav-btn"
+        type="button"
+        (click)="toggleTheme()"
+        (keydown.enter)="toggleTheme(); $event.preventDefault()"
+        [attr.aria-label]="themeAriaLabel">
+        <app-icon [name]="themeIcon" size="small"></app-icon>
+      </button>
+      <button class="settings-page__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
+        <app-icon name="calendar" size="small"></app-icon>
+      </button>
+      <time class="settings-page__date" [attr.dateTime]="currentDate">
+        <p class="settings-page__date-day">{{ currentDayName }}</p>
+        <p class="settings-page__date-full">{{ currentDate }}</p>
+      </time>
+    </section>
+  </nav>
+
+  <!-- Calendar Modal Overlay -->
+  <dialog
+    #calendarDialog
+    *ngIf="isCalendarOpen"
+    class="settings-page__modal-overlay"
+    (click)="closeCalendar()"
+    open
+    role="dialog"
+    aria-modal="true"
+    aria-label="Calendario">
+    <section class="settings-page__modal-content" (click)="$event.stopPropagation()">
+      <app-calendar (close)="closeCalendar()"></app-calendar>
+    </section>
+  </dialog>
+
+  <!-- Side Navigation -->
+  <aside class="settings-page__sidebar" role="complementary" aria-label="Menú lateral">
+    <header class="settings-page__user">
+      <figure class="settings-page__user-avatar">
+        <a class="settings-page__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
+          <ng-container *ngIf="avatarUrl; else settingsAvatarDefault">
+            <img class="settings-page__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" />
+          </ng-container>
+          <ng-template #settingsAvatarDefault>
+            <app-icon name="user" size="large" aria-hidden="true"></app-icon>
+          </ng-template>
+        </a>
+      </figure>
+      <hgroup class="settings-page__user-info">
+        <p class="settings-page__user-name">{{ currentUser?.name || 'Usuario' }}</p>
+        <p class="settings-page__user-email">{{ currentUser?.email || '' }}</p>
+      </hgroup>
+    </header>
+
+    <nav class="settings-page__sidebar-nav" aria-label="Navegación del menú">
+      <a routerLink="/dashboard" class="settings-page__sidebar-link">
+        <app-icon name="home" size="small"></app-icon>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/tareas-importantes" class="settings-page__sidebar-link">
+        <app-icon name="star" size="small"></app-icon>
+        <span>Tareas Importantes</span>
+      </a>
+      <a routerLink="/tareas" class="settings-page__sidebar-link">
+        <app-icon name="check-square" size="small"></app-icon>
+        <span>Tareas</span>
+      </a>
+      <a routerLink="/categorias" class="settings-page__sidebar-link">
+        <app-icon name="folder" size="small"></app-icon>
+        <span>Categorias de Tareas</span>
+      </a>
+      <a routerLink="/almacen" class="settings-page__sidebar-link">
+        <app-icon name="package" size="small"></app-icon>
+        <span>Almacen</span>
+      </a>
+      <a routerLink="/ajustes" class="settings-page__sidebar-link settings-page__sidebar-link--active" aria-current="page">
+        <app-icon name="settings" size="small"></app-icon>
+        <span>Ajustes</span>
+      </a>
+    </nav>
+
+    <footer class="settings-page__sidebar-footer">
+      <button type="button" class="settings-page__logout" (click)="onLogout($event)">
+        <app-icon name="log-out" size="small"></app-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </footer>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="settings-page__main" role="main">
+    <section class="settings-page__content" aria-label="Ajustes">
+      <section class="settings-page__panel" aria-label="Información personal">
+        <header class="settings-page__panel-aside">
+          <h2 class="settings-page__panel-title">Información personal</h2>
+          <p class="settings-page__panel-subtitle">Aquí puedes ver tus datos personales</p>
+        </header>
+
+        <article class="settings-page__card" aria-label="Formulario de información personal">
+          <form class="settings-page__form" (ngSubmit)="$event.preventDefault()">
+            <fieldset class="settings-page__fields" aria-label="Datos personales">
+              <section class="settings-page__row" aria-label="Nombre y correo">
+                <label class="settings-page__field">
+                  <span class="settings-page__label">Nombre completo</span>
+                  <span class="settings-page__input-pill">
+                    <app-icon name="user" size="small" class="settings-page__input-icon"></app-icon>
+                    <input
+                      class="settings-page__input"
+                      type="text"
+                      name="fullName"
+                      autocomplete="name"
+                      [(ngModel)]="fullName"
+                      readonly
+                      aria-label="Nombre completo" />
+                  </span>
+                </label>
+
+                <label class="settings-page__field">
+                  <span class="settings-page__label">Direccion de correo</span>
+                  <span class="settings-page__input-pill">
+                    <app-icon name="mail" size="small" class="settings-page__input-icon"></app-icon>
+                    <input
+                      class="settings-page__input"
+                      type="email"
+                      name="email"
+                      autocomplete="email"
+                      [(ngModel)]="email"
+                      readonly
+                      aria-label="Dirección de correo" />
+                  </span>
+                </label>
+              </section>
+
+              <section class="settings-page__row" aria-label="Teléfono y tipo de cuenta">
+                <label class="settings-page__field">
+                  <span class="settings-page__label">Numero de telefono</span>
+                  <span class="settings-page__input-pill settings-page__input-pill--split">
+                    <span class="settings-page__prefix" aria-hidden="true">+34</span>
+                    <input
+                      class="settings-page__input"
+                      type="tel"
+                      name="phone"
+                      autocomplete="tel"
+                      inputmode="tel"
+                      [(ngModel)]="phone"
+                      readonly
+                      aria-label="Número de teléfono" />
+                    <app-icon name="phone" size="small" class="settings-page__input-icon"></app-icon>
+                  </span>
+                </label>
+
+                <label class="settings-page__field">
+                  <span class="settings-page__label">Tipo de cuenta</span>
+                  <span class="settings-page__input-pill">
+                    <select
+                      class="settings-page__select"
+                      name="accountType"
+                      [(ngModel)]="accountType"
+                      disabled
+                      aria-label="Tipo de cuenta">
+                      <option value="Regular">Regular</option>
+                      <option value="Administrador">Administrador</option>
+                      <option value="Encargado">Encargado</option>
+                    </select>
+                  </span>
+                </label>
+              </section>
+
+              <section class="settings-page__avatar" aria-label="Cambiar avatar">
+                <h3 class="settings-page__avatar-title">Cambiar avatar</h3>
+                <section class="settings-page__avatar-row" aria-label="Subida de avatar">
+                  <figure class="settings-page__avatar-preview">
+                    <img *ngIf="avatarUrl" class="settings-page__avatar-img" [src]="avatarUrl" alt="Avatar actual" />
+                  </figure>
+
+                  <label class="settings-page__dropzone" aria-label="Subir avatar">
+                    <input
+                      class="settings-page__file"
+                      type="file"
+                      accept="image/png,image/jpeg,image/svg+xml"
+                      (change)="onAvatarSelected($event)" />
+                    <figure class="settings-page__dropzone-icon" aria-hidden="true">
+                      <app-icon name="upload" size="large"></app-icon>
+                    </figure>
+                    <p class="settings-page__dropzone-text">
+                      <strong class="settings-page__dropzone-link">Clica aqui</strong>
+                      <span> o arrastra para subir tu foto de perfil</span>
+                    </p>
+                    <p class="settings-page__dropzone-hint">Formato soportado: SVG, JPG, PNG (10mb cada uno)</p>
+                  </label>
+                </section>
+              </section>
+            </fieldset>
+          </form>
+        </article>
+      </section>
+
+      <section class="settings-page__panel" aria-label="Preferencias">
+        <header class="settings-page__panel-aside">
+          <h2 class="settings-page__panel-title">Preferencias</h2>
+          <p class="settings-page__panel-subtitle">Personaliza idioma y notificaciones</p>
+        </header>
+
+        <article class="settings-page__card" aria-label="Preferencias de la aplicación">
+          <form class="settings-page__form" (ngSubmit)="$event.preventDefault()">
+            <fieldset class="settings-page__fields" aria-label="Preferencias">
+              <section class="settings-page__row" aria-label="Idioma y notificaciones">
+                <label class="settings-page__field">
+                  <span class="settings-page__label">Idioma</span>
+                  <span class="settings-page__input-pill settings-page__input-pill--actions settings-page__input-pill--compact">
+                    <app-icon name="book-open" size="small" class="settings-page__input-icon"></app-icon>
+                    <output class="settings-page__value" aria-label="Idioma actual">{{ languageLabel }}</output>
+                    <button class="settings-page__pill-action" type="button" (click)="cycleLanguage($event)">Cambiar</button>
+                  </span>
+                </label>
+
+                <label class="settings-page__field">
+                  <span class="settings-page__label">Notificaciones</span>
+                  <span class="settings-page__input-pill settings-page__input-pill--toggle settings-page__input-pill--compact">
+                    <app-icon name="bell" size="small" class="settings-page__input-icon"></app-icon>
+                    <span class="settings-page__toggle-text">Permitir notificaciones</span>
+                    <input
+                      class="settings-page__switch"
+                      type="checkbox"
+                      name="notifications"
+                      role="switch"
+                      [checked]="notificationsEnabled"
+                      (change)="onNotificationsChange($event)"
+                      [attr.aria-checked]="notificationsEnabled"
+                      aria-label="Permitir notificaciones" />
+                  </span>
+                </label>
+              </section>
+            </fieldset>
+          </form>
+        </article>
+      </section>
+
+      <hr class="settings-page__divider" aria-hidden="true" />
+      <footer class="settings-page__footer" aria-hidden="true"></footer>
+    </section>
+  </main>
+</article>
