@@ -53,7 +53,7 @@ export class TaskService {
   /**
    * Obtener una tarea por ID
    */
-  getTaskById(id: number): Observable<Task> {
+  getTaskById(id: string | number): Observable<Task> {
     return this.http.get<ApiResponse<Task>>(`${this.apiUrl}/${id}`)
       .pipe(map(response => response.data));
   }
@@ -127,7 +127,7 @@ export class TaskService {
   /**
    * Actualizar una tarea existente
    */
-  updateTask(id: number, task: TaskRequest): Observable<Task> {
+  updateTask(id: string | number, task: TaskRequest): Observable<Task> {
     const headers = this.getAuthHeaders();
     return this.http.put<ApiResponse<Task>>(`${this.apiUrl}/${id}`, task, { headers })
       .pipe(map(response => response.data));
@@ -136,7 +136,7 @@ export class TaskService {
   /**
    * Iniciar una tarea (cambiar a IN_PROGRESS)
    */
-  startTask(id: number): Observable<Task> {
+  startTask(id: string | number): Observable<Task> {
     const headers = this.getAuthHeaders();
     return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/start`, {}, { headers })
       .pipe(map(response => response.data));
@@ -145,7 +145,7 @@ export class TaskService {
   /**
    * Completar una tarea
    */
-  completeTask(id: number): Observable<Task> {
+  completeTask(id: string | number): Observable<Task> {
     const headers = this.getAuthHeaders();
     return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/complete`, {}, { headers })
       .pipe(map(response => response.data));
@@ -154,7 +154,7 @@ export class TaskService {
   /**
    * Cancelar una tarea
    */
-  cancelTask(id: number): Observable<Task> {
+  cancelTask(id: string | number): Observable<Task> {
     const headers = this.getAuthHeaders();
     return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/cancel`, {}, { headers })
       .pipe(map(response => response.data));
@@ -163,7 +163,7 @@ export class TaskService {
   /**
    * Marcar una tarea como importante
    */
-  markAsImportant(id: number): Observable<Task> {
+  markAsImportant(id: string | number): Observable<Task> {
     const headers = this.getAuthHeaders();
     return this.http.patch<ApiResponse<Task>>(`${this.apiUrl}/${id}`, { important: true }, { headers })
       .pipe(map(response => response.data));
@@ -172,7 +172,7 @@ export class TaskService {
   /**
    * Desmarcar una tarea como importante
    */
-  removeImportant(id: number): Observable<Task> {
+  removeImportant(id: string | number): Observable<Task> {
     const headers = this.getAuthHeaders();
     return this.http.patch<ApiResponse<Task>>(`${this.apiUrl}/${id}`, { important: false }, { headers })
       .pipe(map(response => response.data));
@@ -181,7 +181,7 @@ export class TaskService {
   /**
    * Eliminar una tarea
    */
-  deleteTask(id: number): Observable<void> {
+  deleteTask(id: string | number): Observable<void> {
     const headers = this.getAuthHeaders();
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
   }

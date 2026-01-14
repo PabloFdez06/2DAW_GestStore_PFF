@@ -7,7 +7,7 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: $spacing-8;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  background: linear-gradient(135deg, $gray-50 0%, $color-white 100%);
   min-height: 100vh;
 }
 
@@ -20,7 +20,7 @@
   font-weight: $font-weight-bold;
   margin-bottom: $spacing-2;
   color: $text-default;
-  background: linear-gradient(135deg, $color-primary 0%, #7b68ee 100%);
+  background: linear-gradient(135deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -57,7 +57,7 @@
     }
 
     &.button--active {
-      background: linear-gradient(135deg, $color-primary 0%, #7b68ee 100%);
+      background: linear-gradient(135deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
       color: $color-white;
       box-shadow: $shadow-md;
 
@@ -94,7 +94,7 @@
     bottom: 0;
     left: 0;
     width: $border-thick;
-    background: linear-gradient(180deg, $color-primary 0%, #7b68ee 100%);
+    background: linear-gradient(180deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
     border-radius: $radius-sm;
   }
 }
@@ -190,7 +190,7 @@
     transition: all 0.3s ease;
 
     &--primary {
-      background: linear-gradient(135deg, $color-primary 0%, #7b68ee 100%);
+      background: linear-gradient(135deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
       color: $color-white;
       box-shadow: $shadow-sm;
 
@@ -293,6 +293,58 @@
     &--full-width {
       width: 100%;
     }
+  }
+}
+
+// Style guide helpers (used by style-guide-complete.html too)
+.color-card__swatch {
+  &--primary-light {
+    background-color: $color-primary-light;
+  }
+
+  &--primary {
+    background-color: $color-primary;
+  }
+
+  &--white {
+    background-color: $color-white;
+    border: $border-thin solid $border-default;
+  }
+
+  &--gray-50 {
+    background-color: $gray-50;
+  }
+
+  &--gray-100 {
+    background-color: $gray-100;
+  }
+
+  &--gray-200 {
+    background-color: $gray-200;
+  }
+
+  &--gray-300 {
+    background-color: $gray-300;
+  }
+
+  &--gray-400 {
+    background-color: $gray-400;
+  }
+
+  &--error {
+    background-color: $error;
+  }
+
+  &--success {
+    background-color: $success;
+  }
+
+  &--info {
+    background-color: $info;
+  }
+
+  &--warning {
+    background-color: $warning;
   }
 }
 

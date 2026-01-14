@@ -113,7 +113,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
   private addBackdrop(): void {
     if (this.backdropEl) return;
 
-    const backdrop = this.renderer.createElement('div') as HTMLElement;
+    const backdrop = this.renderer.createElement('span') as HTMLElement;
     this.renderer.addClass(backdrop, 'app-header__backdrop');
     this.renderer.setAttribute(backdrop, 'aria-hidden', 'true');
 

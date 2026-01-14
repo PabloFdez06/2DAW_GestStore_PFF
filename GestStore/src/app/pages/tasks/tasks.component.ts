@@ -229,11 +229,17 @@ export class TasksComponent implements OnInit, OnDestroy {
 
     forkJoin([created$, assigned$]).subscribe({
       next: ([created, assigned]) => {
-        const mapById = new Map<number, Task>();
+        const mapById = new Map<string, Task>();
         for (const t of [...created, ...assigned]) {
-          mapById.set(t.id, t);
+          const key = String((t as any).id ?? (t as any)._id ?? '');
+          if (!key) continue;
+          mapById.set(key, t);
         }
-        this.tasks = Array.from(mapById.values()).sort((a, b) => b.id - a.id);
+        this.tasks = Array.from(mapById.values()).sort((a, b) => {
+          const aTime = new Date(a.updatedAt ?? a.createdAt).getTime();
+          const bTime = new Date(b.updatedAt ?? b.createdAt).getTime();
+          return bTime - aTime;
+        });
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -246,7 +252,10 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   goToTask(task: Task): void {
-    this.router.navigate(['/tareas', task.id], {
+    const id = (task as any).id ?? (task as any)._id;
+    if (!id) return;
+
+    this.router.navigate(['/tareas', id], {
       queryParams: this.search ? { q: this.search } : {},
       fragment: 'detalle'
     });

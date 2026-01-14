@@ -193,13 +193,19 @@
         <!-- Lista de tareas -->
         <ul *ngIf="!isLoadingTasks && !errorMessage && tasks.length > 0" class="dashboard__tasks" role="list">
           <li *ngFor="let task of filteredTasks; let i = index" role="listitem">
-            <article class="dashboard__task-card">
+            <article
+              class="dashboard__task-card"
+              [routerLink]="['/tareas', task.id]"
+              tabindex="0"
+              role="link"
+              (keydown.enter)="goToTask(task.id)"
+              (keydown.space)="goToTask(task.id); $event.preventDefault()">
               <figure class="dashboard__task-image" role="img" aria-label="Imagen de la tarea"></figure>
               <nav class="dashboard__task-menu-wrapper" aria-label="Acciones de tarea">
                 <button class="dashboard__task-menu" type="button" (click)="toggleTaskMenu(i, $event)" aria-label="Menú" aria-haspopup="true">
                   <app-icon name="more-vertical" size="small"></app-icon>
                 </button>
-                <menu *ngIf="openTaskMenuIndex === i" class="dashboard__task-menu-dropdown">
+                <menu *ngIf="openTaskMenuIndex === i" class="dashboard__task-menu-dropdown" (click)="$event.stopPropagation()">
                   <app-task-menu [isImportant]="task.important || false" [status]="task.status" (action)="handleTaskAction($event, i)"></app-task-menu>
                 </menu>
               </nav>
@@ -299,9 +305,15 @@
 
         <ul *ngIf="completedTasksData.length > 0" class="dashboard__completed-tasks" role="list">
           <li *ngFor="let task of filteredCompletedTasks" role="listitem">
-            <article class="dashboard__completed-card">
+            <article
+              class="dashboard__completed-card"
+              [routerLink]="['/tareas', task.id]"
+              tabindex="0"
+              role="link"
+              (keydown.enter)="goToTask(task.id)"
+              (keydown.space)="goToTask(task.id); $event.preventDefault()">
               <figure class="dashboard__completed-image" role="img" aria-label="Imagen de tarea completada"></figure>
-              <button class="dashboard__completed-menu" type="button" aria-label="Menú">
+              <button class="dashboard__completed-menu" type="button" aria-label="Menú" (click)="$event.stopPropagation()">
                 <app-icon name="more-vertical" size="small"></app-icon>
               </button>
               <mark class="dashboard__completed-check" aria-label="Completada"></mark>

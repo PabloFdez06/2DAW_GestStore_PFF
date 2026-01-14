@@ -3,283 +3,578 @@
 @use 'sass:color';
 
 // ============================================================================
-// TASK DETAIL - Página de detalle de tarea estilo Figma
+// TASK VIEW (Figma: "Ver Tarea")
 // ============================================================================
 
-.task-detail {
-  padding: $spacing-6;
-}
-
-// ============================================================================
-// HEADER
-// ============================================================================
-
-.task-detail__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $spacing-4;
-  margin-bottom: $spacing-6;
-}
-
-.task-detail__back {
-  margin: 0;
-  padding: 0;
-}
-
-.task-detail__back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-2;
-  padding: $spacing-2 $spacing-3;
-  background: transparent;
-  border: 1px solid $gray-300;
-  border-radius: 8px;
-  color: $gray-600;
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  cursor: pointer;
-  @include transition;
-
-  &:hover {
-    border-color: $color-primary;
-    color: $color-primary;
+.task-view {
+  figure,
+  figcaption,
+  hgroup,
+  menu {
+    margin: 0;
+    padding: 0;
   }
 
-  &:focus-visible {
-    outline: 2px solid $color-primary;
-    outline-offset: 2px;
+  mark {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  dl,
+  dt,
+  dd {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 }
 
-.task-detail__actions {
-  display: flex;
-  gap: $spacing-3;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.task-view {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  grid-template-rows: 100px 1fr;
+  min-height: 100vh;
+  background-color: $color-white;
+  position: relative;
 }
 
-.task-detail__btn {
-  display: inline-flex;
+// ============================================================================
+// TOP NAV
+// ============================================================================
+
+.task-view__nav {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
   align-items: center;
-  gap: $spacing-2;
-  padding: $spacing-2 $spacing-4;
+  gap: $spacing-6;
+  padding: 0 $spacing-8;
+  background-color: $color-white;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.07);
+  position: relative;
+  z-index: 10;
+}
+
+.task-view__logo {
+  @include text-style($font-size-3xl, $font-weight-semibold, $line-tight);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.task-view__logo-gest {
+  color: $color-primary;
+}
+
+.task-view__logo-store {
+  color: $gray-950;
+}
+
+.task-view__search {
+  position: relative;
+  flex: 0 0 695px;
+  max-width: 695px;
+}
+
+.task-view__search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 $spacing-12 0 $spacing-4;
   border: none;
   border-radius: 8px;
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  cursor: pointer;
-  @include transition;
-
-  &--primary {
-    background-color: $color-primary;
-    color: $color-white;
-
-    &:hover {
-      background-color: color.scale($color-primary, $lightness: -15%);
-    }
-  }
-
-  &:focus-visible {
-    outline: 2px solid $color-primary;
-    outline-offset: 2px;
-  }
-}
-
-// ============================================================================
-// CARD
-// ============================================================================
-
-.task-detail__card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-4;
-  padding: $spacing-6;
   background-color: $color-white;
-  border: 1px solid $gray-300;
-  border-radius: 14px;
-  margin-bottom: $spacing-6;
+  box-shadow: -26px 108px 31px 0px rgba(0, 0, 0, 0),
+    -17px 69px 28px 0px rgba(0, 0, 0, 0.01),
+    -9px 39px 24px 0px rgba(0, 0, 0, 0.02),
+    -4px 17px 18px 0px rgba(0, 0, 0, 0.03),
+    -1px 4px 10px 0px rgba(0, 0, 0, 0.04);
+
+  @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
+  color: $gray-300;
+
+  &::placeholder {
+    color: $gray-300;
+  }
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 0;
+  }
 }
 
-.task-detail__card-header {
-  display: flex;
-  align-items: flex-start;
-  gap: $spacing-3;
-  padding-right: 110px;
-}
-
-.task-detail__importance {
-  flex-shrink: 0;
+.task-view__search-btn {
+  all: unset;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 4px;
-  color: $info;
+  cursor: pointer;
+  color: $gray-400;
+  @include transition(color);
 
-  &--high {
-    color: $error;
+  &:hover {
+    color: $color-primary;
   }
 }
 
-.task-detail__title {
-  margin: 0;
-  font-family: $font-primary;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-semibold;
-  color: $gray-950;
-  line-height: 1.3;
-}
-
-.task-detail__description {
-  margin: 0;
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
-  color: $gray-500;
-  line-height: 1.5;
-  padding-right: 110px;
-}
-
-.task-detail__thumbnail {
-  position: absolute;
-  top: $spacing-6;
-  right: $spacing-6;
-  width: 90px;
-  height: 88px;
-  background-color: $gray-300;
-  border-radius: 14px;
-  overflow: hidden;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.task-detail__meta-row {
+.task-view__nav-actions {
+  margin-left: auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: $spacing-4;
-  margin-top: $spacing-4;
+  align-items: center;
+  gap: $spacing-3;
 }
 
-.task-detail__meta {
-  font-family: $font-primary;
-  font-size: 10px;
-  font-weight: $font-weight-medium;
-  color: $gray-950;
+.task-view__nav-btn {
+  all: unset;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-primary;
+  border-radius: 8px;
+  color: $color-white;
+  cursor: pointer;
+  @include transition(background-color);
 
-  em {
-    font-style: normal;
+  &:hover {
+    background-color: color.scale($color-primary, $lightness: -10%);
   }
 }
 
-.task-detail__meta--date {
+.task-view__date {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  margin-left: $spacing-4;
+}
+
+.task-view__date-day {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: $gray-950;
+  margin: 0;
+}
+
+.task-view__date-full {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: $medium;
+  margin: 0;
+}
+
+// ============================================================================
+// SIDEBAR
+// ============================================================================
+
+.task-view__sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  background-color: $color-primary;
+  padding: $spacing-8 $spacing-5;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.08);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  position: relative;
+  margin-left: -35px;
+  padding-left: calc($spacing-5 + 35px);
+}
+
+.task-view__user {
+  display: flex;
+  gap: $spacing-4;
+  align-items: center;
+  margin-bottom: $spacing-6;
+}
+
+.task-view__user-avatar {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background-color: $gray-300;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.task-view__avatar-link {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: $color-primary;
+}
+
+.task-view__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.task-view__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+}
+
+.task-view__user-name {
+  @include text-style($font-size-base, $font-weight-semibold, $line-normal);
+  color: $color-white;
+  margin: 0;
+}
+
+.task-view__user-email {
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: $color-white;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.task-view__sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  margin-bottom: auto;
+}
+
+.task-view__sidebar-link {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4 $spacing-5;
+  border-radius: 14px;
+  cursor: pointer;
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  color: $color-white;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: rgba($color-white, 0.12);
+  }
+
+  &--active {
+    background-color: $color-white;
+    color: $color-primary;
+  }
+}
+
+.task-view__sidebar-footer {
+  padding-top: $spacing-6;
+}
+
+.task-view__logout {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4 $spacing-5;
+  border-radius: 14px;
+  cursor: pointer;
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  color: $color-white;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: rgba($color-white, 0.12);
+  }
+}
+
+// ============================================================================
+// MAIN
+// ============================================================================
+
+.task-view__main {
+  grid-column: 2;
+  grid-row: 2;
+  padding: $spacing-8;
+  background-color: $color-white;
+}
+
+.task-view__panel {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.task-view__card {
+  width: min(920px, 100%);
+  background-color: $gray-50;
+  border: 1px solid $gray-200;
+  border-radius: 14px;
+  padding: $spacing-8;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.task-view__card-top {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: $spacing-6;
+  align-items: start;
+}
+
+.task-view__thumb {
+  width: 160px;
+  height: 160px;
+  border-radius: 14px;
+  background-color: $gray-300;
+}
+
+.task-view__summary {
+  min-width: 0;
+}
+
+.task-view__summary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $spacing-4;
+}
+
+.task-view__title-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  min-width: 0;
+}
+
+.task-view__title {
+  @include text-style($font-size-xl, $font-weight-semibold, $line-tight);
+  color: $gray-950;
+  margin: 0;
+}
+
+.task-view__important {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $warning;
+  flex-shrink: 0;
+}
+
+.task-view__back {
+  all: unset;
+  cursor: pointer;
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: $gray-950;
+  text-decoration: underline;
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.task-view__meta {
+  margin-top: $spacing-8;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  row-gap: $spacing-1;
+  column-gap: $spacing-2;
+}
+
+.task-view__meta-label {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: $gray-500;
+}
+
+.task-view__meta-value {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: $gray-950;
+}
+
+.task-view__meta-date {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
   color: $gray-300;
 }
 
-// Priority colors
-.task-detail__priority--low {
+.task-view__meta-value--priority-low {
   color: $success;
 }
 
-.task-detail__priority--medium {
-  color: $medium;
-}
-
-.task-detail__priority--high {
-  color: $error;
-}
-
-// Status colors
-.task-detail__status--pending {
-  color: $error;
-}
-
-.task-detail__status--in_progress {
+.task-view__meta-value--priority-medium {
   color: $info;
 }
 
-.task-detail__status--completed {
+.task-view__meta-value--priority-high {
+  color: $error;
+}
+
+.task-view__meta-value--status-pending {
+  color: $error;
+}
+
+.task-view__meta-value--status-in_progress {
+  color: $info;
+}
+
+.task-view__meta-value--status-completed {
   color: $success;
 }
 
-.task-detail__status--cancelled {
+.task-view__meta-value--status-cancelled {
   color: $gray-400;
 }
 
-// ============================================================================
-// QUICK ACTIONS
-// ============================================================================
-
-.task-detail__quick-actions {
-  padding: $spacing-4;
-  background-color: $color-white;
-  border: 1px solid $gray-300;
-  border-radius: 14px;
+.task-view__body {
+  margin-top: $spacing-8;
 }
 
-.task-detail__section-title {
+.task-view__subtitle {
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: $gray-700;
   margin: 0 0 $spacing-4;
-  font-family: $font-primary;
-  font-size: $font-size-base;
-  font-weight: $font-weight-semibold;
-  color: $gray-950;
 }
 
-.task-detail__buttons {
+.task-view__notes-text {
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: $gray-600;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.task-view__notes-text--muted {
+  color: $gray-400;
+}
+
+.task-view__products {
+  margin-top: $spacing-6;
+}
+
+.task-view__products-title {
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: $gray-700;
+  margin: 0 0 $spacing-3;
+}
+
+.task-view__products-list {
+  display: grid;
+  gap: $spacing-2;
+}
+
+.task-view__products-item {
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: $gray-600;
+  position: relative;
+  padding-left: $spacing-4;
+
+  &::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: $gray-500;
+  }
+}
+
+// ============================================================================
+// FAB
+// ============================================================================
+
+.task-view__fab {
+  position: fixed;
+  right: $spacing-8;
+  bottom: $spacing-8;
   display: flex;
-  flex-wrap: wrap;
   gap: $spacing-3;
   margin: 0;
   padding: 0;
   list-style: none;
+  z-index: 20;
 }
 
-.task-detail__action-btn {
-  padding: $spacing-2 $spacing-4;
-  background-color: $gray-100;
-  border: 1px solid $gray-300;
-  border-radius: 8px;
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
-  color: $gray-700;
+.task-view__fab-btn {
+  all: unset;
+  width: 46px;
+  height: 46px;
+  background-color: $color-primary;
+  color: $color-white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  @include transition;
+  box-shadow: 0px 10px 24px 0px rgba(0, 0, 0, 0.12);
+  @include transition(background-color);
+  position: relative;
+
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: calc(100% + #{$spacing-3});
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: $color-white;
+    color: $gray-950;
+    padding: $spacing-2 $spacing-3;
+    border-radius: 10px;
+    box-shadow: 0px 10px 24px 0px rgba(0, 0, 0, 0.12);
+    @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+  }
 
   &:hover:not(:disabled) {
-    background-color: $gray-200;
-    border-color: $gray-400;
+    background-color: color.scale($color-primary, $lightness: -10%);
+  }
+
+  &:hover:not(:disabled)::after,
+  &:focus-visible::after {
+    opacity: 1;
   }
 
   &:disabled {
-    opacity: 0.5;
+    opacity: 0.55;
     cursor: not-allowed;
   }
 
-  &--success {
-    background-color: rgba($success, 0.1);
-    border-color: $success;
-    color: $success;
-
-    &:hover:not(:disabled) {
-      background-color: rgba($success, 0.2);
-    }
+  &:focus-visible {
+    @include focus-visible;
   }
+}
 
-  &--danger {
-    background-color: rgba($error, 0.1);
-    border-color: $error;
-    color: $error;
+// ============================================================================
+// MODAL
+// ============================================================================
 
-    &:hover:not(:disabled) {
-      background-color: rgba($error, 0.2);
-    }
+.task-view__modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-6;
+  background: rgba($color-white, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: none;
+  z-index: 100;
+
+  &::backdrop {
+    background: rgba($color-white, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
+}
+
+.task-view__modal-content {
+  width: min(920px, 100%);
+  max-height: none;
+  overflow: hidden;
+  background: $color-white;
+  border-radius: 14px;
+  padding: $spacing-6;
 }

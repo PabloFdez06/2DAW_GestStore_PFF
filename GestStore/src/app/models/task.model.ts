@@ -32,7 +32,8 @@ export interface TaskProduct {
 
 // Interface principal de Task
 export interface Task {
-  id: number;
+  id: string | number;
+  _id?: string;
   title: string;
   description: string;
   status: TaskStatus;

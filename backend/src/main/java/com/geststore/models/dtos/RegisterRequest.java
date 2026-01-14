@@ -19,6 +19,8 @@ public class RegisterRequest {
     @NotBlank(message = "El nombre es requerido")
     private String name;
 
+    private String lastName;
+
     @NotBlank(message = "El email es requerido")
     @Email(message = "El email debe ser válido")
     private String email;
@@ -28,5 +30,11 @@ public class RegisterRequest {
     private String password;
 
     private String phone;
+    private String address;
     private String department;
+
+    /**
+     * Avatar como Data URL (base64) o URL remota.
+     */
+    private String avatar;
 }

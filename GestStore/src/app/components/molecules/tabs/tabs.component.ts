@@ -63,7 +63,7 @@ export class TabsComponent implements AfterViewInit, OnDestroy {
     const list = this.tabList?.nativeElement;
     if (!list || this.indicatorEl) return;
 
-    const indicator = this.renderer.createElement('div') as HTMLElement;
+    const indicator = this.renderer.createElement('span') as HTMLElement;
     this.renderer.addClass(indicator, 'tabs__indicator');
     this.renderer.appendChild(list, indicator);
     this.indicatorEl = indicator;

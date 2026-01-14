@@ -85,8 +85,8 @@ export class TooltipDirective implements OnDestroy {
   private show(): void {
     if (this.tooltipEl) return;
 
-    const tooltip = this.renderer.createElement('div') as HTMLElement;
-    const arrow = this.renderer.createElement('div') as HTMLElement;
+    const tooltip = this.renderer.createElement('span') as HTMLElement;
+    const arrow = this.renderer.createElement('span') as HTMLElement;
 
     this.renderer.addClass(tooltip, 'gs-tooltip');
     this.renderer.addClass(tooltip, `gs-tooltip--${this.tooltipPosition}`);

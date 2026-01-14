@@ -136,6 +136,7 @@
     border: none;
     margin: 0;
     padding: 0;
+    min-inline-size: 0;
     display: flex;
     flex-direction: column;
     gap: $spacing-4;
@@ -193,11 +194,13 @@
 .form-input__icon {
   // 1️⃣ POSICIONAMIENTO
   position: absolute;
+  top: 50%;
   left: $spacing-3;
+  transform: translateY(-50%);
 
   // 3️⃣ BOX MODEL
-  width: 1.875rem;
-  height: 1.875rem;
+  width: $spacing-5;
+  height: $spacing-5;
 
   // 6️⃣ TIPOGRAFÍA
   color: $gray-800;

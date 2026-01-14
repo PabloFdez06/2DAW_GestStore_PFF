@@ -17,52 +17,35 @@
             
             <label class="form-group">
               <input type="text" 
-                     id="nombre"
+                     id="name"
                      class="form-input form-input--with-icon" 
                      placeholder="Introduce el nombre"
-                     [(ngModel)]="nombre"
-                     name="nombre"
+                     [(ngModel)]="name"
+                     name="name"
                      autocomplete="given-name"
-                     [class.form-input--error]="errors['nombre']">
+                     [class.form-input--error]="errors['name']">
               <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
               </svg>
-              @if (errors['nombre']) {
-                <output class="form-error" role="alert">{{ errors['nombre'] }}</output>
+              @if (errors['name']) {
+                <output class="form-error" role="alert">{{ errors['name'] }}</output>
               }
             </label>
 
             <label class="form-group">
               <input type="text" 
-                     id="apellido"
+                     id="lastName"
                      class="form-input form-input--with-icon" 
                      placeholder="Introduce el apellido"
-                     [(ngModel)]="apellido"
-                     name="apellido"
+                     [(ngModel)]="lastName"
+                     name="lastName"
                      autocomplete="family-name"
-                     [class.form-input--error]="errors['apellido']">
+                     [class.form-input--error]="errors['lastName']">
               <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
               </svg>
-              @if (errors['apellido']) {
-                <output class="form-error" role="alert">{{ errors['apellido'] }}</output>
-              }
-            </label>
-
-            <label class="form-group">
-              <input type="text" 
-                     id="usuario"
-                     class="form-input form-input--with-icon" 
-                     placeholder="Introduce nombre de usuario"
-                     [(ngModel)]="usuario"
-                     name="usuario"
-                     autocomplete="username"
-                     [class.form-input--error]="errors['usuario']">
-              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
-              </svg>
-              @if (errors['usuario']) {
-                <output class="form-error" role="alert">{{ errors['usuario'] }}</output>
+              @if (errors['lastName']) {
+                <output class="form-error" role="alert">{{ errors['lastName'] }}</output>
               }
             </label>
 
@@ -81,6 +64,41 @@
               </svg>
               @if (errors['email']) {
                 <output class="form-error" role="alert">{{ errors['email'] }}</output>
+              }
+            </label>
+
+            <label class="form-group">
+              <input type="tel" 
+                     id="phone"
+                     class="form-input form-input--with-icon" 
+                     placeholder="Número de teléfono"
+                     [(ngModel)]="phone"
+                     name="phone"
+                     autocomplete="tel"
+                     [class.form-input--error]="errors['phone']">
+              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.86.3 1.7.54 2.5a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.58-1.06a2 2 0 0 1 2.11-.45c.8.24 1.64.42 2.5.54A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              @if (errors['phone']) {
+                <output class="form-error" role="alert">{{ errors['phone'] }}</output>
+              }
+            </label>
+
+            <label class="form-group">
+              <input type="text" 
+                     id="address"
+                     class="form-input form-input--with-icon" 
+                     placeholder="Dirección"
+                     [(ngModel)]="address"
+                     name="address"
+                     autocomplete="street-address"
+                     [class.form-input--error]="errors['address']">
+              <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              @if (errors['address']) {
+                <output class="form-error" role="alert">{{ errors['address'] }}</output>
               }
             </label>
 

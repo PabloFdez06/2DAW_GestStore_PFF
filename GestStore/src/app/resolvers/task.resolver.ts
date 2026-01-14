@@ -9,14 +9,13 @@ export const taskResolver: ResolveFn<Task> = (route) => {
   const taskService = inject(TaskService);
 
   const rawId = route.paramMap.get('id');
-  const id = rawId ? Number(rawId) : NaN;
 
-  if (!Number.isFinite(id)) {
+  if (!rawId || rawId.trim().length === 0) {
     router.navigate(['/not-found'], { replaceUrl: true });
     return EMPTY;
   }
 
-  return taskService.getTaskById(id).pipe(
+  return taskService.getTaskById(rawId).pipe(
     catchError(() => {
       router.navigate(['/not-found'], { replaceUrl: true });
       return EMPTY;

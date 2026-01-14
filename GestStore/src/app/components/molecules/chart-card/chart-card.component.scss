@@ -126,6 +126,7 @@
 // CHART PLACEHOLDER (hasta integrar librería de gráficos)
 // ============================================================================
 .chart-card__placeholder {
+  margin: 0;
   @include flex-center;
   flex-direction: column;
   gap: $spacing-4;
@@ -178,6 +179,9 @@
 }
 
 .chart-card__legend {
+  margin: 0;
+  padding: 0;
+  list-style: none;
   display: flex;
   gap: $spacing-6;
   flex-wrap: wrap;

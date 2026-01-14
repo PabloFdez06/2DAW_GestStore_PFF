@@ -19,30 +19,30 @@ export interface Task {
   template: `
     <article class="task-card" [class.task-card--hoverable]="hoverable">
       <!-- Contenido principal -->
-      <div class="task-card__content">
+      <section class="task-card__content">
         <!-- Icono de estado -->
-        <div class="task-card__status-icon" [class]="'task-card__status-icon--' + status">
+        <span class="task-card__status-icon" [class]="'task-card__status-icon--' + status">
           <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="2"/>
           </svg>
-        </div>
+        </span>
         
         <!-- Información de la tarea -->
-        <div class="task-card__info">
+        <section class="task-card__info">
           <h3 class="task-card__title">{{ title }}</h3>
           <p class="task-card__description">{{ description }}</p>
           <p class="task-card__status-text">
             Estatus: <span [class]="'task-card__status-value--' + status">{{ getStatusLabel() }}</span>
           </p>
           <p class="task-card__timestamp">{{ getTimestamp() }}</p>
-        </div>
-      </div>
+        </section>
+      </section>
 
       <!-- Thumbnail -->
-      <div class="task-card__thumbnail" *ngIf="imageUrl">
+      <figure class="task-card__thumbnail" *ngIf="imageUrl">
         <img [src]="imageUrl" [alt]="title" class="task-card__image" />
-      </div>
-      <div class="task-card__thumbnail task-card__thumbnail--placeholder" *ngIf="!imageUrl"></div>
+      </figure>
+      <figure class="task-card__thumbnail task-card__thumbnail--placeholder" *ngIf="!imageUrl" aria-hidden="true"></figure>
 
       <!-- Menú de opciones -->
       <button 

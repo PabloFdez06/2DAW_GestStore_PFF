@@ -429,6 +429,11 @@ export class DashboardComponent implements OnInit {
   closeTaskMenu() {
     this.openTaskMenuIndex = -1;
   }
+
+  goToTask(taskId: string | number): void {
+    this.closeTaskMenu();
+    this.router.navigate(['/tareas', taskId]);
+  }
   
   handleTaskAction(action: TaskMenuAction, taskIndex: number) {
     const task = this.tasks[taskIndex];

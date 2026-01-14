@@ -11,7 +11,7 @@ interface Priority {
 }
 
 export interface TaskFormData {
-  id?: number;
+  id?: string | number;
   title: string;
   date: string;
   description: string;
@@ -118,7 +118,7 @@ export class AddTaskModalComponent implements OnChanges {
     };
 
     if (this.isEditMode && this.task) {
-      taskData.id = this.task.id;
+      taskData.id = this.task.id ?? this.task._id;
       taskData.important = this.task.important;
       this.taskUpdated.emit(taskData);
     } else {
@@ -179,8 +179,8 @@ export class AddTaskModalComponent implements OnChanges {
     const root = this.modalRoot?.nativeElement;
     if (!root || this.focusGuardStart || this.focusGuardEnd) return;
 
-    const start = this.renderer.createElement('div') as HTMLElement;
-    const end = this.renderer.createElement('div') as HTMLElement;
+    const start = this.renderer.createElement('span') as HTMLElement;
+    const end = this.renderer.createElement('span') as HTMLElement;
 
     this.renderer.setAttribute(start, 'tabindex', '0');
     this.renderer.setAttribute(end, 'tabindex', '0');

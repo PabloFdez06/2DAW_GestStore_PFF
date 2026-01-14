@@ -9,21 +9,21 @@ import { IconComponent } from '../../atoms/icon/icon.component';
   template: `
     <article class="chart-card">
       <header class="chart-card__header">
-        <div class="chart-card__title-section">
+        <section class="chart-card__title-section">
           <h3 class="chart-card__title">{{ title }}</h3>
           <p *ngIf="subtitle" class="chart-card__subtitle">{{ subtitle }}</p>
-        </div>
-        <div class="chart-card__actions">
+        </section>
+        <section class="chart-card__actions">
           <button class="chart-card__action-btn" aria-label="Opciones">
             <app-icon name="more-horizontal" size="small"></app-icon>
           </button>
-        </div>
+        </section>
       </header>
       
-      <div class="chart-card__body">
+      <section class="chart-card__body">
         <!-- Chart placeholder - aquí se integrará la librería de gráficos -->
-        <div [class]="getChartClasses()">
-          <div class="chart-card__placeholder">
+        <section [class]="getChartClasses()">
+          <figure class="chart-card__placeholder">
             <app-icon 
               [name]="getChartIcon()" 
               size="large" 
@@ -32,21 +32,21 @@ import { IconComponent } from '../../atoms/icon/icon.component';
             <p class="chart-card__placeholder-text">
               Gráfico {{ getChartLabel() }}
             </p>
-          </div>
-        </div>
-      </div>
+          </figure>
+        </section>
+      </section>
 
       <footer *ngIf="showFooter" class="chart-card__footer">
-        <div class="chart-card__legend">
-          <div class="chart-card__legend-item">
+        <ul class="chart-card__legend">
+          <li class="chart-card__legend-item">
             <span class="chart-card__legend-dot chart-card__legend-dot--primary"></span>
             <span class="chart-card__legend-label">Actual</span>
-          </div>
-          <div class="chart-card__legend-item">
+          </li>
+          <li class="chart-card__legend-item">
             <span class="chart-card__legend-dot chart-card__legend-dot--secondary"></span>
             <span class="chart-card__legend-label">Anterior</span>
-          </div>
-        </div>
+          </li>
+        </ul>
       </footer>
     </article>
   `,

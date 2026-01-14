@@ -44,10 +44,13 @@ public class AuthService {
         // Crear nuevo usuario
         User user = User.builder()
                 .name(request.getName())
+            .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phone(request.getPhone())
+            .address(request.getAddress())
                 .department(request.getDepartment())
+            .avatar(request.getAvatar())
                 .role(Role.WORKER) // Por defecto todos son WORKER
                 .active(true)
                 .build();

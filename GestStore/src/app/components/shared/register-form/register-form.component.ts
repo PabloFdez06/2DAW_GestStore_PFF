@@ -13,11 +13,13 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class RegisterFormComponent {
   @Output() backClicked = new EventEmitter<void>();
-  
-  nombre: string = '';
-  apellido: string = '';
-  usuario: string = '';
+
+  name: string = '';
+  lastName: string = '';
   email: string = '';
+  phone: string = '';
+  address: string = '';
+
   password: string = '';
   confirmPassword: string = '';
   agreeTerms: boolean = false;
@@ -34,17 +36,21 @@ export class RegisterFormComponent {
     event.preventDefault();
     this.errors = {};
     this.errorMessage = '';
-    
-    if (!this.nombre.trim()) {
-      this.errors['nombre'] = 'El nombre es requerido';
+
+    if (!this.name.trim()) {
+      this.errors['name'] = 'El nombre es requerido';
     }
 
-    if (!this.apellido.trim()) {
-      this.errors['apellido'] = 'El apellido es requerido';
+    if (!this.lastName.trim()) {
+      this.errors['lastName'] = 'Los apellidos son requeridos';
     }
 
-    if (!this.usuario.trim()) {
-      this.errors['usuario'] = 'El nombre de usuario es requerido';
+    if (!this.phone.trim()) {
+      this.errors['phone'] = 'El teléfono es requerido';
+    }
+
+    if (!this.address.trim()) {
+      this.errors['address'] = 'La dirección es requerida';
     }
 
     if (!this.email) {
@@ -69,17 +75,23 @@ export class RegisterFormComponent {
 
     if (Object.keys(this.errors).length === 0) {
       this.isLoading = true;
-      
-      const fullName = `${this.nombre} ${this.apellido}`;
-      
+
       this.authService.register({
-        name: fullName,
+        name: this.name,
+        lastName: this.lastName,
         email: this.email,
-        password: this.password
+        password: this.password,
+        phone: this.phone,
+        address: this.address
       }).subscribe({
         next: (response) => {
           console.log('Registro exitoso:', response);
           this.isLoading = false;
+
+          if (response.user?.avatar) {
+            localStorage.setItem('geststore.avatar', response.user.avatar);
+          }
+
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {

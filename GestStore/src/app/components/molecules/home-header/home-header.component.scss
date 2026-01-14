@@ -109,7 +109,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: $font-primary;
   font-size: 3rem; // 48px
   font-weight: $font-weight-regular;
   color: $gray-950;
