@@ -19,7 +19,7 @@
     {{ errorMessage }}
   </output>
 
-  <form class="task-edit__form" (submit)="$event.preventDefault(); save()">
+  <form class="task-edit__form" (ngSubmit)="onSubmit()">
     <app-form-input
       id="title"
       name="title"

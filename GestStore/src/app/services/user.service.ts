@@ -35,6 +35,14 @@ export class UserService {
     return this.http.put<ApiResponse<User>>(`${this.apiUrl}/me`, payload).pipe(map(r => r.data));
   }
 
+  uploadMyAvatar(file: File): Observable<User> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http
+      .put<ApiResponse<User>>(`${this.apiUrl}/me/avatar`, formData)
+      .pipe(map(r => r.data));
+  }
+
   updateMyPassword(payload: UpdatePasswordRequest): Observable<void> {
     return this.http.put<ApiResponse<void>>(`${this.apiUrl}/me/password`, payload).pipe(map(() => void 0));
   }

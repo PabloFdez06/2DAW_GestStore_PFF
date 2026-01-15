@@ -140,15 +140,37 @@ export class ProfileComponent {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = typeof reader.result === 'string' ? reader.result : null;
-      if (!result) return;
-      this.avatarUrl = result;
-      localStorage.setItem('geststore.avatar', result);
-      this.cdr.detectChanges();
-    };
-    reader.readAsDataURL(file);
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.cdr.detectChanges();
+
+    this.userService.uploadMyAvatar(file).subscribe({
+      next: (user) => {
+        if (user.avatar && user.avatar.trim().length > 0) {
+          this.avatarUrl = user.avatar;
+          localStorage.setItem('geststore.avatar', user.avatar);
+        }
+        this.authService.setCurrentUser(user);
+        this.successMessage = 'Avatar actualizado.';
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.successMessage = '';
+          this.cdr.detectChanges();
+        }, 2500);
+      },
+      error: () => {
+        // Fallback: keep current client-side behavior (Data URL + localStorage)
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = typeof reader.result === 'string' ? reader.result : null;
+          if (!result) return;
+          this.avatarUrl = result;
+          localStorage.setItem('geststore.avatar', result);
+          this.cdr.detectChanges();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
   }
 
   onUpdateInfo(event: Event): void {

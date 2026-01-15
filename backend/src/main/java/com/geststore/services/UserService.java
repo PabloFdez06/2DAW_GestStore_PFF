@@ -15,6 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -206,6 +210,56 @@ public class UserService {
         user.onUpdate();
         User updatedUser = userRepository.save(user);
         return convertToDto(updatedUser);
+    }
+
+    /**
+     * Actualiza el avatar del propio usuario a partir de un archivo (multipart/form-data).
+     * Se persiste como Data URL base64 en el campo "avatar".
+     */
+    public UserResponseDto updateAvatarFromFile(String id, MultipartFile file) {
+        log.info("Actualizando avatar (multipart) del usuario con ID: {}", id);
+
+        if (file == null || file.isEmpty()) {
+            throw new BusinessLogicException("El archivo de avatar es obligatorio", "INVALID_FILE");
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || contentType.isBlank()) {
+            throw new BusinessLogicException("No se pudo determinar el tipo de archivo", "INVALID_FILE_TYPE");
+        }
+
+        boolean allowed = contentType.equals("image/png")
+                || contentType.equals("image/jpeg")
+                || contentType.equals("image/svg+xml")
+                || contentType.equals("image/webp");
+
+        if (!allowed) {
+            throw new BusinessLogicException(
+                    "Formato no soportado. Usa PNG, JPG, SVG o WEBP",
+                    "INVALID_FILE_TYPE"
+            );
+        }
+
+        long maxBytes = 2L * 1024L * 1024L;
+        if (file.getSize() > maxBytes) {
+            throw new BusinessLogicException("La imagen es demasiado grande (máx 2MB)", "FILE_TOO_LARGE");
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
+
+        try {
+            byte[] bytes = file.getBytes();
+            String base64 = Base64.getEncoder().encodeToString(bytes);
+            String dataUrl = "data:" + contentType + ";base64," + base64;
+
+            user.setAvatar(dataUrl);
+            user.onUpdate();
+            User updatedUser = userRepository.save(user);
+            return convertToDto(updatedUser);
+        } catch (IOException e) {
+            throw new BusinessLogicException("No se pudo leer el archivo de avatar", "FILE_READ_ERROR");
+        }
     }
 
     /**

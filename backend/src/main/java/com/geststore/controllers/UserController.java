@@ -10,11 +10,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -55,6 +57,20 @@ public class UserController {
         }
         UserResponseDto user = userService.updateProfile(userId, requestDto);
         return ResponseEntity.ok(ApiResponse.success("Perfil actualizado exitosamente", user));
+    }
+
+    @PutMapping(value = "/me/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateMyAvatar(
+            @RequestHeader(value = "X-User-Id", required = false) String userId,
+            @RequestPart("file") MultipartFile file
+    ) {
+        log.info("PUT /api/users/me/avatar - Actualizando avatar del usuario (multipart)");
+        if (userId == null || userId.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("No se pudo identificar el usuario (X-User-Id)", null));
+        }
+        UserResponseDto user = userService.updateAvatarFromFile(userId, file);
+        return ResponseEntity.ok(ApiResponse.success("Avatar actualizado exitosamente", user));
     }
 
     @PutMapping("/me/password")

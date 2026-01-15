@@ -97,6 +97,10 @@ export class TaskEditComponent implements OnInit, CanComponentDeactivate {
     return JSON.stringify(this.model) !== this.initialSnapshot;
   }
 
+  onSubmit(): void {
+    this.save();
+  }
+
   save(): void {
     if (this.isSaving) return;
 

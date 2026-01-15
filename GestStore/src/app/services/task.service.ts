@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, retry } from 'rxjs/operators';
 import { 
   Task, 
   TaskRequest, 
@@ -17,29 +17,10 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Obtener headers con autenticación y userId
-   */
-  private getAuthHeaders(): HttpHeaders {
-    let headers = new HttpHeaders();
-    const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('currentUser');
-    
-    if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
-    }
-    
-    if (userStr) {
-      try {
-        const user = JSON.parse(userStr);
-        const userId = user.id || user._id;
-        if (userId) {
-          headers = headers.set('X-User-Id', String(userId));
-        }
-      } catch (e) {
-      }
-    }
-    return headers;
+  private handleError(_operation: string) {
+    return (error: unknown) => {
+      return throwError(() => error);
+    };
   }
 
   /**
@@ -47,7 +28,11 @@ export class TaskService {
    */
   getAllTasks(): Observable<Task[]> {
     return this.http.get<ApiResponse<Task[]>>(`${this.apiUrl}/all`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getAllTasks'))
+      );
   }
 
   /**
@@ -55,7 +40,11 @@ export class TaskService {
    */
   getTaskById(id: string | number): Observable<Task> {
     return this.http.get<ApiResponse<Task>>(`${this.apiUrl}/${id}`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getTaskById'))
+      );
   }
 
   /**
@@ -63,7 +52,11 @@ export class TaskService {
    */
   getTasksByAssignedUser(userId: string): Observable<Task[]> {
     return this.http.get<ApiResponse<Task[]>>(`${this.apiUrl}/user/${userId}`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getTasksByAssignedUser'))
+      );
   }
 
   /**
@@ -71,7 +64,11 @@ export class TaskService {
    */
   getTasksCreatedByUser(userId: string): Observable<Task[]> {
     return this.http.get<ApiResponse<Task[]>>(`${this.apiUrl}/created-by/${userId}`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getTasksCreatedByUser'))
+      );
   }
 
   /**
@@ -79,7 +76,11 @@ export class TaskService {
    */
   getUnassignedTasks(): Observable<Task[]> {
     return this.http.get<ApiResponse<Task[]>>(`${this.apiUrl}/unassigned`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getUnassignedTasks'))
+      );
   }
 
   /**
@@ -87,7 +88,11 @@ export class TaskService {
    */
   getTasksInProgress(): Observable<Task[]> {
     return this.http.get<ApiResponse<Task[]>>(`${this.apiUrl}/in-progress`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getTasksInProgress'))
+      );
   }
 
   /**
@@ -95,7 +100,11 @@ export class TaskService {
    */
   getOverdueTasks(): Observable<Task[]> {
     return this.http.get<ApiResponse<Task[]>>(`${this.apiUrl}/overdue`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getOverdueTasks'))
+      );
   }
 
   /**
@@ -103,7 +112,11 @@ export class TaskService {
    */
   getHighPriorityTasks(): Observable<Task[]> {
     return this.http.get<ApiResponse<Task[]>>(`${this.apiUrl}/high-priority`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getHighPriorityTasks'))
+      );
   }
 
   /**
@@ -112,78 +125,96 @@ export class TaskService {
   searchTasks(query: string): Observable<Task[]> {
     const params = new HttpParams().set('q', query);
     return this.http.get<ApiResponse<Task[]>>(`${this.apiUrl}/search`, { params })
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('searchTasks'))
+      );
   }
 
   /**
    * Crear una nueva tarea
    */
   createTask(task: TaskRequest): Observable<Task> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}`, task, { headers })
-      .pipe(map(response => response.data));
+    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}`, task)
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError('createTask'))
+      );
   }
 
   /**
    * Actualizar una tarea existente
    */
   updateTask(id: string | number, task: TaskRequest): Observable<Task> {
-    const headers = this.getAuthHeaders();
-    return this.http.put<ApiResponse<Task>>(`${this.apiUrl}/${id}`, task, { headers })
-      .pipe(map(response => response.data));
+    return this.http.put<ApiResponse<Task>>(`${this.apiUrl}/${id}`, task)
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError('updateTask'))
+      );
   }
 
   /**
    * Iniciar una tarea (cambiar a IN_PROGRESS)
    */
   startTask(id: string | number): Observable<Task> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/start`, {}, { headers })
-      .pipe(map(response => response.data));
+    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/start`, {})
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError('startTask'))
+      );
   }
 
   /**
    * Completar una tarea
    */
   completeTask(id: string | number): Observable<Task> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/complete`, {}, { headers })
-      .pipe(map(response => response.data));
+    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/complete`, {})
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError('completeTask'))
+      );
   }
 
   /**
    * Cancelar una tarea
    */
   cancelTask(id: string | number): Observable<Task> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/cancel`, {}, { headers })
-      .pipe(map(response => response.data));
+    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}/cancel`, {})
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError('cancelTask'))
+      );
   }
 
   /**
    * Marcar una tarea como importante
    */
   markAsImportant(id: string | number): Observable<Task> {
-    const headers = this.getAuthHeaders();
-    return this.http.patch<ApiResponse<Task>>(`${this.apiUrl}/${id}`, { important: true }, { headers })
-      .pipe(map(response => response.data));
+    return this.http.patch<ApiResponse<Task>>(`${this.apiUrl}/${id}`, { important: true })
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError('markAsImportant'))
+      );
   }
 
   /**
    * Desmarcar una tarea como importante
    */
   removeImportant(id: string | number): Observable<Task> {
-    const headers = this.getAuthHeaders();
-    return this.http.patch<ApiResponse<Task>>(`${this.apiUrl}/${id}`, { important: false }, { headers })
-      .pipe(map(response => response.data));
+    return this.http.patch<ApiResponse<Task>>(`${this.apiUrl}/${id}`, { important: false })
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError('removeImportant'))
+      );
   }
 
   /**
    * Eliminar una tarea
    */
   deleteTask(id: string | number): Observable<void> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
+      .pipe(catchError(this.handleError('deleteTask')));
   }
 
   /**
@@ -191,7 +222,11 @@ export class TaskService {
    */
   getTaskStatistics(): Observable<TaskStatistics> {
     return this.http.get<ApiResponse<TaskStatistics>>(`${this.apiUrl}/statistics`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getTaskStatistics'))
+      );
   }
 
   /**
@@ -199,6 +234,10 @@ export class TaskService {
    */
   getTaskStatisticsByUser(userId: string): Observable<TaskStatistics> {
     return this.http.get<ApiResponse<TaskStatistics>>(`${this.apiUrl}/statistics/user/${userId}`)
-      .pipe(map(response => response.data));
+      .pipe(
+        retry(1),
+        map(response => response.data),
+        catchError(this.handleError('getTaskStatisticsByUser'))
+      );
   }
 }
