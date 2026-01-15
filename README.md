@@ -20,3 +20,16 @@ He configurado el despliegue automático en GitHub Pages mediante GitHub Actions
 
 - Apartado Diseño (rama main): https://pablofdez06.github.io/2DAW_GestStore_PFF/
 - Apartado Cliente (rama apartado_cliente): https://pablofdez06.github.io/2DAW_GestStore_PFF/cliente/
+
+# IMPORTANTE | EJEMPLO DE USO
+
+Para comprobar funcionalmente el proyecto, ya que aun no he tenido tiempo de desplegarlo en la nube para tener un funcionamento que sincronice y permita uso de front, back y bd, voy a explicar unos simples pasos que permitiran comprobar el funcionamiento del mismo.
+
+1. Descargar la carpeta del proyecto.
+2. Tener Docker hub abierto (depende del SO), ya que el siguiente comando generara los contenedores.
+3. Ejecutar el siguiente comando: `docker-compose up --build`
+
+El docker-compose esta diseñado de forma que tal como se ejecute ese comando, te generará las imagenes necesarias, contenedores, etc.
+Y autimaticamente se enlazaran de forma que permitira en local la comunicacion entre backend, frontend y base de datos, sin necesidad de instalar nada ya que tambien te instala las dependencias necesarias durante la ejecucion del mismo.
+
+Este tiene conexión con el dockerfile, el cual es el que se encarga de instalar todo lo necesario, y todo esto automatizado con un solo comando, importante destacar que esto es mientras que no despliego la aplicación, una vez este desplegada el proceso realmente es casi el mismo, solo que desde el exterior no es necesario hacer nada, solo se accede a traves de un enlace.
