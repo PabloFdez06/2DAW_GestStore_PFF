@@ -6,22 +6,16 @@ Este es mi proyecto individual de segundo curso del ciclo formativo de Desarroll
 
 He desarrollado el servidor utilizando Spring Boot con Java. La API REST gestiona todas las operaciones de la tienda incluyendo productos, categorías, usuarios y autenticación. He implementado el modelo de datos con JPA/Hibernate y una arquitectura basada en controladores y servicios siguiendo buenas prácticas de desarrollo.
 
-## Frontend (Apartado Diseño)
+## Frontend (Apartado Diseño) 
 
 Para el apartado de diseño he creado la interfaz de usuario con Angular, aplicando una arquitectura de componentes siguiendo la metodología Atomic Design. He estructurado los estilos con SCSS utilizando la metodología ITCSS y he desarrollado una guía de estilos completa que documenta todos los componentes visuales del proyecto. Más adelante desarrollaremos la web completa.
+[Documentación](GestStore/docs/design/DOCUMENTACION.md)
 
 ## Cliente (Apartado Cliente)
 
 En el apartado de cliente he implementado la lógica funcional de la aplicación Angular. Esto incluye formularios reactivos con validaciones síncronas y asíncronas, gestión del estado, servicios de comunicación con la API, guards de navegación y manejo de eventos entre componentes.
 
 ## Deploy
-
-He configurado el despliegue automático en GitHub Pages mediante GitHub Actions. El workflow construye y despliega ambas ramas del proyecto de forma independiente, permitiendo acceder a cada apartado desde su propia URL:
-
-- Apartado Diseño (rama main): https://pablofdez06.github.io/2DAW_GestStore_PFF/
-- Apartado Cliente (rama apartado_cliente): https://pablofdez06.github.io/2DAW_GestStore_PFF/cliente/
-
-# IMPORTANTE | EJEMPLO DE USO
 
 Para comprobar funcionalmente el proyecto, ya que aun no he tenido tiempo de desplegarlo en la nube para tener un funcionamento que sincronice y permita uso de front, back y bd, voy a explicar unos simples pasos que permitiran comprobar el funcionamiento del mismo.
 
