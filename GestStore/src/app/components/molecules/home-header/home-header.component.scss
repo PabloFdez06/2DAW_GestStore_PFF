@@ -49,7 +49,7 @@
   height: 100%;
 
   // BACKGROUND
-  background-color: map.get($color-primary-scale, light-active);
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
 }
 
 .home-header__background-img {
@@ -64,7 +64,7 @@
   height: 100%;
 
   // BORDER
-  border: $border-thin solid $gray-950;
+  border: $border-thin solid var(--border-default);
 
   // EFECTOS VISUALES
   opacity: 0.4;
@@ -112,7 +112,7 @@
   font-family: $font-primary;
   font-size: 3rem; // 48px
   font-weight: $font-weight-regular;
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .home-header__nav {
@@ -144,7 +144,7 @@
   @include transition;
 
   &:hover {
-    background-color: rgba($color-white, 0.1);
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
   }
 }
 
@@ -153,7 +153,7 @@
   font-family: $font-primary;
   font-size: 1.25rem;
   font-weight: $font-weight-regular;
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .home-header__language-arrow {
@@ -164,7 +164,7 @@
   font-family: $font-primary;
   font-size: 1.25rem;
   font-weight: $font-weight-light;
-  color: $gray-950;
+  color: var(--text-default);
 
   // TRANSICIONES
   transform: rotate(90deg);
@@ -189,14 +189,14 @@
   padding: $spacing-2;
 
   // BACKGROUND
-  background-color: $color-white;
+  background-color: var(--bg-surface);
 
   // BORDER
-  border: $border-thin solid $gray-300;
+  border: $border-thin solid var(--border-default);
   border-radius: 0.5rem;
 
   // EFECTOS VISUALES
-  box-shadow: 0 0.5rem 1rem rgba($color-black, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .home-header__language-option {
@@ -223,7 +223,7 @@
   font-family: $font-primary;
   font-size: $font-size-base;
   font-weight: $font-weight-regular;
-  color: $gray-950;
+  color: var(--text-default);
   text-align: left;
 
   // EFECTOS VISUALES
@@ -233,17 +233,17 @@
   @include transition;
 
   &:hover {
-    background-color: $gray-100;
+    background-color: var(--bg-hover);
   }
 }
 
 .home-header__language-option--active {
   // BACKGROUND
-  background-color: rgba($color-primary, 0.1);
+  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
 
   // TIPOGRAFÍA
   font-weight: $font-weight-semibold;
-  color: $color-primary;
+  color: var(--color-primary);
 }
 
 .home-header__language-flag {
@@ -263,17 +263,17 @@
   padding: $spacing-2 $spacing-4;
 
   // BACKGROUND
-  background-color: $color-primary;
+  background-color: var(--color-primary);
 
   // BORDER
-  border: $border-thin solid $gray-950;
+  border: $border-thin solid var(--border-default);
   border-radius: 0.3125rem; // 5px
 
   // TIPOGRAFÍA
   font-family: $font-primary;
   font-size: 2rem; // 32px
   font-weight: $font-weight-regular;
-  color: $color-white;
+  color: var(--text-on-primary);
   text-decoration: none;
 
   // EFECTOS VISUALES
@@ -283,7 +283,7 @@
   @include transition;
 
   &:hover {
-    background-color: color.scale($color-primary, $lightness: -20%);
+    background-color: var(--interactive-hover);
   }
 }
 
@@ -310,7 +310,7 @@
   font-size: 2rem; // 32px
   font-weight: $font-weight-regular;
   line-height: 1.5;
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .home-header__hero-description {
@@ -325,7 +325,7 @@
     font-size: 1.5rem; // 24px
     font-weight: $font-weight-regular;
     line-height: 1.5;
-    color: $gray-950;
+    color: var(--text-default);
   }
 }
 
@@ -341,7 +341,7 @@
   padding: $spacing-3 $spacing-6;
 
   // BACKGROUND
-  background-color: $color-primary;
+  background-color: var(--color-primary);
 
   // BORDER
   border-radius: 0.625rem; // 10px
@@ -350,7 +350,7 @@
   font-family: $font-primary;
   font-size: 2rem; // 32px
   font-weight: $font-weight-regular;
-  color: $color-white;
+  color: var(--text-on-primary);
   text-decoration: none;
 
   // EFECTOS VISUALES
@@ -360,7 +360,7 @@
   @include transition;
 
   &:hover {
-    background-color: color.scale($color-primary, $lightness: -20%);
+    background-color: var(--interactive-hover);
     transform: translateY(-0.125rem);
   }
 }

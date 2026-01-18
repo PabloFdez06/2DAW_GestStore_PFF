@@ -7,7 +7,7 @@
 
 .home-footer {
   // BACKGROUND
-  background-color: rgba($color-primary, 0.18); // var(--principal_2)
+  background-color: color-mix(in srgb, var(--color-primary) 18%, transparent);
 
   // BORDER
   border-radius: 0.3125rem; // 5px
@@ -64,7 +64,7 @@
   font-family: $font-primary;
   font-size: 3rem; // 48px
   font-weight: $font-weight-regular;
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .home-footer__copyright {
@@ -79,7 +79,7 @@
     font-size: 1.5rem; // 24px
     font-weight: $font-weight-regular;
     line-height: 1.67; // 40px/24px
-    color: $gray-950;
+    color: var(--text-default);
   }
 }
 
@@ -134,7 +134,7 @@
   font-family: $font-primary;
   font-size: 1.5rem; // 24px
   font-weight: $font-weight-bold;
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .home-footer__column-list {
@@ -159,12 +159,12 @@
     font-size: 1.5rem; // 24px
     font-weight: $font-weight-regular;
     line-height: 1.67; // 40px/24px
-    color: $gray-950;
+    color: var(--text-default);
     text-decoration: none;
     @include transition;
 
     &:hover {
-      color: $color-primary;
+      color: var(--color-primary);
     }
   }
 }

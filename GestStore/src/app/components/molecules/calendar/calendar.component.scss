@@ -7,9 +7,9 @@
 // CALENDAR COMPONENT - BASADO EN FIGMA
 // ============================================================================
 .calendar {
-  background-color: $color-white;
+  background-color: var(--bg-surface);
   border-radius: 10px;
-  box-shadow: 0px 4px 8px 0px rgba(183, 183, 183, 0.2);
+  box-shadow: var(--shadow-sm);
   padding: $spacing-4;
   width: 328px;
   display: flex;
@@ -28,7 +28,7 @@
 
 .calendar__title {
   @include text-style($font-size-lg, $font-weight-bold, $line-normal);
-  color: $gray-950;
+  color: var(--text-default);
   margin: 0;
 }
 
@@ -44,16 +44,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid $color-primary;
+  border: 1px solid var(--color-primary);
   border-radius: 5px;
-  background-color: $color-white;
+  background-color: var(--bg-surface);
   cursor: pointer;
-  color: $color-primary;
+  color: var(--color-primary);
   @include transition(all);
   
   &:hover {
-    background-color: $color-primary;
-    color: $color-white;
+    background-color: var(--color-primary);
+    color: var(--text-on-primary);
   }
 }
 
@@ -69,12 +69,12 @@
 
 .calendar__weekday {
   @include text-style($font-size-sm, $font-weight-regular, $line-normal);
-  color: $gray-600;
+  color: var(--text-secondary);
   text-align: center;
   
   &--active {
     @include text-style($font-size-sm, $font-weight-bold, $line-normal);
-    color: $color-primary;
+    color: var(--color-primary);
   }
 }
 
@@ -91,7 +91,7 @@
 .calendar__day {
   all: unset;
   @include text-style($font-size-sm, $font-weight-regular, $line-normal);
-  color: $gray-950;
+  color: var(--text-default);
   text-align: center;
   padding: $spacing-2;
   border-radius: 5px;
@@ -103,25 +103,25 @@
   @include transition(all);
   
   &:hover {
-    background-color: rgba($color-primary, 0.1);
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
   }
   
   &--other-month {
-    color: $gray-400;
+    color: var(--text-muted);
   }
   
   &--selected {
-    background-color: $color-primary;
-    color: $color-white;
+    background-color: var(--color-primary);
+    color: var(--text-on-primary);
     @include text-style($font-size-sm, $font-weight-bold, $line-normal);
     
     &:hover {
-      background-color: $color-primary;
+      background-color: var(--color-primary);
     }
   }
   
   &--today {
-    background-color: rgba($color-primary, 0.15);
+    background-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
   }
 }
 
@@ -136,8 +136,8 @@
 
 .calendar__selected-badge {
   @include text-style($font-size-sm, $font-weight-regular, $line-normal);
-  color: $color-primary;
-  background-color: map.get($color-primary-scale, light-active);
+  color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 12%, transparent);
   padding: $spacing-2 $spacing-3;
   border-radius: 10px;
   
@@ -176,22 +176,22 @@
   @include transition(all);
   
   &--outline {
-    border: 1px solid $color-primary;
-    color: $color-primary;
-    background-color: $color-white;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    background-color: var(--bg-surface);
     
     &:hover {
-      background-color: rgba($color-primary, 0.1);
+      background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
     }
   }
   
   &--primary {
-    background-color: $color-primary;
-    color: $color-white;
+    background-color: var(--color-primary);
+    color: var(--text-on-primary);
     @include text-style($font-size-base, $font-weight-bold, $line-normal);
     
     &:hover {
-      background-color: color.scale($color-primary, $lightness: -10%);
+      background-color: var(--interactive-hover);
     }
   }
 }

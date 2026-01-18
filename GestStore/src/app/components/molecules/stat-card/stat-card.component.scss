@@ -14,14 +14,14 @@
   padding: $spacing-6;
 
   // 4️⃣ BACKGROUND
-  background-color: $color-white;
+  background-color: var(--bg-surface);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-light;
+  border: $border-thin solid var(--border-light);
   border-radius: $radius-lg;
 
   // 7️⃣ EFECTOS VISUALES
-  box-shadow: $shadow-sm;
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 
   // 8️⃣ TRANSICIONES
@@ -32,9 +32,9 @@
     cursor: pointer;
 
     &:hover {
-      box-shadow: $shadow-lg;
+      box-shadow: var(--shadow-lg);
       transform: translateY(-4px);
-      border-color: $color-primary;
+      border-color: var(--color-primary);
 
       .stat-card__icon-wrapper {
         transform: scale(1.05);
@@ -43,7 +43,7 @@
 
     &:active {
       transform: translateY(-2px);
-      box-shadow: $shadow-md;
+      box-shadow: var(--shadow-md);
     }
   }
 
@@ -73,28 +73,28 @@
 
   // Modificadores por color
   &--primary {
-    background-color: $color-primary-light;
-    color: $color-primary;
+    background-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
+    color: var(--color-primary);
   }
 
   &--success {
-    background-color: rgba($success, 0.15);
-    color: $success;
+    background-color: color-mix(in srgb, var(--color-success) 15%, transparent);
+    color: var(--color-success);
   }
 
   &--warning {
-    background-color: rgba($warning, 0.15);
-    color: $warning;
+    background-color: color-mix(in srgb, var(--color-warning) 15%, transparent);
+    color: var(--color-warning);
   }
 
   &--info {
-    background-color: rgba($info, 0.15);
-    color: $info;
+    background-color: color-mix(in srgb, var(--color-info) 15%, transparent);
+    color: var(--color-info);
   }
 
   &--error {
-    background-color: rgba($error, 0.15);
-    color: $error;
+    background-color: color-mix(in srgb, var(--color-error) 15%, transparent);
+    color: var(--color-error);
   }
 }
 
@@ -117,7 +117,7 @@
 .stat-card__title {
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
-  color: $text-secondary;
+  color: var(--text-secondary);
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -126,7 +126,7 @@
 .stat-card__value {
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-3xl, $font-weight-bold, $line-tight);
-  color: $text-default;
+  color: var(--text-default);
   margin: 0;
 }
 
@@ -143,22 +143,22 @@
 
   // Modificadores de tipo de tendencia
   &--positive {
-    color: $success;
+    color: var(--color-success);
   }
 
   &--negative {
-    color: $error;
+    color: var(--color-error);
   }
 
   &--neutral {
-    color: $text-muted;
+    color: var(--text-muted);
   }
 }
 
 .stat-card__trend-label {
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-xs, $font-weight-regular, $line-normal);
-  color: $text-muted;
+  color: var(--text-muted);
   margin-left: $spacing-1;
 }
 
@@ -191,25 +191,25 @@
 // ============================================================================
 @media (prefers-color-scheme: dark) {
   .stat-card {
-    background-color: $gray-900;
-    border-color: $gray-800;
+    background-color: var(--bg-surface);
+    border-color: var(--border-default);
 
     &--hoverable:hover {
-      background-color: $gray-800;
-      border-color: $color-primary;
+      background-color: var(--bg-hover);
+      border-color: var(--color-primary);
     }
   }
 
   .stat-card__title {
-    color: $gray-400;
+    color: var(--text-secondary);
   }
 
   .stat-card__value {
-    color: $color-white;
+    color: var(--text-default);
   }
 
   .stat-card__trend-label {
-    color: $gray-500;
+    color: var(--text-muted);
   }
 }
 

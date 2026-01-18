@@ -32,16 +32,16 @@
   // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
-  color: $color-primary;
+  color: var(--color-primary);
 
   // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
 
   // 8️⃣ TRANSICIONES
-  transition: all $transition-base;
+  transition: all var(--transition-base) var(--transition-easing);
 
   &:hover {
-    color: color-primary(normal-hover);
+    color: var(--interactive-hover);
     transform: translateX(-0.25rem);
   }
 
@@ -60,14 +60,18 @@
   min-height: 31.25rem;
 
   // 4️⃣ BACKGROUND
-  background: $bg-default;
+  background: var(--bg-default);
 
   // 5️⃣ BORDER
   border-radius: $radius-lg;
 
   // 7️⃣ EFECTOS VISUALES
   overflow: hidden;
-  box-shadow: $shadow-lg;
+  box-shadow: var(--shadow-lg);
+
+  // 8️⃣ TRANSICIONES
+  transition: background-color var(--transition-base) var(--transition-easing),
+              box-shadow var(--transition-base) var(--transition-easing);
 
   @include respond(md) {
     gap: $spacing-4;
@@ -89,9 +93,12 @@
 .register-modal__title {
   font-size: $font-size-2xl;
   font-weight: $font-weight-bold;
-  color: $text-default;
+  color: var(--text-default);
   margin: 0;
   text-align: center;
+
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
 }
 
 .register-modal__form {
@@ -123,8 +130,8 @@
   // 4️⃣ BACKGROUND
   background: linear-gradient(
     135deg,
-    rgba($color-primary, 0.05) 0%,
-    rgba($color-primary, 0.1) 100%
+    rgba(var(--color-primary-rgb, 107, 90, 255), 0.05) 0%,
+    rgba(var(--color-primary-rgb, 107, 90, 255), 0.1) 100%
   );
 
   @include respond(md) {
@@ -161,12 +168,16 @@
   // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-sm;
   text-align: center;
-  color: $gray-500;
+  color: var(--text-secondary);
+
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
 
   a {
     font-weight: $font-weight-semibold;
-    color: $color-primary;
+    color: var(--color-primary);
     text-decoration: none;
+    transition: color var(--transition-base) var(--transition-easing);
 
     &:hover {
       text-decoration: underline;
@@ -197,26 +208,30 @@
   padding: $spacing-2 $spacing-2 $spacing-2 $spacing-3;
 
   // 4️⃣ BACKGROUND
-  background: $bg-default;
+  background: var(--bg-default);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-md;
 
   // 6️⃣ TIPOGRAFÍA
   font-family: inherit;
   font-size: $font-size-sm;
-  color: $text-default;
+  color: var(--text-default);
 
   // 8️⃣ TRANSICIONES
-  transition: border-color $transition-base, box-shadow $transition-base;
+  transition: background-color var(--transition-base) var(--transition-easing),
+              border-color var(--transition-base) var(--transition-easing),
+              box-shadow var(--transition-base) var(--transition-easing),
+              color var(--transition-base) var(--transition-easing);
 
   &:focus {
     @include focus-visible;
   }
 
   &::placeholder {
-    color: $gray-400;
+    color: var(--text-muted);
+    transition: color var(--transition-base) var(--transition-easing);
   }
 
   &--with-icon {
@@ -224,7 +239,7 @@
   }
 
   &--error {
-    border-color: $error;
+    border-color: var(--color-error);
   }
 }
 
@@ -240,10 +255,13 @@
   height: $spacing-5;
 
   // 6️⃣ TIPOGRAFÍA
-  color: $gray-500;
+  color: var(--text-secondary);
 
   // 7️⃣ EFECTOS VISUALES
   pointer-events: none;
+
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
 }
 
 .form-error {
@@ -252,7 +270,7 @@
 
   // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-xs;
-  color: $error;
+  color: var(--color-error);
 }
 
 .form-group--upload {
@@ -266,7 +284,7 @@
 
 .form-upload__label {
   font-size: $font-size-xs;
-  color: $text-muted;
+  color: var(--text-muted);
 }
 
 .form-checkbox {
@@ -286,8 +304,11 @@
   outline: none;
   box-shadow: none;
 
+  // 8️⃣ TRANSICIONES
+  transition: border-color var(--transition-base) var(--transition-easing);
+
   &:checked {
-    accent-color: $color-primary;
+    accent-color: var(--color-primary);
   }
 
   &:focus {
@@ -299,13 +320,16 @@
 .form-checkbox__label {
   // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-sm;
-  color: $gray-500;
+  color: var(--text-secondary);
 
   // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
 
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
+
   &:hover {
-    color: $text-default;
+    color: var(--text-default);
   }
 }
 
@@ -329,21 +353,23 @@ fieldset .button {
   }
 
   &.button--primary {
-    background-color: $color-primary;
-    color: $color-white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
     transform: translateY(0);
-    transition: all 250ms ease-out;
+    transition: background-color var(--transition-base) var(--transition-easing),
+                transform 250ms ease-out,
+                box-shadow var(--transition-base) var(--transition-easing);
 
     &:hover {
-      background-color: color.scale($color-primary, $lightness: -20%);
+      background-color: var(--color-primary-hover);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-md);
     }
 
     &:active {
-      background-color: color.scale($color-primary, $lightness: -35%);
+      background-color: var(--color-primary-active);
       transform: translateY(0);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-sm);
     }
 
     &:focus-visible {
@@ -351,7 +377,7 @@ fieldset .button {
     }
 
     &:disabled {
-      background-color: $gray-300;
+      background-color: var(--gray-300);
       cursor: not-allowed;
       transform: none;
       box-shadow: none;

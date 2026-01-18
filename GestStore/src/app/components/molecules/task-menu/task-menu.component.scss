@@ -12,10 +12,10 @@
   gap: $spacing-1;
   
   // Visual styles
-  background-color: $color-white;
+  background-color: var(--bg-surface);
   border-radius: $radius-md;
-  border: $border-thin solid rgba($color-black, 0.08);
-  box-shadow: $shadow-lg;
+  border: $border-thin solid var(--border-default);
+  box-shadow: var(--shadow-lg);
   padding: $spacing-2;
   min-width: 10.5rem;
   
@@ -33,7 +33,7 @@
   all: unset;
   box-sizing: border-box;
   @include text-style($font-size-xs, $font-weight-regular, $line-normal);
-  color: $gray-950;
+  color: var(--text-default);
   cursor: pointer;
   padding: $spacing-2 $spacing-3;
   @include transition(color, background-color);
@@ -43,12 +43,12 @@
   width: 100%;
   
   &:hover {
-    color: $color-primary;
-    background-color: $color-primary-light;
+    color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
   }
   
   &:active {
-    background-color: rgba($color-primary, 0.1);
+    background-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
   }
   
   &:focus-visible {

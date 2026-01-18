@@ -1,48 +1,58 @@
-# Fase 1: Fundamentos y Arquitectura CSS
+# DOCUMENTACION | APARTADO DISEÑO
+
+# Sección 1: Arquitectura CSS y comunicación visual
 
 ## 1.1 Principios de comunicación visual
 
-En este proyecto se aplican los cinco principios básicos de comunicación visual para garantizar una interfaz clara y coherente:
+En mi interfaz aplico los cinco principios básicos de comunicación visual para mantener claridad, coherencia y legibilidad:
 
-- **Jerarquía:** Se utiliza una escala tipográfica modular, pesos de fuente y espaciados definidos para destacar títulos, subtítulos y textos secundarios. Los tamaños y pesos de fuente están organizados para que el usuario identifique fácilmente la información más relevante.
-- **Contraste:** La paleta de colores incluye tonos primarios, secundarios, neutros y semánticos, permitiendo diferenciar elementos interactivos, estados y mensajes. El contraste entre fondo y texto asegura legibilidad.
-- **Alineación:** Todos los elementos siguen una estrategia de alineación basada en grid y flex, facilitando la organización visual y la lectura. Se prioriza la alineación izquierda y el uso de grids para distribuir el contenido.
-- **Proximidad:** El sistema de espaciado modular agrupa elementos relacionados y separa los que no lo están, mejorando la comprensión visual.
-- **Repetición:** Se repiten patrones visuales como botones, tarjetas y alertas, usando los mismos estilos y variables para mantener coherencia en toda la aplicación.
+1) **Jerarquía**
+- Uso una escala tipográfica definida en mis tokens ($font-size-xs a $font-size-7xl) y pesos de fuente ($font-weight-light a $font-weight-bold).
+- Refuerzo la jerarquía con espaciado modular ($spacing-1 a $spacing-24) y separación entre bloques.
+
+2) **Contraste**
+- La paleta incluye colores primarios, acentos, neutros y semánticos definidos en src/styles/00-settings/_variables.scss.
+- Aplico contraste en botones, alerts y badges usando variables de color (ej: var(--color-primary), var(--color-error)).
+
+3) **Alineación**
+- Priorizo alineación izquierda y layouts con grid/flex (por ejemplo, el header y los contenedores de página).
+- Mantengo coherencia de alineación en tarjetas y formularios con la misma base de spacing.
+
+4) **Proximidad**
+- Agrupo elementos relacionados con el sistema de espaciado (ej: .task-card__info y .add-task-modal__field).
+- Separo visualmente módulos distintos con padding, gap y borders.
+
+5) **Repetición**
+- Repito patrones: botones, cards, alerts, tabs, badges y tags reutilizan clases y tokens.
+- Esto mantiene consistencia visual en todo el sistema.
 
 ![Foto dashboard](image.png)
 
-A continuación se explica cómo se aplican los 5 principios en la imagen del dashboard:
-
-- **Jerarquía:** Los títulos y secciones principales destacan por su tamaño y peso, guiando la atención del usuario hacia la información más relevante.
-- **Contraste:** Se utilizan colores diferenciados para botones, alertas y fondos, asegurando que los elementos importantes sean fácilmente identificables.
-- **Alineación:** Todos los bloques y tarjetas están perfectamente alineados en una cuadrícula, lo que facilita la lectura y la navegación visual.
-- **Proximidad:** Los elementos relacionados, como acciones y datos, están agrupados y separados de otros bloques, lo que ayuda a entender la relación entre ellos.
-- **Repetición:** Se repiten estilos de botones, tarjetas y tipografía en todo el dashboard, creando una experiencia coherente y uniforme.
 
 ---
 
 ## 1.2 Metodología CSS
 
-Se utiliza la metodología **BEM (Block Element Modifier)** para nombrar las clases CSS. Esto facilita la escalabilidad y el mantenimiento del código, evitando conflictos y mejorando la legibilidad.
+Uso **BEM (Block Element Modifier)** porque me permite escalar y mantener estilos sin colisiones. Mi convención:
 
-- **Bloques:** `.card`, `.button`, `.alert`
-- **Elementos:** `.card__title`, `.button__icon`, `.alert__message`
-- **Modificadores:** `.card--featured`, `.button--primary`, `.alert--success`
+- **Bloques**: .button, .card, .task-card
+- **Elementos**: .card__title, .task-card__status-icon, .tabs__panel
+- **Modificadores**: .button--primary, .badge--success, .task-card__status-icon--completed
 
-Ejemplo:
+Ejemplos reales de mi código:
+
 ```html
-<article class="card card--featured">
-  <h2 class="card__title">Título</h2>
-  <p class="card__content">Contenido</p>
+<button class="button button--primary button--large">Login</button>
+<article class="task-card task-card--hoverable">
+  <span class="task-card__status-icon task-card__status-icon--completed"></span>
 </article>
 ```
 
 ---
 
-## 1.3 Organización de archivos
+## 1.3 Organización de archivos (ITCSS)
 
-Se sigue la metodología **ITCSS** para organizar los estilos, de menor a mayor especificidad:
+Organizo estilos siguiendo ITCSS, de menor a mayor especificidad, y lo reflejo en src/styles.scss:
 
 ```
 src/styles/
@@ -54,60 +64,89 @@ src/styles/
 ├── 05-components/    # Componentes reutilizables
 ```
 
-El archivo `styles.scss` importa todos los estilos en este orden para asegurar que las dependencias y la cascada funcionen correctamente.
+Orden de importación (src/styles.scss):
+1) Settings → 2) Tools → 3) Generic → 4) Elements → 5) Objects → 6) Components.
+
+Así garantizo que lo más global y reutilizable se aplique primero, y los estilos específicos se sobreescriban de forma controlada al final.
 
 ---
 
 ## 1.4 Sistema de Design Tokens
 
-Todos los design tokens están definidos en `src/styles/00-settings/_variables.scss`:
+Defino los tokens en src/styles/00-settings/_variables.scss y los proyecto a CSS Custom Properties en src/styles/00-settings/_css-variables.scss.
 
-- **Colores:**
-  - Primarios: `$color-primary`, `$color-primary-light`, `$color-primary-scale`
-  - Secundarios y acentos: `$color-accent-1`, `$color-accent-2`, `$color-accent-3`, `$color-accent-4`, `$color-side-menu`
-  - Neutrales: `$gray-50` a `$gray-950`
-  - Semánticos: `$success`, `$error`, `$warning`, `$info`
-- **Tipografía:**
-  - Familias: `$font-primary`, `$font-secondary`
-  - Tamaños: `$font-size-xs` a `$font-size-7xl`
-  - Pesos: `$font-weight-light` a `$font-weight-bold`
-  - Alturas de línea: `$line-tight`, `$line-normal`, `$line-relaxed`, `$line-heading`
-- **Espaciado:**
-  - Escala modular: `$spacing-1` (0.25rem) a `$spacing-24` (6rem)
-- **Breakpoints:**
-  - `$breakpoint-sm` (640px), `$breakpoint-md` (768px), `$breakpoint-lg` (1024px), `$breakpoint-xl` (1280px)
-- **Elevaciones:**
-  - Sombras: `$shadow-sm`, `$shadow-md`, `$shadow-lg`, `$shadow-xl`
-- **Bordes y radios:**
-  - Bordes: `$border-thin`, `$border-medium`, `$border-thick`
-  - Radios: `$radius-sm`, `$radius-md`, `$radius-lg`, `$radius-xl`, `$radius-full`
-- **Transiciones:**
-  - `$transition-fast`, `$transition-base`, `$transition-slow`, `$transition-easing`
+**Colores**
+- Primario: $color-primary y su escala ($color-primary-scale).
+- Acentos: $color-accent-1..5 y $color-side-menu.
+- Neutrales: $gray-50 a $gray-950.
+- Semánticos: $success, $error, $warning, $info, $medium.
 
-**Decisiones:**
-- Los colores se eligieron para asegurar contraste y accesibilidad, siguiendo la identidad visual definida en Figma.
-- La escala tipográfica modular permite jerarquía visual y flexibilidad en distintos dispositivos.
-- Los breakpoints cubren los principales tamaños de pantalla (móvil, tablet, desktop).
+**Tipografía**
+- Familias: $font-primary y $font-secondary.
+- Tamaños: $font-size-xs a $font-size-7xl (escala modular).
+- Pesos y alturas de línea definidos para consistencia.
+
+**Espaciado**
+- Escala modular basada en 4px (0.25rem a 6rem).
+
+**Breakpoints (Desktop First)**
+- $breakpoint-xl: 1280px
+- $breakpoint-lg: 1024px
+- $breakpoint-md: 768px
+- $breakpoint-sm: 375px
+- $breakpoint-xs: 320px
+
+**Sombras, bordes y radios**
+- Sombras: $shadow-sm a $shadow-xl.
+- Bordes: $border-thin, $border-medium, $border-thick.
+- Radios: $radius-sm, $radius-md, $radius-lg, $radius-xl, $radius-full.
+
+**Decisiones clave**
+- Los colores siguen la paleta definida en Figma y garantizan contraste.
+- La tipografía modular facilita jerarquía y escalabilidad.
+- Los breakpoints cubren móvil, tablet y desktop en una estrategia desktop-first.
 
 ---
 
 ## 1.5 Mixins y funciones
 
-Los mixins están definidos en `src/styles/01-tools/_mixins.scss` y permiten reutilizar código para tipografía, layout, accesibilidad y utilidades:
+### Mixins disponibles (src/styles/01-tools/_mixins.scss)
+- `respond-down($breakpoint)` / `respond-up($breakpoint)` / `respond-between($lower, $upper)`: responsividad por breakpoint.
+- `mobile`, `tablet`, `desktop`: atajos responsive.
+- `respond($breakpoint)`: alias desktop-first.
+- `text-style($size, $weight, $lh)`: tipografía consistente.
+- `focus-visible`: accesibilidad en foco.
+- `transition($properties, $duration)`: transiciones suaves.
+- `flex-center`, `flex-between`: utilidades flex.
+- `truncate`: truncado con ellipsis.
+- `absolute-center`: centrado absoluto.
+- `theme-transition`, `surface`, `themed-border`, `themed-shadow`: soporte de temas.
 
-- `@mixin respond($breakpoint)`: Aplica estilos según el breakpoint definido.
-- `@mixin text-style($size, $weight, $lh)`: Aplica estilos tipográficos coherentes.
-- `@mixin focus-visible`: Mejora la accesibilidad visual en elementos interactivos.
-- `@mixin transition($properties, $duration)`: Aplica transiciones suaves.
-- `@mixin flex-center`, `@mixin flex-between`: Utilidades para centrar y distribuir elementos con flexbox.
-- `@mixin truncate`: Trunca texto largo con puntos suspensivos.
-- `@mixin absolute-center`: Centra elementos absolutamente.
+Ejemplo real de uso:
 
-**Ejemplo de uso:**
 ```scss
 .button {
-  @include text-style($font-size-base, $font-weight-bold);
-  @include transition(background-color);
+  @include text-style($font-size-sm, $font-weight-medium);
+  @include transition;
+  @include respond-down(md) {
+    font-size: $font-size-xs;
+  }
+}
+```
+
+### Funciones
+- `color-primary($state)` (src/styles/00-settings/_variables.scss) para leer estados del primario.
+
+Ejemplo real de uso (src/styles/03-elements/_typography.scss):
+
+```scss
+a {
+  color: $interactive-primary;
+  @include transition;
+
+  &:hover {
+    color: color-primary(normal-hover);
+  }
 }
 ```
 
@@ -115,1906 +154,626 @@ Los mixins están definidos en `src/styles/01-tools/_mixins.scss` y permiten reu
 
 ## 1.6 ViewEncapsulation en Angular
 
-En este proyecto se utiliza la estrategia de encapsulación **Emulated** (por defecto en Angular). Esto permite que los estilos de cada componente estén aislados, evitando que afecten a otros componentes y facilitando el mantenimiento. Si en algún caso se requiere aplicar estilos globales, se puede usar la opción **None**, pero se recomienda mantener Emulated para la mayoría de los componentes por seguridad y escalabilidad.
+Mantengo la estrategia **Emulated** (por defecto en Angular). No configuro `encapsulation` explícitamente en los componentes, por lo que Angular encapsula estilos a nivel de componente. Esto evita fugas de estilos y me da seguridad al escalar.
 
-**Ejemplo en mi código:**
-```typescript
-@Component({
-  selector: 'app-register-form',
-  templateUrl: './register-form.component.html',
-  styleUrls: ['./register-form.component.scss']
-  // encapsulation: ViewEncapsulation.Emulated // Angular lo aplica por defecto
-})
-export class RegisterFormComponent { ... }
-```
+Si necesito estilos globales, los coloco en src/styles.scss o en utilidades globales, pero el núcleo del sistema vive encapsulado por componente.
 
-La ausencia de la propiedad `encapsulation` indica que se está usando la opción Emulated por defecto.
-
-
----
-
-# Fase 2: HTML semántico y componentes de Layout
+# Sección 2: HTML semántico y estructura
 
 ## 2.1 Elementos semánticos utilizados
 
-En la aplicación se emplean los siguientes elementos semánticos para estructurar el contenido:
+Uso etiquetas semánticas en la estructura principal y en componentes específicos:
 
-- `<header>`: Encabezado principal, contiene el logo, navegación y acciones de usuario.
-- `<nav>`: Navegación principal y secundaria, menús de enlaces.
-- `<main>`: Contenedor del contenido principal de cada página.
-- `<section>`: Agrupa bloques de contenido relacionados temáticamente.
-- `<article>`: Contenido independiente y autocontenido (tarjetas de tareas, posts).
-- `<aside>`: Contenido complementario o secundario.
-- `<footer>`: Pie de página con información legal, contacto y enlaces.
-- `<figure>`: Contenedores de elementos visuales (logos, imágenes, fondos decorativos).
-- `<address>`: Información de contacto y direcciones.
-- `<menu>`: Listas de comandos o acciones (dropdowns, menús contextuales).
-- `<form>`: Para formularios de login y registro.
-- `<fieldset>` y `<legend>`: Para agrupar y describir campos relacionados en formularios.
-- `<button>`: Botones interactivos con atributo type="button".
-- `<a>`: Enlaces de navegación con routerLink o href.
+- **header**: cabeceras en app-header y home-header.
+- **nav**: navegación principal, secundaria y menús (ej. breadcrumbs, header, home-footer).
+- **main**: contenedor del contenido principal (app-main).
+- **section**: agrupaciones temáticas (hero, secciones de página, bloques de contenido).
+- **article**: piezas autocontenidas (cards, task-card, bloques de contenido).
+- **aside**: mensajes y feedback (app-alert).
+- **footer**: pie de página global y home-footer.
+- **figure**: imágenes decorativas y logotipos (home-header, home-footer, login/register).
+- **address**: contacto (home-footer y footer).
+- **menu**: menús de acciones (task-menu, selector de idioma).
+- **form**, **fieldset**, **legend**: estructura de formularios (add-task-modal, login/register).
 
-**Principio fundamental:** No se utilizan `<article>` genéricos excepto cuando no existe una etiqueta semántica más apropiada. Cada elemento HTML debe reflejar su propósito y significado.
+Ejemplos reales:
 
-**Ejemplo de código del Header:**
 ```html
 <header class="app-header">
-  <figure class="app-header__logo">
-    <img src="logo.png" alt="GestStore Logo" />
-  </figure>
-  <nav class="app-header__nav">
-    <a routerLink="/dashboard">Dashboard</a>
-    <a routerLink="/products">Productos</a>
-  </nav>
-  <button type="button" class="app-header__user-menu">Menú</button>
+  <nav class="app-header__nav" aria-label="Navegación principal">...</nav>
 </header>
-```
 
-**Ejemplo de código del Footer:**
-```html
-<footer class="app-footer">
-  <section class="app-footer__content">
-    <article class="app-footer__brand">
-      <figure class="app-footer__logo">
-        <h2>GestStore</h2>
-        <img src="logo.png" alt="Logo" />
-      </figure>
-      <address>
-        <p>Copyright © 2025 GestStore Ltd</p>
-        <p>soportegeststore@gmail.com</p>
-      </address>
-    </article>
-    <nav class="app-footer__links">
-      <h3>Enlaces</h3>
-      <ul>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">FAQ</a></li>
-      </ul>
-    </nav>
-  </section>
-</footer>
+<main class="app-main">
+  <section class="app-main__container o-container">...</section>
+</main>
+
+<aside class="alert" role="alert">...</aside>
 ```
 
 ---
 
 ## 2.2 Jerarquía de headings
 
-La estrategia de headings sigue estas reglas:
-- Solo un `<h1>` por página, para el título principal.
-- `<h2>` para secciones principales.
-- `<h3>` para subsecciones.
-- Nunca se saltan niveles.
+Reglas que sigo:
+- Solo un h1 por página.
+- h2 para secciones principales.
+- h3 para subsecciones.
+- No salto niveles.
 
-**Diagrama de jerarquía:**
+Diagrama:
 ```
-h1: Título principal de la página
+h1: Título principal
   └─ h2: Sección principal
       └─ h3: Subsección
 ```
 
-![Jerarquia titulos](image-2.png)
+proximamente adjuntare aqui la imagen
 
 ---
 
 ## 2.3 Estructura de formularios
 
-Los formularios usan `<form>`, `<fieldset>`, `<legend>`, y el componente `form-input` para cada campo. Los labels están correctamente asociados a los inputs mediante `for` e `id`.
+Mis formularios están estructurados con form, fieldset y legend, y asocio labels con inputs mediante id/for o wrapping.
 
-**Ejemplo de código de form-input:**
+Ejemplo real en el modal de tareas:
+
 ```html
-<form class="register-modal__form" (ngSubmit)="onSubmit($event)">
-    <fieldset>
-    <legend>Datos de registro</legend>
-    <article class="form-group">
-        <input type="text" 
-                class="form-input form-input--with-icon" 
-                placeholder="Introduce el nombre"
-                [(ngModel)]="nombre"
-                name="nombre"
-                [class.form-input--error]="errors['nombre']">
-        <svg class="form-input__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
-        </svg>
-        @if (errors['nombre']) {
-        <p class="form-error">{{ errors['nombre'] }}</p>
-        }
-    </article>
-
+<form class="add-task-modal__form" (ngSubmit)="onSubmit($event)">
+  <fieldset class="add-task-modal__left-column">
+    <legend class="visually-hidden">Información de la tarea</legend>
+    <label class="add-task-modal__field">
+      <span class="add-task-modal__label">Titulo</span>
+      <input type="text" class="add-task-modal__input" name="title" required />
+    </label>
+  </fieldset>
+</form>
 ```
 
-![Register](image-1.png)
+Ejemplo real del componente app-form-input:
 
----
-
-## 2.4 Componentes Home Header y Home Footer
-
-Se han implementado dos componentes moleculares para la página de inicio que demuestran el uso correcto de HTML semántico:
-
-### Home Header Component
-
-Componente de encabezado para landing page con:
-- Fondo decorativo con imagen (usando `<figure>`)
-- Logo y navegación con selector de idioma funcional
-- Sección hero con título, descripción y CTA
-
-**Estructura semántica:**
 ```html
-<header class="home-header">
-  <!-- Fondos decorativos -->
-  <figure class="home-header__background"></figure>
-  <figure class="home-header__background-img">
-    <img [src]="backgroundImg" alt="Background" />
-  </figure>
-
-  <!-- Barra de navegación -->
-  <section class="home-header__content">
-    <figure class="home-header__brand">
-      <img [src]="logoImg" alt="GestStore Logo" />
-      <h1 class="home-header__logo-text">GestStore</h1>
-    </figure>
-
-    <nav class="home-header__nav">
-      <!-- Selector de idioma con dropdown -->
-      <button type="button" class="home-header__language">
-        <span>{{ currentLanguage.flag }} {{ currentLanguage.code }}</span>
-        <menu class="home-header__language-dropdown">
-          <li><button type="button">Español</button></li>
-        </menu>
-      </button>
-      <a routerLink="/login">LogIn</a>
-    </nav>
-  </section>
-
-  <!-- Sección Hero -->
-  <section class="home-header__hero">
-    <h2 class="home-header__hero-title">
-      Organiza tus tareas y controla tu inventario
-    </h2>
-    <article class="home-header__hero-description">
-      <p>Gestiona tus productos...</p>
-    </article>
-    <a routerLink="/register" class="home-header__register-btn">
-      <span>REGÍSTRATE GRATIS!</span>
-    </a>
-  </section>
-</header>
-```
-
-**Decisiones semánticas:**
-- `<figure>` para elementos decorativos y logos
-- `<section>` para agrupaciones de contenido relacionado
-- `<article>` para bloques de texto autocontenidos
-- `<menu>` + `<li>` para el dropdown de idiomas
-- `<button type="button">` para interacciones que no envían formularios
-- `<h1>` solo para el nombre de la marca en el header
-- `<h2>` para el título principal del hero
-
-### Home Footer Component
-
-Componente de pie de página con:
-- Columna de marca con logo, copyright y badges de apps
-- Tres columnas de navegación (GestStore, Legal, Redes Sociales)
-- Grid layout responsive mantenido en todos los breakpoints
-
-**Estructura semántica:**
-```html
-<footer class="home-footer">
-  <section class="home-footer__content">
-    <!-- Columna de marca -->
-    <article class="home-footer__brand">
-      <figure class="home-footer__logo">
-        <h2>GestStore</h2>
-        <img [src]="logoImg" alt="Logo" />
-      </figure>
-      
-      <address class="home-footer__copyright">
-        <p>Copyright © 2025 GestStore Ltd - Cádiz, España</p>
-        <p>Asistencia: soportegeststore@gmail.com</p>
-      </address>
-
-      <nav class="home-footer__apps">
-        <a href="#">
-          <img [src]="androidBadge" alt="Google Play" />
-        </a>
-        <a href="#">
-          <img [src]="appleBadge" alt="App Store" />
-        </a>
-      </nav>
-    </article>
-
-    <!-- Columnas de navegación -->
-    <nav class="home-footer__column">
-      <h3>GestStore</h3>
-      <ul>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">Contacto</a></li>
-      </ul>
-    </nav>
-
-    <nav class="home-footer__column">
-      <h3>Legal</h3>
-      <ul>
-        <li><a href="#">Términos de uso</a></li>
-        <li><a href="#">Cookies</a></li>
-        <li><a href="#">Política de Privacidad</a></li>
-      </ul>
-    </nav>
-
-    <nav class="home-footer__column">
-      <h3>Redes Sociales</h3>
-      <ul>
-        <li>
-          <a href="#" class="home-footer__social-link">
-            <img [src]="instagramLogo" alt="Instagram" />
-            <span>Instagram</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </section>
-</footer>
-```
-
-**Decisiones semánticas:**
-- `<footer>` como contenedor principal
-- `<section>` para el grid de contenido
-- `<article>` para la columna de marca (contenido autocontenido)
-- `<figure>` para el logo
-- `<address>` para información de contacto y copyright (uso correcto según HTML5)
-- `<nav>` para todas las columnas de enlaces y badges de apps
-- `<h2>` para el nombre de marca en footer
-- `<h3>` para títulos de columnas
-
-**Componentes ubicados en:** `src/app/components/molecules/home-header/` y `src/app/components/molecules/home-footer/`
-
----
-
-**Fase 2 completada:**
-- Componentes de layout semánticos y reutilizables.
-- Componente form-input funcional y accesible.
-- Formularios estructurados y completos.
-- Estilos SCSS siguiendo BEM y usando variables.
-- Custom Properties CSS para temas.
-- Documentación ampliada en este archivo.
-
----
-
-# Fase 3: Componentes UI Básicos
-
-## 3.1 Componentes implementados
-
-En esta fase se han desarrollado **9 componentes UI** fundamentales que forman la base del sistema de diseño. Todos siguen la arquitectura de componentes standalone de Angular con soporte para TypeScript, SCSS y accesibilidad.
-
-### Componentes Obligatorios (5/5)
-
-#### **Button** (`src/app/components/atoms/button/`)
-Componente de botón interactivo con múltiples variantes y estados.
-
-**Variantes:** Primary, Secondary, Tertiary, Success, Error, Warning
-**Tamaños:** Small (28px), Medium (40px, default), Large (48px)
-**Estados:** Normal, Hover, Active, Disabled, Full-width
-
-**Código  del componente TypeScript:**
-```typescript
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'success' | 'warning';
-export type ButtonSize = 'small' | 'medium' | 'large';
-
-@Component({
-  selector: 'app-button',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <button 
-      [class]="getButtonClasses()"
-      [disabled]="disabled"
-      (click)="onClick()">
-      <ng-content></ng-content>
-    </button>
-  `,
-  styleUrl: './button.component.scss'
-})
-export class ButtonComponent {
-  @Input() variant: ButtonVariant = 'primary';
-  @Input() size: ButtonSize = 'medium';
-  @Input() disabled: boolean = false;
-  @Input() fullWidth: boolean = false;
-
-  getButtonClasses(): string {
-    return `button button--${this.variant} button--${this.size} ${this.fullWidth ? 'button--full-width' : ''}`;
-  }
-
-  onClick(): void {
-    // lógica personalizada
-  }
-}
-```
-
-**Uso en template:**
-```html
-<app-button variant="primary">Botón Primario</app-button>
-<app-button variant="secondary" size="small">Pequeño</app-button>
-<app-button variant="error" [disabled]="true">Deshabilitado</app-button>
-<app-button variant="success" [fullWidth]="true">Ancho Completo</app-button>
-```
-
-**Nomenclatura BEM:**
-```scss
-.button {                      // Bloque
-  &--primary { }               // Modificador: variante
-  &--small { }                 // Modificador: tamaño
-  &:disabled { }               // Modificador: estado
-  &--full-width { }            // Modificador: ancho
-}
-```
-
----
-
-#### **Card** (`src/app/components/molecules/card/`)
-Componente contenedor para agrupar contenido relacionado.
-
-**Sombras:** Small, Medium, Large
-**Propiedades:** Titulo configurable, contenido flexible, efecto hover opcional
-
-**Código  del componente TypeScript:**
-```typescript
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-@Component({
-  selector: 'app-card',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <article [class]="getCardClasses()">
-      <article *ngIf="title" class="card__header">
-        <h3 class="card__title">{{ title }}</h3>
-      </article>
-      <article class="card__body">
-        <ng-content></ng-content>
-      </article>
-      <article *ngIf="footer" class="card__footer">
-        <ng-content select="[card-footer]"></ng-content>
-      </article>
-    </article>
-  `,
-  styleUrl: './card.component.scss'
-})
-export class CardComponent {
-  @Input() title: string = '';
-  @Input() footer: boolean = false;
-  @Input() hoverable: boolean = true;
-  @Input() shadow: 'small' | 'medium' | 'large' = 'medium';
-
-  getCardClasses(): string {
-    return `card card--shadow-${this.shadow} ${this.hoverable ? 'card--hoverable' : ''}`;
-  }
-}
-```
-
-**Uso en template:**
-```html
-<app-card shadow="medium" title="Título de tarjeta">
-  <p>Contenido de la tarjeta</p>
-</app-card>
-
-<app-card shadow="large" title="Tarjeta Destacada">
-  <ul>
-    <li>Item 1</li>
-    <li>Item 2</li>
-  </ul>
-</app-card>
-```
-
-**Nomenclatura BEM:**
-```scss
-.card {                        // Bloque
-  &--shadow-small { }          // Modificador: sombra
-  &--shadow-medium { }         // Modificador: sombra
-  &__title { }                 // Elemento: título
-  &__content { }               // Elemento: contenido
-  &:hover { }                  // Modificador: interacción
-}
-```
-
----
-
-#### **Alert** (`src/app/components/molecules/alert/`)
-Componente de retroalimentación con ícono y mensaje para notificaciones.
-
-**Tipos:** Success (verde), Error (rojo), Warning (amarillo), Info (azul)
-**Características:** Icono automático según tipo, colores semánticos, accesible
-
-**Código  del componente TypeScript (parcial):**
-```typescript
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-export type AlertType = 'success' | 'warning' | 'error' | 'info';
-
-@Component({
-  selector: 'app-alert',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <article [class]="getAlertClasses()" role="alert">
-      <article class="alert__icon">
-        <svg class="alert__icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <!-- SVG dinámico según tipo -->
-        </svg>
-      </article>
-      <article class="alert__content">
-        <ng-content></ng-content>
-      </article>
-    </article>
-  `,
-  styleUrl: './alert.component.scss'
-})
-export class AlertComponent {
-  @Input() type: AlertType = 'info';
-
-  getAlertClasses(): string {
-    return `alert alert--${this.type}`;
-  }
-}
-```
-
-**Uso en template:**
-```html
-<app-alert type="success">¡Operación completada exitosamente!</app-alert>
-<app-alert type="error">Error: No se pudo procesar la solicitud</app-alert>
-<app-alert type="warning">Advertencia: Revisa los datos antes de continuar</app-alert>
-<app-alert type="info">Información: Esta acción es irreversible</app-alert>
-```
-
-**Nomenclatura BEM:**
-```scss
-.alert {                       // Bloque
-  &--success { }               // Modificador: tipo
-  &--error { }                 // Modificador: tipo
-  &__icon { }                  // Elemento: ícono
-  &__message { }               // Elemento: mensaje
-}
-```
-
----
-
-#### **Form Input** (`src/app/components/shared/form-input/`)
-Campo de entrada de texto con label, validación y ayuda contextual.
-
-**Tipos:** text, email, password, number, etc.
-**Estados:** Normal, Focus, Disabled, Error, Con ayuda
-**Propiedades:** Label, placeholder, required, disabled, error, helpText
-
-**Código  del componente TypeScript:**
-```typescript
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-@Component({
-  selector: 'app-form-input',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './form-input.component.html',
-  styleUrls: ['./form-input.component.scss']
-})
-export class FormInputComponent {
-  @Input() id: string = '';
-  @Input() name: string = '';
-  @Input() label: string = '';
-  @Input() type: string = 'text';
-  @Input() placeholder: string = '';
-  @Input() required: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() value: string = '';
-  @Input() error: string = '';
-  @Input() helpText: string = '';
-  
-  @Output() valueChange = new EventEmitter<string>();
-
-  onInput(event: any): void {
-    const newValue = event.target.value;
-    this.value = newValue;
-    this.valueChange.emit(newValue);
-  }
-}
-```
-
-**HTML  del componente:**
-```html
-<article class="form-group">
-  <label [for]="id" class="form-label" *ngIf="label">
-    {{ label }}
-    <span class="required" *ngIf="required" aria-label="requerido">*</span>
-  </label>
-  
+<label class="form-group">
+  <span class="form-label">{{ label }}</span>
   <input
     [id]="id"
     [name]="name"
     [type]="type"
-    [placeholder]="placeholder"
-    [required]="required"
-    [disabled]="disabled"
-    [value]="value"
-    [class.form-input--error]="error"
     class="form-input"
-    (input)="onInput($event)"
-    aria-describedby="help-text error-text"
   />
-
-  <p class="form-help" id="help-text" *ngIf="helpText">{{ helpText }}</p>
-  <p class="form-error" id="error-text" *ngIf="error" role="alert">{{ error }}</p>
-</article>
+</label>
 ```
 
-**Uso en template del proyecto:**
+---
+
+# Sección 3: Sistema de componentes UI
+
+## 3.1 Componentes implementados
+
+### Átomos
+
+**app-button**
+- Propósito: botón de acción con variantes y tamaños.
+- Variantes: primary, secondary, tertiary, outline, danger, success, warning, info, error.
+- Tamaños: small, medium, large.
+- Estados: disabled, active, fullWidth.
+- Ejemplo real (estilos de botón):
 ```html
-<app-form-input 
-  id="form-email"
-  name="email"
-  label="Correo Electrónico" 
-  type="email"
-  placeholder="ejemplo@correo.com"
-  required="true"
-  (valueChange)="onEmailChange($event)"
-/>
-
-<app-form-input 
-  id="form-password"
-  name="password"
-  label="Contraseña" 
-  type="password"
-  [helpText]="'Mínimo 8 caracteres'"
-/>
+<button class="button button--primary button--large">Login</button>
 ```
 
-**Nomenclatura BEM:**
+**app-badge**
+- Propósito: etiqueta de estado/contador.
+- Variantes: primary, secondary, success, warning, error, info, default.
+- Tamaños: small, medium.
+- Estados: sin estados especiales.
+- Ejemplo real:
+```html
+<app-badge variant="success">Success</app-badge>
+```
+
+**app-icon**
+- Propósito: iconografía con Lucide.
+- Variantes: nombres definidos en el mapa (search, bell, calendar, home, star, etc.).
+- Tamaños: small, medium, large.
+- Estados: sin estados especiales.
+- Ejemplo real:
+```html
+<app-icon name="calendar" size="small"></app-icon>
+```
+
+**app-spinner**
+- Propósito: indicador de carga.
+- Tamaños: small, medium, large.
+- Estados: animación `spin`.
+- Ejemplo real (markup interno del componente):
+```html
+<div class="spinner spinner-medium" aria-label="Cargando..."></div>
+```
+
+**app-tag**
+- Propósito: etiqueta de filtro o categoría.
+- Variantes: default, primary, success, warning, error.
+- Tamaños: sin tamaños específicos (responsive por CSS).
+- Estados: removable (aplica `.tag--removable`).
+- Ejemplo real:
+```html
+<app-tag variant="primary">Primary</app-tag>
+```
+
+---
+
+### Molecules
+
+**app-accordion**
+- Propósito: acordeón con soporte teclado.
+- Variantes: mode="single" | "multiple".
+- Tamaños: no aplica.
+- Estados: abierto/cerrado (`is-open`).
+- Ejemplo real:
+```html
+<app-accordion [items]="demoAccordionItems" mode="single"></app-accordion>
+```
+
+**app-alert**
+- Propósito: feedback de estado.
+- Variantes: success, warning, error, info.
+- Tamaños: no aplica.
+- Estados: closable (botón de cierre), focus/hover.
+- Ejemplo real:
+```html
+<app-alert type="error">Error: No se pudo completar la operación.</app-alert>
+```
+
+**app-card**
+- Propósito: contenedor de contenido con sombra.
+- Variantes: shadow="small|medium|large".
+- Tamaños: no aplica.
+- Estados: hoverable, variante CSS `.card--horizontal`.
+- Ejemplo real:
+```html
+<app-card shadow="medium" title="Shadow Medium">
+  <p>Contenido</p>
+</app-card>
+```
+
+**app-chart-card**
+- Propósito: tarjeta de gráfico con placeholder.
+- Variantes: chartType="line|bar|donut|area".
+- Tamaños: no aplica.
+- Estados: hover.
+- Ejemplo real:
+```html
+<app-chart-card title="Ventas" chartType="line"></app-chart-card>
+```
+
+**app-calendar**
+- Propósito: calendario interactivo.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: día seleccionado, día actual, días fuera de mes.
+- Ejemplo real:
+```html
+<app-calendar (close)="onClose()"></app-calendar>
+```
+
+**app-add-task-modal**
+- Propósito: modal para crear/editar tareas.
+- Variantes: isEditMode.
+- Tamaños: no aplica.
+- Estados: focus trap, validaciones del formulario.
+- Ejemplo real:
+```html
+<app-add-task-modal [isEditMode]="true" [task]="task"></app-add-task-modal>
+```
+
+**app-stat-card**
+- Propósito: tarjeta de métrica con icono.
+- Variantes: bgColor="primary|success|warning|info|error".
+- Tamaños: no aplica.
+- Estados: trendType="positive|negative|neutral", hoverable.
+- Ejemplo real:
+```html
+<app-stat-card title="Ventas" value="€9.450" trend="+8%" trendType="positive"></app-stat-card>
+```
+
+**app-tabs**
+- Propósito: navegación por pestañas.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: tab activo (`tabs__tab--active`).
+- Ejemplo real:
+```html
+<app-tabs [tabs]="demoTabs"></app-tabs>
+```
+
+**app-task-card**
+- Propósito: tarjeta de tarea con estado.
+- Variantes: status="completed|pending|in-progress|cancelled".
+- Tamaños: no aplica.
+- Estados: hoverable, imagen opcional.
+- Ejemplo real:
+```html
+<app-task-card [title]="task.title" [status]="task.status"></app-task-card>
+```
+
+**app-task-menu**
+- Propósito: menú contextual de acciones.
+- Variantes: status (string), isImportant.
+- Tamaños: no aplica.
+- Estados: hover/focus en items.
+- Ejemplo real:
+```html
+<app-task-menu [status]="task.status" [isImportant]="task.important" (action)="onAction($event)"></app-task-menu>
+```
+
+**app-home-header**
+- Propósito: header de landing.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: menú de idioma abierto/cerrado.
+- Ejemplo real:
+```html
+<app-home-header></app-home-header>
+```
+
+**app-home-footer**
+- Propósito: footer de landing.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: no aplica.
+- Ejemplo real:
+```html
+<app-home-footer></app-home-footer>
+```
+
+---
+
+### Layout
+
+**app-header**
+- Propósito: cabecera global con navegación y theme switcher.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: menú móvil abierto/cerrado.
+- Ejemplo real:
+```html
+<app-header></app-header>
+```
+
+**app-footer**
+- Propósito: pie de página global.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: no aplica.
+- Ejemplo real:
+```html
+<app-footer></app-footer>
+```
+
+**app-main**
+- Propósito: wrapper semántico del contenido.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: no aplica.
+- Ejemplo real:
+```html
+<app-main>...</app-main>
+```
+
+**app-breadcrumbs**
+- Propósito: navegación contextual.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: último elemento con aria-current.
+- Ejemplo real:
+```html
+<app-breadcrumbs></app-breadcrumbs>
+```
+
+---
+
+### Shared
+
+**app-form-input**
+- Propósito: input de texto con label, help y error.
+- Variantes: type (text, email, password, etc.).
+- Tamaños: no aplica.
+- Estados: error, disabled, required, focus.
+- Ejemplo real:
+```html
+<app-form-input id="email" name="email" label="Email" type="email"></app-form-input>
+```
+
+**app-form-select**
+- Propósito: select accesible.
+- Variantes: options.
+- Tamaños: no aplica.
+- Estados: error, disabled, required.
+- Ejemplo real:
+```html
+<app-form-select id="role" name="role" [options]="roles"></app-form-select>
+```
+
+**app-form-textarea**
+- Propósito: textarea accesible.
+- Variantes: rows.
+- Tamaños: no aplica.
+- Estados: error, disabled, required.
+- Ejemplo real:
+```html
+<app-form-textarea id="desc" name="desc" rows="6"></app-form-textarea>
+```
+
+**app-login-form**
+- Propósito: formulario de login.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: loading, errores de validación.
+- Ejemplo real:
+```html
+<app-login-form></app-login-form>
+```
+
+**app-register-form**
+- Propósito: formulario de registro.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: loading, errores de validación.
+- Ejemplo real:
+```html
+<app-register-form></app-register-form>
+```
+
+---
+
+## 3.2 Nomenclatura y metodología
+
+Ejemplos reales de BEM en mis componentes:
+
+- **Block**: `.button`
+- **Element**: `.task-card__status-icon`
+- **Modifier**: `.button--primary`, `.task-card__status-icon--completed`
+
+Ejemplos en código:
+
+```html
+<button class="button button--primary button--small"></button>
+<span class="task-card__status-icon task-card__status-icon--completed"></span>
+<nav class="app-header__nav app-header__nav--mobile"></nav>
+```
+
+Estrategia:
+- Uso **block** para el componente principal.
+- Uso **element** para piezas internas del bloque.
+- Uso **modifier** para variaciones visuales o estados (color, tamaño, activo).
+
+---
+
+## 3.3 Style Guide
+
+He creado la página de Style Guide en src/app/pages/style-guide, donde documento visualmente componentes, colores y tipografía. Me sirve como referencia visual, validación rápida y testing manual de estados.
+
+Capturas de la página de Style Guide:
+- proximamente adjuntare aqui la imagen
+
+---
+
+# Sección 4: Responsive design
+
+## 4.1 Breakpoints definidos
+
+Defino los breakpoints en src/styles/00-settings/_variables.scss:
+
+- xs: 320px
+- sm: 375px
+- md: 768px
+- lg: 1024px
+- xl: 1280px
+
+Justificación: cubro móvil pequeño, móvil estándar, tablet, laptop y desktop, con estrategia desktop-first.
+
+---
+
+## 4.2 Estrategia responsive
+
+Uso **desktop-first** con mixins `respond-down` para adaptar hacia tamaños menores. Ejemplo real en el header:
+
 ```scss
-.form-input {                  // Bloque
-  &__label { }                 // Elemento: etiqueta
-  &__input { }                 // Elemento: campo
-  &__help-text { }             // Elemento: ayuda
-  &__error { }                 // Elemento: error
-  &--disabled { }              // Modificador: estado
-  &--error { }                 // Modificador: estado
-  &:focus { }                  // Pseudoclase: interacción
-}
-```
-
----
-
-#### **Form Textarea** (`src/app/components/shared/form-textarea/`)
-Área de texto para entradas multilinea con validación y soporte de filas personalizadas.
-
-**Estados:** Normal, Focus, Disabled, Error, Con ayuda
-**Propiedades:** Label, placeholder, required, disabled, error, helpText, rows
-
-**Código  del componente TypeScript:**
-```typescript
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-@Component({
-  selector: 'app-form-textarea',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './form-textarea.component.html',
-  styleUrls: ['./form-textarea.component.scss']
-})
-export class FormTextareaComponent {
-  @Input() id: string = '';
-  @Input() name: string = '';
-  @Input() label: string = '';
-  @Input() placeholder: string = '';
-  @Input() required: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() value: string = '';
-  @Input() error: string = '';
-  @Input() helpText: string = '';
-  @Input() rows: number = 4;
-  
-  @Output() valueChange = new EventEmitter<string>();
-
-  onInput(event: any): void {
-    const newValue = event.target.value;
-    this.value = newValue;
-    this.valueChange.emit(newValue);
-  }
-}
-```
-
-**HTML  del componente:**
-```html
-<article class="form-group">
-  <label [for]="id" class="form-label" *ngIf="label">
-    {{ label }}
-    <span class="required" *ngIf="required" aria-label="requerido">*</span>
-  </label>
-  
-  <textarea
-    [id]="id"
-    [name]="name"
-    [placeholder]="placeholder"
-    [required]="required"
-    [disabled]="disabled"
-    [value]="value"
-    [rows]="rows"
-    [class.form-textarea--error]="error"
-    class="form-textarea"
-    (input)="onInput($event)"
-    aria-describedby="help-text error-text"
-  ></textarea>
-
-  <p class="form-help" id="help-text" *ngIf="helpText">{{ helpText }}</p>
-  <p class="form-error" id="error-text" *ngIf="error" role="alert">{{ error }}</p>
-</article>
-```
-
-**Uso en template del proyecto:**
-```html
-<app-form-textarea 
-  id="form-description"
-  name="description"
-  label="Descripción" 
-  placeholder="Ingresa una descripción..."
-  [rows]="5"
-  required
-  (valueChange)="onDescriptionChange($event)"
-/>
-
-<app-form-textarea 
-  id="form-comments"
-  name="comments"
-  label="Comentarios"
-  [rows]="3"
-  [helpText]="'Máximo 500 caracteres'"
-/>
-```
-
-**Nomenclatura BEM:**
-```scss
-.form-textarea {               // Bloque
-  &__label { }                 // Elemento: etiqueta
-  &__textarea { }              // Elemento: campo
-  &__help-text { }             // Elemento: ayuda
-  &--error { }                 // Modificador: estado
-}
-```
-
----
-
-#### **Form Select** (`src/app/components/shared/form-select/`)
-Dropdown con opciones tipadas para selecciones predefinidas.
-
-**Estados:** Normal, Focus, Disabled, Open, Cerrado
-**Propiedades:** Label, options (SelectOption[]), placeholder, required, disabled
-
-**Interfaz y Componente TypeScript :**
-```typescript
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-export interface SelectOption {
-  value: string | number;
-  label: string;
-  disabled?: boolean;
-}
-
-@Component({
-  selector: 'app-form-select',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './form-select.component.html',
-  styleUrls: ['./form-select.component.scss']
-})
-export class FormSelectComponent {
-  @Input() id: string = '';
-  @Input() name: string = '';
-  @Input() label: string = '';
-  @Input() options: SelectOption[] = [];
-  @Input() placeholder: string = '';
-  @Input() required: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() value: string | number = '';
-  @Input() error: string = '';
-  @Input() helpText: string = '';
-  
-  @Output() valueChange = new EventEmitter<string | number>();
-
-  onChange(event: any): void {
-    const newValue = event.target.value;
-    this.value = newValue;
-    this.valueChange.emit(newValue);
-  }
-}
-```
-
-**Uso en template del proyecto:**
-```typescript
-// En el componente del padre
-selectOptions: SelectOption[] = [
-  { value: 'es', label: 'España' },
-  { value: 'mx', label: 'México' },
-  { value: 'ar', label: 'Argentina' },
-  { value: 'co', label: 'Colombia' }
-];
-```
-
-```html
-<app-form-select 
-  id="country"
-  name="country"
-  label="País" 
-  placeholder="Selecciona un país"
-  [options]="selectOptions"
-  required
-  (valueChange)="onCountryChange($event)"
-/>
-
-<app-form-select 
-  id="category"
-  name="category"
-  label="Categoría" 
-  [options]="categories"
-  [helpText]="'Elige la categoría que mejor se ajuste'"
-/>
-```
-
-**Nomenclatura BEM:**
-```scss
-.form-select {                 // Bloque
-  &__label { }                 // Elemento: etiqueta
-  &__select { }                // Elemento: select
-  &__arrow { }                 // Elemento: flecha custom
-  &__help-text { }             // Elemento: ayuda
-  &--error { }                 // Modificador: estado
-}
-```
-
----
-
-### Componentes Adicionales (5/5)
-
-#### **Badge** (`src/app/components/atoms/badge/`)
-Etiqueta pequeña para estados, categorías y notificaciones.
-
-**Variantes:** Primary, Secondary, Success, Error, Warning, Info
-**Tamaños:** Small, Medium
-
-**Código  del componente TypeScript:**
-```typescript
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
-
-@Component({
-  selector: 'app-badge',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <span [class]="getBadgeClasses()">
-      <ng-content></ng-content>
-    </span>
-  `,
-  styleUrl: './badge.component.scss'
-})
-export class BadgeComponent {
-  @Input() variant: BadgeVariant = 'primary';
-  @Input() size: 'small' | 'medium' = 'small';
-
-  getBadgeClasses(): string {
-    return `badge badge--${this.variant} badge--${this.size}`;
-  }
-}
-```
-
-**Uso en template del proyecto:**
-```html
-<app-badge variant="primary" size="small">Premium</app-badge>
-<app-badge variant="success">Completado</app-badge>
-<app-badge variant="error" size="medium">Crítico</app-badge>
-<app-badge variant="warning">Pendiente</app-badge>
-```
-
----
-
-#### **Tag** (`src/app/components/atoms/tag/`)
-Etiqueta removible para selecciones y filtros.
-
-**Variantes:** Default, Primary, Success, Error, Warning
-
-**Código  del componente TypeScript:**
-```typescript
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-export type TagVariant = 'default' | 'primary' | 'success' | 'warning' | 'error';
-
-@Component({
-  selector: 'app-tag',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <span [class]="getTagClasses()">
-      <ng-content></ng-content>
-    </span>
-  `,
-  styleUrl: './tag.component.scss'
-})
-export class TagComponent {
-  @Input() variant: TagVariant = 'default';
-  @Input() removable: boolean = false;
-
-  getTagClasses(): string {
-    return `tag tag--${this.variant} ${this.removable ? 'tag--removable' : ''}`;
-  }
-
-  onRemove(): void {
-    // Emit remove event
-  }
-}
-```
-
-**Uso en template del proyecto:**
-```html
-<app-tag variant="primary">JavaScript</app-tag>
-<app-tag variant="success">Angular</app-tag>
-<app-tag variant="error" [removable]="true" (click)="onRemoveTag()">TypeScript</app-tag>
-<app-tag variant="warning">En desarrollo</app-tag>
-```
-
----
-
-#### **Icon** (`src/app/components/atoms/icon/`)
-Sistema de iconos reutilizable con tamaños flexibles.
-
-**Tamaños:** Small (16px), Medium (24px), Large (32px)
-
-**Código  del componente TypeScript:**
-```typescript
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-@Component({
-  selector: 'app-icon',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <svg [class]="getIconClasses()" [attr.viewBox]="viewBox">
-      <use [attr.href]="'#' + name"></use>
-    </svg>
-  `,
-  styleUrl: './icon.component.scss'
-})
-export class IconComponent {
-  @Input() name: string = 'default';
-  @Input() size: 'small' | 'medium' | 'large' = 'medium';
-  @Input() color: string = 'currentColor';
-  @Input() viewBox: string = '0 0 24 24';
-
-  getIconClasses(): string {
-    return `icon icon--${this.size}`;
-  }
-}
-```
-
-**Uso en template del proyecto:**
-```html
-<app-icon name="home" size="medium"></app-icon>
-<app-icon name="check" size="small"></app-icon>
-<app-icon name="warning" size="large" [color]="'red'"></app-icon>
-```
-
----
-
-#### **Task Card** (`src/app/components/molecules/task-card/`)
-Tarjeta de tarea con estado visual, descripción, timestamp e imagen opcional. Diseñada según el mockup de Figma.
-
-**Estados:** Completed (verde), Pending (amarillo), In-Progress (azul), Cancelled (rojo)
-**Características:** Icono de estado dinámico, título, descripción truncada, timestamp relativo, thumbnail opcional, menú de opciones
-
-**Código del componente TypeScript:**
-```typescript
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-export type TaskStatus = 'completed' | 'pending' | 'in-progress' | 'cancelled';
-
-@Component({
-  selector: 'app-task-card',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <article class="task-card" [class.task-card--hoverable]="hoverable">
-      <article class="task-card__content">
-        <article class="task-card__status-icon" [class]="'task-card__status-icon--' + status">
-          <svg viewBox="0 0 12 12">
-            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </article>
-        <article class="task-card__info">
-          <h3 class="task-card__title">{{ title }}</h3>
-          <p class="task-card__description">{{ description }}</p>
-          <p class="task-card__status-text">
-            Estatus: <span [class]="'task-card__status-value--' + status">{{ getStatusLabel() }}</span>
-          </p>
-          <p class="task-card__timestamp">{{ getTimestamp() }}</p>
-        </article>
-      </article>
-      <article class="task-card__thumbnail" *ngIf="imageUrl">
-        <img [src]="imageUrl" [alt]="title" />
-      </article>
-      <button class="task-card__menu" (click)="onMenuClick($event)">⋯</button>
-    </article>
-  `,
-  styleUrl: './task-card.component.scss'
-})
-export class TaskCardComponent {
-  @Input() title: string = '';
-  @Input() description: string = '';
-  @Input() status: TaskStatus = 'pending';
-  @Input() completedAt?: Date;
-  @Input() imageUrl?: string;
-  @Input() hoverable: boolean = true;
-
-  @Output() menuClick = new EventEmitter<void>();
-
-  getStatusLabel(): string {
-    const labels: Record<TaskStatus, string> = {
-      'completed': 'Completada',
-      'pending': 'Pendiente',
-      'in-progress': 'En progreso',
-      'cancelled': 'Cancelada'
-    };
-    return labels[this.status];
-  }
-}
-```
-
-**Uso en template del proyecto:**
-```html
-<app-task-card 
-  title="Revisión cableado"
-  description="En la obra de calle x, revisar y terminar cableado."
-  status="completed"
-  [completedAt]="taskDate"
-  (menuClick)="onTaskMenu()"
-/>
-
-<app-task-card 
-  title="Inspección equipos"
-  description="Revisar estado de los equipos del almacén."
-  status="pending"
-/>
-
-<app-task-card 
-  title="Actualizar inventario"
-  description="Registrar nuevos productos recibidos."
-  status="in-progress"
-/>
-```
-
-**Nomenclatura BEM:**
-```scss
-.task-card {                          // Bloque
-  &--hoverable { }                    // Modificador: interactivo
-  &__content { }                      // Elemento: contenedor principal
-  &__status-icon { }                  // Elemento: icono de estado
-  &__status-icon--completed { }       // Modificador: estado completado
-  &__status-icon--pending { }         // Modificador: estado pendiente
-  &__info { }                         // Elemento: información
-  &__title { }                        // Elemento: título
-  &__description { }                  // Elemento: descripción
-  &__timestamp { }                    // Elemento: fecha/hora
-  &__thumbnail { }                    // Elemento: imagen
-  &__menu { }                         // Elemento: botón menú
-}
-```
-
----
-
-### Mejoras Adicionales Implementadas
-
-#### **Navegación Responsive con Hamburger Menu (Header Component)**
-El componente header se ha mejorado con:
-- Menú hamburguesa funcional en dispositivos móviles
-- Navegación horizontal en desktop
-- Animación suave (slideDown) para el menú colapsible
-- Estado basado en Angular signals: `isMenuOpen = signal(false)`
-- Cierre automático al navegar
-
-**Código  del componente TypeScript:**
-```typescript
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-
-@Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
-})
-export class HeaderComponent {
-  private readonly router = inject(Router);
-  isMenuOpen = signal(false);
-
-  toggleMenu(): void {
-    this.isMenuOpen.update(open => !open);
-  }
-
-  closeMenu(): void {
-    this.isMenuOpen.set(false);
-  }
-
-  navigateToLogin(): void {
-    this.router.navigate(['/login']);
-    this.closeMenu();
-  }
-}
-```
-
-**Características del código:**
-- `signal(false)`: Estado reactivo usando Angular signals (Angular 17+)
-- `isMenuOpen.update()`: Actualiza el estado con función callback
-- `isMenuOpen.set()`: Establece el estado directamente
-- `inject(Router)`: Inyección moderna de dependencias
-- Métodos para toggle, cerrar y navegar con cierre automático de menú
-
-**Nomenclatura BEM del Header:**
-```scss
-.app-header {                  // Bloque
-  &__logo { }                  // Elemento
-  &__nav { }                   // Elemento
-  &__actions { }               // Elemento
-  
-  .hamburger {                 // Bloque anidado
-    &__line { }                // Elemento
-    &--top, &--middle, &--bottom { } // Modificadores
-  }
-  
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-}
-```
-
----
-
-## 3.2 Nomenclatura BEM - Convenciones Aplicadas
-
-La nomenclatura BEM (Block Element Modifier) se aplica de manera consistente en todos los componentes:
-
-### Estructura General
-
-```
-.block                         // Componente principal
-.block__element                // Parte del componente
-.block--modifier               // Variante del componente
-.block__element--modifier      // Variante de un elemento
-```
-
-### Ejemplos del Proyecto
-
-**Botón:**
-```scss
-.button {
-  padding: $spacing-3 $spacing-6;
-  font-size: $font-size-base;
-  border-radius: $radius-md;
-  
-  &--primary {
-    background-color: $color-primary;
-    color: white;
-    
-    &:hover {
-      background-color: color-primary(normal-hover);
-    }
-  }
-  
-  &--small {
-    padding: $spacing-2 $spacing-4;
-    font-size: $font-size-sm;
-  }
-  
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-}
-```
-
-**Formulario:**
-```scss
-.form-input {
+.app-header__nav--desktop {
   display: flex;
-  flex-direction: column;
-  gap: $spacing-2;
-  margin-bottom: $spacing-6;
-  
-  &__label {
-    font-weight: $font-weight-semibold;
-    color: $text-default;
-  }
-  
-  &__input {
-    padding: $spacing-3;
-    border: 1px solid $border-default;
-    border-radius: $radius-md;
-    font-size: $font-size-base;
-    
-    &:focus {
-      outline: none;
-      border-color: $color-primary;
-      box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
-    }
-  }
-  
-  &__help-text {
-    font-size: $font-size-sm;
-    color: $text-secondary;
-  }
-  
-  &--error &__input {
-    border-color: $error;
-    box-shadow: 0 0 0 3px rgba($error, 0.1);
+  @include respond-down(lg) {
+    display: none;
   }
 }
 ```
 
-**Alert:**
+---
+
+## 4.3 Container Queries
+
+Implementé Container Queries en el componente app-card para adaptar el layout por tamaño del contenedor, no del viewport:
+
 ```scss
-.alert {
-  display: flex;
-  gap: $spacing-4;
-  padding: $spacing-4;
-  border-radius: $radius-md;
-  
-  &__icon {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-  }
-  
-  &--success {
-    background-color: rgba($success, 0.1);
-    color: darken($success, 20%);
-    
-    #{&}__icon {
-      color: $success;
-    }
-  }
-  
-  &--error {
-    background-color: rgba($error, 0.1);
-    color: darken($error, 20%);
-    
-    #{&}__icon {
-      color: $error;
-    }
-  }
+.card {
+  container-type: inline-size;
+  container-name: card;
+}
+
+@container card (max-width: 400px) {
+  .card__body { padding: $spacing-2; }
 }
 ```
 
-### Reglas de Nomenclatura
+---
 
-1. **Solo 2 niveles:** `block__element` (no `block__element__subelement`)
-2. **Modificadores específicos:** `button--primary` en lugar de `button-primary`
-3. **Nombres semánticos:** `form-input__label` es mejor que `form-input__text`
-4. **Pseudoclases HTML:** `:hover`, `:focus`, `:disabled` se escriben en SCSS
-5. **Evitar nesting excesivo:** Máximo 3 niveles de anidamiento
+## 4.4 Adaptaciones principales
+
+| Componente | Mobile (≤ 375px) | Tablet (768px) | Desktop (≥ 1024px) |
+|---|---|---|---|
+| Header | Menú hamburguesa, nav móvil desplegable | Nav desktop oculto, acciones compactas | Nav desktop visible, acciones completas |
+| Card | Padding reducido y tipografía más pequeña | Padding medio | Padding completo y sombras | 
+| Task Card | Layout en columna, thumbnail arriba | Layout con gap reducido | Layout en fila con thumbnail lateral |
+| Botones | Padding menor y tamaños compactos | Ajuste intermedio | Padding y tamaño estándar |
 
 ---
 
-## 3.3 Style Guide Profesional
+## 4.5 Páginas responsive implementadas
 
-Se ha creado una página de Style Guide interactiva en `/style-guide` que funciona como documentación visual y referencia de desarrollo.
+- Dashboard
+- Tasks
+- Task Detail
+- Task Edit
+- Important Tasks
+- Profile
+- Settings
+- Style Guide
+- Not Found
 
-### Estructura del Style Guide
+---
 
-El Style Guide está articleidido en **6 secciones principales:**
+## 4.6 Screenshots comparativos
 
-#### **1. Componentes**
-Muestra todos los componentes UI con sus variantes, tamaños y estados:
+Dashboard
+- Mobile (375px): proximamente adjuntare aqui la imagen
+- Tablet (768px): proximamente adjuntare aqui la imagen
+- Desktop (1280px): proximamente adjuntare aqui la imagen
 
-- **Botones:** 6 variantes × 3 tamaños × 3 estados = 18 ejemplos
-- **Badges:** 6 variantes + 2 tamaños = 12 ejemplos
-- **Tags:** 5 variantes removibles
-- **Alerts:** 4 tipos (success, error, warning, info)
-- **Cards:** 3 niveles de sombra + efecto hover
-- **Form Inputs:** 3 ejemplos con diferentes estados
-- **Form Textarea:** 2 ejemplos (básico y con ayuda)
-- **Form Select:** 2 ejemplos con opciones dinámicas
+Tasks
+- Mobile (375px): proximamente adjuntare aqui la imagen
+- Tablet (768px): proximamente adjuntare aqui la imagen
+- Desktop (1280px): proximamente adjuntare aqui la imagen
 
-#### **2. Colores**
-Paleta completa y documentada de todos los colores del sistema:
+Profile
+- Mobile (375px): proximamente adjuntare aqui la imagen
+- Tablet (768px): proximamente adjuntare aqui la imagen
+- Desktop (1280px): proximamente adjuntare aqui la imagen
 
-- **Color Primario:** 10 tonos desde light hasta darker
-- **Escala de Grises:** 12 tonos (white, grey-50 a grey-950)
-- **Especiales y Acentos:** Error, Success, Warning, Info, Side Menu, Black
-- **Colores Semánticos:** Text Default, Text Secondary, Text Muted, Border Default
+---
 
-Cada color se muestra con:
-- Swatch visual del color
-- Nombre semántico
-- Valor hexadecimal
-- Descripción de uso
+# Sección 5: Optimización multimedia
 
-#### **3. Tipografía**
-Escala tipográfica completa con ejemplos:
+## 5.1 Formatos elegidos
 
-- H1 a H4 (72pt, 64pt, 56pt, 24px)
-- Body 1 (16px regular)
-- Todos los estilos con pesos de fuente indicados
+Actualmente solo uso **PNG** en las ilustraciones (login/register y assets públicos). No tengo implementados AVIF, WebP o JPG en el repositorio. La comparación AVIF vs WebP vs JPG queda pendiente hasta que los incorpore.
 
-#### **4. Login**
-Formulario de login funcional como referencia de integración.
+---
 
-#### **5. Registro**
-Formulario de registro con validación como ejemplo.
+## 5.2 Herramientas utilizadas
 
-#### **6. Página Completa**
-Vista de página completa mostrando Header, Main y Footer juntos.
+Pendiente.
 
-### Navegación del Style Guide
+---
+
+## 5.3 Resultados de optimización
+
+Aún no tengo versiones optimizadas. Dejo la tabla con el tamaño actual y el campo de optimización pendiente:
+
+| Imagen | Tamaño original | Tamaño optimizado | % reducción |
+|---|---:|---:|---:|
+| docs/design/image-1.png | 222.4 KB | pendiente | N/A |
+| docs/design/image-2.png | 31.7 KB | pendiente | N/A |
+| docs/design/image.png | 124.2 KB | pendiente | N/A |
+| public/login-illustration.png | 42.1 KB | pendiente | N/A |
+| public/register-illustration.png | 37.9 KB | pendiente | N/A |
+
+---
+
+## 5.4 Tecnologías implementadas
+
+**loading="lazy"** y **decoding="async"** se usan en imágenes como las ilustraciones de login y register, y además he implementado **`<picture>`**, **`srcset`** y **`sizes`** para servir el recurso adecuado según el viewport.
+
+Ejemplo real (login/register):
 
 ```html
-<nav class="style-guide__nav">
-  <button (click)="switchView('components')">Componentes</button>
-  <button (click)="switchView('colors')">Colores</button>
-  <button (click)="switchView('typography')">Tipografía</button>
-  <button (click)="switchView('login')">Login</button>
-  <button (click)="switchView('register')">Register</button>
-  <button (click)="switchView('page')">Página</button>
-</nav>
-```
-
-### Diseño Visual del Style Guide
-
-El Style Guide se ha mejorado significativamente con:
-
-- **Gradients:** Fondo sutil y título con gradiente púrpura
-- **Subsecciones en tarjetas:** Cada subsección está en una tarjeta blanca elevada
-- **Grid layout responsivo:** Componentes se organizan automáticamente
-- **Efectos hover:** Las tarjetas se elevan al pasar el cursor
-- **Indicadores visuales:** Líneas de color y bullets en títulos
-- **Espaciado profesional:** Padding y gaps consistentes
-- **Color de fondo optimizado:** Fondo gris claro (#F8F9FA) para contrastar
-
----
-
-## 3.4 Estructura de Carpetas
-
-```
-src/app/components/
-├── atoms/
-│   ├── badge/
-│   │   ├── badge.component.ts
-│   │   └── badge.component.scss
-│   ├── button/
-│   │   ├── button.component.ts
-│   │   └── button.component.scss
-│   ├── icon/
-│   │   ├── icon.component.ts
-│   │   └── icon.component.scss
-│   └── tag/
-│       ├── tag.component.ts
-│       └── tag.component.scss
-├── molecules/
-│   ├── alert/
-│   │   ├── alert.component.ts
-│   │   └── alert.component.scss
-│   └── card/
-│       ├── card.component.ts
-│       └── card.component.scss
-├── layout/
-│   ├── header/
-│   ├── footer/
-│   └── main/
-└── shared/
-    ├── form-input/
-    │   ├── form-input.component.ts
-    │   ├── form-input.component.html
-    │   └── form-input.component.scss
-    ├── form-textarea/
-    │   ├── form-textarea.component.ts
-    │   ├── form-textarea.component.html
-    │   └── form-textarea.component.scss
-    ├── form-select/
-    │   ├── form-select.component.ts
-    │   ├── form-select.component.html
-    │   └── form-select.component.scss
-    ├── login-form/
-    └── register-form/
-```
-
----
-
-## 3.5 Características de Accesibilidad (a11y)
-
-Todos los componentes cumplen con estándares WCAG 2.1:
-
-### Form Input
-```html
-<article class="form-input">
-  <label for="email" class="form-input__label">
-    Email {{ required ? '*' : '' }}
-  </label>
-  <input 
-    id="email"
-    type="email"
-    class="form-input__input"
-    aria-describedby="email-help"
-    [attr.aria-label]="label"
+<picture>
+  <source
+    type="image/png"
+    srcset="login-illustration.png 600w, /assets/images/login/login-illustration.png 1200w"
+    sizes="(max-width: 768px) 100vw, 600px"
   />
-  @if (helpText) {
-    <span id="email-help" class="form-input__help-text">
-      {{ helpText }}
-    </span>
-  }
-</article>
-```
-
-### Alert
-```html
-<article class="alert alert--success" role="alert">
-  <svg class="alert__icon" aria-hidden="true">...</svg>
-  <p class="alert__message">{{ message }}</p>
-</article>
-```
-
-### Button
-```html
-<button 
-  type="button"
-  class="button button--primary"
-  [disabled]="disabled"
-  [attr.aria-label]="ariaLabel"
->
-  {{ label }}
-</button>
+  <img
+    src="login-illustration.png"
+    alt="Ilustración de inicio de sesión"
+    loading="lazy"
+    decoding="async"
+    width="600"
+    height="500"
+  />
+</picture>
 ```
 
 ---
 
-## 3.6 Estado Actual del Proyecto
+## 5.5 Animaciones CSS
 
-**Componentes Implementados:** 9/9 (100%)
-- 5 Componentes Obligatorios (Button, Card, Alert, Form Input, Form Textarea, Form Select)
-- 5 Componentes Adicionales (Badge, Tag, Icon, Task Card, Mejoras en Header)
+Las animaciones viven en src/styles/05-components/_animations.scss y solo usan **transform** y **opacity** para rendimiento.
 
-**Funcionalidades:**
-- Todos los componentes con variantes, tamaños y estados completos
-- Navegación responsive con hamburger menu
-- Style Guide profesional e interactivo
-- Paleta de colores documentada (completa)
-- Accesibilidad
-- Nomenclatura BEM aplicada
-- Responsive design (mobile, tablet, desktop)
+Listado principal:
+- spin (spinner)
+- fadeIn, fadeInUp, fadeInDown
+- bounce, bounceIn
+- slideInLeft, slideInRight
+- pulse, pulseGlow
+- scaleIn, scaleOut
+- shake
+- shimmer (skeleton)
+- utilidades: transition-*, hover-*, focus-*
 
----
+Ejemplo real:
 
-**Fase 3 completada:**
-- Componentes UI básicos implementados y funcionales.
-- Nomenclatura BEM aplicada consistentemente.
-- Style Guide profesional como referencia visual.
-- Sistema de colores documentado y accesible.
-- Accesibilidad (a11y) integrada en todos los componentes.
-- Documentación detallada con ejemplos de código.
-- Proyecto listo para integración en páginas.
-
----
-
-# Fase 4: Dashboard - Layout Completo
-
-## 4.1 Descripción del Dashboard
-
-El Dashboard de GestStore es un panel de control completo que proporciona una visión general del sistema. Implementado siguiendo todos los criterios de la rúbrica DIW, incluyendo:
-
-- **Metodología BEM** aplicada consistentemente
-- **Arquitectura ITCSS** para organización de estilos
-- **Sistema de diseño atómico** (átomos, moléculas, organismos)
-- **Responsive design** con breakpoints definidos
-- **Animaciones CSS** optimizadas
-- **Dark mode** preparado con `prefers-color-scheme`
-- **Accesibilidad** con ARIA labels y focus states
-
-### Estructura del Dashboard
-
-```
-dashboard/
-├── Header Section
-│   ├── Título y subtítulo
-│   └── Botones de acción (Exportar, Nuevo Pedido)
-├── Stats Grid (4 tarjetas de estadísticas)
-│   ├── Total Ventas
-│   ├── Nuevos Clientes
-│   ├── Pedidos Activos
-│   └── Tasa de Conversión
-├── Main Content Grid
-│   ├── Charts Section
-│   │   ├── Ingresos Mensuales (gráfico de líneas)
-│   │   └── Distribución de Ventas (gráfico circular)
-│   ├── Tareas Recientes
-│   ├── Actividad Reciente
-│   └── Acciones Rápidas
-```
-
----
-
-## 4.2 Componentes Nuevos Implementados
-
-### 4.2.1 StatCard Component (Molécula)
-
-Componente reutilizable para mostrar estadísticas clave con iconos y tendencias.
-
-**Ubicación:** `src/app/components/molecules/stat-card/`
-
-**Propiedades:**
-```typescript
-@Input() title: string = '';          // Título de la estadística
-@Input() value: string = '';          // Valor principal
-@Input() icon: string = 'trending-up'; // Icono
-@Input() trend: string = '';          // Porcentaje de cambio
-@Input() trendType: 'positive' | 'negative' | 'neutral' = 'neutral';
-@Input() bgColor: 'primary' | 'success' | 'warning' | 'info' | 'error' = 'primary';
-@Input() hoverable: boolean = true;   // Efectos hover
-```
-
-**Variantes de color:**
-- `--primary`: Azul/Morado (#6B5AFF)
-- `--success`: Verde (#05A301)
-- `--warning`: Amarillo (#FFC107)
-- `--info`: Azul (#0225FF)
-- `--error`: Rojo (#F21E1E)
-
-**Estados:**
-- Normal: Sombra suave
-- Hover: Elevación aumentada, escala del icono
-- Active: Sombra reducida
-
-**Animaciones:**
-```scss
-@keyframes statCardSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-```
-
-**Nomenclatura BEM:**
-```scss
-.stat-card                          // Block
-  .stat-card--hoverable            // Modifier
-  .stat-card__icon-wrapper         // Element
-    .stat-card__icon-wrapper--primary  // Element Modifier
-  .stat-card__content              // Element
-  .stat-card__title                // Element
-  .stat-card__value                // Element
-  .stat-card__trend                // Element
-    .stat-card__trend--positive    // Element Modifier
-  .stat-card__trend-label          // Element
-```
-
-**Ejemplo de uso:**
-```html
-<app-stat-card
-  title="Total Ventas"
-  value="€ 45,231"
-  icon="trending-up"
-  trend="+12.5%"
-  trendType="positive"
-  bgColor="primary">
-</app-stat-card>
-```
-
----
-
-### 4.2.2 ChartCard Component (Molécula)
-
-Componente contenedor para gráficos de datos con header y footer configurables.
-
-**Ubicación:** `src/app/components/molecules/chart-card/`
-
-**Propiedades:**
-```typescript
-@Input() title: string = '';
-@Input() subtitle: string = '';
-@Input() chartType: 'line' | 'bar' | 'donut' | 'area' = 'line';
-@Input() showFooter: boolean = true;
-```
-
-**Características:**
-- Header con título, subtítulo y botón de opciones
-- Área de contenido para integrar librerías de gráficos (Chart.js, ApexCharts, etc.)
-- Footer con leyenda de colores
-- Placeholder visual hasta integrar gráficos reales
-
-**Nomenclatura BEM:**
-```scss
-.chart-card                        // Block
-  .chart-card__header             // Element
-  .chart-card__title-section      // Element
-  .chart-card__title              // Element
-  .chart-card__subtitle           // Element
-  .chart-card__actions            // Element
-  .chart-card__action-btn         // Element
-  .chart-card__body               // Element
-  .chart-card__chart              // Element
-    .chart-card__chart--line      // Element Modifier
-    .chart-card__chart--donut     // Element Modifier
-  .chart-card__placeholder        // Element
-  .chart-card__footer             // Element
-  .chart-card__legend             // Element
-  .chart-card__legend-item        // Element
-  .chart-card__legend-dot         // Element
-    .chart-card__legend-dot--primary  // Element Modifier
-```
-
-**Animaciones:**
-```scss
-@keyframes chartFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-```
-
----
-
-## 4.3 Layout Grid del Dashboard
-
-### Sistema de Grid Responsivo
-
-El dashboard utiliza CSS Grid para un layout flexible y responsive:
-
-```scss
-.dashboard__main-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-6;
-
-  @include respond(lg) {
-    grid-template-columns: repeat(12, 1fr);
-  }
-}
-
-// Distribución de secciones
-.dashboard__section--charts {
-  grid-column: 1 / -1;
-  
-  @include respond(lg) {
-    grid-column: 1 / 9;  // 8 columnas (66%)
-  }
-}
-
-.dashboard__section--tasks {
-  grid-column: 1 / -1;
-  
-  @include respond(lg) {
-    grid-column: 9 / 13;  // 4 columnas (33%)
-  }
-}
-```
-
-### Breakpoints Aplicados
-
-- **Mobile (< 640px):** 1 columna, stack vertical
-- **Tablet (640px - 1024px):** 2 columnas para stats, 1 para contenido
-- **Desktop (> 1024px):** Grid de 12 columnas, layout optimizado
-
----
-
-## 4.4 Principios de Comunicación Visual Aplicados
-
-### Jerarquía
-- **Título principal:** `$font-size-3xl` (2.5rem), `$font-weight-bold`
-- **Títulos de sección:** `$font-size-xl` (1.5rem), `$font-weight-semibold`
-- **Valores de estadísticas:** `$font-size-3xl` destacado
-- **Texto secundario:** `$font-size-sm` con `$text-secondary`
-
-### Contraste
-- Fondo: `$gray-50` (#F8F9FA)
-- Tarjetas: `$color-white` con sombras
-- Bordes: `$border-light` (#EAEAEA)
-- Colores semánticos: success, warning, error, info
-
-### Alineación
-- Grid de 12 columnas en desktop
-- Flex para elementos internos
-- Alineación consistente con `$spacing-*` tokens
-
-### Proximidad
-- Gap entre secciones: `$spacing-6` (1.5rem)
-- Gap interno: `$spacing-4` (1rem)
-- Elementos relacionados agrupados visualmente
-
-### Repetición
-- Mismos estilos de tarjetas en todo el dashboard
-- Botones con variantes consistentes
-- Iconos con tamaños estandarizados
-- Sombras y radios uniformes
-
----
-
-## 4.5 Estados y Modificadores BEM
-
-### Estados Interactivos
-
-**Hover:**
-```scss
-.dashboard__task-item:hover {
-  border-color: $color-primary;
-  box-shadow: $shadow-sm;
-  transform: translateX(4px);
-}
-
-.stat-card--hoverable:hover {
-  box-shadow: $shadow-lg;
-  transform: translateY(-4px);
-}
-```
-
-**Focus:**
-```scss
-&:focus-visible {
-  outline: 2px solid $color-primary;
-  outline-offset: 2px;
-}
-```
-
-**Active:**
-```scss
-.dashboard__quick-action:active {
-  transform: translateY(0);
-}
-```
-
----
-
-## 4.6 Animaciones CSS Implementadas
-
-### 1. Fade In Up (Stats Cards)
 ```scss
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.dashboard__stat-card {
-  animation: fadeInUp 0.4s ease-out backwards;
-  
-  @for $i from 1 through 4 {
-    &:nth-child(#{$i}) {
-      animation-delay: #{$i * 0.1}s;
-    }
-  }
-}
-```
-
-### 2. Slide In (Stat Card Individual)
-```scss
-@keyframes statCardSlideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-```
-
-### 3. Chart Fade In
-```scss
-@keyframes chartFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-```
-
-### 4. Transiciones Suaves
-```scss
-@mixin transition($properties: all, $duration: $transition-base) {
-  transition: $properties $duration $transition-easing;
-}
-
-// Aplicado en elementos interactivos
-.dashboard__task-item {
-  @include transition(all);
-}
-```
-
-**Total de animaciones:** 3+ `@keyframes` + transiciones en 15+ elementos
-
----
-
-## 4.7 Dark Mode Support
-
-El dashboard incluye soporte completo para modo oscuro usando `prefers-color-scheme`:
-
-```scss
-@media (prefers-color-scheme: dark) {
-  .dashboard {
-    background-color: $gray-950;
-  }
-
-  .dashboard__header,
-  .dashboard__section {
-    background-color: $gray-900;
-    border-color: $gray-800;
-  }
-
-  .dashboard__title {
-    color: $color-white;
-  }
-
-  .dashboard__task-item {
-    background-color: $gray-900;
-    border-color: $gray-800;
-
-    &:hover {
-      border-color: $color-primary;
-      background-color: $gray-800;
-    }
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 ```
 
 ---
 
-## 4.8 Accesibilidad (a11y) en Dashboard
+# Sección 6: Sistema de temas
 
-### ARIA Labels
-```html
-<button class="dashboard__task-action" aria-label="Ver tarea">
-  <app-icon name="chevron-right" size="small"></app-icon>
-</button>
+## 6.1 Variables de tema
 
-<button class="dashboard__action-btn" aria-label="Opciones">
-  <app-icon name="more-horizontal" size="small"></app-icon>
-</button>
-```
+Uso CSS Custom Properties para light/dark en src/styles/00-settings/_css-variables.scss:
 
-### Focus States
-Todos los elementos interactivos incluyen estados de focus visibles:
 ```scss
-@mixin focus-visible {
-  outline: 2px solid $color-primary;
-  outline-offset: 2px;
+:root {
+  --bg-default: #{$bg-default};
+  --text-default: #{$text-default};
+  --color-primary: #{$color-primary};
+}
+
+[data-theme='dark'] {
+  --bg-default: #{$gray-950};
+  --text-default: #{$gray-50};
 }
 ```
 
-### Keyboard Navigation
-- Todos los botones accesibles por teclado
-- Tab order lógico
-- Enter/Space activan acciones
-
 ---
 
-## 4.9 Integración y Routing
+## 6.2 Implementación del Theme Switcher
 
-El dashboard está integrado en el sistema de rutas de Angular:
+Inicializo el tema en app.ts y lo alterno desde el header con ThemeService:
 
-**Archivo:** `src/app/app.routes.ts`
 ```typescript
-{
-  path: 'dashboard',
-  component: DashboardComponent
+constructor(private themeService: ThemeService) {
+  this.themeService.init();
 }
 ```
 
-**Acceso:** `http://localhost:4200/dashboard`
+```typescript
+toggleTheme(): void {
+  this.themeService.toggle();
+}
+```
+
+El servicio guarda la preferencia en localStorage y aplica `data-theme` en `documentElement`.
 
 ---
 
-## 4.10 Cumplimiento de Rúbricas DIW
+## 6.3 Capturas de pantalla
 
-### RA1.a - Comunicación Visual (3.37%)
-✅ **Excelente (10/10)**
-- Los 5 principios aplicados y documentados
-- Capturas y ejemplos en esta documentación
-- Jerarquía, contraste, alineación, proximidad, repetición evidentes
-
-### RA1.f - Plantillas de Diseño (3.37%)
-✅ **Excelente (10/10)**
-- 11+ componentes reutilizables (Button, Badge, Icon, Card, StatCard, ChartCard, Alert, Form Input, Form Select, Form Textarea, Task Card)
-- Layouts completos con grid system
-- Style Guide como catálogo
-
-### RA2.g - Clases de Estilos (2.70%)
-✅ **Excelente (10/10)**
-- 11+ componentes con BEM consistente
-- Modificadores para todas las variantes
-- Estados con clases apropiadas (hover, active, focus)
-
-### RA2.j - Preprocesadores (2.75%)
-✅ **Excelente (10/10)**
-- 7+ mixins reutilizables (`respond`, `text-style`, `focus-visible`, `transition`, `flex-center`, `flex-between`, `truncate`)
-- Estructura ITCSS completa
-- CSS válido W3C
-- Documentación completa
-
-### RA3.g - Animaciones CSS (0.42%)
-✅ **Excelente (10/10)**
-- 3+ animaciones `@keyframes` (fadeInUp, statCardSlideIn, chartFadeIn)
-- Transiciones en 15+ elementos
-- Optimizadas con `transform` y `opacity`
-- Documentadas con ejemplos
-
-### RA3.h - Aplicación de Guía de Estilo (1.90%)
-✅ **Excelente (10/10)**
-- Guía visual completa en Figma/DOCUMENTACION.md
-- Sistema atómico implementado
-- BEM aplicado consistentemente
-- Style Guide página funcional
-- Consistencia total en colores, tipografía, espaciado
-
----
-
-## 4.11 Próximos Pasos
-
-1. **Integrar librería de gráficos** (Chart.js o ApexCharts)
-2. **Conectar con backend** para datos reales
-3. **Agregar filtros** de fecha en dashboard
-4. **Implementar exportación** de datos
-5. **Tests unitarios** de componentes
-6. **Optimización de imágenes** según rúbricas multimedia
-
----
-
-**Dashboard implementado completamente siguiendo las rúbricas DIW.**
-
-
-
+Modo claro / oscuro (3 páginas):
+- Dashboard: proximamente adjuntare aqui la imagen
+- Tasks: proximamente adjuntare aqui la imagen
+- Profile: proximamente adjuntare aqui la imagen

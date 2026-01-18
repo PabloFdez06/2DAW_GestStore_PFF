@@ -10,21 +10,21 @@
   flex-direction: column;
 
   // 4️⃣ BACKGROUND
-  background-color: $color-white;
+  background-color: var(--bg-surface);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-light;
+  border: $border-thin solid var(--border-light);
   border-radius: $radius-lg;
 
   // 7️⃣ EFECTOS VISUALES
-  box-shadow: $shadow-sm;
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 
   // 8️⃣ TRANSICIONES
   @include transition(box-shadow);
 
   &:hover {
-    box-shadow: $shadow-md;
+    box-shadow: var(--shadow-md);
   }
 }
 
@@ -35,7 +35,7 @@
   @include flex-between;
   gap: $spacing-4;
   padding: $spacing-6;
-  border-bottom: $border-thin solid $border-light;
+  border-bottom: $border-thin solid var(--border-light);
 }
 
 .chart-card__title-section {
@@ -48,14 +48,14 @@
 .chart-card__title {
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-lg, $font-weight-semibold, $line-normal);
-  color: $text-default;
+  color: var(--text-default);
   margin: 0;
 }
 
 .chart-card__subtitle {
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-sm, $font-weight-regular, $line-normal);
-  color: $text-secondary;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -84,14 +84,14 @@
 
   // 6️⃣ CURSOR
   cursor: pointer;
-  color: $text-secondary;
+  color: var(--text-secondary);
 
   // 8️⃣ TRANSICIONES
   @include transition(all);
 
   &:hover {
-    background-color: $gray-100;
-    color: $text-default;
+    background-color: var(--bg-hover);
+    color: var(--text-default);
   }
 
   &:focus-visible {
@@ -99,7 +99,7 @@
   }
 
   &:active {
-    background-color: $gray-200;
+    background-color: var(--bg-active);
   }
 }
 
@@ -133,26 +133,26 @@
   width: 100%;
   height: 100%;
   min-height: 200px;
-  background: linear-gradient(135deg, $gray-50 0%, $color-white 100%);
-  border: 2px dashed $border-light;
+  background: linear-gradient(135deg, var(--bg-subtle) 0%, var(--bg-surface) 100%);
+  border: 2px dashed var(--border-light);
   border-radius: $radius-md;
   @include transition(all);
 
   .chart-card:hover & {
-    border-color: $color-primary;
-    background: linear-gradient(135deg, $color-primary-light 0%, $color-white 100%);
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 12%, transparent) 0%, var(--bg-surface) 100%);
   }
 }
 
 .chart-card__placeholder-icon {
   width: 4rem;
   height: 4rem;
-  color: $text-muted;
+  color: var(--text-muted);
   opacity: 0.5;
   @include transition(all);
 
   .chart-card:hover & {
-    color: $color-primary;
+    color: var(--color-primary);
     opacity: 0.8;
     transform: scale(1.1);
   }
@@ -161,11 +161,11 @@
 .chart-card__placeholder-text {
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
-  color: $text-muted;
+  color: var(--text-muted);
   margin: 0;
 
   .chart-card:hover & {
-    color: $color-primary;
+    color: var(--color-primary);
   }
 }
 
@@ -174,8 +174,8 @@
 // ============================================================================
 .chart-card__footer {
   padding: $spacing-4 $spacing-6;
-  border-top: $border-thin solid $border-light;
-  background-color: $gray-50;
+  border-top: $border-thin solid var(--border-light);
+  background-color: var(--bg-subtle);
 }
 
 .chart-card__legend {
@@ -200,30 +200,30 @@
   flex-shrink: 0;
 
   &--primary {
-    background-color: $color-primary;
+    background-color: var(--color-primary);
   }
 
   &--secondary {
-    background-color: $color-accent-2;
+    background-color: var(--color-accent-2);
   }
 
   &--warning {
-    background-color: $warning;
+    background-color: var(--color-warning);
   }
 
   &--error {
-    background-color: $error;
+    background-color: var(--color-error);
   }
 
   &--info {
-    background-color: $info;
+    background-color: var(--color-info);
   }
 }
 
 .chart-card__legend-label {
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-sm, $font-weight-regular, $line-normal);
-  color: $text-secondary;
+  color: var(--text-secondary);
 }
 
 // ============================================================================
@@ -248,68 +248,68 @@
 // ============================================================================
 @media (prefers-color-scheme: dark) {
   .chart-card {
-    background-color: $gray-900;
-    border-color: $gray-800;
+    background-color: var(--bg-surface);
+    border-color: var(--border-default);
 
     &:hover {
-      box-shadow: $shadow-lg;
+      box-shadow: var(--shadow-lg);
     }
   }
 
   .chart-card__header,
   .chart-card__footer {
-    border-color: $gray-800;
+    border-color: var(--border-light);
   }
 
   .chart-card__title {
-    color: $color-white;
+    color: var(--text-default);
   }
 
   .chart-card__subtitle,
   .chart-card__legend-label {
-    color: $gray-400;
+    color: var(--text-secondary);
   }
 
   .chart-card__action-btn {
-    color: $gray-400;
+    color: var(--text-secondary);
 
     &:hover {
-      background-color: $gray-800;
-      color: $color-white;
+      background-color: var(--bg-hover);
+      color: var(--text-default);
     }
 
     &:active {
-      background-color: $gray-700;
+      background-color: var(--bg-active);
     }
   }
 
   .chart-card__footer {
-    background-color: $gray-950;
+    background-color: var(--bg-subtle);
   }
 
   .chart-card__placeholder {
-    background: linear-gradient(135deg, $gray-800 0%, $gray-900 100%);
-    border-color: $gray-700;
+    background: linear-gradient(135deg, var(--bg-hover) 0%, var(--bg-surface) 100%);
+    border-color: var(--border-light);
 
     .chart-card:hover & {
-      border-color: $color-primary;
-      background: linear-gradient(135deg, rgba($color-primary, 0.1) 0%, $gray-900 100%);
+      border-color: var(--color-primary);
+      background: linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 10%, transparent) 0%, var(--bg-surface) 100%);
     }
   }
 
   .chart-card__placeholder-icon {
-    color: $gray-600;
+    color: var(--text-muted);
 
     .chart-card:hover & {
-      color: $color-primary;
+      color: var(--color-primary);
     }
   }
 
   .chart-card__placeholder-text {
-    color: $gray-500;
+    color: var(--text-muted);
 
     .chart-card:hover & {
-      color: $color-primary;
+      color: var(--color-primary);
     }
   }
 }

@@ -143,15 +143,22 @@
 
       <!-- Illustration -->
       <figure class="login-content__illustration fade-in-right">
-        <img
-          src="login-illustration.png"
-          alt="Ilustración de inicio de sesión"
-          class="login-illustration-img"
-          loading="lazy"
-          decoding="async"
-          width="600"
-          height="500"
-        />
+        <picture>
+          <source
+            type="image/png"
+            srcset="login-illustration.png 600w, /assets/images/login/login-illustration.png 1200w"
+            sizes="(max-width: 768px) 100vw, 600px"
+          />
+          <img
+            src="login-illustration.png"
+            alt="Ilustración de inicio de sesión"
+            class="login-illustration-img"
+            loading="lazy"
+            decoding="async"
+            width="600"
+            height="500"
+          />
+        </picture>
       </figure>
     </section>
 </article>

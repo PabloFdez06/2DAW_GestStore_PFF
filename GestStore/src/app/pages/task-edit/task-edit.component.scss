@@ -50,7 +50,7 @@
   font-family: $font-primary;
   font-size: $font-size-xl;
   font-weight: $font-weight-semibold;
-  color: $gray-950;
+  color: var(--text-default);
 
   @include respond-down(md) {
     font-size: $font-size-lg;
@@ -65,7 +65,7 @@
   margin: $spacing-1 0 0;
   font-family: $font-primary;
   font-size: $font-size-xs;
-  color: $gray-400;
+  color: var(--text-muted);
 }
 
 .task-edit__actions {
@@ -84,12 +84,12 @@
 .task-edit__error {
   padding: $spacing-3 $spacing-4;
   border-radius: 12px;
-  border: 1px solid rgba($error, 0.25);
-  background: rgba($error, 0.06);
+  border: 1px solid color-mix(in srgb, var(--color-error) 25%, transparent);
+  background: color-mix(in srgb, var(--color-error) 6%, transparent);
   margin-bottom: $spacing-4;
   font-family: $font-primary;
   font-size: $font-size-sm;
-  color: $error;
+  color: var(--color-error);
 }
 
 // ============================================================================
@@ -100,8 +100,8 @@
   display: grid;
   gap: $spacing-4;
   padding: $spacing-6;
-  background-color: $color-white;
-  border: 1px solid $gray-300;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 14px;
 
   @include respond-down(lg) {
@@ -147,13 +147,13 @@
   user-select: none;
   font-family: $font-primary;
   font-size: $font-size-sm;
-  color: $gray-700;
+  color: var(--text-secondary);
   cursor: pointer;
 
   input[type='checkbox'] {
     width: 18px;
     height: 18px;
-    accent-color: $color-primary;
+    accent-color: var(--color-primary);
     cursor: pointer;
   }
 }
@@ -168,11 +168,11 @@
   justify-content: space-between;
   gap: $spacing-4;
   padding-top: $spacing-4;
-  border-top: 1px solid $gray-200;
+  border-top: 1px solid var(--border-light);
 
   .task-edit__muted {
     margin: 0;
-    color: $warning;
+    color: var(--color-warning);
   }
 }
 
@@ -200,27 +200,27 @@
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 }
 
 .button--primary {
-  background-color: $color-primary;
-  color: $color-white;
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
 
   &:hover:not(:disabled) {
-    background-color: color.scale($color-primary, $lightness: -15%);
+    background-color: var(--interactive-hover);
   }
 }
 
 .button--secondary {
-  background-color: $gray-100;
-  border: 1px solid $gray-300;
-  color: $gray-700;
+  background-color: var(--bg-hover);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
 
   &:hover:not(:disabled) {
-    background-color: $gray-200;
-    border-color: $gray-400;
+    background-color: var(--bg-active);
+    border-color: var(--border-hover);
   }
 }

@@ -18,10 +18,10 @@
   padding: $spacing-4;
 
   // 4️⃣ BACKGROUND
-  background-color: $bg-default;
+  background-color: var(--bg-surface);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-lg;
 
   // 8️⃣ TRANSICIONES
@@ -41,9 +41,9 @@
   }
 
   &:hover {
-    border-color: $color-primary;
+    border-color: var(--color-primary);
     transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
   }
 
   // Modificador: hoverable
@@ -52,7 +52,7 @@
     cursor: pointer;
 
     &:hover {
-      box-shadow: $shadow-md;
+      box-shadow: var(--shadow-md);
 
       // 8️⃣ TRANSICIONES
       transform: translateY(-0.125rem);
@@ -98,19 +98,19 @@
 
   // Variantes de estado
   &--completed {
-    color: $success;
+    color: var(--color-success);
   }
 
   &--pending {
-    color: $warning;
+    color: var(--color-warning);
   }
 
   &--in-progress {
-    color: $info;
+    color: var(--color-info);
   }
 
   &--cancelled {
-    color: $error;
+    color: var(--color-error);
   }
 }
 
@@ -135,7 +135,7 @@
 
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-base, $font-weight-semibold);
-  color: $gray-900;
+  color: var(--text-default);
   @include truncate;
 }
 
@@ -151,7 +151,7 @@
   @include text-style($font-size-sm, $font-weight-regular);
   line-clamp: 2;
   -webkit-line-clamp: 2; /* stylelint-disable-line property-no-vendor-prefix */
-  color: $gray-600;
+  color: var(--text-secondary);
 
   // 7️⃣ EFECTOS VISUALES
   overflow: hidden;
@@ -163,29 +163,29 @@
 
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-xs, $font-weight-regular);
-  color: $gray-900;
+  color: var(--text-default);
 }
 
 // Valores de estado con colores
 .task-card__status-value {
   &--completed {
     font-weight: $font-weight-medium;
-    color: $success;
+    color: var(--color-success);
   }
 
   &--pending {
     font-weight: $font-weight-medium;
-    color: $warning;
+    color: var(--color-warning);
   }
 
   &--in-progress {
     font-weight: $font-weight-medium;
-    color: $info;
+    color: var(--color-info);
   }
 
   &--cancelled {
     font-weight: $font-weight-medium;
-    color: $error;
+    color: var(--color-error);
   }
 }
 
@@ -195,7 +195,7 @@
 
   // 6️⃣ TIPOGRAFÍA
   @include text-style($font-size-xs, $font-weight-medium);
-  color: $gray-500;
+  color: var(--text-muted);
 }
 
 // ============================================================================
@@ -212,7 +212,7 @@
   height: 5.5rem;
 
   // 4️⃣ BACKGROUND
-  background-color: $gray-200;
+  background-color: var(--gray-200);
 
   // 5️⃣ BORDER
   border-radius: $radius-lg;
@@ -221,7 +221,7 @@
   overflow: hidden;
 
   &--placeholder {
-    background-color: $gray-200;
+    background-color: var(--gray-200);
   }
 }
 
@@ -262,7 +262,7 @@
   border-radius: $radius-sm;
 
   // 6️⃣ TIPOGRAFÍA
-  color: $gray-500;
+  color: var(--text-muted);
 
   // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
@@ -271,8 +271,8 @@
   @include transition;
 
   &:hover {
-    background-color: $gray-100;
-    color: $gray-700;
+    background-color: var(--bg-hover);
+    color: var(--text-secondary);
   }
 
   &:focus-visible {

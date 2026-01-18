@@ -24,6 +24,9 @@ dd {
 // Body base
 html {
   scroll-behavior: smooth;
+  // Transiciones suaves para cambio de tema
+  transition: background-color var(--transition-base) var(--transition-easing),
+              color var(--transition-base) var(--transition-easing);
 }
 
 body {
@@ -33,6 +36,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  
+  // Aplicar colores del tema
+  background-color: var(--bg-default);
+  color: var(--text-default);
+  
+  // Transiciones suaves para cambio de tema
+  transition: background-color var(--transition-base) var(--transition-easing),
+              color var(--transition-base) var(--transition-easing);
 
   &.is-scroll-locked {
     overflow: hidden;

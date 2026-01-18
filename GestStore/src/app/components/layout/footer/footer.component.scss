@@ -2,11 +2,13 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .app-footer {
-  background-color: $gray-50;
-  border-top: $border-thin solid $border-default;
+  background-color: var(--bg-subtle);
+  border-top: $border-thin solid var(--border-default);
   margin-top: $spacing-16;
   padding-top: $spacing-12;
   padding-bottom: $spacing-8;
+  transition: background-color var(--transition-base) var(--transition-easing),
+              border-color var(--transition-base) var(--transition-easing);
 
   @include respond-down(md) {
     margin-top: $spacing-8;
@@ -62,11 +64,11 @@
 
 .app-footer__link {
   @include text-style($font-size-sm, $font-weight-regular);
-  color: $text-default;
+  color: var(--text-default);
   @include transition;
 
   &:hover {
-    color: $color-primary;
+    color: var(--color-primary);
   }
 
   &:focus-visible {
@@ -96,21 +98,21 @@
   height: $spacing-10;
 
   // 4️⃣ BACKGROUND
-  background-color: $color-primary;
+  background-color: var(--color-primary);
 
   // 5️⃣ BORDER
   border-radius: $radius-md;
 
   // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-base;
-  color: $text-inverse;
+  color: var(--text-on-primary);
   text-decoration: none;
 
   // 8️⃣ TRANSICIONES
   @include transition;
 
   &:hover {
-    background-color: color-primary(normal-hover);
+    background-color: var(--interactive-hover);
     transform: translateY(-0.125rem);
   }
 
@@ -124,13 +126,15 @@
 }
 
 .app-footer__bottom {
-  border-top: $border-thin solid $border-default;
+  border-top: $border-thin solid var(--border-default);
   padding-top: $spacing-6;
   text-align: center;
+  transition: border-color var(--transition-base) var(--transition-easing);
 }
 
 .app-footer__copyright {
   @include text-style($font-size-xs, $font-weight-regular);
-  color: $gray-500;
+  color: var(--text-muted);
   margin: 0;
+  transition: color var(--transition-base) var(--transition-easing);
 }

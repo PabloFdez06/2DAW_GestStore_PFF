@@ -32,16 +32,16 @@
   // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
-  color: $color-primary;
+  color: var(--color-primary);
 
   // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
 
   // 8️⃣ TRANSICIONES
-  transition: all $transition-base;
+  transition: all var(--transition-base) var(--transition-easing);
 
   &:hover {
-    color: color-primary(normal-hover);
+    color: var(--interactive-hover);
     transform: translateX(-0.25rem);
   }
 
@@ -60,14 +60,18 @@
   min-height: 31.25rem;
 
   // 4️⃣ BACKGROUND
-  background: $bg-default;
+  background: var(--bg-default);
 
   // 5️⃣ BORDER
   border-radius: $radius-lg;
 
   // 7️⃣ EFECTOS VISUALES
   overflow: hidden;
-  box-shadow: $shadow-lg;
+  box-shadow: var(--shadow-lg);
+
+  // 8️⃣ TRANSICIONES
+  transition: background-color var(--transition-base) var(--transition-easing),
+              box-shadow var(--transition-base) var(--transition-easing);
 
   @include respond(md) {
     gap: $spacing-4;
@@ -100,8 +104,8 @@
   // 4️⃣ BACKGROUND
   background: linear-gradient(
     135deg,
-    rgba($color-primary, 0.05) 0%,
-    rgba($color-primary, 0.1) 100%
+    rgba(var(--color-primary-rgb, 107, 90, 255), 0.05) 0%,
+    rgba(var(--color-primary-rgb, 107, 90, 255), 0.1) 100%
   );
 
   @include respond(md) {
@@ -124,7 +128,10 @@
   font-family: $font-primary;
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
-  color: $gray-900;
+  color: var(--text-default);
+
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
 }
 
 .login-form {
@@ -162,32 +169,36 @@
   padding: $spacing-3 $spacing-3 $spacing-3 $spacing-10;
 
   // 4️⃣ BACKGROUND
-  background: $bg-default;
+  background: var(--bg-default);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $gray-800;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-md;
 
   // 6️⃣ TIPOGRAFÍA
   font-family: $font-primary;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
-  color: $gray-900;
+  color: var(--text-default);
 
   // 8️⃣ TRANSICIONES
-  transition: border-color $transition-base, box-shadow $transition-base;
+  transition: background-color var(--transition-base) var(--transition-easing),
+              border-color var(--transition-base) var(--transition-easing),
+              box-shadow var(--transition-base) var(--transition-easing),
+              color var(--transition-base) var(--transition-easing);
 
   &:focus {
     @include focus-visible;
-    border-color: $color-primary;
+    border-color: var(--color-primary);
   }
 
   &::placeholder {
-    color: $gray-400;
+    color: var(--text-muted);
+    transition: color var(--transition-base) var(--transition-easing);
   }
 
   &--error {
-    border-color: $error;
+    border-color: var(--color-error);
   }
 }
 
@@ -203,10 +214,13 @@
   height: $spacing-5;
 
   // 6️⃣ TIPOGRAFÍA
-  color: $gray-800;
+  color: var(--text-secondary);
 
   // 7️⃣ EFECTOS VISUALES
   pointer-events: none;
+
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
 }
 
 .form-checkbox {
@@ -222,15 +236,18 @@
   height: 1.125rem;
 
   // 5️⃣ BORDER
-  border: $border-thin solid $gray-800;
+  border: $border-thin solid var(--border-default);
 
   // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
   outline: none;
   box-shadow: none;
 
+  // 8️⃣ TRANSICIONES
+  transition: border-color var(--transition-base) var(--transition-easing);
+
   &:checked {
-    accent-color: $color-primary;
+    accent-color: var(--color-primary);
   }
 }
 
@@ -239,13 +256,16 @@
   font-family: $font-primary;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
-  color: $gray-900;
+  color: var(--text-default);
 
   // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
 
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
+
   &:hover {
-    color: $gray-800;
+    color: var(--text-secondary);
   }
 }
 
@@ -269,21 +289,23 @@ fieldset .button {
   }
 
   &.button--primary {
-    background-color: $color-primary;
-    color: $color-white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
     transform: translateY(0);
-    transition: all 250ms ease-out;
+    transition: background-color var(--transition-base) var(--transition-easing),
+                transform 250ms ease-out,
+                box-shadow var(--transition-base) var(--transition-easing);
 
     &:hover {
-      background-color: color.scale($color-primary, $lightness: -20%);
+      background-color: var(--color-primary-hover);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-md);
     }
 
     &:active {
-      background-color: color.scale($color-primary, $lightness: -35%);
+      background-color: var(--color-primary-active);
       transform: translateY(0);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-sm);
     }
 
     &:focus-visible {
@@ -291,7 +313,7 @@ fieldset .button {
     }
 
     &:disabled {
-      background-color: $gray-300;
+      background-color: var(--gray-300);
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
@@ -315,7 +337,10 @@ fieldset .button {
   font-family: $font-primary;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
-  color: $gray-900;
+  color: var(--text-default);
+
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
 }
 
 .login-social__links {
@@ -349,16 +374,17 @@ fieldset .button {
   border: none;
 
   // 6️⃣ TIPOGRAFÍA
-  color: $gray-500;
+  color: var(--text-secondary);
 
   // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
 
   // 8️⃣ TRANSICIONES
-  transition: all $transition-base;
+  transition: color var(--transition-base) var(--transition-easing),
+              transform var(--transition-base) var(--transition-easing);
 
   &:hover {
-    color: $color-primary;
+    color: var(--color-primary);
     transform: scale(1.1);
   }
 
@@ -380,10 +406,13 @@ fieldset .button {
   font-family: $font-primary;
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
-  color: $gray-900;
+  color: var(--text-default);
+
+  // 8️⃣ TRANSICIONES
+  transition: color var(--transition-base) var(--transition-easing);
 
   .link-register {
-    color: $info;
+    color: var(--color-info);
     text-decoration: none;
     cursor: pointer;
 

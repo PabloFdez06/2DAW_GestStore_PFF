@@ -1,22 +1,21 @@
 @use '../../../styles/00-settings/variables' as *;
 @use '../../../styles/01-tools/mixins' as *;
-@use 'sass:color';
 
 .not-found {
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: $spacing-8;
-  background-color: $bg-subtle;
+  background-color: var(--bg-subtle);
 }
 
 .not-found__card {
   width: min(560px, 100%);
   padding: $spacing-8;
   border-radius: 16px;
-  background: $color-white;
-  color: $gray-950;
-  border: 1px solid $gray-300;
+  background: var(--surface-1);
+  color: var(--text-default);
+  border: 1px solid var(--border-default);
   text-align: center;
 }
 
@@ -26,7 +25,7 @@
   font-weight: $font-weight-bold;
   letter-spacing: 0.1em;
   margin: 0 0 $spacing-2;
-  color: $color-primary;
+  color: var(--color-primary);
   opacity: 0.3;
 }
 
@@ -35,14 +34,14 @@
   font-family: $font-primary;
   font-size: $font-size-xl;
   font-weight: $font-weight-semibold;
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .not-found__text {
   margin: 0 0 $spacing-6;
   font-family: $font-primary;
   font-size: $font-size-sm;
-  color: $gray-500;
+  color: var(--text-muted);
 }
 
 .not-found__actions {
@@ -68,27 +67,27 @@
   @include transition;
 
   &:focus-visible {
-    outline: 2px solid $color-primary;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 }
 
 .button--primary {
-  background-color: $color-primary;
-  color: $color-white;
+  background-color: var(--color-primary);
+  color: var(--color-white);
 
   &:hover {
-    background-color: color.scale($color-primary, $lightness: -15%);
+    background-color: var(--color-primary-hover);
   }
 }
 
 .button--secondary {
-  background-color: $gray-100;
-  border: 1px solid $gray-300;
-  color: $gray-700;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
 
   &:hover {
-    background-color: $gray-200;
-    border-color: $gray-400;
+    background-color: var(--surface-3);
+    border-color: var(--border-default);
   }
 }

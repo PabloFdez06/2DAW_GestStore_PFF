@@ -1,13 +1,12 @@
 
 @use '../../../styles/00-settings/variables' as *;
 @use '../../../styles/01-tools/mixins' as *;
-@use 'sass:map';
 
 .style-guide {
   max-width: 1400px;
   margin: 0 auto;
   padding: $spacing-8;
-  background: linear-gradient(135deg, $gray-50 0%, $color-white 100%);
+  background: linear-gradient(135deg, var(--surface-2) 0%, var(--bg-default) 100%);
   min-height: 100vh;
 
   // RESPONSIVE - Desktop first
@@ -32,8 +31,12 @@
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
   margin-bottom: $spacing-2;
-  color: $text-default;
-  background: linear-gradient(135deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
+  color: var(--text-default);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    color-mix(in srgb, var(--color-primary) 90%, var(--color-white) 10%) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -61,10 +64,10 @@
   flex-wrap: wrap;
   margin-bottom: $spacing-10;
   padding: $spacing-6;
-  background: $color-white;
+  background: var(--surface-1);
   border-radius: $radius-lg;
-  box-shadow: $shadow-sm;
-  border: $border-thin solid $border-default;
+  box-shadow: var(--shadow-sm);
+  border: $border-thin solid var(--border-default);
 
   @include respond-down(lg) {
     padding: $spacing-5;
@@ -91,8 +94,8 @@
     font-size: $font-size-sm;
     border: none;
     cursor: pointer;
-    background-color: $gray-100;
-    color: $text-default;
+    background-color: var(--surface-2);
+    color: var(--text-default);
 
     @include respond-down(md) {
       padding: $spacing-2 $spacing-4;
@@ -105,17 +108,21 @@
     }
 
     &:hover {
-      background-color: $gray-200;
+      background-color: var(--surface-3);
     }
 
     &.button--active {
-      background: linear-gradient(135deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
-      color: $color-white;
-      box-shadow: $shadow-md;
+      background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        color-mix(in srgb, var(--color-primary) 90%, var(--color-white) 10%) 100%
+      );
+      color: var(--color-white);
+      box-shadow: var(--shadow-md);
 
       &:hover {
         transform: translateY(-0.125rem);
-        box-shadow: $shadow-lg;
+        box-shadow: var(--shadow-lg);
       }
     }
   }
@@ -137,7 +144,7 @@
   // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-2xl;
   font-weight: $font-weight-bold;
-  color: $text-default;
+  color: var(--text-default);
 
   &::before {
     content: '';
@@ -146,13 +153,17 @@
     bottom: 0;
     left: 0;
     width: $border-thick;
-    background: linear-gradient(180deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
+    background: linear-gradient(
+      180deg,
+      var(--color-primary) 0%,
+      color-mix(in srgb, var(--color-primary) 90%, var(--color-white) 10%) 100%
+    );
     border-radius: $radius-sm;
   }
 }
 
 .section__description {
-  color: $text-secondary;
+  color: var(--text-secondary);
   font-size: $font-size-base;
   margin-bottom: $spacing-8;
   line-height: $line-normal;
@@ -164,18 +175,18 @@
   padding: $spacing-6;
 
   // 4️⃣ BACKGROUND
-  background: $color-white;
+  background: var(--surface-1);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-lg;
 
   // 8️⃣ TRANSICIONES
   transition: all 0.3s ease;
 
   &:hover {
-    border-color: $color-primary;
-    box-shadow: $shadow-md;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
   }
 }
 
@@ -191,14 +202,14 @@
   // 6️⃣ TIPOGRAFÍA
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
-  color: $text-default;
+  color: var(--text-default);
 
   &::before {
     content: '';
     display: inline-block;
     width: $spacing-2;
     height: $spacing-2;
-    background: $color-primary;
+    background: var(--color-primary);
     border-radius: 50%;
   }
 }
@@ -215,7 +226,7 @@
   padding: $spacing-6;
 
   // 4️⃣ BACKGROUND
-  background: $gray-50;
+  background: var(--surface-2);
 
   // 5️⃣ BORDER
   border-radius: $radius-md;
@@ -242,13 +253,17 @@
     transition: all 0.3s ease;
 
     &--primary {
-      background: linear-gradient(135deg, $color-primary 0%, lighten($color-primary, 10%) 100%);
-      color: $color-white;
-      box-shadow: $shadow-sm;
+      background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        color-mix(in srgb, var(--color-primary) 90%, var(--color-white) 10%) 100%
+      );
+      color: var(--color-white);
+      box-shadow: var(--shadow-sm);
 
       &:hover {
         transform: translateY(-0.125rem);
-        box-shadow: $shadow-md;
+        box-shadow: var(--shadow-md);
       }
 
       &:active {
@@ -257,67 +272,67 @@
     }
 
     &--secondary {
-      background-color: $gray-200;
-      color: $text-default;
-      border: $border-thin solid $gray-300;
+      background-color: var(--surface-3);
+      color: var(--text-default);
+      border: $border-thin solid var(--border-light);
 
       &:hover {
-        background-color: $gray-300;
-        box-shadow: $shadow-sm;
+        background-color: color-mix(in srgb, var(--surface-3) 85%, var(--color-black) 15%);
+        box-shadow: var(--shadow-sm);
       }
     }
 
     &--tertiary {
       background-color: transparent;
-      color: $color-primary;
-      border: $border-medium solid $color-primary;
+      color: var(--color-primary);
+      border: $border-medium solid var(--color-primary);
 
       &:hover {
-        background-color: rgba($color-primary, 0.1);
+        background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
       }
     }
 
     &--success {
-      background-color: $success;
-      color: $color-white;
-      box-shadow: $shadow-sm;
+      background-color: var(--color-success);
+      color: var(--color-white);
+      box-shadow: var(--shadow-sm);
 
       &:hover {
         transform: translateY(-0.125rem);
-        box-shadow: $shadow-md;
+        box-shadow: var(--shadow-md);
       }
     }
 
     &--error {
-      background-color: $error;
-      color: $color-white;
-      box-shadow: $shadow-sm;
+      background-color: var(--color-error);
+      color: var(--color-white);
+      box-shadow: var(--shadow-sm);
 
       &:hover {
         transform: translateY(-0.125rem);
-        box-shadow: $shadow-md;
+        box-shadow: var(--shadow-md);
       }
     }
 
     &--warning {
-      background-color: $warning;
-      color: $color-white;
-      box-shadow: $shadow-sm;
+      background-color: var(--color-warning);
+      color: var(--color-white);
+      box-shadow: var(--shadow-sm);
 
       &:hover {
         transform: translateY(-0.125rem);
-        box-shadow: $shadow-md;
+        box-shadow: var(--shadow-md);
       }
     }
 
     &--info {
-      background-color: $info;
-      color: $color-white;
-      box-shadow: $shadow-sm;
+      background-color: var(--color-info);
+      color: var(--color-white);
+      box-shadow: var(--shadow-sm);
 
       &:hover {
         transform: translateY(-0.125rem);
-        box-shadow: $shadow-md;
+        box-shadow: var(--shadow-md);
       }
     }
 
@@ -351,52 +366,52 @@
 // Style guide helpers (used by style-guide-complete.html too)
 .color-card__swatch {
   &--primary-light {
-    background-color: $color-primary-light;
+    background-color: var(--color-primary-light);
   }
 
   &--primary {
-    background-color: $color-primary;
+    background-color: var(--color-primary);
   }
 
   &--white {
-    background-color: $color-white;
-    border: $border-thin solid $border-default;
+    background-color: var(--color-white);
+    border: $border-thin solid var(--border-default);
   }
 
   &--gray-50 {
-    background-color: $gray-50;
+    background-color: var(--gray-50);
   }
 
   &--gray-100 {
-    background-color: $gray-100;
+    background-color: var(--gray-100);
   }
 
   &--gray-200 {
-    background-color: $gray-200;
+    background-color: var(--gray-200);
   }
 
   &--gray-300 {
-    background-color: $gray-300;
+    background-color: var(--gray-300);
   }
 
   &--gray-400 {
-    background-color: $gray-400;
+    background-color: var(--gray-400);
   }
 
   &--error {
-    background-color: $error;
+    background-color: var(--color-error);
   }
 
   &--success {
-    background-color: $success;
+    background-color: var(--color-success);
   }
 
   &--info {
-    background-color: $info;
+    background-color: var(--color-info);
   }
 
   &--warning {
-    background-color: $warning;
+    background-color: var(--color-warning);
   }
 }
 
@@ -411,10 +426,10 @@
   padding: $spacing-4;
 
   // 4️⃣ BACKGROUND
-  background: $color-white;
+  background: var(--surface-1);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-lg;
 
   // 7️⃣ EFECTOS VISUALES
@@ -423,10 +438,10 @@
 
 .color-card {
   // 4️⃣ BACKGROUND
-  background: $color-white;
+  background: var(--surface-1);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-md;
 
   // 7️⃣ EFECTOS VISUALES
@@ -436,7 +451,7 @@
   @include transition(transform, $transition-base);
 
   &:hover {
-    box-shadow: $shadow-lg;
+    box-shadow: var(--shadow-lg);
     transform: translateY(-0.25rem);
   }
 }
@@ -458,13 +473,13 @@
     @include text-style($font-size-lg, $font-weight-semibold);
     display: block;
     margin-bottom: $spacing-2;
-    color: $text-default;
+    color: var(--text-default);
   }
 
   code {
     font-family: monospace;
     font-size: $font-size-sm;
-    color: $gray-600;
+    color: var(--text-muted);
     background: transparent;
   }
 }
@@ -479,10 +494,10 @@
   padding: $spacing-6;
 
   // 4️⃣ BACKGROUND
-  background: $color-white;
+  background: var(--surface-1);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-lg;
 }
 
@@ -496,7 +511,7 @@
   padding-bottom: $spacing-6;
 
   // 5️⃣ BORDER
-  border-bottom: $border-thin solid $border-default;
+  border-bottom: $border-thin solid var(--border-default);
 
   &:last-child {
     padding-bottom: 0;
@@ -511,13 +526,13 @@
   h6,
   p {
     margin: 0;
-    color: $text-default;
+    color: var(--text-default);
   }
 }
 
 .typography-label {
   font-size: $font-size-sm;
-  color: $text-muted;
+  color: var(--text-muted);
   font-weight: $font-weight-regular;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -525,26 +540,26 @@
 
 .typography-weight {
   font-size: $font-size-xs;
-  color: $gray-500;
+  color: var(--text-secondary);
   font-weight: $font-weight-regular;
 }
 
 .button--active {
-  background-color: $color-primary;
-  color: white;
-  box-shadow: 0 4px 12px rgba(107, 90, 255, 0.3);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: var(--shadow-md);
 }
 
 .page-demo__title {
   font-size: $font-size-3xl;
   font-weight: $font-weight-bold;
   margin-bottom: $spacing-4;
-  color: $text-default;
+  color: var(--text-default);
 }
 
 .page-demo__description {
   font-size: $font-size-lg;
-  color: $text-secondary;
+  color: var(--text-secondary);
   margin-bottom: $spacing-8;
   line-height: $line-normal;
 }
@@ -554,10 +569,10 @@
   padding: $spacing-8;
 
   // 4️⃣ BACKGROUND
-  background: $color-white;
+  background: var(--surface-1);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-lg;
 }
 
@@ -565,19 +580,19 @@
   &:not(:last-child) {
     margin-bottom: $spacing-8;
     padding-bottom: $spacing-8;
-    border-bottom: $border-thin solid $border-default;
+    border-bottom: $border-thin solid var(--border-default);
   }
 
   h2 {
     margin-bottom: $spacing-4;
     font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
-    color: $text-default;
+    color: var(--text-default);
   }
 
   p {
     line-height: $line-relaxed;
-    color: $text-secondary;
+    color: var(--text-secondary);
   }
 }
 
@@ -585,48 +600,48 @@
 // COLOR SWATCHES - Usando variables de _variables.scss
 // ============================================================================
 
-// Primary Scale - Usando el mapa $color-primary-scale
-.color-swatch--primary-light { background-color: map.get($color-primary-scale, light); }
-.color-swatch--primary-light-hover { background-color: map.get($color-primary-scale, light-hover); }
-.color-swatch--primary-light-active { background-color: map.get($color-primary-scale, light-active); }
-.color-swatch--primary-normal { background-color: map.get($color-primary-scale, normal); }
-.color-swatch--primary-hover { background-color: map.get($color-primary-scale, normal-hover); }
-.color-swatch--primary-active { background-color: map.get($color-primary-scale, normal-active); }
-.color-swatch--primary-dark { background-color: map.get($color-primary-scale, dark); }
-.color-swatch--primary-dark-hover { background-color: map.get($color-primary-scale, dark-hover); }
-.color-swatch--primary-dark-active { background-color: map.get($color-primary-scale, dark-active); }
-.color-swatch--primary-darker { background-color: map.get($color-primary-scale, darker); }
+// Primary Scale - Usando variables de tema
+.color-swatch--primary-light { background-color: var(--color-primary-light); }
+.color-swatch--primary-light-hover { background-color: color-mix(in srgb, var(--color-primary-light) 90%, var(--color-black) 10%); }
+.color-swatch--primary-light-active { background-color: color-mix(in srgb, var(--color-primary-light) 80%, var(--color-black) 20%); }
+.color-swatch--primary-normal { background-color: var(--color-primary); }
+.color-swatch--primary-hover { background-color: var(--color-primary-hover); }
+.color-swatch--primary-active { background-color: var(--color-primary-active); }
+.color-swatch--primary-dark { background-color: color-mix(in srgb, var(--color-primary) 80%, var(--color-black) 20%); }
+.color-swatch--primary-dark-hover { background-color: color-mix(in srgb, var(--color-primary) 70%, var(--color-black) 30%); }
+.color-swatch--primary-dark-active { background-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-black) 40%); }
+.color-swatch--primary-darker { background-color: color-mix(in srgb, var(--color-primary) 50%, var(--color-black) 50%); }
 
 // Neutral Scale - Usando variables $gray-*
-.color-swatch--white { 
-  background-color: $color-white; 
-  border: $border-thin solid $border-default;
+.color-swatch--white {
+  background-color: var(--color-white);
+  border: $border-thin solid var(--border-default);
 }
-.color-swatch--gray-50 { background-color: $gray-50; }
-.color-swatch--gray-100 { background-color: $gray-100; }
-.color-swatch--gray-200 { background-color: $gray-200; }
-.color-swatch--gray-300 { background-color: $gray-300; }
-.color-swatch--gray-400 { background-color: $gray-400; }
-.color-swatch--gray-500 { background-color: $gray-500; }
-.color-swatch--gray-600 { background-color: $gray-600; }
-.color-swatch--gray-700 { background-color: $gray-700; }
-.color-swatch--gray-800 { background-color: $gray-800; }
-.color-swatch--gray-900 { background-color: $gray-900; }
-.color-swatch--gray-950 { background-color: $gray-950; }
+.color-swatch--gray-50 { background-color: var(--gray-50); }
+.color-swatch--gray-100 { background-color: var(--gray-100); }
+.color-swatch--gray-200 { background-color: var(--gray-200); }
+.color-swatch--gray-300 { background-color: var(--gray-300); }
+.color-swatch--gray-400 { background-color: var(--gray-400); }
+.color-swatch--gray-500 { background-color: var(--gray-500); }
+.color-swatch--gray-600 { background-color: var(--gray-600); }
+.color-swatch--gray-700 { background-color: var(--gray-700); }
+.color-swatch--gray-800 { background-color: var(--gray-800); }
+.color-swatch--gray-900 { background-color: var(--gray-900); }
+.color-swatch--gray-950 { background-color: var(--gray-950); }
 
 // Special / Accent Colors - Usando variables semánticas
-.color-swatch--error { background-color: $error; }
-.color-swatch--success { background-color: $success; }
-.color-swatch--info { background-color: $info; }
-.color-swatch--warning { background-color: $warning; }
-.color-swatch--side-menu { background-color: $color-side-menu; }
-.color-swatch--black { background-color: $color-black; }
+.color-swatch--error { background-color: var(--color-error); }
+.color-swatch--success { background-color: var(--color-success); }
+.color-swatch--info { background-color: var(--color-info); }
+.color-swatch--warning { background-color: var(--color-warning); }
+.color-swatch--side-menu { background-color: var(--color-side-menu); }
+.color-swatch--black { background-color: var(--color-black); }
 
 // Text & Border Colors - Usando variables semánticas
-.color-swatch--text-default { background-color: $text-default; }
-.color-swatch--text-secondary { background-color: $text-secondary; }
-.color-swatch--text-muted { background-color: $text-muted; }
-.color-swatch--border-default { background-color: $border-default; }
+.color-swatch--text-default { background-color: var(--text-default); }
+.color-swatch--text-secondary { background-color: var(--text-secondary); }
+.color-swatch--text-muted { background-color: var(--text-muted); }
+.color-swatch--border-default { background-color: var(--border-default); }
 
 // ============================================================================
 // PAGE DEMO
@@ -648,7 +663,7 @@
   font-size: $font-size-2xl;
   font-weight: $font-weight-semibold;
   text-align: center;
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .page-demo__task-wrapper {

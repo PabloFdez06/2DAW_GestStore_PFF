@@ -5,8 +5,8 @@
   display: grid;
   grid-template-columns: 280px 1fr;
   min-height: 100vh;
-  background: $bg-default;
-  color: $text-default;
+  background: var(--bg-default);
+  color: var(--text-default);
 
   // RESPONSIVE - Desktop first
   @include respond-down(lg) {
@@ -19,8 +19,8 @@
 }
 
 .profile__sidebar {
-  background: $color-primary;
-  color: $color-white;
+  background: var(--color-primary);
+  color: var(--color-white);
   padding: 24px 18px;
   display: flex;
   flex-direction: column;
@@ -85,7 +85,7 @@
   padding: 10px 12px;
   border-radius: 12px;
   text-decoration: none;
-  color: $color-white;
+  color: var(--color-white);
 
   @include respond-down(md) {
     padding: 8px 10px;
@@ -100,7 +100,7 @@
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: color-mix(in srgb, var(--color-white) 12%, transparent);
   }
 }
 
@@ -118,7 +118,7 @@
   color: inherit;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: color-mix(in srgb, var(--color-white) 12%, transparent);
   }
 }
 
@@ -127,14 +127,14 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.45);
+  border: 2px solid color-mix(in srgb, var(--color-white) 45%, transparent);
 }
 
 .profile__user-avatar--empty {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.18);
+  background: color-mix(in srgb, var(--color-white) 18%, transparent);
 }
 
 .profile__user-name {
@@ -194,28 +194,28 @@
 
 .profile__subtitle {
   margin: 4px 0 0;
-  color: $text-muted;
+  color: var(--text-muted);
 }
 
 .profile__icon-button {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  border: 1px solid $border-default;
-  background: $bg-default;
-  color: $text-default;
+  border: 1px solid var(--border-default);
+  background: var(--bg-default);
+  color: var(--text-default);
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
-    background: $gray-100-hover;
+    background: var(--gray-100-hover);
   }
 }
 
 .profile__card {
-  border: 1px solid $border-default;
-  background: $bg-default;
+  border: 1px solid var(--border-default);
+  background: var(--bg-default);
   border-radius: 18px;
   padding: 18px;
 }
@@ -232,10 +232,10 @@
   gap: 8px;
   width: fit-content;
   text-decoration: none;
-  color: $text-default;
+  color: var(--text-default);
 
   &:hover {
-    color: $color-primary;
+    color: var(--color-primary);
   }
 }
 
@@ -251,8 +251,8 @@
   gap: 12px;
   padding: 12px;
   border-radius: 14px;
-  border: 1px solid $border-default;
-  background: $bg-subtle;
+  border: 1px solid var(--border-default);
+  background: var(--bg-subtle);
 }
 
 .profile__identity-avatar {
@@ -260,15 +260,15 @@
   height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(0, 0, 0, 0.08);
+  border: 3px solid color-mix(in srgb, var(--color-black) 8%, transparent);
 }
 
 .profile__identity-avatar--empty {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: $bg-default;
-  color: $text-muted;
+  background: var(--bg-default);
+  color: var(--text-muted);
 }
 
 .profile__identity-name {
@@ -278,7 +278,7 @@
 
 .profile__identity-email {
   margin: 4px 0 0;
-  color: $text-muted;
+  color: var(--text-muted);
 }
 
 .profile__upload {
@@ -299,9 +299,9 @@
   gap: 8px;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid $border-default;
-  background: $bg-default;
-  color: $text-default;
+  border: 1px solid var(--border-default);
+  background: var(--bg-default);
+  color: var(--text-default);
 }
 
 .profile__form {
@@ -331,32 +331,32 @@
 
 .profile__label {
   font-size: 12px;
-  color: $text-muted;
+  color: var(--text-muted);
 }
 
 .profile__input {
   height: 44px;
   padding: 0 12px;
   border-radius: 12px;
-  border: 1px solid $border-default;
-  background: $bg-default;
-  color: $text-default;
+  border: 1px solid var(--border-default);
+  background: var(--bg-default);
+  color: var(--text-default);
 
   &:focus {
-    outline: 2px solid rgba($color-primary, 0.35);
-    border-color: rgba($color-primary, 0.55);
+    outline: 2px solid rgba(var(--color-primary-rgb), 0.35);
+    border-color: rgba(var(--color-primary-rgb), 0.55);
   }
 }
 
 .profile__error {
   margin: 12px 0 0;
-  color: $error;
+  color: var(--color-error);
   font-weight: 600;
 }
 
 .profile__success {
   margin: 12px 0 0;
-  color: $success;
+  color: var(--color-success);
   font-weight: 700;
 }
 
@@ -370,15 +370,15 @@
 .profile__secondary {
   height: 44px;
   border-radius: 12px;
-  border: 1px solid $border-default;
+  border: 1px solid var(--border-default);
   padding: 0 14px;
   font-weight: 700;
 }
 
 .profile__primary {
-  background: $color-primary;
-  color: $color-white;
-  border-color: $color-primary;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
 
   &:disabled {
     opacity: 0.7;
@@ -388,27 +388,27 @@
 
 .profile__secondary {
   background: transparent;
-  color: $text-default;
+  color: var(--text-default);
 
   &:hover {
-    background: $gray-100-hover;
+    background: var(--gray-100-hover);
   }
 }
 
 .profile__calendar {
-  border: 1px solid $border-default;
+  border: 1px solid var(--border-default);
   border-radius: 16px;
   padding: 12px;
-  background: $bg-default;
-  color: $text-default;
+  background: var(--bg-default);
+  color: var(--text-default);
 }
 
 .profile__calendar-close {
   margin-top: 10px;
   height: 40px;
   border-radius: 12px;
-  border: 1px solid $border-default;
-  background: $bg-default;
+  border: 1px solid var(--border-default);
+  background: var(--bg-default);
 }
 
 @media (max-width: 980px) {

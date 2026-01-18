@@ -1,0 +1,131 @@
+@use '../00-settings/variables' as *;
+@use '../01-tools/mixins' as *;
+
+// ============================================================================
+// UTILIDADES DE TEMA
+// ============================================================================
+
+// Clases para transiciones suaves en elementos que cambian con el tema
+.theme-transition {
+  @include theme-transition();
+}
+
+.theme-transition-bg {
+  @include theme-transition((background-color));
+}
+
+.theme-transition-text {
+  @include theme-transition((color));
+}
+
+.theme-transition-border {
+  @include theme-transition((border-color));
+}
+
+.theme-transition-shadow {
+  @include theme-transition((box-shadow));
+}
+
+// Clases de color basadas en variables CSS
+.bg-default {
+  background-color: var(--bg-default);
+}
+
+.bg-subtle {
+  background-color: var(--bg-subtle);
+}
+
+.bg-surface {
+  background-color: var(--bg-surface);
+}
+
+.bg-elevated {
+  background-color: var(--bg-elevated);
+}
+
+.text-default {
+  color: var(--text-default);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-inverse {
+  color: var(--text-inverse);
+}
+
+.border-default {
+  border-color: var(--border-default);
+}
+
+.border-light {
+  border-color: var(--border-light);
+}
+
+.border-strong {
+  border-color: var(--border-strong);
+}
+
+// ============================================================================
+// COMPONENTES BASE CON SOPORTE DE TEMA
+// ============================================================================
+
+// Cards y superficies
+.card,
+.surface {
+  @include surface();
+  @include themed-border();
+  border-radius: $radius-md;
+}
+
+.card-elevated,
+.surface-elevated {
+  @include surface(true);
+  @include themed-shadow(md);
+  border-radius: $radius-md;
+}
+
+// Overlays
+.overlay {
+  background-color: var(--bg-overlay);
+  @include theme-transition((background-color));
+}
+
+// Estados interactivos
+.interactive {
+  color: var(--interactive-primary);
+  @include theme-transition((color));
+  
+  &:hover {
+    color: var(--interactive-hover);
+  }
+  
+  &:active {
+    color: var(--interactive-active);
+  }
+  
+  &:disabled,
+  &.disabled {
+    color: var(--interactive-disabled);
+    cursor: not-allowed;
+  }
+}
+
+// Botones con soporte de tema
+.btn-surface {
+  @include surface();
+  @include themed-border();
+  
+  &:hover:not(:disabled) {
+    background-color: var(--bg-hover);
+  }
+  
+  &:active:not(:disabled) {
+    background-color: var(--bg-active);
+  }
+}

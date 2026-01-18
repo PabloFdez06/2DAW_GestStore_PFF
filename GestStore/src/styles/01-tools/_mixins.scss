@@ -116,3 +116,46 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+// ============================================================================
+// THEME-AWARE COLORS
+// ============================================================================
+// Aplicar transiciones suaves para elementos que cambian con el tema
+@mixin theme-transition($properties: (background-color, color, border-color, box-shadow)) {
+  $transition-list: ();
+  @each $property in $properties {
+    $transition-list: append($transition-list, #{$property} var(--transition-base) var(--transition-easing), comma);
+  }
+  transition: $transition-list;
+}
+
+// Mixin para aplicar colores de superficie con transiciones
+@mixin surface($elevated: false) {
+  @if $elevated {
+    background-color: var(--bg-elevated);
+  } @else {
+    background-color: var(--bg-surface);
+  }
+  color: var(--text-default);
+  @include theme-transition();
+}
+
+// Mixin para bordes con tema
+@mixin themed-border($width: 1px, $style: solid, $color: var(--border-default)) {
+  border: $width $style $color;
+  @include theme-transition((border-color));
+}
+
+// Mixin para sombras con tema
+@mixin themed-shadow($size: md) {
+  @if $size == sm {
+    box-shadow: var(--shadow-sm);
+  } @else if $size == md {
+    box-shadow: var(--shadow-md);
+  } @else if $size == lg {
+    box-shadow: var(--shadow-lg);
+  } @else if $size == xl {
+    box-shadow: var(--shadow-xl);
+  }
+  @include theme-transition((box-shadow));
+}

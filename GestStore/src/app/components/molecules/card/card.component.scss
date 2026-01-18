@@ -13,10 +13,10 @@
   container-name: card;
 
   // 4️⃣ BACKGROUND
-  background-color: $bg-default;
+  background-color: var(--bg-surface);
 
   // 5️⃣ BORDER
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-lg;
 
   // 7️⃣ EFECTOS VISUALES
@@ -31,26 +31,26 @@
   }
 
   &:hover {
-    border-color: $color-primary;
+    border-color: var(--color-primary);
   }
 
   &--shadow-small {
-    box-shadow: $shadow-sm;
+    box-shadow: var(--shadow-sm);
   }
 
   &--shadow-medium {
-    box-shadow: $shadow-md;
+    box-shadow: var(--shadow-md);
   }
 
   &--shadow-large {
-    box-shadow: $shadow-xl;
+    box-shadow: var(--shadow-xl);
   }
 
   &--hoverable {
     cursor: pointer;
 
     &:hover {
-      box-shadow: $shadow-xl;
+      box-shadow: var(--shadow-xl);
       transform: translateY(-0.25rem);
 
       @include respond-down(sm) {
@@ -95,7 +95,7 @@
 
 .card__header {
   padding: $spacing-4;
-  border-bottom: $border-thin solid $border-default;
+  border-bottom: $border-thin solid var(--border-default);
 
   @include respond-down(md) {
     padding: $spacing-3;
@@ -149,7 +149,7 @@
 
 .card__description {
   @include text-style($font-size-sm, $font-weight-regular);
-  color: $gray-600;
+  color: var(--text-secondary);
   margin-bottom: $spacing-3;
 
   @include respond-down(sm) {
@@ -196,7 +196,7 @@
 
 .card__footer {
   padding: $spacing-4;
-  border-top: $border-thin solid $border-default;
+  border-top: $border-thin solid var(--border-default);
   padding-top: $spacing-3;
 
   @include respond-down(md) {

@@ -36,37 +36,37 @@
   }
 
   &--primary {
-    background-color: vars.$color-primary;
-    color: vars.$color-white;
+    background-color: var(--color-primary);
+    color: var(--text-on-primary);
   }
 
   &--secondary {
-    background-color: vars.$gray-200;
-    color: vars.$text-default;
+    background-color: var(--gray-200);
+    color: var(--text-default);
   }
 
   &--default {
-    background-color: vars.$gray-200;
-    color: vars.$text-default;
+    background-color: var(--gray-200);
+    color: var(--text-default);
   }
 
   &--success {
-    background-color: vars.$success;
-    color: vars.$color-white;
+    background-color: var(--color-success);
+    color: var(--text-on-primary);
   }
 
   &--warning {
-    background-color: vars.$warning;
-    color: vars.$color-white;
+    background-color: var(--color-warning);
+    color: var(--text-on-primary);
   }
 
   &--error {
-    background-color: vars.$error;
-    color: vars.$color-white;
+    background-color: var(--color-error);
+    color: var(--text-on-primary);
   }
 
   &--info {
-    background-color: vars.$info;
-    color: vars.$color-white;
+    background-color: var(--color-info);
+    color: var(--text-on-primary);
   }
 }

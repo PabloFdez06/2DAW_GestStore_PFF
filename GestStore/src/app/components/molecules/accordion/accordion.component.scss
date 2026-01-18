@@ -8,10 +8,10 @@
 }
 
 .accordion__item {
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-md;
   overflow: hidden;
-  background: $bg-default;
+  background: var(--bg-surface);
 }
 
 .accordion__header {
@@ -26,7 +26,7 @@
   gap: $spacing-3;
   padding: $spacing-3 $spacing-4;
   @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
-  color: $text-default;
+  color: var(--text-default);
   cursor: pointer;
 
   &:focus-visible {
@@ -34,7 +34,7 @@
   }
 
   &:hover {
-    background: rgba($color-primary, 0.06);
+    background: color-mix(in srgb, var(--color-primary) 6%, transparent);
   }
 }
 
@@ -53,7 +53,7 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 250ms ease;
-  border-top: $border-thin solid $border-default;
+  border-top: $border-thin solid var(--border-default);
 }
 
 .accordion__panel-inner {
@@ -62,5 +62,5 @@
 
 .accordion__content {
   margin: 0;
-  color: $text-secondary;
+  color: var(--text-secondary);
 }

@@ -9,10 +9,10 @@
   @include text-style($font-size-sm, $font-weight-medium);
   display: block;
   margin-bottom: $spacing-2;
-  color: $text-default;
+  color: var(--text-default);
 
   .required {
-    color: $error;
+    color: var(--color-error);
   }
 }
 
@@ -21,38 +21,40 @@
 .form-select {
   width: 100%;
   padding: $spacing-3 $spacing-4;
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: $radius-md;
   font-family: $font-primary;
   font-size: $font-size-base;
+  background-color: var(--bg-surface);
+  color: var(--text-default);
   @include transition;
 
   &:focus {
     outline: none;
-    border-color: $color-primary;
-    box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
   }
 
   &:disabled {
-    background-color: $gray-100;
-    color: $gray-500;
+    background-color: var(--bg-hover);
+    color: var(--text-muted);
     cursor: not-allowed;
   }
 
   &--error {
-    border-color: $error;
+    border-color: var(--color-error);
 
     &:focus {
-      box-shadow: 0 0 0 3px rgba($error, 0.1);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 15%, transparent);
     }
   }
 }
 
 .form-select {
-  background-color: $bg-default;
+  background-color: var(--bg-surface);
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23353535' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='currentColor' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right $spacing-3 center;
   padding-right: $spacing-10;
@@ -68,11 +70,11 @@
 
   option {
     padding: $spacing-2;
-    color: $text-default;
+    color: var(--text-default);
   }
 
   option:disabled {
-    color: $gray-400;
+    color: var(--text-muted);
   }
 }
 
@@ -84,11 +86,11 @@
 .form-help {
   @include text-style($font-size-xs, $font-weight-regular);
   margin-top: $spacing-2;
-  color: $gray-500;
+  color: var(--text-muted);
 }
 
 .form-error {
   @include text-style($font-size-xs, $font-weight-regular);
   margin-top: $spacing-2;
-  color: $error;
+  color: var(--color-error);
 }

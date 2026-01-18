@@ -1,6 +1,5 @@
 @use '../../../styles/00-settings/variables' as *;
 @use '../../../styles/01-tools/mixins' as *;
-@use 'sass:color';
 
 // ============================================================================
 // RESET ELEMENTOS SEMÁNTICOS
@@ -42,7 +41,7 @@
   grid-template-columns: 330px 1fr;
   grid-template-rows: 100px 1fr;
   min-height: 100vh;
-  background-color: $color-white;
+  background-color: var(--bg-default);
   position: relative;
 
   // RESPONSIVE - Desktop first
@@ -84,7 +83,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: $radius-sm;
   }
@@ -97,7 +96,7 @@
 .important-tasks-page__hamburger-line {
   width: 24px;
   height: 2px;
-  background-color: $color-primary;
+  background-color: var(--color-primary);
   transition: all 0.3s ease;
   transform-origin: center;
 
@@ -139,8 +138,8 @@
   align-items: center;
   gap: $spacing-6;
   padding: 0 $spacing-8;
-  background-color: $color-white;
-  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.07);
+  background-color: var(--surface-1);
+  box-shadow: var(--shadow-sm);
   position: relative;
   z-index: 10;
 
@@ -179,11 +178,11 @@
 }
 
 .important-tasks-page__logo-gest {
-  color: $color-primary;
+  color: var(--color-primary);
 }
 
 .important-tasks-page__logo-store {
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .important-tasks-page__search {
@@ -212,15 +211,11 @@
   padding: 0 $spacing-12 0 $spacing-4;
   border: none;
   border-radius: 8px;
-  background-color: $color-white;
-  box-shadow: -26px 108px 31px 0px rgba(0, 0, 0, 0),
-              -17px 69px 28px 0px rgba(0, 0, 0, 0.01),
-              -9px 39px 24px 0px rgba(0, 0, 0, 0.02),
-              -4px 17px 18px 0px rgba(0, 0, 0, 0.03),
-              -1px 4px 10px 0px rgba(0, 0, 0, 0.04);
+  background-color: var(--surface-1);
+  box-shadow: var(--shadow-sm);
   
   @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
-  color: $gray-300;
+  color: var(--text-default);
 
   @include respond-down(md) {
     height: 32px;
@@ -229,11 +224,11 @@
   }
   
   &::placeholder {
-    color: $gray-300;
+    color: var(--text-muted);
   }
   
   &:focus {
-    outline: 2px solid $color-primary;
+    outline: 2px solid var(--color-primary);
     outline-offset: 0;
   }
 }
@@ -249,11 +244,11 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: $gray-400;
+  color: var(--text-muted);
   @include transition(color);
   
   &:hover {
-    color: $color-primary;
+    color: var(--color-primary);
   }
 }
 
@@ -271,14 +266,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: $color-primary;
+  background-color: var(--color-primary);
   border-radius: 8px;
-  color: $color-white;
+  color: var(--color-white);
   cursor: pointer;
   @include transition(background-color);
   
   &:hover {
-    background-color: color.scale($color-primary, $lightness: -10%);
+    background-color: var(--color-primary-hover);
   }
 }
 
@@ -291,13 +286,13 @@
 
 .important-tasks-page__date-day {
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
-  color: $gray-950;
+  color: var(--text-default);
   margin: 0;
 }
 
 .important-tasks-page__date-full {
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
-  color: $medium;
+  color: var(--color-medium);
   margin: 0;
 }
 
@@ -307,11 +302,11 @@
 .important-tasks-page__sidebar {
   grid-column: 1;
   grid-row: 2;
-  background-color: $color-primary;
+  background-color: var(--color-primary);
   padding: $spacing-8 $spacing-5;
   display: flex;
   flex-direction: column;
-  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   position: relative;
@@ -344,7 +339,7 @@
     
     &.is-open {
       transform: translateX(0);
-      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-lg);
     }
   }
 
@@ -391,7 +386,7 @@
   width: 86px;
   height: 86px;
   border-radius: 50%;
-  background-color: $gray-300;
+  background-color: var(--gray-300);
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -403,7 +398,7 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  color: $color-primary;
+  color: var(--color-primary);
 }
 
 .important-tasks-page__avatar-img {
@@ -421,13 +416,13 @@
 
 .important-tasks-page__user-name {
   @include text-style($font-size-base, $font-weight-semibold, $line-normal);
-  color: $color-white;
+  color: var(--color-white);
   margin: 0;
 }
 
 .important-tasks-page__user-email {
   @include text-style($font-size-xs, $font-weight-regular, $line-normal);
-  color: $color-white;
+  color: var(--color-white);
   margin: 0;
   opacity: 0.9;
 }
@@ -448,16 +443,16 @@
   border-radius: 14px;
   cursor: pointer;
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
-  color: $color-white;
+  color: var(--color-white);
   @include transition(background-color);
   
   &:hover {
-    background-color: rgba($color-white, 0.1);
+    background-color: color-mix(in srgb, var(--color-white) 10%, transparent);
   }
   
   &--active {
-    background-color: $color-white;
-    color: $color-primary;
+    background-color: var(--color-white);
+    color: var(--color-primary);
   }
 }
 
@@ -470,12 +465,12 @@
   border-radius: 14px;
   cursor: pointer;
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
-  color: $color-white;
+  color: var(--color-white);
   margin-top: $spacing-16;
   @include transition(background-color);
   
   &:hover {
-    background-color: rgba($color-white, 0.1);
+    background-color: color-mix(in srgb, var(--color-white) 10%, transparent);
   }
 }
 
@@ -508,14 +503,10 @@
 }
 
 .important-tasks-page__section {
-  background-color: $color-white;
+  background-color: var(--surface-1);
   border-radius: 14px;
   padding: $spacing-6;
-  box-shadow: 0px 121px 34px 0px rgba(0, 0, 0, 0),
-              0px 77px 31px 0px rgba(0, 0, 0, 0.01),
-              0px 44px 26px 0px rgba(0, 0, 0, 0.02),
-              0px 19px 19px 0px rgba(0, 0, 0, 0.03),
-              0px 5px 11px 0px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-md);
 
   @include respond-down(md) {
     padding: $spacing-4;
@@ -543,12 +534,12 @@
 }
 
 .important-tasks-page__section-icon {
-  color: $warning;
+  color: var(--color-warning);
 }
 
 .important-tasks-page__section-title {
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
-  color: $color-primary;
+  color: var(--color-primary);
   margin: 0;
 }
 
@@ -559,7 +550,7 @@
   padding: 0;
   background: transparent;
   border: none;
-  color: $gray-400;
+  color: var(--text-muted);
   font-family: $font-primary;
   font-size: $font-size-xs;
   font-weight: $font-weight-regular;
@@ -567,11 +558,11 @@
   @include transition;
 
   &:hover {
-    color: $color-primary;
+    color: var(--color-primary);
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: $radius-sm;
   }
@@ -586,16 +577,16 @@
 
 .important-tasks-page__section-date {
   @include text-style($font-size-xs, $font-weight-medium, $line-normal);
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .important-tasks-page__separator {
-  color: $gray-400;
+  color: var(--text-muted);
 }
 
 .important-tasks-page__section-today {
   @include text-style($font-size-xs, $font-weight-medium, $line-normal);
-  color: $gray-400;
+  color: var(--text-muted);
 }
 
 // ============================================================================
@@ -608,7 +599,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba($color-white, 0.55);
+  background-color: color-mix(in srgb, var(--bg-default) 55%, transparent);
   backdrop-filter: blur(6px);
   border: none;
   padding: 0;
@@ -631,27 +622,27 @@
   display: flex;
   justify-content: center;
   padding: $spacing-8;
-  color: $gray-600;
+  color: var(--text-muted);
 }
 
 .important-tasks-page__error {
   text-align: center;
   padding: $spacing-6;
-  color: $error;
+  color: var(--color-error);
 }
 
 .important-tasks-page__retry-btn {
   margin-top: $spacing-4;
   padding: $spacing-2 $spacing-4;
-  background-color: $color-primary;
-  color: $color-white;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   @include transition(background-color);
 
   &:hover {
-    background-color: color.scale($color-primary, $lightness: -10%);
+    background-color: var(--color-primary-hover);
   }
 }
 
@@ -665,19 +656,19 @@
 }
 
 .important-tasks-page__empty-icon {
-  color: $warning;
+  color: var(--color-warning);
   margin-bottom: $spacing-4;
 }
 
 .important-tasks-page__empty-text {
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
-  color: $gray-500;
+  color: var(--text-default);
   margin: 0 0 $spacing-2 0;
 }
 
 .important-tasks-page__empty-subtext {
   @include text-style($font-size-sm, $font-weight-regular, $line-normal);
-  color: $gray-400;
+  color: var(--text-secondary);
   margin: 0 0 $spacing-6 0;
 }
 
@@ -686,8 +677,8 @@
   align-items: center;
   gap: $spacing-2;
   padding: $spacing-3 $spacing-5;
-  background-color: $color-primary;
-  color: $color-white;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -695,7 +686,7 @@
   @include transition(background-color);
 
   &:hover {
-    background-color: color.scale($color-primary, $lightness: -10%);
+    background-color: var(--color-primary-hover);
   }
 }
 
@@ -722,18 +713,18 @@
   gap: $spacing-3;
   padding: $spacing-4;
   background-color: transparent;
-  border: 1px solid $gray-300;
+  border: 1px solid var(--border-default);
   border-radius: 14px;
   cursor: pointer;
   @include transition;
 
   &:hover {
-    border-color: $color-primary;
-    box-shadow: $shadow-md;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
   }
 
   &:focus-visible {
-    outline: 2px solid $color-primary;
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
 }
@@ -744,7 +735,7 @@
   right: $spacing-4;
   width: 90px;
   height: 88px;
-  background-color: $gray-300;
+  background-color: var(--surface-3);
   border-radius: 14px;
   overflow: hidden;
 }
@@ -765,13 +756,13 @@
   background: transparent;
   border: none;
   border-radius: $radius-sm;
-  color: $gray-400;
+  color: var(--text-muted);
   cursor: pointer;
   @include transition;
 
   &:hover {
-    color: $gray-600;
-    background-color: $gray-100;
+    color: var(--text-secondary);
+    background-color: var(--surface-2);
   }
 }
 
@@ -804,7 +795,7 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  color: $warning;
+  color: var(--color-warning);
 }
 
 .task-card__priority-indicator {
@@ -814,18 +805,18 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: $info;
+  background-color: var(--color-info);
 
   &--low {
-    background-color: $success;
+    background-color: var(--color-success);
   }
 
   &--medium {
-    background-color: $medium;
+    background-color: var(--color-medium);
   }
 
   &--high {
-    background-color: $error;
+    background-color: var(--color-error);
   }
 }
 
@@ -850,13 +841,13 @@
 .task-card__title {
   margin: 0 0 $spacing-2 0;
   @include text-style($font-size-base, $font-weight-semibold, $line-normal);
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .task-card__description {
   margin: 0 0 $spacing-3 0;
   @include text-style($font-size-sm, $font-weight-regular, 1.4);
-  color: $gray-500;
+  color: var(--text-muted);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -874,47 +865,47 @@
 .task-card__label {
   display: inline;
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $gray-950;
+  color: var(--text-default);
 }
 
 .task-card__value--low {
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $success;
+  color: var(--color-success);
 }
 
 .task-card__value--medium {
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $medium;
+  color: var(--color-medium);
 }
 
 .task-card__value--high {
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $error;
+  color: var(--color-error);
 }
 
 .task-card__value--status-pending {
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $error;
+  color: var(--color-error);
 }
 
 .task-card__value--status-in_progress {
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $info;
+  color: var(--color-info);
 }
 
 .task-card__value--status-completed {
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $success;
+  color: var(--color-success);
 }
 
 .task-card__value--status-cancelled {
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $gray-400;
+  color: var(--text-muted);
 }
 
 .task-card__value--date {
   @include text-style(10px, $font-weight-medium, $line-normal);
-  color: $gray-300;
+  color: var(--text-muted);
 }
 
 // ============================================================================

@@ -11,18 +11,18 @@
   position: relative;
   display: flex;
   gap: $spacing-2;
-  border-bottom: $border-thin solid $border-default;
+  border-bottom: $border-thin solid var(--border-default);
 }
 
 .tabs__tab {
   position: relative;
   padding: $spacing-2 $spacing-3;
   border-radius: $radius-md $radius-md 0 0;
-  color: $text-default;
+  color: var(--text-default);
   @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
 
   &:hover {
-    background: rgba($color-primary, 0.06);
+    background: color-mix(in srgb, var(--color-primary) 6%, transparent);
   }
 
   &:focus-visible {
@@ -31,7 +31,7 @@
 }
 
 .tabs__tab--active {
-  color: $color-primary;
+  color: var(--color-primary);
 }
 
 .tabs__indicator {
@@ -39,18 +39,18 @@
   bottom: -1px;
   left: 0;
   height: 2px;
-  background: $color-primary;
+  background: var(--color-primary);
   transition: transform 200ms ease, width 200ms ease;
 }
 
 .tabs__panel {
   padding: $spacing-3 $spacing-2;
-  border: $border-thin solid $border-default;
+  border: $border-thin solid var(--border-default);
   border-radius: 0 $radius-md $radius-md $radius-md;
-  background: $bg-default;
+  background: var(--bg-surface);
 }
 
 .tabs__content {
   margin: 0;
-  color: $text-secondary;
+  color: var(--text-secondary);
 }

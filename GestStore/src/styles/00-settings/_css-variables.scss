@@ -1,14 +1,26 @@
 @use '../00-settings/variables' as *;
 
 :root {
-  // Colores - Light Theme (default)
+  // ============================================================================
+  // COLORES BASE - Light Theme (default)
+  // ============================================================================
   --color-primary: #{$color-primary};
+  --color-primary-rgb: #{red($color-primary)}, #{green($color-primary)}, #{blue($color-primary)};
+  --color-primary-hover: #{map-get($color-primary-scale, 'normal-hover')};
+  --color-primary-active: #{map-get($color-primary-scale, 'normal-active')};
+  --color-primary-light: #{$color-primary-light};
   --color-accent-1: #{$color-accent-1};
   --color-accent-2: #{$color-accent-2};
   --color-accent-3: #{$color-accent-3};
   --color-accent-4: #{$color-accent-4};
+  --color-accent-5: #{$color-accent-5};
+  --color-side-menu: #{$color-side-menu};
 
-  // Neutrales
+  // Colores primitivos
+  --color-white: #{$color-white};
+  --color-black: #{$color-black};
+
+  // Neutrales (escala de grises)
   --gray-50: #{$gray-50};
   --gray-100: #{$gray-100};
   --gray-200: #{$gray-200};
@@ -19,39 +31,224 @@
   --gray-700: #{$gray-700};
   --gray-800: #{$gray-800};
   --gray-900: #{$gray-900};
+  --gray-950: #{$gray-950};
 
-  // Semánticos
+  // ============================================================================
+  // FONDOS
+  // ============================================================================
   --bg-default: #{$bg-default};
+  --bg-subtle: #{$bg-subtle};
+  --bg-surface: #{$color-white};
+  --bg-elevated: #{$color-white};
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --bg-hover: #{$gray-50};
+  --bg-active: #{$gray-100};
+
+  // ============================================================================
+  // TEXTOS
+  // ============================================================================
   --text-default: #{$text-default};
+  --text-secondary: #{$text-secondary};
+  --text-muted: #{$text-muted};
   --text-inverse: #{$text-inverse};
+  --text-on-primary: #{$color-white};
+  --text-disabled: #{$gray-400};
+
+  // ============================================================================
+  // BORDES
+  // ============================================================================
   --border-default: #{$border-default};
+  --border-light: #{$border-light};
+  --border-strong: #{$gray-300};
+  --border-hover: #{$gray-400};
+  --border-focus: #{$color-primary};
+
+  // ============================================================================
+  // SOMBRAS
+  // ============================================================================
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 1px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.10);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.18), 0 10px 10px rgba(0, 0, 0, 0.12);
+
+  // ============================================================================
+  // ESTADOS SEMÁNTICOS
+  // ============================================================================
   --color-success: #{$success};
   --color-error: #{$error};
   --color-warning: #{$warning};
   --color-info: #{$info};
+  --color-medium: #{$medium};
+
+  // ============================================================================
+  // ESTADOS INTERACTIVOS
+  // ============================================================================
+  --interactive-primary: #{$interactive-primary};
+  --interactive-hover: #{map-get($color-primary-scale, 'normal-hover')};
+  --interactive-active: #{map-get($color-primary-scale, 'normal-active')};
+  --interactive-disabled: #{$gray-300};
+
+  // ============================================================================
+  // TRANSICIONES
+  // ============================================================================
+  --transition-fast: #{$transition-fast};
+  --transition-base: #{$transition-base};
+  --transition-slow: #{$transition-slow};
 }
 
-// Dark Theme
+// ============================================================================
+// DARK THEME
+// ============================================================================
+[data-theme='dark'] {
+  // Fondos - Invertidos y con mayor contraste
+  --bg-default: #{$gray-950};
+  --bg-subtle: #{$gray-900};
+  --bg-surface: #{$gray-900};
+  --bg-elevated: #{$gray-800};
+  --bg-overlay: rgba(0, 0, 0, 0.7);
+  --bg-hover: #{$gray-800};
+  --bg-active: #{$gray-700};
+
+  // Textos - Invertidos con menor intensidad para reducir fatiga visual
+  --text-default: #{$gray-50};
+  --text-secondary: #{$gray-300};
+  --text-muted: #{$gray-400};
+  --text-inverse: #{$gray-900};
+  --text-on-primary: #{$color-white};
+  --text-disabled: #{$gray-600};
+
+  // Bordes - Más sutiles en modo oscuro
+  --border-default: #{$gray-800};
+  --border-light: #{$gray-700};
+  --border-strong: #{$gray-600};
+  --border-hover: #{$gray-500};
+  --border-focus: #{$color-primary};
+
+  // Sombras - Más sutiles y con mayor opacidad
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6), 0 10px 10px rgba(0, 0, 0, 0.5);
+
+  // Estados semánticos - Ajustados para mejor visibilidad en fondo oscuro
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-medium: #{$color-accent-5};
+
+  // Estados interactivos - Ligeramente más claros en modo oscuro
+  --interactive-hover: #{lighten($color-primary, 10%)};
+  --interactive-active: #{lighten($color-primary, 5%)};
+  --interactive-disabled: #{$gray-700};
+
+  // Colores primitivos en modo oscuro (para casos específicos)
+  --gray-50: #{$gray-900};
+  --gray-100: #{$gray-800};
+  --gray-200: #{$gray-700};
+  --gray-300: #{$gray-600};
+  --gray-400: #{$gray-500};
+  --gray-500: #{$gray-400};
+  --gray-600: #{$gray-300};
+  --gray-700: #{$gray-200};
+  --gray-800: #{$gray-100};
+  --gray-900: #{$gray-50};
+}
+
+// Aplicar también con preferencia del sistema
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg-default: #{$gray-900};
+  :root:not([data-theme='light']) {
+    // Fondos
+    --bg-default: #{$gray-950};
+    --bg-subtle: #{$gray-900};
+    --bg-surface: #{$gray-900};
+    --bg-elevated: #{$gray-800};
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+    --bg-hover: #{$gray-800};
+    --bg-active: #{$gray-700};
+
+    // Textos
     --text-default: #{$gray-50};
+    --text-secondary: #{$gray-300};
+    --text-muted: #{$gray-400};
     --text-inverse: #{$gray-900};
-    --border-default: #{$gray-700};
+    --text-on-primary: #{$color-white};
+    --text-disabled: #{$gray-600};
+
+    // Bordes
+    --border-default: #{$gray-800};
+    --border-light: #{$gray-700};
+    --border-strong: #{$gray-600};
+    --border-hover: #{$gray-500};
+    --border-focus: #{$color-primary};
+
+    // Sombras
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6), 0 10px 10px rgba(0, 0, 0, 0.5);
+
+    // Estados semánticos
+    --color-success: #10b981;
+    --color-error: #ef4444;
+    --color-warning: #f59e0b;
+    --color-info: #3b82f6;
+    --color-medium: #{$color-accent-5};
+
+    // Estados interactivos
+    --interactive-hover: #{lighten($color-primary, 10%)};
+    --interactive-active: #{lighten($color-primary, 5%)};
+    --interactive-disabled: #{$gray-700};
+
+    // Colores primitivos
+    --gray-50: #{$gray-900};
+    --gray-100: #{$gray-800};
+    --gray-200: #{$gray-700};
+    --gray-300: #{$gray-600};
+    --gray-400: #{$gray-500};
+    --gray-500: #{$gray-400};
+    --gray-600: #{$gray-300};
+    --gray-700: #{$gray-200};
+    --gray-800: #{$gray-100};
+    --gray-900: #{$gray-50};
   }
 }
 
-// Manual toggle (si se usa data-theme="dark")
-[data-theme='dark'] {
-  --bg-default: #{$gray-900};
-  --text-default: #{$gray-50};
-  --text-inverse: #{$gray-900};
-  --border-default: #{$gray-700};
-}
-
+// Light theme explícito (override de preferencias del sistema)
 [data-theme='light'] {
   --bg-default: #{$bg-default};
+  --bg-subtle: #{$bg-subtle};
+  --bg-surface: #{$color-white};
+  --bg-elevated: #{$color-white};
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --bg-hover: #{$gray-50};
+  --bg-active: #{$gray-100};
+
   --text-default: #{$text-default};
+  --text-secondary: #{$text-secondary};
+  --text-muted: #{$text-muted};
   --text-inverse: #{$text-inverse};
+  --text-on-primary: #{$color-white};
+  --text-disabled: #{$gray-400};
+
   --border-default: #{$border-default};
+  --border-light: #{$border-light};
+  --border-strong: #{$gray-300};
+  --border-hover: #{$gray-400};
+  --border-focus: #{$color-primary};
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 1px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.10);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.18), 0 10px 10px rgba(0, 0, 0, 0.12);
+
+  --color-success: #{$success};
+  --color-error: #{$error};
+  --color-warning: #{$warning};
+  --color-info: #{$info};
+  --color-medium: #{$medium};
+
+  --interactive-hover: #{map-get($color-primary-scale, 'normal-hover')};
+  --interactive-active: #{map-get($color-primary-scale, 'normal-active')};
+  --interactive-disabled: #{$gray-300};
 }
