@@ -774,6 +774,32 @@ El servicio guarda la preferencia en localStorage y aplica `data-theme` en `docu
 ## 6.3 Capturas de pantalla
 
 Modo claro / oscuro (3 páginas):
-- Dashboard: proximamente adjuntare aqui la imagen
-- Tasks: proximamente adjuntare aqui la imagen
-- Profile: proximamente adjuntare aqui la imagen
+- Dashboard: 
+
+Claro:
+
+![modo_claro_dashboard](image-3.png)
+
+Oscuro:
+
+![modo_oscuro_dashboard](image-4.png)
+
+- Tasks:
+
+Claro:
+
+![modo_claro_tasks](image-5.png)
+
+Oscuro:
+
+![modo_oscuro_tasks](image-6.png)
+
+- Profile:
+
+Claro:
+
+![modo_claro_profile](image-7.png)
+
+Oscuro:
+
+![modo_oscuro_profile](image-8.png)
