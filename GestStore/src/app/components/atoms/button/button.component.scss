@@ -9,14 +9,14 @@
   justify-content: center;
   gap: $spacing-2;
 
-  // 3️⃣ BOX MODEL
+  // 3️⃣ BOX MODEL - Desktop first
   padding: $spacing-3 $spacing-5;
 
   // 5️⃣ BORDER
   border: $border-thin solid transparent;
   border-radius: $radius-md;
 
-  // 6️⃣ TIPOGRAFÍA
+  // 6️⃣ TIPOGRAFÍA - Desktop first
   @include text-style($font-size-sm, $font-weight-medium);
 
   // 7️⃣ EFECTOS VISUALES
@@ -24,6 +24,18 @@
 
   // 8️⃣ TRANSICIONES
   @include transition;
+
+  // RESPONSIVE - Desktop first
+  @include respond-down(md) {
+    padding: $spacing-2 $spacing-4;
+    font-size: $font-size-xs;
+    gap: $spacing-1;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-2 $spacing-3;
+    min-height: 36px; // Touch target mínimo
+  }
 
   &:focus-visible {
     @include focus-visible;
@@ -149,26 +161,49 @@
   &--small {
     padding: $spacing-2 $spacing-4;
     font-size: $font-size-xs;
+
+    @include respond-down(md) {
+      padding: $spacing-1 $spacing-3;
+    }
   }
 
   &--medium {
     padding: $spacing-3 $spacing-5;
     font-size: $font-size-sm;
+
+    @include respond-down(md) {
+      padding: $spacing-2 $spacing-4;
+      font-size: $font-size-xs;
+    }
   }
 
   &--large {
     padding: $spacing-4 $spacing-6;
     font-size: $font-size-base;
+
+    @include respond-down(md) {
+      padding: $spacing-3 $spacing-5;
+      font-size: $font-size-sm;
+    }
   }
 
   &--sm {
     padding: $spacing-2 $spacing-4;
     font-size: $font-size-xs;
+
+    @include respond-down(md) {
+      padding: $spacing-1 $spacing-3;
+    }
   }
 
   &--lg {
     padding: $spacing-4 $spacing-6;
     font-size: $font-size-base;
+
+    @include respond-down(md) {
+      padding: $spacing-3 $spacing-5;
+      font-size: $font-size-sm;
+    }
   }
 
   // Estados

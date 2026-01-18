@@ -42,6 +42,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   taskToEdit: Task | null = null;
   currentUser: User | null = null;
   avatarUrl: string | null = null;
+  isSidebarOpen = false;
 
   @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
   @ViewChild('taskDialog', { read: ElementRef }) taskDialog?: ElementRef<HTMLDialogElement>;
@@ -137,6 +138,20 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     this.themeService.toggle();
   }
 
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    if (this.isSidebarOpen) {
+      this.lockScroll();
+    } else {
+      this.unlockScroll();
+    }
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
+    this.unlockScroll();
+  }
+
   onSearchChange(): void {
     const q = this.search.trim();
     this.router.navigate([], {
@@ -180,6 +195,11 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       this.lockScroll();
     } else {
       this.unlockScroll();
+    }
+    
+    // Cerrar sidebar si está abierto cuando se abre un modal
+    if ((this.isCalendarOpen || this.isTaskModalOpen) && this.isSidebarOpen) {
+      this.isSidebarOpen = false;
     }
   }
 

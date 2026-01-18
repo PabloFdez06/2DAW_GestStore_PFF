@@ -8,12 +8,24 @@
   align-items: flex-start;
   gap: $spacing-3;
 
-  // 3️⃣ BOX MODEL
+  // 3️⃣ BOX MODEL - Desktop first
   padding: $spacing-4;
 
   // 5️⃣ BORDER
   border-left: $border-thick solid;
   border-radius: $radius-md;
+
+  // RESPONSIVE - Desktop first
+  @include respond-down(md) {
+    padding: $spacing-3;
+    gap: $spacing-2;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-2;
+    gap: $spacing-1;
+    border-left-width: $spacing-1;
+  }
 
   &--success {
     background-color: rgba($success, 0.1);

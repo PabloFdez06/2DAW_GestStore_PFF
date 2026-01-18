@@ -1,6 +1,19 @@
 <article class="dashboard">
   <!-- Top Navigation Bar -->
   <nav class="dashboard__nav" role="navigation" aria-label="Navegación principal">
+    <!-- Botón hamburguesa para mobile -->
+    <button 
+      class="dashboard__hamburger" 
+      type="button"
+      (click)="toggleSidebar()"
+      [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
+      [attr.aria-expanded]="isSidebarOpen"
+      [class.is-open]="isSidebarOpen">
+      <span class="hamburger__line hamburger__line--top" aria-hidden="true"></span>
+      <span class="hamburger__line hamburger__line--middle" aria-hidden="true"></span>
+      <span class="hamburger__line hamburger__line--bottom" aria-hidden="true"></span>
+    </button>
+    
     <h1 class="dashboard__logo">
       <span class="dashboard__logo-gest">Gest</span><span class="dashboard__logo-store">Store</span>
     </h1>
@@ -76,13 +89,24 @@
     </section>
   </dialog>
 
+  <!-- Overlay del sidebar para mobile -->
+  <div 
+    *ngIf="isSidebarOpen" 
+    class="dashboard__sidebar-overlay"
+    (click)="closeSidebar()"
+    aria-hidden="true"></div>
+  
   <!-- Side Navigation -->
-  <aside class="dashboard__sidebar" role="complementary" aria-label="Menú lateral">
+  <aside 
+    class="dashboard__sidebar" 
+    role="complementary" 
+    aria-label="Menú lateral"
+    [class.is-open]="isSidebarOpen">
     <header class="dashboard__user">
       <figure class="dashboard__user-avatar">
         <a class="dashboard__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
           <ng-container *ngIf="avatarUrl; else dashboardAvatarDefault">
-            <img class="dashboard__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" />
+            <img class="dashboard__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
           </ng-container>
           <ng-template #dashboardAvatarDefault>
             <app-icon name="user" size="large" aria-hidden="true"></app-icon>
@@ -96,27 +120,27 @@
     </header>
 
     <nav class="dashboard__sidebar-nav" aria-label="Navegación del menú">
-      <a routerLink="/dashboard" class="dashboard__sidebar-link dashboard__sidebar-link--active" aria-current="page">
+      <a routerLink="/dashboard" class="dashboard__sidebar-link dashboard__sidebar-link--active" aria-current="page" (click)="closeSidebar()">
         <app-icon name="home" size="small"></app-icon>
         <span>Dashboard</span>
       </a>
-      <a routerLink="/tareas-importantes" class="dashboard__sidebar-link">
+      <a routerLink="/tareas-importantes" class="dashboard__sidebar-link" (click)="closeSidebar()">
         <app-icon name="star" size="small"></app-icon>
         <span>Tareas Importantes</span>
       </a>
-      <a routerLink="/tareas" class="dashboard__sidebar-link">
+      <a routerLink="/tareas" class="dashboard__sidebar-link" (click)="closeSidebar()">
         <app-icon name="check-square" size="small"></app-icon>
         <span>Tareas</span>
       </a>
-      <a routerLink="/categorias" class="dashboard__sidebar-link">
+      <a routerLink="/categorias" class="dashboard__sidebar-link" (click)="closeSidebar()">
         <app-icon name="folder" size="small"></app-icon>
         <span>Categorias de Tareas</span>
       </a>
-      <a routerLink="/almacen" class="dashboard__sidebar-link">
+      <a routerLink="/almacen" class="dashboard__sidebar-link" (click)="closeSidebar()">
         <app-icon name="package" size="small"></app-icon>
         <span>Almacen</span>
       </a>
-      <a routerLink="/ajustes" class="dashboard__sidebar-link">
+      <a routerLink="/ajustes" class="dashboard__sidebar-link" (click)="closeSidebar()">
         <app-icon name="settings" size="small"></app-icon>
         <span>Ajustes</span>
       </a>

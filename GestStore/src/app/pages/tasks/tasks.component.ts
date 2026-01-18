@@ -35,6 +35,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   openTaskMenuIndex: number = -1;
 
   avatarUrl: string | null = null;
+  isSidebarOpen: boolean = false;
 
   @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
   @ViewChild('taskDialog', { read: ElementRef }) taskDialog?: ElementRef<HTMLDialogElement>;
@@ -439,5 +440,19 @@ export class TasksComponent implements OnInit, OnDestroy {
       CANCELLED: 'Cancelada'
     };
     return labels[status] ?? status;
+  }
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    if (this.isSidebarOpen) {
+      this.renderer.addClass(this.document.body, 'sidebar-open');
+    } else {
+      this.renderer.removeClass(this.document.body, 'sidebar-open');
+    }
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
+    this.renderer.removeClass(this.document.body, 'sidebar-open');
   }
 }

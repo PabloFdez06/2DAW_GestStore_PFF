@@ -1,24 +1,56 @@
 @use '../00-settings/variables' as *;
 @use '../01-tools/mixins' as *;
 
-// Contenedor principal
+// ============================================================================
+// CONTENEDOR PRINCIPAL - RESPONSIVE DESKTOP FIRST
+// ============================================================================
 .o-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: $container-xl; // 1280px
   margin-inline: auto;
-  padding-inline: $spacing-4;
+  padding-inline: $spacing-6;
   
-  @include respond(md) {
-    padding-inline: $spacing-6;
+  @include respond-down(lg) {
+    max-width: $container-lg; // 1024px
+    padding-inline: $spacing-5;
+  }
+
+  @include respond-down(md) {
+    max-width: $container-md; // 768px
+    padding-inline: $spacing-4;
+  }
+
+  @include respond-down(sm) {
+    max-width: $container-sm; // 375px
+    padding-inline: $spacing-3;
+  }
+
+  @include respond-down(xs) {
+    max-width: $container-xs; // 320px
+    padding-inline: $spacing-2;
   }
 }
 
-// Wrapper fullwidth
+// Contenedor extra grande
+.o-container--xxl {
+  max-width: $container-xxl; // 1440px
+}
+
+// Contenedor fluido (sin max-width)
+.o-container--fluid {
+  max-width: none;
+}
+
+// ============================================================================
+// WRAPPER FULLWIDTH
+// ============================================================================
 .o-wrapper {
   width: 100%;
 }
 
-// Página base
+// ============================================================================
+// PÁGINA BASE
+// ============================================================================
 .o-page {
   min-height: 100vh;
   display: flex;
@@ -31,22 +63,150 @@
 
 .o-page__main {
   flex: 1 1 auto;
+  padding: $spacing-6;
+
+  @include respond-down(lg) {
+    padding: $spacing-5;
+  }
+
+  @include respond-down(md) {
+    padding: $spacing-4;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+  }
+
+  @include respond-down(xs) {
+    padding: $spacing-2;
+  }
 }
 
 .o-page__footer {
   flex-shrink: 0;
 }
 
-// Grid 12 columnas
+// ============================================================================
+// GRID 12 COLUMNAS - RESPONSIVE
+// ============================================================================
 .o-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: $spacing-4;
+  gap: $spacing-6;
   
-  @include respond(md) {
-    gap: $spacing-6;
+  @include respond-down(lg) {
+    gap: $spacing-5;
+  }
+
+  @include respond-down(md) {
+    gap: $spacing-4;
+    grid-template-columns: repeat(8, 1fr); // 8 columnas en tablet
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-3;
+    grid-template-columns: repeat(4, 1fr); // 4 columnas en mobile
+  }
+
+  @include respond-down(xs) {
+    gap: $spacing-2;
+    grid-template-columns: 1fr; // 1 columna en mobile pequeño
   }
 }
+
+// Spans de columnas responsive
+@for $i from 1 through 12 {
+  .o-col-#{$i} {
+    grid-column: span $i;
+
+    @include respond-down(md) {
+      @if $i > 8 {
+        grid-column: span 8;
+      }
+    }
+
+    @include respond-down(sm) {
+      @if $i > 4 {
+        grid-column: span 4;
+      }
+    }
+
+    @include respond-down(xs) {
+      grid-column: span 1;
+    }
+  }
+}
+
+// ============================================================================
+// FLEX UTILITIES RESPONSIVE
+// ============================================================================
+.o-flex {
+  display: flex;
+  gap: $spacing-4;
+
+  @include respond-down(md) {
+    gap: $spacing-3;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+    flex-direction: column; // Stack en mobile por defecto
+  }
+}
+
+.o-flex--row {
+  flex-direction: row;
+
+  @include respond-down(sm) {
+    flex-direction: column;
+  }
+}
+
+.o-flex--column {
+  flex-direction: column;
+}
+
+.o-flex--wrap {
+  flex-wrap: wrap;
+}
+
+// ============================================================================
+// STACK UTILITY - Para espaciado vertical consistente
+// ============================================================================
+.o-stack {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+
+  @include respond-down(md) {
+    gap: $spacing-3;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+  }
+}
+
+.o-stack--large {
+  gap: $spacing-8;
+
+  @include respond-down(md) {
+    gap: $spacing-6;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-4;
+  }
+}
+
+.o-stack--small {
+  gap: $spacing-2;
+
+  @include respond-down(sm) {
+    gap: $spacing-1;
+  }
+}
+
 
 .o-grid__item {
   grid-column: span 12;

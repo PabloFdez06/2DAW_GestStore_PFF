@@ -7,7 +7,7 @@
   top: 0;
   z-index: 10;
 
-  // 3️⃣ BOX MODEL
+  // 3️⃣ BOX MODEL - Desktop first
   padding: $spacing-3 0;
 
   // 4️⃣ BACKGROUND
@@ -15,6 +15,15 @@
 
   // 5️⃣ BORDER
   border-bottom: $border-thin solid rgba($color-primary, 0.2);
+
+  // RESPONSIVE - Desktop first
+  @include respond-down(md) {
+    padding: $spacing-2 0;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-2 0;
+  }
 }
 
 .app-header__container {
@@ -23,8 +32,16 @@
   align-items: center;
   gap: $spacing-6;
 
-  @include respond(md) {
+  @include respond-down(lg) {
     gap: $spacing-4;
+  }
+
+  @include respond-down(md) {
+    gap: $spacing-3;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
   }
 }
 
@@ -34,6 +51,10 @@
   gap: $spacing-2;
   text-decoration: none;
   flex-shrink: 0;
+
+  @include respond-down(md) {
+    gap: $spacing-1;
+  }
 
   &:hover {
     opacity: 0.8;
@@ -49,15 +70,27 @@
   font-weight: $font-weight-bold;
   color: $color-primary;
   margin: 0;
+
+  @include respond-down(lg) {
+    font-size: $font-size-xl;
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-lg;
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-base;
+  }
 }
 
 // Desktop Navigation
 .app-header__nav {
   &--desktop {
-    display: none;
+    display: flex; // Desktop por defecto
 
-    @include respond(lg) {
-      display: flex;
+    @include respond-down(lg) {
+      display: none; // Ocultar en tablets y mobile
     }
   }
 
@@ -87,8 +120,9 @@
     // 8️⃣ ANIMACIÓN
     animation: slideDown $transition-base ease-out;
 
-    @include respond(lg) {
-      display: none;
+    @include respond-down(sm) {
+      padding: $spacing-3;
+      gap: $spacing-2;
     }
 
     .app-header__nav-list {
@@ -105,6 +139,10 @@
   list-style: none;
   margin: 0;
   padding: 0;
+
+  @include respond-down(lg) {
+    gap: $spacing-4;
+  }
 }
 
 .app-header__nav-link {
@@ -114,6 +152,16 @@
   @include transition;
   padding: $spacing-2 $spacing-4;
   border-radius: $radius-md;
+
+  @include respond-down(md) {
+    padding: $spacing-2 $spacing-3;
+    font-size: $font-size-sm;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-2;
+    font-size: $font-size-xs;
+  }
 
   &:hover {
     color: $color-primary;
@@ -127,7 +175,7 @@
 
 // Hamburger Menu
 .app-header__hamburger {
-  display: flex;
+  display: none; // Oculto en desktop por defecto
   flex-direction: column;
   gap: $spacing-1;
   background: transparent;
@@ -136,8 +184,8 @@
   padding: $spacing-2;
   align-items: center;
 
-  @include respond(lg) {
-    display: none;
+  @include respond-down(lg) {
+    display: flex; // Mostrar en tablets y mobile
   }
 
   &:focus-visible {
@@ -155,6 +203,11 @@
   background: rgba($color-primary, 0.06);
   color: $text-default;
   @include transition;
+
+  @include respond-down(sm) {
+    padding: $spacing-1;
+    font-size: $font-size-xs;
+  }
 
   &:hover {
     background: rgba($color-primary, 0.12);
@@ -176,6 +229,10 @@
   // 8️⃣ TRANSICIONES
   @include transition;
   transform-origin: center;
+
+  @include respond-down(sm) {
+    width: $spacing-5;
+  }
 
   &--top {
     transform: translateY(calc(-#{$spacing-1} - 0.125rem));
@@ -205,10 +262,6 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.25);
   z-index: 9;
-
-  @include respond(lg) {
-    display: none;
-  }
 }
 
 // Desktop Actions
@@ -218,11 +271,15 @@
   justify-content: space-between;
   gap: $spacing-4;
 
-  &--desktop {
-    display: none;
+  @include respond-down(md) {
+    gap: $spacing-2;
+  }
 
-    @include respond(lg) {
-      display: flex;
+  &--desktop {
+    display: flex; // Visible en desktop por defecto
+
+    @include respond-down(lg) {
+      display: none; // Ocultar en tablets y mobile
     }
   }
 }

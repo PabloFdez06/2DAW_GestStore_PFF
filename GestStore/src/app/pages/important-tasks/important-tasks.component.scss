@@ -35,7 +35,7 @@
 }
 
 // ============================================================================
-// IMPORTANT TASKS PAGE - LAYOUT PRINCIPAL
+// IMPORTANT TASKS PAGE - LAYOUT PRINCIPAL - RESPONSIVE
 // ============================================================================
 .important-tasks-page {
   display: grid;
@@ -44,10 +44,93 @@
   min-height: 100vh;
   background-color: $color-white;
   position: relative;
+
+  // RESPONSIVE - Desktop first
+  @include respond-down(lg) {
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: 80px 1fr;
+  }
+
+  @include respond-down(md) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 70px auto 1fr;
+  }
+
+  @include respond-down(sm) {
+    grid-template-rows: 60px auto 1fr;
+  }
 }
 
 // ============================================================================
-// TOP NAVIGATION BAR
+// BOTÓN HAMBURGUESA PARA SIDEBAR MOBILE
+// ============================================================================
+.important-tasks-page__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-1;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: $spacing-2;
+  flex-shrink: 0;
+  z-index: 15;
+
+  @include respond-down(md) {
+    display: flex;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+    border-radius: $radius-sm;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.important-tasks-page__hamburger-line {
+  width: 24px;
+  height: 2px;
+  background-color: $color-primary;
+  transition: all 0.3s ease;
+  transform-origin: center;
+
+  &--top {
+    transform: translateY(-6px);
+  }
+
+  &--middle {
+    transform: translateY(0);
+  }
+
+  &--bottom {
+    transform: translateY(6px);
+  }
+}
+
+.important-tasks-page__hamburger.is-open {
+  .important-tasks-page__hamburger-line--top {
+    transform: translateY(0) rotate(45deg);
+  }
+
+  .important-tasks-page__hamburger-line--middle {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .important-tasks-page__hamburger-line--bottom {
+    transform: translateY(0) rotate(-45deg);
+  }
+}
+
+// ============================================================================
+// TOP NAVIGATION BAR - RESPONSIVE
 // ============================================================================
 .important-tasks-page__nav {
   grid-column: 1 / -1;
@@ -60,12 +143,39 @@
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.07);
   position: relative;
   z-index: 10;
+
+  @include respond-down(lg) {
+    gap: $spacing-4;
+    padding: 0 $spacing-4;
+  }
+
+  @include respond-down(md) {
+    gap: $spacing-3;
+    padding: 0 $spacing-3;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+    padding: 0 $spacing-2;
+  }
 }
 
 .important-tasks-page__logo {
   @include text-style($font-size-3xl, $font-weight-semibold, $line-tight);
   margin: 0;
   flex-shrink: 0;
+
+  @include respond-down(lg) {
+    font-size: $font-size-2xl;
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-xl;
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-lg;
+  }
 }
 
 .important-tasks-page__logo-gest {
@@ -80,6 +190,20 @@
   position: relative;
   flex: 0 0 695px;
   max-width: 695px;
+
+  @include respond-down(lg) {
+    flex: 0 0 500px;
+    max-width: 500px;
+  }
+
+  @include respond-down(md) {
+    flex: 1 1 auto;
+    max-width: 400px;
+  }
+
+  @include respond-down(sm) {
+    display: none; // Ocultar en mobile muy pequeño
+  }
 }
 
 .important-tasks-page__search-input {
@@ -97,6 +221,12 @@
   
   @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
   color: $gray-300;
+
+  @include respond-down(md) {
+    height: 32px;
+    padding: 0 $spacing-8 0 $spacing-3;
+    font-size: 0.625rem; // 10px
+  }
   
   &::placeholder {
     color: $gray-300;
@@ -187,6 +317,67 @@
   position: relative;
   margin-left: -35px;
   padding-left: calc($spacing-5 + 35px);
+
+  @include respond-down(lg) {
+    padding: $spacing-6 $spacing-4;
+    margin-left: -20px;
+    padding-left: calc($spacing-4 + 20px);
+  }
+
+  @include respond-down(md) {
+    // Menú lateral deslizable en tablet/mobile
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    margin-left: 0;
+    padding: $spacing-6 $spacing-4;
+    border-radius: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 20;
+    overflow-y: auto;
+    flex-direction: column;
+    border-bottom: none;
+    
+    &.is-open {
+      transform: translateX(0);
+      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  @include respond-down(sm) {
+    width: 260px;
+    padding: $spacing-4 $spacing-3;
+  }
+}
+
+// Overlay del sidebar en mobile
+.important-tasks-page__sidebar-overlay {
+  display: none;
+  
+  @include respond-down(md) {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 15;
+    animation: fadeIn 0.3s ease;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .important-tasks-page__user {
@@ -300,6 +491,20 @@
   grid-row: 2;
   padding: $spacing-8;
   overflow-y: auto;
+
+  @include respond-down(lg) {
+    padding: $spacing-6;
+  }
+
+  @include respond-down(md) {
+    grid-column: 1;
+    grid-row: 2;
+    padding: $spacing-4;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+  }
 }
 
 .important-tasks-page__section {
@@ -311,6 +516,16 @@
               0px 44px 26px 0px rgba(0, 0, 0, 0.02),
               0px 19px 19px 0px rgba(0, 0, 0, 0.03),
               0px 5px 11px 0px rgba(0, 0, 0, 0.04);
+
+  @include respond-down(md) {
+    padding: $spacing-4;
+    border-radius: 12px;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+    border-radius: 10px;
+  }
 }
 
 .important-tasks-page__section-header {
@@ -618,6 +833,18 @@
   padding-left: $spacing-5;
   padding-right: 110px;
   padding-top: $spacing-6;
+
+  @include respond-down(md) {
+    padding-left: $spacing-4;
+    padding-right: 100px;
+    padding-top: $spacing-5;
+  }
+
+  @include respond-down(sm) {
+    padding-left: $spacing-3;
+    padding-right: 85px;
+    padding-top: $spacing-4;
+  }
 }
 
 .task-card__title {

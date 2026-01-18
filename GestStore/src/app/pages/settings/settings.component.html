@@ -1,6 +1,19 @@
 <article class="settings-page">
   <!-- Top Navigation Bar -->
   <nav class="settings-page__nav" role="navigation" aria-label="Navegación principal">
+    <!-- Botón hamburguesa para mobile -->
+    <button 
+      class="settings-page__hamburger" 
+      type="button"
+      (click)="toggleSidebar()"
+      [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
+      [attr.aria-expanded]="isSidebarOpen"
+      [class.is-open]="isSidebarOpen">
+      <span class="settings-page__hamburger-line settings-page__hamburger-line--top" aria-hidden="true"></span>
+      <span class="settings-page__hamburger-line settings-page__hamburger-line--middle" aria-hidden="true"></span>
+      <span class="settings-page__hamburger-line settings-page__hamburger-line--bottom" aria-hidden="true"></span>
+    </button>
+    
     <h1 class="settings-page__logo">
       <span class="settings-page__logo-gest">Gest</span><span class="settings-page__logo-store">Store</span>
     </h1>
@@ -42,13 +55,24 @@
     </section>
   </dialog>
 
+  <!-- Overlay del sidebar para mobile -->
+  <div 
+    *ngIf="isSidebarOpen" 
+    class="settings-page__sidebar-overlay"
+    (click)="closeSidebar()"
+    aria-hidden="true"></div>
+  
   <!-- Side Navigation -->
-  <aside class="settings-page__sidebar" role="complementary" aria-label="Menú lateral">
+  <aside 
+    class="settings-page__sidebar" 
+    role="complementary" 
+    aria-label="Menú lateral"
+    [class.is-open]="isSidebarOpen">
     <header class="settings-page__user">
       <figure class="settings-page__user-avatar">
         <a class="settings-page__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
           <ng-container *ngIf="avatarUrl; else settingsAvatarDefault">
-            <img class="settings-page__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" />
+            <img class="settings-page__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
           </ng-container>
           <ng-template #settingsAvatarDefault>
             <app-icon name="user" size="large" aria-hidden="true"></app-icon>
@@ -62,27 +86,27 @@
     </header>
 
     <nav class="settings-page__sidebar-nav" aria-label="Navegación del menú">
-      <a routerLink="/dashboard" class="settings-page__sidebar-link">
+      <a routerLink="/dashboard" class="settings-page__sidebar-link" (click)="closeSidebar()">
         <app-icon name="home" size="small"></app-icon>
         <span>Dashboard</span>
       </a>
-      <a routerLink="/tareas-importantes" class="settings-page__sidebar-link">
+      <a routerLink="/tareas-importantes" class="settings-page__sidebar-link" (click)="closeSidebar()">
         <app-icon name="star" size="small"></app-icon>
         <span>Tareas Importantes</span>
       </a>
-      <a routerLink="/tareas" class="settings-page__sidebar-link">
+      <a routerLink="/tareas" class="settings-page__sidebar-link" (click)="closeSidebar()">
         <app-icon name="check-square" size="small"></app-icon>
         <span>Tareas</span>
       </a>
-      <a routerLink="/categorias" class="settings-page__sidebar-link">
+      <a routerLink="/categorias" class="settings-page__sidebar-link" (click)="closeSidebar()">
         <app-icon name="folder" size="small"></app-icon>
         <span>Categorias de Tareas</span>
       </a>
-      <a routerLink="/almacen" class="settings-page__sidebar-link">
+      <a routerLink="/almacen" class="settings-page__sidebar-link" (click)="closeSidebar()">
         <app-icon name="package" size="small"></app-icon>
         <span>Almacen</span>
       </a>
-      <a routerLink="/ajustes" class="settings-page__sidebar-link settings-page__sidebar-link--active" aria-current="page">
+      <a routerLink="/ajustes" class="settings-page__sidebar-link settings-page__sidebar-link--active" aria-current="page" (click)="closeSidebar()">
         <app-icon name="settings" size="small"></app-icon>
         <span>Ajustes</span>
       </a>
@@ -179,7 +203,7 @@
                 <h3 class="settings-page__avatar-title">Cambiar avatar</h3>
                 <section class="settings-page__avatar-row" aria-label="Subida de avatar">
                   <figure class="settings-page__avatar-preview">
-                    <img *ngIf="avatarUrl" class="settings-page__avatar-img" [src]="avatarUrl" alt="Avatar actual" />
+                    <img *ngIf="avatarUrl" class="settings-page__avatar-img" [src]="avatarUrl" alt="Avatar actual" loading="lazy" decoding="async" />
                   </figure>
 
                   <label class="settings-page__dropzone" aria-label="Subir avatar">

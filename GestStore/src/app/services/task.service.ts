@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 import { 
@@ -136,7 +136,24 @@ export class TaskService {
    * Crear una nueva tarea
    */
   createTask(task: TaskRequest): Observable<Task> {
-    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}`, task)
+    // Obtener userId de localStorage como fallback si el interceptor no funciona
+    const currentUserStr = localStorage.getItem('currentUser');
+    let headers = new HttpHeaders();
+    
+    if (currentUserStr) {
+      try {
+        const user = JSON.parse(currentUserStr);
+        const userId = user?.id ?? user?._id;
+        if (userId) {
+          headers = headers.set('X-User-Id', String(userId));
+          console.log('[TaskService] X-User-Id header añadido manualmente:', String(userId));
+        }
+      } catch (e) {
+        console.error('[TaskService] Error parsing currentUser:', e);
+      }
+    }
+
+    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}`, task, { headers })
       .pipe(
         map(response => response.data),
         catchError(this.handleError('createTask'))

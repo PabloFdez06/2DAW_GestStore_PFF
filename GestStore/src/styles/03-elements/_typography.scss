@@ -1,8 +1,23 @@
 @use '../00-settings/variables' as *;
 @use '../01-tools/mixins' as *;
 
+// ============================================================================
+// BASE FONT SIZE - Responsive con fluid typography
+// ============================================================================
 html {
-  font-size: 100%;
+  font-size: 100%; // 16px base
+
+  @include respond-down(lg) {
+    font-size: 95%; // 15.2px
+  }
+
+  @include respond-down(md) {
+    font-size: 90%; // 14.4px
+  }
+
+  @include respond-down(sm) {
+    font-size: 87.5%; // 14px
+  }
 }
 
 body {
@@ -12,61 +27,158 @@ body {
   font-family: $font-primary;
 }
 
-// Headings - según Figma
+// ============================================================================
+// HEADINGS - Responsive según Figma
+// ============================================================================
 h1, h2, h3, h4, h5, h6 {
   font-family: $font-primary;
   margin-bottom: $spacing-3;
+
+  @include respond-down(md) {
+    margin-bottom: $spacing-2;
+  }
 }
 
 // H1: 72pt, Regular, line-height 100%
 h1 { 
-  font-size: $font-size-7xl;
+  font-size: $font-size-7xl; // 72px
   font-weight: $font-weight-regular;
   line-height: $line-tight;
+
+  @include respond-down(lg) {
+    font-size: $font-size-6xl; // 64px
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-5xl; // 56px
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-3xl; // 40px
+  }
 }
 
 // H2: 64pt, Medium, line-height 100%
 h2 { 
-  font-size: $font-size-6xl;
+  font-size: $font-size-6xl; // 64px
   font-weight: $font-weight-medium;
   line-height: $line-tight;
+
+  @include respond-down(lg) {
+    font-size: $font-size-5xl; // 56px
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-4xl; // 48px
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-2xl; // 36px
+  }
 }
 
 // H3: 56pt, Semi Bold, line-height 100%
 h3 { 
-  font-size: $font-size-5xl;
+  font-size: $font-size-5xl; // 56px
   font-weight: $font-weight-semibold;
   line-height: $line-tight;
+
+  @include respond-down(lg) {
+    font-size: $font-size-4xl; // 48px
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-3xl; // 40px
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-xl; // 24px
+  }
 }
 
 // H4: 24px, Semi Bold, line-height 32px
 h4 { 
-  font-size: $font-size-xl;
+  font-size: $font-size-xl; // 24px
   font-weight: $font-weight-semibold;
   line-height: $line-heading;
+
+  @include respond-down(md) {
+    font-size: $font-size-lg; // 20px
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-base; // 16px
+  }
 }
 
-h5 { font-size: $font-size-lg; }
-h6 { font-size: $font-size-base; }
+h5 { 
+  font-size: $font-size-lg;
 
-// Text styles - según Figma
+  @include respond-down(md) {
+    font-size: $font-size-base;
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-sm;
+  }
+}
+
+h6 { 
+  font-size: $font-size-base;
+
+  @include respond-down(md) {
+    font-size: $font-size-sm;
+  }
+}
+
+// ============================================================================
+// TEXT STYLES - Responsive según Figma
+// ============================================================================
 .text-1 {
   font-size: $font-size-3xl;  // 40pt
   font-weight: $font-weight-regular;
   line-height: $line-tight;
+
+  @include respond-down(md) {
+    font-size: $font-size-2xl; // 36pt
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-xl; // 24px
+  }
 }
 
 .text-2 {
   font-size: $font-size-2xl;  // 36pt
   font-weight: $font-weight-regular;
   line-height: $line-tight;
+
+  @include respond-down(md) {
+    font-size: $font-size-xl; // 24px
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-lg; // 20px
+  }
 }
 
 // Display 1: 48px, Semi Bold, line-height 56px
 .display-1 {
-  font-size: $font-size-4xl;
+  font-size: $font-size-4xl; // 48px
   font-weight: $font-weight-semibold;
   line-height: 1.17;
+
+  @include respond-down(lg) {
+    font-size: $font-size-3xl; // 40px
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-2xl; // 36px
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-xl; // 24px
+  }
 }
 
 // Párrafos

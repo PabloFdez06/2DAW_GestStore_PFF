@@ -1,0 +1,390 @@
+@use '../00-settings/variables' as *;
+
+// ============================================================================
+// ANIMACIONES CSS OPTIMIZADAS
+// ============================================================================
+// Todas las animaciones usan solo transform y opacity para máximo rendimiento
+// Duraciones entre 150ms-500ms según criterios
+
+// ============================================================================
+// 1. LOADING SPINNER - Para estados de carga
+// ============================================================================
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba($color-primary, 0.1);
+  border-top-color: $color-primary;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  
+  &--small {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+  }
+  
+  &--large {
+    width: 60px;
+    height: 60px;
+    border-width: 6px;
+  }
+}
+
+// ============================================================================
+// 2. FADE ANIMATIONS - Apariciones suaves
+// ============================================================================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 300ms ease-out;
+}
+
+.fade-in-up {
+  animation: fadeInUp 400ms ease-out;
+}
+
+.fade-in-down {
+  animation: fadeInDown 400ms ease-out;
+}
+
+// ============================================================================
+// 3. BOUNCE - Micro-interacción de rebote
+// ============================================================================
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bounce {
+  animation: bounce 500ms ease-in-out;
+}
+
+.bounce-in {
+  animation: bounceIn 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+// ============================================================================
+// 4. SLIDE ANIMATIONS - Deslizamientos
+// ============================================================================
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 350ms ease-out;
+}
+
+.slide-in-right {
+  animation: slideInRight 350ms ease-out;
+}
+
+// ============================================================================
+// 5. PULSE - Pulsación suave
+// ============================================================================
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+// ============================================================================
+// 6. SCALE ANIMATIONS - Escalado
+// ============================================================================
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 300ms ease-out;
+}
+
+.scale-out {
+  animation: scaleOut 250ms ease-in;
+}
+
+// ============================================================================
+// 7. SHAKE - Sacudida para errores
+// ============================================================================
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.shake {
+  animation: shake 400ms ease-in-out;
+}
+
+// ============================================================================
+// 8. SMOOTH TRANSITIONS - Transiciones optimizadas
+// ============================================================================
+.transition-smooth {
+  transition: transform 300ms ease-out, opacity 300ms ease-out;
+}
+
+.transition-fast {
+  transition: transform 150ms ease-out, opacity 150ms ease-out;
+}
+
+.transition-medium {
+  transition: transform 250ms ease-out, opacity 250ms ease-out;
+}
+
+.transition-slow {
+  transition: transform 400ms ease-out, opacity 400ms ease-out;
+}
+
+// ============================================================================
+// 9. HOVER EFFECTS - Efectos al pasar el cursor
+// ============================================================================
+.hover-lift {
+  transition: transform 200ms ease-out;
+  
+  &:hover {
+    transform: translateY(-3px);
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
+}
+
+.hover-scale {
+  transition: transform 200ms ease-out;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.hover-glow {
+  transition: opacity 250ms ease-out;
+  
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+// ============================================================================
+// 10. FOCUS EFFECTS - Efectos de enfoque
+// ============================================================================
+.focus-ring {
+  transition: transform 150ms ease-out, opacity 150ms ease-out;
+  
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+    transform: scale(1.02);
+  }
+}
+
+.focus-glow {
+  transition: transform 200ms ease-out, opacity 200ms ease-out;
+  
+  &:focus-visible {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}
+
+// ============================================================================
+// 11. LOADING STATES - Estados de carga
+// ============================================================================
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: $gray-200;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.5) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer 2s infinite;
+  }
+}
+
+// ============================================================================
+// 12. UTILITY CLASSES - Clases de utilidad
+// ============================================================================
+.animated {
+  animation-duration: 300ms;
+  animation-fill-mode: both;
+}
+
+.animated-fast {
+  animation-duration: 150ms;
+}
+
+.animated-slow {
+  animation-duration: 500ms;
+}
+
+.animation-delay-1 {
+  animation-delay: 100ms;
+}
+
+.animation-delay-2 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-3 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-4 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-5 {
+  animation-delay: 500ms;
+}

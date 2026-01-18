@@ -1,5 +1,18 @@
 <article class="task-view">
   <nav class="task-view__nav" role="navigation" aria-label="Navegación principal">
+    <!-- Botón hamburguesa para mobile -->
+    <button 
+      class="task-view__hamburger" 
+      type="button"
+      (click)="toggleSidebar()"
+      [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
+      [attr.aria-expanded]="isSidebarOpen"
+      [class.is-open]="isSidebarOpen">
+      <span class="task-view__hamburger-line task-view__hamburger-line--top" aria-hidden="true"></span>
+      <span class="task-view__hamburger-line task-view__hamburger-line--middle" aria-hidden="true"></span>
+      <span class="task-view__hamburger-line task-view__hamburger-line--bottom" aria-hidden="true"></span>
+    </button>
+    
     <h1 class="task-view__logo">
       <span class="task-view__logo-gest">Gest</span><span class="task-view__logo-store">Store</span>
     </h1>
@@ -72,12 +85,24 @@
     </section>
   </dialog>
 
-  <aside class="task-view__sidebar" role="complementary" aria-label="Menú lateral">
+  <!-- Overlay del sidebar para mobile -->
+  <div 
+    *ngIf="isSidebarOpen" 
+    class="task-view__sidebar-overlay"
+    (click)="closeSidebar()"
+    aria-hidden="true">
+  </div>
+
+  <aside 
+    class="task-view__sidebar" 
+    role="complementary" 
+    aria-label="Menú lateral"
+    [class.is-open]="isSidebarOpen">
     <header class="task-view__user">
       <figure class="task-view__user-avatar">
         <a class="task-view__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
           <ng-container *ngIf="avatarUrl; else taskViewAvatarDefault">
-            <img class="task-view__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" />
+            <img class="task-view__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
           </ng-container>
           <ng-template #taskViewAvatarDefault>
             <app-icon name="user" size="large" aria-hidden="true"></app-icon>

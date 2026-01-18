@@ -48,6 +48,9 @@ export class DashboardComponent implements OnInit {
   // Control del menú de tarea (índice de la tarea con menú abierto, -1 si ninguno)
   openTaskMenuIndex: number = -1;
   
+  // Control del sidebar mobile
+  isSidebarOpen: boolean = false;
+  
   // Tareas desde la API
   tasks: Task[] = [];
   completedTasksData: Task[] = [];
@@ -92,6 +95,20 @@ export class DashboardComponent implements OnInit {
 
   toggleTheme(): void {
     this.themeService.toggle();
+  }
+  
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    if (this.isSidebarOpen) {
+      this.renderer.addClass(this.document.body, 'sidebar-open');
+    } else {
+      this.renderer.removeClass(this.document.body, 'sidebar-open');
+    }
+  }
+  
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
+    this.renderer.removeClass(this.document.body, 'sidebar-open');
   }
   
   ngOnInit() {
@@ -346,6 +363,48 @@ export class DashboardComponent implements OnInit {
   }
   
   handleTaskAdded(task: any) {
+    // Validar usuario desde localStorage directamente
+    const userStr = localStorage.getItem('currentUser');
+    const token = localStorage.getItem('token');
+    
+    console.log('=== DEBUG CREATE TASK ===');
+    console.log('localStorage.currentUser:', userStr);
+    console.log('localStorage.token exists:', !!token);
+    
+    if (!userStr) {
+      console.error('No hay usuario en localStorage');
+      this.errorMessage = 'Error: No se pudo identificar el usuario. Por favor, vuelve a iniciar sesión.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    if (!token) {
+      console.error('No hay token en localStorage');
+      this.errorMessage = 'Error: Sesión expirada. Por favor, vuelve a iniciar sesión.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    let userId: string | undefined;
+    try {
+      const user = JSON.parse(userStr);
+      userId = user?.id ?? user?._id;
+      console.log('User object:', user);
+      console.log('UserId extraído:', userId);
+      
+      if (!userId) {
+        console.error('El usuario no tiene ID');
+        this.errorMessage = 'Error: Usuario inválido. Por favor, vuelve a iniciar sesión.';
+        this.cdr.detectChanges();
+        return;
+      }
+    } catch (e) {
+      console.error('Error al parsear usuario:', e);
+      this.errorMessage = 'Error al procesar datos de usuario';
+      this.cdr.detectChanges();
+      return;
+    }
+
     // Convertir el formato del modal al formato de la API
     const taskRequest: TaskRequest = {
       title: task.title,
@@ -353,10 +412,12 @@ export class DashboardComponent implements OnInit {
       priority: this.convertPriorityFromModal(task.priority),
       status: TaskStatus.PENDING,
       dueDate: task.date ? `${task.date}T23:59:59` : undefined,
-      important: false
+      important: task.priority === 'absolute'
     };
     
-    console.log('Creando tarea:', taskRequest);
+    console.log('Creando tarea con:', taskRequest);
+    console.log('Header X-User-Id debería ser:', userId);
+    console.log('=== FIN DEBUG ===');
     
     this.taskService.createTask(taskRequest).subscribe({
       next: (newTask) => {

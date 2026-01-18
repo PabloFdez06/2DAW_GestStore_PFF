@@ -18,11 +18,21 @@
   &--small {
     padding: vars.$spacing-1 vars.$spacing-2;
     font-size: vars.$font-size-xs;
+
+    @media (max-width: #{vars.$breakpoint-md - 1}) {
+      padding: 0.125rem vars.$spacing-1;
+      font-size: 0.625rem; // 10px
+    }
   }
 
   &--medium {
     padding: vars.$spacing-2 vars.$spacing-3;
     font-size: vars.$font-size-sm;
+
+    @media (max-width: #{vars.$breakpoint-md - 1}) {
+      padding: vars.$spacing-1 vars.$spacing-2;
+      font-size: vars.$font-size-xs;
+    }
   }
 
   &--primary {

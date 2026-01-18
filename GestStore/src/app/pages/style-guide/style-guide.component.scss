@@ -9,6 +9,19 @@
   padding: $spacing-8;
   background: linear-gradient(135deg, $gray-50 0%, $color-white 100%);
   min-height: 100vh;
+
+  // RESPONSIVE - Desktop first
+  @include respond-down(lg) {
+    padding: $spacing-6;
+  }
+
+  @include respond-down(md) {
+    padding: $spacing-4;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+  }
 }
 
 .style-guide__header {
@@ -24,6 +37,18 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+
+  @include respond-down(lg) {
+    font-size: $font-size-3xl;
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-2xl;
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-xl;
+  }
 }
 
 .style-guide__title + .style-guide__nav {
@@ -41,6 +66,23 @@
   box-shadow: $shadow-sm;
   border: $border-thin solid $border-default;
 
+  @include respond-down(lg) {
+    padding: $spacing-5;
+    margin-bottom: $spacing-8;
+    gap: $spacing-2;
+  }
+
+  @include respond-down(md) {
+    padding: $spacing-4;
+    margin-bottom: $spacing-6;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+    margin-bottom: $spacing-4;
+    gap: $spacing-1;
+  }
+
   .button {
     padding: $spacing-3 $spacing-5;
     border-radius: $radius-md;
@@ -51,6 +93,16 @@
     cursor: pointer;
     background-color: $gray-100;
     color: $text-default;
+
+    @include respond-down(md) {
+      padding: $spacing-2 $spacing-4;
+      font-size: $font-size-xs;
+    }
+
+    @include respond-down(sm) {
+      padding: $spacing-2 $spacing-3;
+      font-size: 0.625rem; // 10px
+    }
 
     &:hover {
       background-color: $gray-200;

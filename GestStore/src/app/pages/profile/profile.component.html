@@ -42,7 +42,7 @@
     <footer class="profile__sidebar-footer">
       <a class="profile__user" routerLink="/perfil" aria-label="Ir a tu perfil">
         <ng-container *ngIf="avatarUrl; else profileSidebarAvatarDefault">
-          <img class="profile__user-avatar" [src]="avatarUrl" alt="Avatar" />
+          <img class="profile__user-avatar" [src]="avatarUrl" alt="Avatar" loading="lazy" decoding="async" />
         </ng-container>
         <ng-template #profileSidebarAvatarDefault>
           <span class="profile__user-avatar profile__user-avatar--empty" aria-hidden="true">
@@ -83,7 +83,7 @@
 
         <section class="profile__identity" aria-label="Identidad">
           <ng-container *ngIf="avatarUrl; else profileIdentityAvatarDefault">
-            <img class="profile__identity-avatar" [src]="avatarUrl" alt="Avatar" />
+            <img class="profile__identity-avatar" [src]="avatarUrl" alt="Avatar" loading="lazy" decoding="async" />
           </ng-container>
           <ng-template #profileIdentityAvatarDefault>
             <span class="profile__identity-avatar profile__identity-avatar--empty" aria-hidden="true">

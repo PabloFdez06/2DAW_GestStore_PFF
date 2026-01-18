@@ -377,17 +377,119 @@
 // ============================================================================
 // RESPONSIVE
 // ============================================================================
-@media (max-width: $breakpoint-md) {
+@include respond-down(lg) {
   .add-task-modal {
-    width: 100%;
+    width: 90vw;
+    padding: $spacing-8;
+  }
+  
+  .add-task-modal__form {
+    gap: $spacing-6;
+  }
+}
+
+@include respond-down(md) {
+  .add-task-modal {
+    width: 95vw;
+    padding: $spacing-6;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .add-task-modal__header {
+    margin-bottom: $spacing-6;
+  }
+  
+  .add-task-modal__content {
     padding: $spacing-6;
   }
   
   .add-task-modal__form {
     grid-template-columns: 1fr;
+    gap: $spacing-6;
+  }
+  
+  .add-task-modal__left-column,
+  .add-task-modal__right-column {
+    gap: $spacing-4;
+  }
+  
+  .add-task-modal__field {
+    gap: $spacing-2;
+  }
+  
+  .add-task-modal__textarea {
+    min-height: 8rem;
   }
   
   .add-task-modal__submit-btn {
     width: 100%;
+  }
+}
+
+@include respond-down(sm) {
+  .add-task-modal {
+    width: 100vw;
+    max-width: 100vw;
+    padding: $spacing-4;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+  
+  .add-task-modal__header {
+    margin-bottom: $spacing-4;
+  }
+  
+  .add-task-modal__title {
+    font-size: $font-size-sm;
+  }
+  
+  .add-task-modal__content {
+    padding: $spacing-4;
+  }
+  
+  .add-task-modal__form {
+    gap: $spacing-4;
+  }
+  
+  .add-task-modal__left-column,
+  .add-task-modal__right-column {
+    gap: $spacing-3;
+  }
+  
+  .add-task-modal__field {
+    gap: $spacing-2;
+  }
+  
+  .add-task-modal__label {
+    font-size: $font-size-xs;
+  }
+  
+  .add-task-modal__input,
+  .add-task-modal__textarea {
+    font-size: $font-size-xs;
+  }
+  
+  .add-task-modal__textarea {
+    min-height: 6rem;
+  }
+  
+  .add-task-modal__priorities {
+    gap: $spacing-4;
+    flex-wrap: wrap;
+  }
+  
+  .add-task-modal__assign-box {
+    padding: $spacing-4;
+    min-height: 8rem;
+    
+    &--tall {
+      min-height: 10rem;
+    }
+  }
+  
+  .add-task-modal__submit-btn {
+    padding: $spacing-3 $spacing-4;
+    font-size: $font-size-xs;
   }
 }

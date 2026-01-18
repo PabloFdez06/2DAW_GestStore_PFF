@@ -25,6 +25,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
 
   avatarUrl: string | null = null;
+  isSidebarOpen: boolean = false;
 
   // Form data (UI only for now)
   fullName: string = '';
@@ -232,5 +233,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
       keyboardEvent.preventDefault();
       this.closeCalendar();
     }
+  }
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    if (this.isSidebarOpen) {
+      this.renderer.addClass(this.document.body, 'sidebar-open');
+    } else {
+      this.renderer.removeClass(this.document.body, 'sidebar-open');
+    }
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
+    this.renderer.removeClass(this.document.body, 'sidebar-open');
   }
 }

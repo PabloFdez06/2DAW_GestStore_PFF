@@ -57,6 +57,15 @@
   background-position: right $spacing-3 center;
   padding-right: $spacing-10;
 
+  @include respond-down(md) {
+    background-position: right $spacing-2 center;
+    padding-right: $spacing-8;
+  }
+
+  @include respond-down(sm) {
+    padding-right: $spacing-6;
+  }
+
   option {
     padding: $spacing-2;
     color: $text-default;

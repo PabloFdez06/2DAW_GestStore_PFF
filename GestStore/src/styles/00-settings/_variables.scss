@@ -121,12 +121,22 @@ $spacing-23: 5.75rem;
 $spacing-24: 6rem;
 
 // ============================================================================
-// BREAKPOINTS
+// BREAKPOINTS - Desktop First Strategy
 // ============================================================================
-$breakpoint-sm: 640px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1280px;
+// Base: Desktop (1280px y superior)
+$breakpoint-xl: 1280px;     // Desktop estándar
+$breakpoint-lg: 1024px;     // Desktop pequeño / Laptop
+$breakpoint-md: 768px;      // Tablet
+$breakpoint-sm: 375px;      // Mobile estándar
+$breakpoint-xs: 320px;      // Mobile pequeño
+
+// Container max-widths
+$container-xs: 320px;
+$container-sm: 375px;
+$container-md: 768px;
+$container-lg: 1024px;
+$container-xl: 1280px;
+$container-xxl: 1440px;
 
 // ============================================================================
 // ELEVACIÓN (SOMBRAS)
