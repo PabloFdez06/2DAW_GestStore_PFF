@@ -39,25 +39,25 @@
 // ============================================================================
 .tasks-page {
   display: grid;
-  grid-template-columns: 330px 1fr;
-  grid-template-rows: 100px 1fr;
+  grid-template-columns: 20.625rem 1fr;
+  grid-template-rows: 6.25rem 1fr;
   min-height: 100vh;
   background-color: var(--bg-default);
   position: relative;
 
   // RESPONSIVE - Desktop first
   @include respond-down(lg) {
-    grid-template-columns: 250px 1fr;
-    grid-template-rows: 80px 1fr;
+    grid-template-columns: 15.625rem 1fr;
+    grid-template-rows: 5rem 1fr;
   }
 
   @include respond-down(md) {
     grid-template-columns: 1fr;
-    grid-template-rows: 70px auto 1fr;
+    grid-template-rows: 4.375rem auto 1fr;
   }
 
   @include respond-down(sm) {
-    grid-template-rows: 60px auto 1fr;
+    grid-template-rows: 3.75rem auto 1fr;
   }
 }
 
@@ -70,8 +70,8 @@
   justify-content: center;
   align-items: center;
   gap: $spacing-1;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -95,14 +95,14 @@
 }
 
 .tasks-page__hamburger-line {
-  width: 24px;
+  width: 1.5rem;
   height: 2px;
   background-color: var(--color-primary);
   transition: all 0.3s ease;
   transform-origin: center;
 
   &--top {
-    transform: translateY(-6px);
+    transform: translateY(-0.375rem);
   }
 
   &--middle {
@@ -110,7 +110,7 @@
   }
 
   &--bottom {
-    transform: translateY(6px);
+    transform: translateY(0.375rem);
   }
 }
 
@@ -188,17 +188,17 @@
 
 .tasks-page__search {
   position: relative;
-  flex: 0 0 695px;
-  max-width: 695px;
+  flex: 0 0 43.4375rem;
+  max-width: 43.4375rem;
 
   @include respond-down(lg) {
-    flex: 0 0 500px;
-    max-width: 500px;
+    flex: 0 0 31.25rem;
+    max-width: 31.25rem;
   }
 
   @include respond-down(md) {
     flex: 1 1 auto;
-    max-width: 400px;
+    max-width: 25rem;
   }
 
   @include respond-down(sm) {
@@ -208,10 +208,10 @@
 
 .tasks-page__search-input {
   width: 100%;
-  height: 36px;
+  height: 2.25rem;
   padding: 0 $spacing-12 0 $spacing-4;
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background-color: var(--bg-surface);
   box-shadow: var(--shadow-sm);
   
@@ -219,7 +219,7 @@
   color: var(--text-muted);
 
   @include respond-down(md) {
-    height: 32px;
+    height: 2rem;
     padding: 0 $spacing-8 0 $spacing-3;
     font-size: 0.625rem; // 10px
   }
@@ -239,8 +239,8 @@
   position: absolute;
   right: 0;
   top: 0;
-  width: 36px;
-  height: 36px;
+  width: 2.25rem;
+  height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -262,13 +262,13 @@
 
 .tasks-page__nav-btn {
   all: unset;
-  width: 34px;
-  height: 34px;
+  width: 2.125rem;
+  height: 2.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--color-primary);
-  border-radius: 8px;
+  border-radius: 0.5rem;
   color: var(--text-on-primary);
   cursor: pointer;
   position: relative;
@@ -285,17 +285,17 @@
 
 .tasks-page__notification-badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 18px;
-  height: 18px;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 1.125rem;
+  height: 1.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 $spacing-1;
   background-color: var(--color-error);
-  color: #fff;
-  border-radius: 9px;
+  color: var(--color-white);
+  border-radius: 0.5625rem;
   @include text-style($font-size-xs, $font-weight-bold, $line-normal);
 }
 
@@ -304,7 +304,7 @@
     box-shadow: 0 0 0 0 rgba(var(--color-error-rgb, 239, 68, 68), 0.4);
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(var(--color-error-rgb, 239, 68, 68), 0);
+    box-shadow: 0 0 0 0.25rem rgba(var(--color-error-rgb, 239, 68, 68), 0);
   }
 }
 
@@ -338,16 +338,16 @@
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-md);
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
   position: relative;
-  margin-left: -35px;
-  padding-left: calc($spacing-5 + 35px);
+  margin-left: -2.1875rem;
+  padding-left: calc($spacing-5 + 2.1875rem);
 
   @include respond-down(lg) {
     padding: $spacing-6 $spacing-4;
-    margin-left: -20px;
-    padding-left: calc($spacing-4 + 20px);
+    margin-left: -1.25rem;
+    padding-left: calc($spacing-4 + 1.25rem);
   }
 
   @include respond-down(md) {
@@ -356,7 +356,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    width: 280px;
+    width: 17.5rem;
     max-width: 85vw;
     margin-left: 0;
     padding: $spacing-6 $spacing-4;
@@ -370,12 +370,12 @@
     
     &.is-open {
       transform: translateX(0);
-      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+      box-shadow: 0.125rem 0 1rem rgba(0, 0, 0, 0.15);
     }
   }
 
   @include respond-down(sm) {
-    width: 260px;
+    width: 16.25rem;
     padding: $spacing-4 $spacing-3;
   }
 }
@@ -428,26 +428,26 @@
 }
 
 .tasks-page__user-avatar {
-  width: 86px;
-  height: 86px;
+  width: 5.375rem;
+  height: 5.375rem;
   border-radius: 50%;
   background-color: var(--gray-300);
   flex-shrink: 0;
   overflow: hidden;
 
   @include respond-down(lg) {
-    width: 60px;
-    height: 60px;
+    width: 3.75rem;
+    height: 3.75rem;
   }
 
   @include respond-down(md) {
-    width: 48px;
-    height: 48px;
+    width: 3rem;
+    height: 3rem;
   }
 
   @include respond-down(sm) {
-    width: 40px;
-    height: 40px;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }
 
@@ -512,7 +512,7 @@
   align-items: center;
   gap: $spacing-4;
   padding: $spacing-4 $spacing-5;
-  border-radius: 14px;
+  border-radius: 0.875rem;
   cursor: pointer;
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
   color: var(--text-on-primary);
@@ -556,7 +556,7 @@
   align-items: center;
   gap: $spacing-4;
   padding: $spacing-4 $spacing-5;
-  border-radius: 14px;
+  border-radius: 0.875rem;
   cursor: pointer;
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
   color: var(--text-on-primary);
@@ -602,18 +602,18 @@
 
 .tasks-page__section {
   background-color: var(--bg-surface);
-  border-radius: 14px;
+  border-radius: 0.875rem;
   padding: $spacing-6;
   box-shadow: var(--shadow-sm);
 
   @include respond-down(md) {
     padding: $spacing-4;
-    border-radius: 12px;
+    border-radius: 0.75rem;
   }
 
   @include respond-down(sm) {
     padding: $spacing-3;
-    border-radius: 10px;
+    border-radius: 0.625rem;
   }
 }
 
@@ -698,7 +698,7 @@
   align-items: center;
   justify-content: center;
   background-color: var(--bg-overlay);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(0.375rem);
   border: none;
   padding: 0;
   margin: 0;
@@ -734,7 +734,7 @@
   background-color: var(--color-primary);
   color: var(--text-on-primary);
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   cursor: pointer;
   @include transition(background-color);
 
@@ -771,7 +771,7 @@
   background-color: var(--color-primary);
   color: var(--text-on-primary);
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   cursor: pointer;
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
   @include transition(background-color);
@@ -805,7 +805,7 @@
   padding: $spacing-4;
   background-color: transparent;
   border: 1px solid var(--border-default);
-  border-radius: 14px;
+  border-radius: 0.875rem;
   cursor: pointer;
   @include transition;
 
@@ -824,25 +824,25 @@
   position: absolute;
   top: $spacing-4;
   right: $spacing-4;
-  width: 90px;
-  height: 88px;
+  width: 5.625rem;
+  height: 5.5rem;
   background-color: var(--gray-300);
-  border-radius: 14px;
+  border-radius: 0.875rem;
   overflow: hidden;
 }
 
 .task-card__menu-wrapper {
   position: absolute;
   top: $spacing-4;
-  right: calc($spacing-4 + 100px);
+  right: calc($spacing-4 + 6.25rem);
 }
 
 .task-card__menu-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0;
   background: transparent;
   border: none;
@@ -861,7 +861,7 @@
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 4px;
+  margin-top: 0.25rem;
   z-index: 100;
   animation: fadeIn 0.15s ease-out;
 }
@@ -869,7 +869,7 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-0.25rem);
   }
   to {
     opacity: 1;
@@ -884,8 +884,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
   color: var(--color-warning);
 }
 
@@ -893,15 +893,15 @@
   position: absolute;
   top: $spacing-5;
   left: $spacing-4;
-  width: 8px;
-  height: 8px;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 50%;
   background-color: var(--color-info);
 
   // Adjust position when important badge is present
   .task-card:has(.task-card__important-badge) & {
-    top: calc($spacing-4 + 28px);
-    left: calc($spacing-4 + 8px);
+    top: calc($spacing-4 + 1.75rem);
+    left: calc($spacing-4 + 0.5rem);
   }
 
   &--low {
@@ -919,16 +919,16 @@
 
 .task-card__content {
   padding-left: $spacing-5;
-  padding-right: 110px;
+  padding-right: 6.875rem;
 
   @include respond-down(md) {
     padding-left: $spacing-4;
-    padding-right: 100px;
+    padding-right: 6.25rem;
   }
 
   @include respond-down(sm) {
     padding-left: $spacing-3;
-    padding-right: 85px;
+    padding-right: 5.3125rem;
   }
 }
 
@@ -958,47 +958,47 @@
 
 .task-card__label {
   display: inline;
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--text-default);
 }
 
 .task-card__value--low {
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--color-success);
 }
 
 .task-card__value--medium {
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--color-medium);
 }
 
 .task-card__value--high {
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--color-error);
 }
 
 .task-card__value--status-pending {
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--color-error);
 }
 
 .task-card__value--status-in_progress {
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--color-info);
 }
 
 .task-card__value--status-completed {
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--color-success);
 }
 
 .task-card__value--status-cancelled {
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--text-muted);
 }
 
 .task-card__value--date {
-  @include text-style(10px, $font-weight-medium, $line-normal);
+  @include text-style(0.625rem, $font-weight-medium, $line-normal);
   color: var(--text-muted);
 }
 
@@ -1007,10 +1007,10 @@
 // ============================================================================
 .visually-hidden {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 0.0625rem;
+  height: 0.0625rem;
   padding: 0;
-  margin: -1px;
+  margin: -0.0625rem;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

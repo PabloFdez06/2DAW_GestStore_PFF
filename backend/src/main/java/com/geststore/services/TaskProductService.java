@@ -87,11 +87,28 @@ public class TaskProductService {
             );
         }
 
+        int quantityToAssign = requestDto.getQuantity() != null ? requestDto.getQuantity() : 1;
+
+        // Validar y descontar el stock del producto
+        int currentStock = product.getStockQuantity() != null ? product.getStockQuantity() : 0;
+        if (currentStock < quantityToAssign) {
+            throw new BusinessLogicException(
+                    "No hay suficiente stock del producto. Stock actual: " + currentStock + ", cantidad solicitada: " + quantityToAssign,
+                    "INSUFFICIENT_STOCK"
+            );
+        }
+
+        // Descontar el stock
+        product.setStockQuantity(currentStock - quantityToAssign);
+        product.onUpdate();
+        productRepository.save(product);
+        log.info("Stock del producto {} decrementado de {} a {}", product.getId(), currentStock, currentStock - quantityToAssign);
+
         TaskProduct taskProduct = TaskProduct.builder()
                 .task(task)
                 .product(product)
-                .quantity(requestDto.getQuantity() != null ? requestDto.getQuantity() : 1)
-                .quantityUsed(0)
+                .quantity(quantityToAssign)
+                .quantityUsed(quantityToAssign)  // Ya se considera usado al asignar
                 .notes(requestDto.getNotes())
                 .build();
 

@@ -32,7 +32,7 @@
   &:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+    box-shadow: 0 0 0 0.1875rem color-mix(in srgb, var(--color-primary) 15%, transparent);
   }
 
   &:disabled {
@@ -45,7 +45,7 @@
     border-color: var(--color-error);
 
     &:focus {
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 15%, transparent);
+      box-shadow: 0 0 0 0.1875rem color-mix(in srgb, var(--color-error) 15%, transparent);
     }
   }
 }

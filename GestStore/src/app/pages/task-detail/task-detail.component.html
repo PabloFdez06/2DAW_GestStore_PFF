@@ -98,12 +98,13 @@
   </dialog>
 
   <!-- Overlay del sidebar para mobile -->
-  <div 
+  <span 
     *ngIf="isSidebarOpen" 
     class="task-view__sidebar-overlay"
+    role="presentation"
     (click)="closeSidebar()"
     aria-hidden="true">
-  </div>
+  </span>
 
   <aside 
     class="task-view__sidebar" 

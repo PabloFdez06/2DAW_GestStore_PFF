@@ -13,7 +13,7 @@
   line-height: $line-normal;
   box-shadow: $shadow-md;
   opacity: 0;
-  transform: translateY(-2px);
+  transform: translateY(-0.125rem);
   pointer-events: none;
   transition: opacity 150ms ease, transform 150ms ease;
 }
@@ -31,36 +31,36 @@
 
 .gs-tooltip--top .gs-tooltip__arrow {
   left: 50%;
-  bottom: -6px;
+  bottom: -0.375rem;
   transform: translateX(-50%);
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid rgba($gray-950, 0.94);
+  border-left: 0.375rem solid transparent;
+  border-right: 0.375rem solid transparent;
+  border-top: 0.375rem solid rgba($gray-950, 0.94);
 }
 
 .gs-tooltip--bottom .gs-tooltip__arrow {
   left: 50%;
-  top: -6px;
+  top: -0.375rem;
   transform: translateX(-50%);
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 6px solid rgba($gray-950, 0.94);
+  border-left: 0.375rem solid transparent;
+  border-right: 0.375rem solid transparent;
+  border-bottom: 0.375rem solid rgba($gray-950, 0.94);
 }
 
 .gs-tooltip--left .gs-tooltip__arrow {
   top: 50%;
-  right: -6px;
+  right: -0.375rem;
   transform: translateY(-50%);
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 6px solid rgba($gray-950, 0.94);
+  border-top: 0.375rem solid transparent;
+  border-bottom: 0.375rem solid transparent;
+  border-left: 0.375rem solid rgba($gray-950, 0.94);
 }
 
 .gs-tooltip--right .gs-tooltip__arrow {
   top: 50%;
-  left: -6px;
+  left: -0.375rem;
   transform: translateY(-50%);
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-right: 6px solid rgba($gray-950, 0.94);
+  border-top: 0.375rem solid transparent;
+  border-bottom: 0.375rem solid transparent;
+  border-right: 0.375rem solid rgba($gray-950, 0.94);
 }

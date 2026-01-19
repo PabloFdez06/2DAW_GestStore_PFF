@@ -40,25 +40,25 @@
 // ============================================================================
 .dashboard {
   display: grid;
-  grid-template-columns: 330px 1fr;
-  grid-template-rows: 100px 1fr;
+  grid-template-columns: 20.625rem 1fr;
+  grid-template-rows: 6.25rem 1fr;
   min-height: 100vh;
   background-color: var(--bg-default);
   position: relative;
 
   // RESPONSIVE - Desktop first
   @include respond-down(lg) {
-    grid-template-columns: 250px 1fr;
-    grid-template-rows: 80px 1fr;
+    grid-template-columns: 15.625rem 1fr;
+    grid-template-rows: 5rem 1fr;
   }
 
   @include respond-down(md) {
     grid-template-columns: 1fr;
-    grid-template-rows: 70px auto 1fr;
+    grid-template-rows: 4.375rem auto 1fr;
   }
 
   @include respond-down(sm) {
-    grid-template-rows: 60px auto 1fr;
+    grid-template-rows: 3.75rem auto 1fr;
   }
 }
 
@@ -102,8 +102,8 @@
   justify-content: center;
   align-items: center;
   gap: $spacing-1;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -127,14 +127,14 @@
 }
 
 .hamburger__line {
-  width: 24px;
+  width: 1.5rem;
   height: 2px;
   background-color: var(--color-primary);
   transition: all 0.3s ease;
   transform-origin: center;
 
   &--top {
-    transform: translateY(-6px);
+    transform: translateY(-0.375rem);
   }
 
   &--middle {
@@ -142,7 +142,7 @@
   }
 
   &--bottom {
-    transform: translateY(6px);
+    transform: translateY(0.375rem);
   }
 }
 
@@ -189,17 +189,17 @@
 
 .dashboard__search {
   position: relative;
-  flex: 0 0 695px;
-  max-width: 695px;
+  flex: 0 0 43.4375rem;
+  max-width: 43.4375rem;
 
   @include respond-down(lg) {
-    flex: 0 0 500px;
-    max-width: 500px;
+    flex: 0 0 31.25rem;
+    max-width: 31.25rem;
   }
 
   @include respond-down(md) {
     flex: 1 1 auto;
-    max-width: 400px;
+    max-width: 25rem;
   }
 
   @include respond-down(sm) {
@@ -209,10 +209,10 @@
 
 .dashboard__search-input {
   width: 100%;
-  height: 36px;
+  height: 2.25rem;
   padding: 0 $spacing-12 0 $spacing-4;
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background-color: var(--bg-surface);
   box-shadow: var(--shadow-sm);
   
@@ -220,7 +220,7 @@
   color: var(--text-muted);
 
   @include respond-down(md) {
-    height: 32px;
+    height: 2rem;
     padding: 0 $spacing-8 0 $spacing-3;
     font-size: 0.625rem; // 10px
   }
@@ -240,8 +240,8 @@
   position: absolute;
   right: 0;
   top: 0;
-  width: 36px;
-  height: 36px;
+  width: 2.25rem;
+  height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -263,13 +263,13 @@
 
 .dashboard__nav-btn {
   all: unset;
-  width: 34px;
-  height: 34px;
+  width: 2.125rem;
+  height: 2.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--color-primary);
-  border-radius: 8px;
+  border-radius: 0.5rem;
   color: var(--text-on-primary);
   cursor: pointer;
   @include transition(background-color);
@@ -309,16 +309,16 @@
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-md);
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
   position: relative;
-  margin-left: -35px;
-  padding-left: calc($spacing-5 + 35px);
+  margin-left: -2.1875rem;
+  padding-left: calc($spacing-5 + 2.1875rem);
 
   @include respond-down(lg) {
     padding: $spacing-6 $spacing-4;
-    margin-left: -20px;
-    padding-left: calc($spacing-4 + 20px);
+    margin-left: -1.25rem;
+    padding-left: calc($spacing-4 + 1.25rem);
   }
 
   @include respond-down(md) {
@@ -327,7 +327,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    width: 280px;
+    width: 17.5rem;
     max-width: 85vw;
     margin-left: 0;
     padding: $spacing-6 $spacing-4;
@@ -346,7 +346,7 @@
   }
 
   @include respond-down(sm) {
-    width: 260px;
+    width: 16.25rem;
     padding: $spacing-4 $spacing-3;
   }
 }
@@ -399,26 +399,26 @@
 }
 
 .dashboard__user-avatar {
-  width: 86px;
-  height: 86px;
+  width: 5.375rem;
+  height: 5.375rem;
   border-radius: 50%;
   background-color: var(--gray-300);
   flex-shrink: 0;
   overflow: hidden;
 
   @include respond-down(lg) {
-    width: 60px;
-    height: 60px;
+    width: 3.75rem;
+    height: 3.75rem;
   }
 
   @include respond-down(md) {
-    width: 48px;
-    height: 48px;
+    width: 3rem;
+    height: 3rem;
   }
 
   @include respond-down(sm) {
-    width: 40px;
-    height: 40px;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }
 
@@ -483,7 +483,7 @@
   align-items: center;
   gap: $spacing-4;
   padding: $spacing-4 $spacing-5;
-  border-radius: 14px;
+  border-radius: 0.875rem;
   cursor: pointer;
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
   color: var(--text-on-primary);
@@ -514,7 +514,7 @@
   
   &:hover {
     background-color: color-mix(in srgb, var(--text-on-primary) 10%, transparent);
-    transform: translateX(4px);
+    transform: translateX(0.25rem);
   }
 
   &:focus-visible {
@@ -535,7 +535,7 @@
   align-items: center;
   gap: $spacing-4;
   padding: $spacing-4 $spacing-5;
-  border-radius: 14px;
+  border-radius: 0.875rem;
   cursor: pointer;
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
   color: var(--text-on-primary);
@@ -591,16 +591,16 @@
 }
 
 .dashboard__team-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 0.5rem;
   background-color: var(--gray-300);
 }
 
 .dashboard__team-more {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 0.5rem;
   background-color: color-mix(in srgb, var(--text-default) 75%, transparent);
   display: flex;
   align-items: center;
@@ -616,7 +616,7 @@
   gap: $spacing-2;
   padding: $spacing-2 $spacing-4;
   border: 1px solid var(--color-primary);
-  border-radius: 8px;
+  border-radius: 0.5rem;
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
   color: var(--color-primary);
   cursor: pointer;
@@ -633,14 +633,14 @@
 // ============================================================================
 .dashboard__content-grid {
   display: grid;
-  grid-template-columns: 466px 1fr;
+  grid-template-columns: 29.125rem 1fr;
   grid-template-rows: auto 1fr;
   gap: $spacing-6;
 }
 
 .dashboard__section {
   background-color: var(--bg-surface);
-  border-radius: 14px;
+  border-radius: 0.875rem;
   padding: $spacing-6;
   box-shadow: var(--shadow-sm);
 }
@@ -729,10 +729,10 @@
   position: relative;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-default);
-  border-radius: 14px;
+  border-radius: 0.875rem;
   padding: $spacing-4;
   display: grid;
-  grid-template-columns: 12px 1fr 88px;
+  grid-template-columns: 0.75rem 1fr 5.5rem;
   grid-template-rows: auto auto auto auto;
   gap: $spacing-3;
   @include transition(all);
@@ -745,7 +745,7 @@
 
   &:focus-visible {
     outline: 2px solid var(--color-primary);
-    outline-offset: 3px;
+    outline-offset: 0.1875rem;
   }
 }
 
@@ -761,8 +761,8 @@
 .dashboard__task-priority {
   grid-column: 1;
   grid-row: 1;
-  width: 12px;
-  height: 12px;
+  width: 0.75rem;
+  height: 0.75rem;
   border: 2px solid;
   border-radius: 50%;
   
@@ -796,18 +796,18 @@
 .dashboard__task-image {
   grid-column: 3;
   grid-row: 2 / 4;
-  width: 88px;
-  height: 88px;
+  width: 5.5rem;
+  height: 5.5rem;
   background-color: var(--gray-300);
-  border-radius: 14px;
+  border-radius: 0.875rem;
 }
 
 .dashboard__task-menu {
   all: unset;
   grid-column: 3;
   grid-row: 1;
-  width: 14px;
-  height: 14px;
+  width: 0.875rem;
+  height: 0.875rem;
   margin-left: auto;
   cursor: pointer;
   color: var(--text-muted);
@@ -830,7 +830,7 @@
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 4px;
+  margin-top: 0.25rem;
   z-index: 100;
   animation: fadeIn 0.15s ease-out;
 }
@@ -933,8 +933,8 @@
 
 .dashboard__status-circle-wrap {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 8.75rem;
+  height: 8.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -990,8 +990,8 @@
 }
 
 .dashboard__status-dot {
-  width: 7px;
-  height: 7px;
+  width: 0.4375rem;
+  height: 0.4375rem;
   border-radius: 50%;
   
   &--completed {
@@ -1025,10 +1025,10 @@
   position: relative;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-default);
-  border-radius: 14px;
+  border-radius: 0.875rem;
   padding: $spacing-4;
   display: grid;
-  grid-template-columns: 12px 1fr 88px;
+  grid-template-columns: 0.75rem 1fr 5.5rem;
   grid-template-rows: auto auto auto;
   gap: $spacing-3;
   @include transition(all);
@@ -1041,15 +1041,15 @@
 
   &:focus-visible {
     outline: 2px solid var(--color-success);
-    outline-offset: 3px;
+    outline-offset: 0.1875rem;
   }
 }
 
 .dashboard__completed-check {
   grid-column: 1;
   grid-row: 1;
-  width: 12px;
-  height: 12px;
+  width: 0.75rem;
+  height: 0.75rem;
   border: 2px solid var(--color-success);
   border-radius: 50%;
   position: relative;
@@ -1057,8 +1057,8 @@
   &::after {
     content: '';
     position: absolute;
-    width: 6px;
-    height: 6px;
+    width: 0.375rem;
+    height: 0.375rem;
     background-color: var(--color-success);
     border-radius: 50%;
     top: 50%;
@@ -1078,18 +1078,18 @@
 .dashboard__completed-image {
   grid-column: 3;
   grid-row: 2 / 3;
-  width: 88px;
-  height: 91px;
+  width: 5.5rem;
+  height: 5.6875rem;
   background-color: var(--gray-300);
-  border-radius: 14px;
+  border-radius: 0.875rem;
 }
 
 .dashboard__completed-menu {
   all: unset;
   grid-column: 3;
   grid-row: 1;
-  width: 14px;
-  height: 14px;
+  width: 0.875rem;
+  height: 0.875rem;
   margin-left: auto;
   cursor: pointer;
   color: var(--text-muted);
@@ -1151,7 +1151,7 @@
   
   // Estilos
   background-color: var(--bg-overlay);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(0.375rem);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -1198,7 +1198,7 @@
 @keyframes slideInDown {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-1.25rem);
   }
   to {
     opacity: 1;
@@ -1211,18 +1211,18 @@
 // ============================================================================
 @media (max-width: 1400px) {
   .dashboard {
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 17.5rem 1fr;
   }
   
   .dashboard__content-grid {
-    grid-template-columns: 400px 1fr;
+    grid-template-columns: 25rem 1fr;
   }
 }
 
 @media (max-width: 1200px) {
   .dashboard {
     grid-template-columns: 1fr;
-    grid-template-rows: 100px auto 1fr;
+    grid-template-rows: 6.25rem auto 1fr;
   }
   
   .dashboard__sidebar {
@@ -1285,7 +1285,7 @@
   padding: $spacing-8 $spacing-6;
   background-color: color-mix(in srgb, var(--color-error) 6%, transparent);
   border: 1px solid color-mix(in srgb, var(--color-error) 20%, transparent);
-  border-radius: 12px;
+  border-radius: 0.75rem;
   margin-bottom: $spacing-4;
   
   p {
@@ -1300,7 +1300,7 @@
   background-color: var(--color-error);
   color: var(--text-on-primary);
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
   cursor: pointer;
   @include transition(all);
@@ -1344,14 +1344,14 @@
   background-color: var(--color-primary);
   color: var(--text-on-primary);
   border: none;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
   cursor: pointer;
   @include transition(all);
   
   &:hover {
     background-color: var(--interactive-hover);
-    transform: translateY(-2px);
+    transform: translateY(-0.125rem);
     box-shadow: var(--shadow-md);
   }
   
@@ -1373,11 +1373,11 @@
 
 .dashboard__notification-badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 0.25rem;
   background-color: var(--color-error);
   color: white;
   border-radius: 50%;
@@ -1410,15 +1410,15 @@
   width: 100%;
   height: 100%;
   background-color: var(--bg-overlay);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(0.25rem);
   z-index: 1000;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  padding: 80px $spacing-4 $spacing-4;
+  padding: 5rem $spacing-4 $spacing-4;
   
   @include respond-down(md) {
-    padding: 70px $spacing-3 $spacing-3;
+    padding: 4.375rem $spacing-3 $spacing-3;
     align-items: center;
     justify-content: center;
   }
@@ -1428,7 +1428,7 @@
   background-color: var(--bg-surface);
   border-radius: $radius-lg;
   box-shadow: var(--shadow-xl);
-  width: 320px;
+  width: 20rem;
   max-width: 90vw;
   max-height: 70vh;
   display: flex;
@@ -1437,7 +1437,7 @@
   
   @include respond-down(md) {
     width: 100%;
-    max-width: 400px;
+    max-width: 25rem;
   }
 }
 
@@ -1460,8 +1460,8 @@
 
 .dashboard__stock-close {
   all: unset;
-  width: 28px;
-  height: 28px;
+  width: 1.75rem;
+  height: 1.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1524,12 +1524,12 @@
   
   &--danger {
     background-color: color-mix(in srgb, var(--color-error) 10%, transparent);
-    border-left: 3px solid var(--color-error);
+    border-left: 0.1875rem solid var(--color-error);
   }
   
   &--warning {
     background-color: color-mix(in srgb, var(--color-warning) 10%, transparent);
-    border-left: 3px solid var(--color-warning);
+    border-left: 0.1875rem solid var(--color-warning);
   }
 }
 

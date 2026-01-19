@@ -38,24 +38,24 @@
 // ============================================================================
 .warehouse {
   display: grid;
-  grid-template-columns: 330px 1fr;
-  grid-template-rows: 100px 1fr;
+  grid-template-columns: 20.625rem 1fr;
+  grid-template-rows: 6.25rem 1fr;
   min-height: 100vh;
   background-color: var(--bg-default);
   position: relative;
 
   @include respond-down(lg) {
-    grid-template-columns: 250px 1fr;
-    grid-template-rows: 80px 1fr;
+    grid-template-columns: 15.625rem 1fr;
+    grid-template-rows: 5rem 1fr;
   }
 
   @include respond-down(md) {
     grid-template-columns: 1fr;
-    grid-template-rows: 70px auto 1fr;
+    grid-template-rows: 4.375rem auto 1fr;
   }
 
   @include respond-down(sm) {
-    grid-template-rows: 60px auto 1fr;
+    grid-template-rows: 3.75rem auto 1fr;
   }
 }
 
@@ -99,8 +99,8 @@
   justify-content: center;
   align-items: center;
   gap: $spacing-1;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -124,14 +124,14 @@
 }
 
 .warehouse__hamburger-line {
-  width: 24px;
+  width: 1.5rem;
   height: 2px;
   background-color: var(--color-primary);
   transition: all 0.3s ease;
   transform-origin: center;
 
   &--top {
-    transform: translateY(-6px);
+    transform: translateY(-0.375rem);
   }
 
   &--middle {
@@ -139,7 +139,7 @@
   }
 
   &--bottom {
-    transform: translateY(6px);
+    transform: translateY(0.375rem);
   }
 }
 
@@ -192,17 +192,17 @@
 // ============================================================================
 .warehouse__search {
   position: relative;
-  flex: 0 0 695px;
-  max-width: 695px;
+  flex: 0 0 43.4375rem;
+  max-width: 43.4375rem;
 
   @include respond-down(lg) {
-    flex: 0 0 500px;
-    max-width: 500px;
+    flex: 0 0 31.25rem;
+    max-width: 31.25rem;
   }
 
   @include respond-down(md) {
     flex: 1 1 auto;
-    max-width: 400px;
+    max-width: 25rem;
   }
 
   @include respond-down(sm) {
@@ -212,17 +212,17 @@
 
 .warehouse__search-input {
   width: 100%;
-  height: 36px;
+  height: 2.25rem;
   padding: 0 $spacing-12 0 $spacing-4;
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background-color: var(--bg-surface);
   box-shadow: var(--shadow-sm);
   @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
   color: var(--text-muted);
 
   @include respond-down(md) {
-    height: 32px;
+    height: 2rem;
     padding: 0 $spacing-8 0 $spacing-3;
     font-size: 0.625rem;
   }
@@ -242,8 +242,8 @@
   position: absolute;
   right: 0;
   top: 0;
-  width: 36px;
-  height: 36px;
+  width: 2.25rem;
+  height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -268,13 +268,13 @@
 
 .warehouse__nav-btn {
   all: unset;
-  width: 34px;
-  height: 34px;
+  width: 2.125rem;
+  height: 2.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--color-primary);
-  border-radius: 8px;
+  border-radius: 0.5rem;
   color: var(--text-on-primary);
   cursor: pointer;
   position: relative;
@@ -291,17 +291,17 @@
 
 .warehouse__notification-badge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 18px;
-  height: 18px;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 1.125rem;
+  height: 1.125rem;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 $spacing-1;
   background-color: var(--color-error);
-  color: #fff;
-  border-radius: 9px;
+  color: var(--color-white);
+  border-radius: 0.5625rem;
   @include text-style($font-size-xs, $font-weight-bold, $line-normal);
 }
 
@@ -310,7 +310,7 @@
     box-shadow: 0 0 0 0 rgba(var(--color-error-rgb, 239, 68, 68), 0.4);
   }
   50% {
-    box-shadow: 0 0 0 4px rgba(var(--color-error-rgb, 239, 68, 68), 0);
+    box-shadow: 0 0 0 0.25rem rgba(var(--color-error-rgb, 239, 68, 68), 0);
   }
 }
 
@@ -344,16 +344,16 @@
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-md);
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
   position: relative;
-  margin-left: -35px;
-  padding-left: calc($spacing-5 + 35px);
+  margin-left: -2.1875rem;
+  padding-left: calc($spacing-5 + 2.1875rem);
 
   @include respond-down(lg) {
     padding: $spacing-6 $spacing-4;
-    margin-left: -20px;
-    padding-left: calc($spacing-4 + 20px);
+    margin-left: -1.25rem;
+    padding-left: calc($spacing-4 + 1.25rem);
   }
 
   @include respond-down(md) {
@@ -361,7 +361,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    width: 280px;
+    width: 17.5rem;
     max-width: 85vw;
     margin-left: 0;
     padding: $spacing-6 $spacing-4;
@@ -378,7 +378,7 @@
   }
 
   @include respond-down(sm) {
-    width: 260px;
+    width: 16.25rem;
     padding: $spacing-4 $spacing-3;
   }
 }
@@ -428,18 +428,18 @@
 }
 
 .warehouse__user-avatar {
-  width: 86px;
-  height: 86px;
+  width: 5.375rem;
+  height: 5.375rem;
   flex-shrink: 0;
 
   @include respond-down(lg) {
-    width: 60px;
-    height: 60px;
+    width: 3.75rem;
+    height: 3.75rem;
   }
 
   @include respond-down(sm) {
-    width: 50px;
-    height: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
   }
 }
 
@@ -501,7 +501,7 @@
   align-items: center;
   gap: $spacing-4;
   padding: $spacing-4 $spacing-4;
-  border-radius: 14px;
+  border-radius: 0.875rem;
   text-decoration: none;
   color: var(--text-on-primary);
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
@@ -538,7 +538,7 @@
   gap: $spacing-4;
   padding: $spacing-4;
   width: 100%;
-  border-radius: 14px;
+  border-radius: 0.875rem;
   color: var(--text-on-primary);
   @include text-style($font-size-base, $font-weight-medium, $line-normal);
   cursor: pointer;
@@ -610,12 +610,12 @@
   &::after {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: -0.25rem;
     left: 0;
-    width: 200px;
-    height: 3px;
+    width: 12.5rem;
+    height: 0.1875rem;
     background-color: var(--color-primary);
-    border-radius: 2px;
+    border-radius: 0.125rem;
   }
 }
 
@@ -629,12 +629,12 @@
   &::after {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: -0.25rem;
     left: 0;
-    width: 51px;
-    height: 3px;
+    width: 3.1875rem;
+    height: 0.1875rem;
     background-color: var(--color-primary);
-    border-radius: 2px;
+    border-radius: 0.125rem;
   }
 }
 
@@ -679,9 +679,9 @@
 
 .warehouse__stat-card {
   background-color: var(--color-primary-light);
-  border-radius: 8px;
+  border-radius: 0.5rem;
   padding: $spacing-4;
-  min-height: 100px;
+  min-height: 6.25rem;
   display: flex;
   flex-direction: column;
   gap: $spacing-2;
@@ -700,8 +700,8 @@
 }
 
 .warehouse__stat-indicator {
-  width: 10px;
-  height: 10px;
+  width: 0.625rem;
+  height: 0.625rem;
   border-radius: 50%;
 
   &--warning {
@@ -724,8 +724,8 @@
 // ============================================================================
 .warehouse__table-container {
   border: 1px solid rgba(161, 163, 171, 0.63);
-  border-radius: 16px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
   overflow: hidden;
   background-color: var(--bg-surface);
 }
@@ -748,7 +748,7 @@
   background-color: var(--color-primary);
   color: var(--text-on-primary);
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
   cursor: pointer;
   @include transition(background-color);
@@ -782,34 +782,34 @@
   border-bottom: 1px solid rgba(161, 163, 171, 0.63);
 
   &--id {
-    width: 60px;
+    width: 3.75rem;
   }
 
   &--name {
-    min-width: 180px;
+    min-width: 11.25rem;
   }
 
   &--category {
-    width: 120px;
+    width: 7.5rem;
   }
 
   &--description,
   &--details {
-    width: 140px;
+    width: 8.75rem;
   }
 
   &--stock {
-    width: 70px;
+    width: 4.375rem;
     text-align: center;
   }
 
   &--status {
-    width: 80px;
+    width: 5rem;
     text-align: center;
   }
 
   &--actions {
-    width: 100px;
+    width: 6.25rem;
     text-align: center;
   }
 }
@@ -856,8 +856,8 @@
 }
 
 .warehouse__status-dot {
-  width: 10px;
-  height: 10px;
+  width: 0.625rem;
+  height: 0.625rem;
   border-radius: 50%;
 }
 
@@ -885,12 +885,12 @@
 
 .warehouse__action-btn {
   all: unset;
-  width: 32px;
-  height: 32px;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 0.375rem;
   cursor: pointer;
   @include transition(background-color, color);
 
@@ -942,13 +942,29 @@
 }
 
 .warehouse__modal-content {
-  background-color: transparent;
-  border-radius: 16px;
-  max-width: 600px;
-  width: auto;
+  animation: slideInDown 0.3s ease-out;
+}
+
+.warehouse__product-modal-content {
+  background-color: var(--bg-surface);
+  border-radius: 1rem;
+  max-width: 37.5rem;
+  width: 100%;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: var(--shadow-xl);
   animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-1.25rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 // ============================================================================
@@ -970,7 +986,7 @@
   }
 
   .warehouse__table {
-    min-width: 600px;
+    min-width: 37.5rem;
   }
 }
 

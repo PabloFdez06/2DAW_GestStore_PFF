@@ -9,12 +9,14 @@ import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
+import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 import { TaskService } from '../../services/task.service';
 import { TaskProductService } from '../../services/task-product.service';
 import { ProductService } from '../../services/product.service';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
+import { StockAlertService } from '../../services/stock-alert.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest, TaskStatistics } from '../../models/task.model';
 import { Product } from '../../models/product.model';
 import { User } from '../../models/auth.model';
@@ -32,7 +34,8 @@ import { SpinnerComponent } from '../../components/atoms/spinner/spinner.compone
     CalendarComponent,
     AddTaskModalComponent,
     TaskMenuComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    StockNotificationsComponent
   ],
   providers: [TaskService],
   templateUrl: './dashboard.component.html',
@@ -82,16 +85,6 @@ export class DashboardComponent implements OnInit {
 
   // Stock notifications
   isStockNotificationsOpen: boolean = false;
-  lowStockProducts: Product[] = [];
-  outOfStockProducts: Product[] = [];
-  
-  get hasStockAlerts(): boolean {
-    return this.lowStockProducts.length > 0 || this.outOfStockProducts.length > 0;
-  }
-  
-  get stockAlertsCount(): number {
-    return this.lowStockProducts.length + this.outOfStockProducts.length;
-  }
 
   avatarUrl: string | null = null;
 
@@ -105,6 +98,7 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private themeService: ThemeService,
     private notificationService: NotificationService,
+    protected stockAlertService: StockAlertService,
     private router: Router,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document,
@@ -142,30 +136,12 @@ export class DashboardComponent implements OnInit {
     this.updateCurrentDate();
     this.loadAvatar();
     this.loadCurrentUser(); // Esto cargará las tareas cuando el usuario esté disponible
-    this.loadStockAlerts();
+    this.stockAlertService.loadAlerts();
   }
 
   private loadAvatar(): void {
     const stored = localStorage.getItem('geststore.avatar');
     this.avatarUrl = stored && stored.trim().length > 0 ? stored : null;
-  }
-  
-  private loadStockAlerts(): void {
-    forkJoin({
-      lowStock: this.productService.getLowStockProducts(),
-      outOfStock: this.productService.getOutOfStockProducts()
-    }).subscribe({
-      next: ({ lowStock, outOfStock }) => {
-        this.lowStockProducts = lowStock;
-        this.outOfStockProducts = outOfStock;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        // Silently fail - not critical
-        this.lowStockProducts = [];
-        this.outOfStockProducts = [];
-      }
-    });
   }
   
   toggleStockNotifications(): void {
@@ -495,6 +471,7 @@ export class DashboardComponent implements OnInit {
           next: () => {
             this.loadTasks();
             this.loadStatistics();
+            this.stockAlertService.refresh();
             this.closeTaskModal();
             this.notificationService.success('Tarea creada correctamente');
             this.cdr.detectChanges();
@@ -505,6 +482,7 @@ export class DashboardComponent implements OnInit {
             this.notificationService.warning('La tarea se creó, pero no se pudieron asignar los productos');
             this.loadTasks();
             this.loadStatistics();
+            this.stockAlertService.refresh();
             this.closeTaskModal();
             this.cdr.detectChanges();
           }

@@ -55,9 +55,9 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     }
 
     /**
-     * Busca productos con bajo stock de un usuario
+     * Busca productos con bajo stock de un usuario (stock <= minStockLevel)
      */
-    @Query("{ $expr: { $lt: ['$stockQuantity', '$minStockLevel'] }, 'active': true, 'userId': ?0 }")
+    @Query("{ $expr: { $lte: ['$stockQuantity', '$minStockLevel'] }, 'active': true, 'userId': ?0 }")
     List<Product> findLowStockProductsByUserId(String userId);
 
     /**

@@ -68,11 +68,12 @@
   </dialog>
 
   <!-- Overlay del sidebar para mobile -->
-  <div 
+  <span 
     *ngIf="isSidebarOpen" 
     class="settings-page__sidebar-overlay"
+    role="presentation"
     (click)="closeSidebar()"
-    aria-hidden="true"></div>
+    aria-hidden="true"></span>
   
   <!-- Side Navigation -->
   <aside 

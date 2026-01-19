@@ -8,10 +8,10 @@
 // ============================================================================
 .calendar {
   background-color: var(--bg-surface);
-  border-radius: 10px;
+  border-radius: 0.625rem;
   box-shadow: var(--shadow-sm);
   padding: $spacing-4;
-  width: 328px;
+  width: 20.5rem;
   display: flex;
   flex-direction: column;
   gap: $spacing-4;
@@ -39,13 +39,13 @@
 
 .calendar__nav-btn {
   all: unset;
-  width: 23px;
-  height: 23px;
+  width: 1.4375rem;
+  height: 1.4375rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-primary);
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   background-color: var(--bg-surface);
   cursor: pointer;
   color: var(--color-primary);
@@ -94,9 +94,9 @@
   color: var(--text-default);
   text-align: center;
   padding: $spacing-2;
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   cursor: pointer;
-  min-height: 32px;
+  min-height: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -137,11 +137,11 @@
 
 .calendar__day-indicator {
   position: absolute;
-  bottom: 3px;
+  bottom: 0.1875rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
+  width: 0.3125rem;
+  height: 0.3125rem;
   border-radius: 50%;
   background-color: var(--color-primary);
   
@@ -161,7 +161,7 @@
   margin-top: $spacing-2;
   padding: $spacing-3;
   background-color: color-mix(in srgb, var(--color-primary) 8%, transparent);
-  border-radius: 8px;
+  border-radius: 0.5rem;
 }
 
 .calendar__selected-date {
@@ -199,7 +199,7 @@
   gap: $spacing-2;
   @include text-style($font-size-base, $font-weight-regular, $line-normal);
   padding: $spacing-2 $spacing-6;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   cursor: pointer;
   text-align: center;
   flex: 1;

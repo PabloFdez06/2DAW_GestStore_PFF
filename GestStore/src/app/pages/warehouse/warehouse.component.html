@@ -91,7 +91,7 @@
     role="dialog"
     aria-modal="true"
     [attr.aria-label]="isEditMode ? 'Editar producto' : 'Añadir producto'">
-    <section class="warehouse__modal-content" (click)="$event.stopPropagation()">
+    <section class="warehouse__product-modal-content" (click)="$event.stopPropagation()">
       <app-add-product-modal 
         [product]="productToEdit"
         [isEditMode]="isEditMode"

@@ -14,35 +14,35 @@
   }
 
   &--small {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     
     i-lucide,
     ::ng-deep svg {
-      width: 16px;
-      height: 16px;
+      width: 1rem;
+      height: 1rem;
     }
   }
 
   &--medium {
-    width: 20px;
-    height: 20px;
+    width: 1.25rem;
+    height: 1.25rem;
     
     i-lucide,
     ::ng-deep svg {
-      width: 20px;
-      height: 20px;
+      width: 1.25rem;
+      height: 1.25rem;
     }
   }
 
   &--large {
-    width: 24px;
-    height: 24px;
+    width: 1.5rem;
+    height: 1.5rem;
     
     i-lucide,
     ::ng-deep svg {
-      width: 24px;
-      height: 24px;
+      width: 1.5rem;
+      height: 1.5rem;
     }
   }
 }

@@ -3,7 +3,7 @@
 @use '../../../styles/01-tools/mixins' as *;
 
 .style-guide {
-  max-width: 1400px;
+  max-width: 87.5rem;
   margin: 0 auto;
   padding: $spacing-8;
   background: linear-gradient(135deg, var(--surface-2) 0%, var(--bg-default) 100%);
@@ -535,7 +535,7 @@
   color: var(--text-muted);
   font-weight: $font-weight-regular;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.03125rem;
 }
 
 .typography-weight {

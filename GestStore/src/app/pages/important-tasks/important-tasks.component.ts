@@ -315,6 +315,7 @@ export class ImportantTasksComponent implements OnInit, OnDestroy {
           next: () => {
             this.closeTaskModal();
             this.loadTasks();
+            this.stockAlertService.refresh();
             this.notificationService.success('Tarea importante creada correctamente');
           },
           error: (error) => {
@@ -323,6 +324,7 @@ export class ImportantTasksComponent implements OnInit, OnDestroy {
             this.notificationService.warning('La tarea se creó, pero no se pudieron asignar los productos');
             this.closeTaskModal();
             this.loadTasks();
+            this.stockAlertService.refresh();
             this.cdr.detectChanges();
           }
         });

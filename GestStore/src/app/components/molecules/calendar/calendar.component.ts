@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, OnDestroy, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, Output, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { TaskService } from '../../../services/task.service';
@@ -26,6 +26,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter<void>();
   
   private taskService = inject(TaskService);
+  private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
   
   currentDate: Date = new Date();
@@ -41,6 +42,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   
   ngOnInit() {
     this.selectToday();
+    this.updateCalendar(); // Mostrar el calendario inmediatamente
     this.loadTasks();
   }
   
@@ -63,10 +65,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
           this.processTaskDates();
           this.updateCalendar();
           this.updateSelectedTaskCount();
+          this.cdr.detectChanges();
         },
         error: () => {
           // Si falla, mostrar calendario sin tareas
           this.updateCalendar();
+          this.cdr.detectChanges();
         }
       });
   }

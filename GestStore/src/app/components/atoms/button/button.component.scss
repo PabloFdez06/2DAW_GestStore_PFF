@@ -34,7 +34,7 @@
 
   @include respond-down(sm) {
     padding: $spacing-2 $spacing-3;
-    min-height: 36px; // Touch target mínimo
+    min-height: 2.25rem; // Touch target mínimo
   }
 
   &:focus-visible {
