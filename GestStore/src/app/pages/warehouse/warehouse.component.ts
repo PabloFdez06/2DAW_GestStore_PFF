@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ProductService } from '../../services/product.service';
 import { ThemeService } from '../../services/theme.service';
+import { NotificationService } from '../../services/notification.service';
 import { Product, ProductStatus, ProductCategory, ProductStatistics, calculateProductStatus } from '../../models/product.model';
 import { User } from '../../models/auth.model';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
@@ -56,6 +57,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private productService: ProductService,
     private themeService: ThemeService,
+    private notificationService: NotificationService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
@@ -123,6 +125,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.errorMessage = 'Error al cargar los productos';
         this.isLoading = false;
+        this.notificationService.error('Error al cargar los productos');
         console.error('Error loading products:', error);
       }
     });
@@ -182,12 +185,14 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     this.loadProducts();
     this.loadStatistics();
     this.closeProductModal();
+    this.notificationService.success(`Producto "${product.name}" creado correctamente`);
   }
 
   handleProductUpdated(product: Product): void {
     this.loadProducts();
     this.loadStatistics();
     this.closeProductModal();
+    this.notificationService.success(`Producto "${product.name}" actualizado correctamente`);
   }
 
   // ============================================================================
@@ -299,8 +304,10 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         next: () => {
           this.loadProducts();
           this.loadStatistics();
+          this.notificationService.success(`Producto "${product.name}" eliminado correctamente`);
         },
         error: (error) => {
+          this.notificationService.error('Error al eliminar el producto');
           console.error('Error deleting product:', error);
         }
       });

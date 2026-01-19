@@ -4,6 +4,8 @@ import com.geststore.models.entities.Product;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,11 @@ public interface ProductRepository extends MongoRepository<Product, String> {
      * Busca todos los productos activos
      */
     List<Product> findByActive(Boolean active);
+
+    /**
+     * Busca todos los productos activos con paginación
+     */
+    Page<Product> findByActive(Boolean active, Pageable pageable);
 
     /**
      * Busca productos por categoría

@@ -10,8 +10,10 @@ import { CalendarComponent } from '../../components/molecules/calendar/calendar.
 import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
 import { TaskService } from '../../services/task.service';
+import { TaskProductService } from '../../services/task-product.service';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
+import { NotificationService } from '../../services/notification.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest, TaskStatistics } from '../../models/task.model';
 import { User } from '../../models/auth.model';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
@@ -78,8 +80,10 @@ export class DashboardComponent implements OnInit {
   
   constructor(
     private taskService: TaskService,
+    private taskProductService: TaskProductService,
     private authService: AuthService,
     private themeService: ThemeService,
+    private notificationService: NotificationService,
     private router: Router,
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document,
@@ -424,18 +428,51 @@ export class DashboardComponent implements OnInit {
     this.taskService.createTask(taskRequest).subscribe({
       next: (newTask) => {
         console.log('Tarea creada exitosamente:', newTask);
-        // Recargar las tareas después de crear una nueva
-        this.loadTasks();
-        this.loadStatistics();
-        this.closeTaskModal();
-        this.cdr.detectChanges();
+
+        const taskId = String((newTask as any)?.id ?? (newTask as any)?._id ?? '');
+        const selected = (task?.selectedProducts ?? [])
+          .filter((sp: any) => sp?.product?.id && sp?.quantity > 0)
+          .map((sp: any) => ({ productId: sp.product.id, quantity: sp.quantity }));
+
+        if (!taskId || selected.length === 0) {
+          this.loadTasks();
+          this.loadStatistics();
+          this.closeTaskModal();
+          this.notificationService.success('Tarea creada correctamente');
+          this.cdr.detectChanges();
+          return;
+        }
+
+        this.taskProductService.assignMultipleProducts(taskId, selected).subscribe({
+          next: () => {
+            this.loadTasks();
+            this.loadStatistics();
+            this.closeTaskModal();
+            this.notificationService.success('Tarea creada correctamente');
+            this.cdr.detectChanges();
+          },
+          error: (error) => {
+            console.error('Error al asignar productos:', error);
+            this.errorMessage = 'La tarea se creó, pero no se pudieron asignar los productos.';
+            this.notificationService.warning('La tarea se creó, pero no se pudieron asignar los productos');
+            this.loadTasks();
+            this.loadStatistics();
+            this.closeTaskModal();
+            this.cdr.detectChanges();
+          }
+        });
       },
       error: (error) => {
         console.error('Error al crear tarea:', error);
         this.errorMessage = 'Error al crear la tarea: ' + (error.error?.message || error.message);
+        this.notificationService.error('Error al crear la tarea');
         this.cdr.detectChanges();
       }
     });
+  }
+
+  get completionRateRounded(): number {
+    return Math.round(this.statistics?.completionRate ?? 0);
   }
 
   handleTaskUpdated(taskData: TaskFormData) {
@@ -457,11 +494,13 @@ export class DashboardComponent implements OnInit {
         this.loadTasks();
         this.loadStatistics();
         this.closeTaskModal();
+        this.notificationService.success('Tarea actualizada correctamente');
         this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error al actualizar tarea:', error);
         this.errorMessage = 'Error al actualizar la tarea: ' + (error.error?.message || error.message);
+        this.notificationService.error('Error al actualizar la tarea');
         this.cdr.detectChanges();
       }
     });
@@ -511,11 +550,13 @@ export class DashboardComponent implements OnInit {
           next: (updatedTask) => {
             console.log('Tarea actualizada:', updatedTask);
             this.loadTasks();
+            this.notificationService.success('Importancia actualizada');
             this.cdr.detectChanges();
           },
           error: (error) => {
             console.error('Error al cambiar importancia:', error);
             this.errorMessage = 'Error al cambiar la importancia de la tarea.';
+            this.notificationService.error('Error al cambiar la importancia');
             this.cdr.detectChanges();
           }
         });
@@ -532,11 +573,13 @@ export class DashboardComponent implements OnInit {
               console.log('Tarea eliminada exitosamente');
               this.loadTasks();
               this.loadStatistics();
+              this.notificationService.success('Tarea eliminada correctamente');
               this.cdr.detectChanges();
             },
             error: (error) => {
               console.error('Error al eliminar tarea:', error);
               this.errorMessage = 'Error al eliminar la tarea.';
+              this.notificationService.error('Error al eliminar la tarea');
               this.cdr.detectChanges();
             }
           });
@@ -549,11 +592,13 @@ export class DashboardComponent implements OnInit {
             console.log('Tarea completada exitosamente:', completedTask);
             this.loadTasks();
             this.loadStatistics();
+            this.notificationService.success('Tarea completada');
             this.cdr.detectChanges();
           },
           error: (error) => {
             console.error('Error al completar tarea:', error);
             this.errorMessage = 'Error al completar la tarea: ' + (error.error?.message || error.message);
+            this.notificationService.error('Error al completar la tarea');
             this.cdr.detectChanges();
           }
         });
@@ -565,11 +610,13 @@ export class DashboardComponent implements OnInit {
             console.log('Tarea iniciada exitosamente');
             this.loadTasks();
             this.loadStatistics();
+            this.notificationService.success('Tarea iniciada');
             this.cdr.detectChanges();
           },
           error: (error) => {
             console.error('Error al iniciar tarea:', error);
             this.errorMessage = 'Error al iniciar la tarea: ' + (error.error?.message || error.message);
+            this.notificationService.error('Error al iniciar la tarea');
             this.cdr.detectChanges();
           }
         });

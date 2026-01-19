@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Product, ProductRequest, ProductCategory } from '../../../models/product.model';
 import { ProductService } from '../../../services/product.service';
+import { NotificationService } from '../../../services/notification.service';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { SpinnerComponent } from '../../atoms/spinner/spinner.component';
 
@@ -38,7 +39,10 @@ export class AddProductModalComponent implements OnInit {
   errors: { [key: string]: string } = {};
   isSubmitting = false;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     if (this.isEditMode && this.product) {
@@ -113,6 +117,7 @@ export class AddProductModalComponent implements OnInit {
         error: (error) => {
           console.error('Error updating product:', error);
           this.errors['submit'] = 'Error al actualizar el producto';
+          this.notificationService.error('Error al actualizar el producto');
           this.isSubmitting = false;
         }
       });
@@ -125,6 +130,7 @@ export class AddProductModalComponent implements OnInit {
         error: (error) => {
           console.error('Error creating product:', error);
           this.errors['submit'] = 'Error al crear el producto';
+          this.notificationService.error('Error al crear el producto');
           this.isSubmitting = false;
         }
       });

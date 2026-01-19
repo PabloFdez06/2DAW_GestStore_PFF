@@ -7,6 +7,7 @@ import { CalendarComponent } from '../../components/molecules/calendar/calendar.
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
+import { NotificationService } from '../../services/notification.service';
 import { User } from '../../models/auth.model';
 
 @Component({
@@ -42,6 +43,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private themeService: ThemeService,
+    private notificationService: NotificationService,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
     private renderer: Renderer2,
@@ -95,14 +97,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     const allowedTypes = ['image/png', 'image/jpeg', 'image/svg+xml'];
     if (!allowedTypes.includes(file.type)) {
-      alert('Formato no soportado. Usa SVG, JPG o PNG.');
+      this.notificationService.error('Formato no soportado. Usa SVG, JPG o PNG.');
       input.value = '';
       return;
     }
 
     const maxBytes = 10 * 1024 * 1024;
     if (file.size > maxBytes) {
-      alert('La imagen supera 10MB.');
+      this.notificationService.error('La imagen supera el límite de 10MB.');
       input.value = '';
       return;
     }
@@ -113,6 +115,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       if (!result) return;
       this.avatarUrl = result;
       localStorage.setItem('geststore.avatar', result);
+      this.notificationService.success('Avatar actualizado correctamente');
       this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
@@ -135,6 +138,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.language = nextLanguage;
     localStorage.setItem('geststore.language', this.language);
+    this.notificationService.success(`Idioma cambiado a ${nextLabel}`);
   }
 
   onNotificationsChange(event: Event): void {
@@ -152,6 +156,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.notificationsEnabled = next;
     localStorage.setItem('geststore.notifications.enabled', String(this.notificationsEnabled));
+    this.notificationService.success(next ? 'Notificaciones activadas' : 'Notificaciones desactivadas');
   }
 
   private formatRole(role: string): string {

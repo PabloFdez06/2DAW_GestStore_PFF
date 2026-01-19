@@ -99,7 +99,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<ProductResponseDto>> deactivateProduct(@PathVariable String id) {
         log.info("DELETE /api/products/{} - Desactivando producto", id);
         ProductResponseDto product = productService.deactivateProduct(id);

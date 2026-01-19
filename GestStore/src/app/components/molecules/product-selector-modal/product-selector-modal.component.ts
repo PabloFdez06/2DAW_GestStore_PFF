@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Product, ProductStatus, calculateProductStatus } from '../../../models/product.model';
@@ -27,13 +27,14 @@ export class ProductSelectorModalComponent implements OnInit {
   filteredProducts: Product[] = [];
   search = '';
   isLoading = false;
+  private readonly MIN_LOADING_MS = 1200;
 
   // Local selection state (using string id)
   localSelectedProducts: Map<string, SelectedProduct> = new Map();
 
   ProductStatus = ProductStatus;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -44,16 +45,26 @@ export class ProductSelectorModalComponent implements OnInit {
   }
 
   loadProducts(): void {
+    const startTime = Date.now();
     this.isLoading = true;
+    this.cdr.detectChanges();
     this.productService.getAvailableProducts().subscribe({
       next: (products) => {
         this.products = products;
         this.filteredProducts = [...products];
-        this.isLoading = false;
+        const remaining = this.MIN_LOADING_MS - (Date.now() - startTime);
+        setTimeout(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }, Math.max(0, remaining));
       },
       error: (error) => {
         console.error('Error loading products:', error);
-        this.isLoading = false;
+        const remaining = this.MIN_LOADING_MS - (Date.now() - startTime);
+        setTimeout(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }, Math.max(0, remaining));
       }
     });
   }

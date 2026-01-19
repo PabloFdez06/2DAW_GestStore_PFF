@@ -54,6 +54,9 @@ export class AddTaskModalComponent implements OnChanges {
   selectedProducts: SelectedProduct[] = [];
   isProductSelectorOpen: boolean = false;
 
+  // Validation errors
+  errors: { [key: string]: string } = {};
+
   priorities: Priority[] = [
     { label: 'Absoluta', value: 'absolute', color: '#F21E1E' },
     { label: 'Moderada', value: 'moderate', color: '#42ADE2' },
@@ -128,9 +131,32 @@ export class AddTaskModalComponent implements OnChanges {
     this.selectedProducts.splice(index, 1);
   }
 
+  validateForm(): boolean {
+    this.errors = {};
+
+    if (!this.title.trim()) {
+      this.errors['title'] = 'El título es requerido';
+    }
+
+    if (!this.date) {
+      this.errors['date'] = 'La fecha es requerida';
+    }
+
+    if (!this.description.trim()) {
+      this.errors['description'] = 'La descripción es requerida';
+    }
+
+    if (!this.selectedPriority) {
+      this.errors['priority'] = 'Debes seleccionar una prioridad';
+    }
+
+    return Object.keys(this.errors).length === 0;
+  }
+
   onSubmit(event?: Event) {
     event?.preventDefault();
-    if (!this.title || !this.date || !this.description || !this.selectedPriority) {
+    
+    if (!this.validateForm()) {
       return;
     }
 
@@ -166,6 +192,7 @@ export class AddTaskModalComponent implements OnChanges {
     this.selectedPriority = '';
     this.selectedProducts = [];
     this.isProductSelectorOpen = false;
+    this.errors = {};
   }
 
   private attachKeydownTrap(): void {

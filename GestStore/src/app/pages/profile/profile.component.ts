@@ -5,15 +5,17 @@ import { Router, RouterModule } from '@angular/router';
 
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
+import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { UserService } from '../../services/user.service';
+import { NotificationService } from '../../services/notification.service';
 import { User } from '../../models/auth.model';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent, SpinnerComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -42,6 +44,7 @@ export class ProfileComponent {
     private authService: AuthService,
     private userService: UserService,
     private themeService: ThemeService,
+    private notificationService: NotificationService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
@@ -152,6 +155,7 @@ export class ProfileComponent {
         }
         this.authService.setCurrentUser(user);
         this.successMessage = 'Avatar actualizado.';
+        this.notificationService.success('Avatar actualizado correctamente');
         this.cdr.detectChanges();
         setTimeout(() => {
           this.successMessage = '';
@@ -166,6 +170,7 @@ export class ProfileComponent {
           if (!result) return;
           this.avatarUrl = result;
           localStorage.setItem('geststore.avatar', result);
+          this.notificationService.success('Avatar guardado localmente');
           this.cdr.detectChanges();
         };
         reader.readAsDataURL(file);
@@ -182,6 +187,9 @@ export class ProfileComponent {
     this.isSaving = true;
     this.cdr.detectChanges();
 
+    const startTime = Date.now();
+    const minDelay = 1500; // Minimum 1.5 seconds for spinner visibility
+
     this.userService
       .updateMe({
         name: this.name,
@@ -193,26 +201,38 @@ export class ProfileComponent {
       })
       .subscribe({
         next: user => {
-          this.isSaving = false;
-          this.currentUser = user;
-          this.authService.setCurrentUser(user);
-
-          if (user.avatar && user.avatar.trim().length > 0) {
-            localStorage.setItem('geststore.avatar', user.avatar);
-            this.avatarUrl = user.avatar;
-          }
-
-          this.cdr.detectChanges();
-          this.successMessage = 'Información actualizada.';
+          const elapsed = Date.now() - startTime;
+          const remainingDelay = Math.max(0, minDelay - elapsed);
+          
           setTimeout(() => {
-            this.successMessage = '';
+            this.isSaving = false;
+            this.currentUser = user;
+            this.authService.setCurrentUser(user);
+
+            if (user.avatar && user.avatar.trim().length > 0) {
+              localStorage.setItem('geststore.avatar', user.avatar);
+              this.avatarUrl = user.avatar;
+            }
+
             this.cdr.detectChanges();
-          }, 2500);
+            this.successMessage = 'Información actualizada.';
+            this.notificationService.success('Información actualizada correctamente');
+            setTimeout(() => {
+              this.successMessage = '';
+              this.cdr.detectChanges();
+            }, 2500);
+          }, remainingDelay);
         },
         error: () => {
-          this.isSaving = false;
-          this.errorMessage = 'No se pudo actualizar la información.';
-          this.cdr.detectChanges();
+          const elapsed = Date.now() - startTime;
+          const remainingDelay = Math.max(0, minDelay - elapsed);
+          
+          setTimeout(() => {
+            this.isSaving = false;
+            this.errorMessage = 'No se pudo actualizar la información.';
+            this.notificationService.error('Error al actualizar la información');
+            this.cdr.detectChanges();
+          }, remainingDelay);
         }
       });
   }

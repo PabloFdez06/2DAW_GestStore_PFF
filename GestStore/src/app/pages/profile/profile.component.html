@@ -141,7 +141,9 @@
 
         <section class="profile__actions" aria-label="Acciones">
           <button class="profile__primary" type="submit" [disabled]="isSaving">
-            {{ isSaving ? 'Guardando…' : 'Actualizar Info' }}
+            <app-spinner *ngIf="isSaving" size="small"></app-spinner>
+            <span *ngIf="!isSaving">Actualizar Info</span>
+            <span *ngIf="isSaving">Guardando…</span>
           </button>
 
           <button class="profile__secondary" type="button" (click)="onGoToPassword($event)">

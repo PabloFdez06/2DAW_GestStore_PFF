@@ -274,9 +274,9 @@
               <svg class="dashboard__status-svg" viewBox="0 0 140 140" role="img" aria-label="Gráfico de tareas completadas">
                 <circle cx="70" cy="70" r="60" class="dashboard__status-bg"></circle>
                 <circle cx="70" cy="70" r="60" class="dashboard__status-progress dashboard__status-progress--completed" 
-                  [attr.stroke-dasharray]="(statistics?.completionRate || 0) * 3.77 + ' ' + (100 - (statistics?.completionRate || 0)) * 3.77"></circle>
+                    [attr.stroke-dasharray]="completionRateRounded * 3.77 + ' ' + (100 - completionRateRounded) * 3.77"></circle>
               </svg>
-              <data class="dashboard__status-percent" [value]="statistics?.completionRate || 0">{{ statistics?.completionRate || 0 }}%</data>
+                  <data class="dashboard__status-percent" [value]="completionRateRounded">{{ completionRateRounded }}%</data>
             </figure>
             <figcaption class="dashboard__status-legend">
               <span class="dashboard__status-dot dashboard__status-dot--completed" aria-hidden="true"></span>

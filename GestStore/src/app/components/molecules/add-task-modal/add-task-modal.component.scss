@@ -164,6 +164,15 @@
   &--date {
     padding-right: $spacing-10;
   }
+
+  &--error {
+    border-color: var(--color-error);
+    
+    &:focus {
+      border-color: var(--color-error);
+      outline-color: color-mix(in srgb, var(--color-error) 20%, transparent);
+    }
+  }
 }
 
 .add-task-modal__input-wrapper {
@@ -196,6 +205,25 @@
     border-color: var(--color-primary);
     outline: $border-medium solid color-mix(in srgb, var(--color-primary) 20%, transparent);
   }
+
+  &--error {
+    border-color: var(--color-error);
+    
+    &:focus {
+      border-color: var(--color-error);
+      outline-color: color-mix(in srgb, var(--color-error) 20%, transparent);
+    }
+  }
+}
+
+// ============================================================================
+// ERROR MESSAGE
+// ============================================================================
+.add-task-modal__error {
+  display: block;
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: var(--color-error);
+  margin-top: $spacing-1;
 }
 
 // ============================================================================
@@ -205,6 +233,13 @@
   display: flex;
   gap: $spacing-8;
   align-items: center;
+
+  &--error {
+    padding: $spacing-2;
+    border: $border-thin solid var(--color-error);
+    border-radius: $radius-md;
+    margin: -$spacing-2;
+  }
 }
 
 .add-task-modal__priority-option {

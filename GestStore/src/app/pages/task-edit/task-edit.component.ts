@@ -9,6 +9,7 @@ import { FormTextareaComponent } from '../../components/shared/form-textarea/for
 import { FormSelectComponent, type SelectOption } from '../../components/shared/form-select/form-select.component';
 
 import { TaskService } from '../../services/task.service';
+import { NotificationService } from '../../services/notification.service';
 import { CanComponentDeactivate } from '../../guards/pending-changes.guard';
 import { TaskPriority, TaskStatus, type Task, type TaskRequest } from '../../models/task.model';
 
@@ -61,7 +62,8 @@ export class TaskEditComponent implements OnInit, CanComponentDeactivate {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -128,6 +130,7 @@ export class TaskEditComponent implements OnInit, CanComponentDeactivate {
           ...payload,
           dueDate: this.toDateInputValue(updated.dueDate)
         });
+        this.notificationService.success('Tarea guardada correctamente');
 
         const q = this.route.snapshot.queryParamMap.get('q');
         this.router.navigate(['/tareas', updated.id], {
@@ -138,6 +141,7 @@ export class TaskEditComponent implements OnInit, CanComponentDeactivate {
       error: () => {
         this.isSaving = false;
         this.errorMessage = 'No se pudo guardar la tarea. Inténtalo de nuevo.';
+        this.notificationService.error('Error al guardar la tarea');
       }
     });
   }

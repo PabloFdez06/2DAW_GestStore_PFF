@@ -5,7 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { TaskService } from '../../services/task.service';
+import { TaskProductService } from '../../services/task-product.service';
 import { ThemeService } from '../../services/theme.service';
+import { NotificationService } from '../../services/notification.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest } from '../../models/task.model';
 import { User } from '../../models/auth.model';
 import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
@@ -44,7 +46,9 @@ export class TasksComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private taskService: TaskService,
+    private taskProductService: TaskProductService,
     private themeService: ThemeService,
+    private notificationService: NotificationService,
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -263,7 +267,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     });
   }
 
-  handleTaskAdded(taskData: any): void {
+  handleTaskAdded(taskData: TaskFormData): void {
     if (!this.currentUser?.id) return;
 
     const taskRequest: TaskRequest = {
@@ -276,13 +280,39 @@ export class TasksComponent implements OnInit, OnDestroy {
     };
 
     this.taskService.createTask(taskRequest).subscribe({
-      next: () => {
-        this.closeTaskModal();
-        this.loadTasks();
+      next: (createdTask: Task) => {
+        const taskId = String((createdTask as any).id ?? (createdTask as any)._id ?? '');
+        const selected = (taskData.selectedProducts ?? [])
+          .filter(sp => sp.product?.id && sp.quantity > 0)
+          .map(sp => ({ productId: sp.product.id, quantity: sp.quantity }));
+
+        if (!taskId || selected.length === 0) {
+          this.closeTaskModal();
+          this.loadTasks();
+          this.notificationService.success('Tarea creada correctamente');
+          return;
+        }
+
+        this.taskProductService.assignMultipleProducts(taskId, selected).subscribe({
+          next: () => {
+            this.closeTaskModal();
+            this.loadTasks();
+            this.notificationService.success('Tarea creada correctamente');
+          },
+          error: (error) => {
+            console.error('Error al asignar productos:', error);
+            this.errorMessage = 'La tarea se creó, pero no se pudieron asignar los productos.';
+            this.notificationService.warning('La tarea se creó, pero no se pudieron asignar los productos');
+            this.closeTaskModal();
+            this.loadTasks();
+            this.cdr.detectChanges();
+          }
+        });
       },
       error: (error) => {
         console.error('Error al crear tarea:', error);
         this.errorMessage = 'Error al crear la tarea: ' + (error.error?.message || error.message);
+        this.notificationService.error('Error al crear la tarea');
         this.cdr.detectChanges();
       }
     });
@@ -303,10 +333,12 @@ export class TasksComponent implements OnInit, OnDestroy {
       next: () => {
         this.closeTaskModal();
         this.loadTasks();
+        this.notificationService.success('Tarea actualizada correctamente');
       },
       error: (error) => {
         console.error('Error al actualizar tarea:', error);
         this.errorMessage = 'Error al actualizar la tarea: ' + (error.error?.message || error.message);
+        this.notificationService.error('Error al actualizar la tarea');
         this.cdr.detectChanges();
       }
     });
@@ -362,11 +394,13 @@ export class TasksComponent implements OnInit, OnDestroy {
         importantAction.subscribe({
           next: () => {
             this.loadTasks();
+            this.notificationService.success('Importancia actualizada');
             this.cdr.detectChanges();
           },
           error: (error) => {
             console.error('Error al cambiar importancia:', error);
             this.errorMessage = 'Error al cambiar la importancia de la tarea.';
+            this.notificationService.error('Error al cambiar la importancia');
             this.cdr.detectChanges();
           }
         });
@@ -381,11 +415,13 @@ export class TasksComponent implements OnInit, OnDestroy {
           this.taskService.deleteTask(task.id).subscribe({
             next: () => {
               this.loadTasks();
+              this.notificationService.success('Tarea eliminada correctamente');
               this.cdr.detectChanges();
             },
             error: (error) => {
               console.error('Error al eliminar tarea:', error);
               this.errorMessage = 'Error al eliminar la tarea.';
+              this.notificationService.error('Error al eliminar la tarea');
               this.cdr.detectChanges();
             }
           });
@@ -396,11 +432,13 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.taskService.completeTask(task.id).subscribe({
           next: () => {
             this.loadTasks();
+            this.notificationService.success('Tarea completada');
             this.cdr.detectChanges();
           },
           error: (error) => {
             console.error('Error al completar tarea:', error);
             this.errorMessage = 'Error al completar la tarea: ' + (error.error?.message || error.message);
+            this.notificationService.error('Error al completar la tarea');
             this.cdr.detectChanges();
           }
         });
@@ -410,11 +448,13 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.taskService.startTask(task.id).subscribe({
           next: () => {
             this.loadTasks();
+            this.notificationService.success('Tarea iniciada');
             this.cdr.detectChanges();
           },
           error: (error) => {
             console.error('Error al iniciar tarea:', error);
             this.errorMessage = 'Error al iniciar la tarea: ' + (error.error?.message || error.message);
+            this.notificationService.error('Error al iniciar la tarea');
             this.cdr.detectChanges();
           }
         });

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type AlertType = 'success' | 'warning' | 'error' | 'info';
@@ -40,7 +40,7 @@ export type AlertType = 'success' | 'warning' | 'error' | 'info';
       <button 
         *ngIf="closable" 
         class="alert__close" 
-        (click)="onClose()"
+        (click)="onCloseClick()"
         type="button"
         aria-label="Cerrar alerta">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
@@ -55,12 +55,13 @@ export type AlertType = 'success' | 'warning' | 'error' | 'info';
 export class AlertComponent {
   @Input() type: AlertType = 'info';
   @Input() closable: boolean = false;
+  @Output() close = new EventEmitter<void>();
 
   getAlertClasses(): string {
     return `alert alert--${this.type}`;
   }
 
-  onClose(): void {
-    // Emit close event o lógica
+  onCloseClick(): void {
+    this.close.emit();
   }
 }

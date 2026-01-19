@@ -17,36 +17,44 @@
         
         <!-- Título -->
         <label class="add-task-modal__field">
-          <span class="add-task-modal__label">Titulo</span>
+          <span class="add-task-modal__label">Titulo *</span>
           <input 
             type="text" 
             class="add-task-modal__input"
+            [class.add-task-modal__input--error]="errors['title']"
             #titleInput
             [(ngModel)]="title"
             name="title"
             required
             aria-required="true">
+          <span *ngIf="errors['title']" class="add-task-modal__error" role="alert">
+            {{ errors['title'] }}
+          </span>
         </label>
 
         <!-- Fecha -->
         <label class="add-task-modal__field">
-          <span class="add-task-modal__label">Fecha</span>
+          <span class="add-task-modal__label">Fecha *</span>
           <span class="add-task-modal__input-wrapper">
             <input 
               type="date" 
               class="add-task-modal__input add-task-modal__input--date"
+              [class.add-task-modal__input--error]="errors['date']"
               [(ngModel)]="date"
               name="date"
               required
               aria-required="true">
             <app-icon name="calendar" size="small" class="add-task-modal__calendar-icon"></app-icon>
           </span>
+          <span *ngIf="errors['date']" class="add-task-modal__error" role="alert">
+            {{ errors['date'] }}
+          </span>
         </label>
 
         <!-- Prioridad -->
         <fieldset class="add-task-modal__field">
-          <legend class="add-task-modal__label">Prioridad</legend>
-          <ul class="add-task-modal__priorities" role="list">
+          <legend class="add-task-modal__label">Prioridad *</legend>
+          <ul class="add-task-modal__priorities" role="list" [class.add-task-modal__priorities--error]="errors['priority']">
             <li *ngFor="let priority of priorities">
               <label class="add-task-modal__priority-option">
                 <mark 
@@ -66,18 +74,25 @@
               </label>
             </li>
           </ul>
+          <span *ngIf="errors['priority']" class="add-task-modal__error" role="alert">
+            {{ errors['priority'] }}
+          </span>
         </fieldset>
 
         <!-- Descripción -->
         <label class="add-task-modal__field add-task-modal__field--description">
-          <span class="add-task-modal__label">Descripción de la Tarea</span>
+          <span class="add-task-modal__label">Descripción de la Tarea *</span>
           <textarea 
             class="add-task-modal__textarea"
+            [class.add-task-modal__textarea--error]="errors['description']"
             [(ngModel)]="description"
             name="description"
             rows="8"
             required
             aria-required="true"></textarea>
+          <span *ngIf="errors['description']" class="add-task-modal__error" role="alert">
+            {{ errors['description'] }}
+          </span>
         </label>
       </fieldset>
 

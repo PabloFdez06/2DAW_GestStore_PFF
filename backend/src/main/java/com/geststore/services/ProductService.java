@@ -32,7 +32,7 @@ public class ProductService {
      */
     public Page<ProductResponseDto> getAllProducts(Pageable pageable) {
         log.info("Obteniendo todos los productos activos, página: {}", pageable.getPageNumber());
-        Page<Product> products = productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findByActive(true, pageable);
         return products.map(this::convertToDto);
     }
 
@@ -206,15 +206,15 @@ public class ProductService {
     public ProductStatistics getProductStatistics() {
         log.info("Obteniendo estadísticas de productos");
         
-        long totalProducts = productRepository.count();
-        long activeProducts = productRepository.findByActive(true).size();
+        List<Product> activeProducts = productRepository.findByActive(true);
+        long totalProducts = activeProducts.size();
         long lowStockProducts = productRepository.findLowStockProducts().size();
         long outOfStockProducts = productRepository.findOutOfStockProducts().size();
 
         return ProductStatistics.builder()
                 .totalProducts(totalProducts)
-                .activeProducts(activeProducts)
-                .inactiveProducts(totalProducts - activeProducts)
+                .activeProducts(totalProducts)
+                .inactiveProducts(0L)
                 .lowStockProducts(lowStockProducts)
                 .outOfStockProducts(outOfStockProducts)
                 .build();

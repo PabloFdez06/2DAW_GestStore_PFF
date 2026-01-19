@@ -17,6 +17,7 @@ import { AuthService } from '../../services/auth.service';
 import { TaskService } from '../../services/task.service';
 import { TaskProductService } from '../../services/task-product.service';
 import { ThemeService } from '../../services/theme.service';
+import { NotificationService } from '../../services/notification.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest } from '../../models/task.model';
 import { TaskProduct } from '../../models/task-product.model';
 import { User } from '../../models/auth.model';
@@ -59,6 +60,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     private taskService: TaskService,
     private taskProductService: TaskProductService,
     private themeService: ThemeService,
+    private notificationService: NotificationService,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
     private renderer: Renderer2,
@@ -284,9 +286,11 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       next: (updated: Task) => {
         this.task = updated;
         this.isLoadingAction = false;
+        this.notificationService.success('Acción completada');
       },
       error: () => {
         this.isLoadingAction = false;
+        this.notificationService.error('Error al realizar la acción');
       }
     });
   }
@@ -325,8 +329,10 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       next: (updated: Task) => {
         this.task = updated;
         this.closeTaskModal();
+        this.notificationService.success('Tarea actualizada correctamente');
       },
       error: () => {
+        this.notificationService.error('Error al actualizar la tarea');
         // Mantener el modal abierto para que el usuario pueda reintentar
       }
     });

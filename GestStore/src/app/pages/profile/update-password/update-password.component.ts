@@ -8,6 +8,7 @@ import { IconComponent } from '../../../components/atoms/icon/icon.component';
 import { AuthService } from '../../../services/auth.service';
 import { ThemeService } from '../../../services/theme.service';
 import { UserService } from '../../../services/user.service';
+import { NotificationService } from '../../../services/notification.service';
 import { User } from '../../../models/auth.model';
 
 @Component({
@@ -39,6 +40,7 @@ export class UpdatePasswordComponent {
     private authService: AuthService,
     private userService: UserService,
     private themeService: ThemeService,
+    private notificationService: NotificationService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
@@ -109,16 +111,19 @@ export class UpdatePasswordComponent {
 
     if (!this.currentPassword || !this.newPassword || !this.confirmPassword) {
       this.errorMessage = 'Completa todos los campos.';
+      this.notificationService.warning('Completa todos los campos');
       return;
     }
 
     if (this.newPassword.length < 6) {
       this.errorMessage = 'La nueva contraseña debe tener al menos 6 caracteres.';
+      this.notificationService.warning('La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
     if (this.newPassword !== this.confirmPassword) {
       this.errorMessage = 'La confirmación no coincide con la nueva contraseña.';
+      this.notificationService.warning('Las contraseñas no coinciden');
       return;
     }
 
@@ -132,6 +137,7 @@ export class UpdatePasswordComponent {
         this.newPassword = '';
         this.confirmPassword = '';
         this.successMessage = 'Contraseña actualizada.';
+        this.notificationService.success('Contraseña actualizada correctamente');
         this.cdr.detectChanges();
 
         setTimeout(() => {
@@ -141,6 +147,7 @@ export class UpdatePasswordComponent {
       error: () => {
         this.isSaving = false;
         this.errorMessage = 'No se pudo actualizar la contraseña. Revisa la contraseña actual.';
+        this.notificationService.error('Error al actualizar la contraseña');
         this.cdr.detectChanges();
       }
     });
