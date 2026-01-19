@@ -29,6 +29,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'almacen',
+    loadComponent: () => import('./pages/warehouse/warehouse.component').then(m => m.WarehouseComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'perfil/cambiar-contrasena',
     loadComponent: () => import('./pages/profile/update-password/update-password.component').then(m => m.UpdatePasswordComponent),
     canActivate: [authGuard]

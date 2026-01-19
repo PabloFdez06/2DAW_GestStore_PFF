@@ -1,0 +1,293 @@
+<article class="warehouse">
+  <!-- Top Navigation Bar -->
+  <nav class="warehouse__nav" role="navigation" aria-label="Navegación principal">
+    <!-- Botón hamburguesa para mobile -->
+    <button 
+      class="warehouse__hamburger" 
+      type="button"
+      (click)="toggleSidebar()"
+      [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
+      [attr.aria-expanded]="isSidebarOpen"
+      [class.is-open]="isSidebarOpen">
+      <span class="warehouse__hamburger-line warehouse__hamburger-line--top" aria-hidden="true"></span>
+      <span class="warehouse__hamburger-line warehouse__hamburger-line--middle" aria-hidden="true"></span>
+      <span class="warehouse__hamburger-line warehouse__hamburger-line--bottom" aria-hidden="true"></span>
+    </button>
+    
+    <h1 class="warehouse__logo">
+      <span class="warehouse__logo-gest">Gest</span><span class="warehouse__logo-store">Store</span>
+    </h1>
+
+    <search class="warehouse__search" role="search">
+      <input 
+        type="search" 
+        class="warehouse__search-input" 
+        placeholder="Buscar productos..."
+        [(ngModel)]="search"
+        (input)="onSearchChange()"
+        aria-label="Buscar productos"
+      />
+      <button class="warehouse__search-btn" type="button" aria-label="Buscar">
+        <app-icon name="search" size="small"></app-icon>
+      </button>
+    </search>
+
+    <section class="warehouse__nav-actions" aria-label="Acciones rápidas">
+      <button class="warehouse__nav-btn" type="button" aria-label="Notificaciones">
+        <app-icon name="bell" size="small"></app-icon>
+      </button>
+      <button
+        class="warehouse__nav-btn"
+        type="button"
+        (click)="toggleTheme()"
+        (keydown.enter)="toggleTheme(); $event.preventDefault()"
+        [attr.aria-label]="themeAriaLabel">
+        <app-icon [name]="themeIcon" size="small"></app-icon>
+      </button>
+      <button class="warehouse__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
+        <app-icon name="calendar" size="small"></app-icon>
+      </button>
+      <time class="warehouse__date" [attr.dateTime]="currentDate">
+        <p class="warehouse__date-day">{{ currentDayName }}</p>
+        <p class="warehouse__date-full">{{ currentDate }}</p>
+      </time>
+    </section>
+  </nav>
+
+  <!-- Calendar Modal Overlay -->
+  <dialog
+    #calendarDialog
+    *ngIf="isCalendarOpen"
+    class="warehouse__modal-overlay"
+    (click)="closeCalendar()"
+    open
+    role="dialog"
+    aria-modal="true"
+    aria-label="Calendario">
+    <section class="warehouse__modal-content" (click)="$event.stopPropagation()">
+      <app-calendar (close)="closeCalendar()"></app-calendar>
+    </section>
+  </dialog>
+
+  <!-- Add/Edit Product Modal Overlay -->
+  <dialog
+    #productDialog
+    *ngIf="isProductModalOpen"
+    class="warehouse__modal-overlay"
+    (click)="closeProductModal()"
+    open
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="isEditMode ? 'Editar producto' : 'Añadir producto'">
+    <section class="warehouse__modal-content" (click)="$event.stopPropagation()">
+      <app-add-product-modal 
+        [product]="productToEdit"
+        [isEditMode]="isEditMode"
+        (close)="closeProductModal()" 
+        (productAdded)="handleProductAdded($event)"
+        (productUpdated)="handleProductUpdated($event)">
+      </app-add-product-modal>
+    </section>
+  </dialog>
+
+  <!-- Overlay del sidebar para mobile -->
+  <section 
+    *ngIf="isSidebarOpen" 
+    class="warehouse__sidebar-overlay"
+    (click)="closeSidebar()"
+    aria-hidden="true"></section>
+  
+  <!-- Side Navigation -->
+  <aside 
+    class="warehouse__sidebar" 
+    role="complementary" 
+    aria-label="Menú lateral"
+    [class.is-open]="isSidebarOpen">
+    <header class="warehouse__user">
+      <figure class="warehouse__user-avatar">
+        <a class="warehouse__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
+          <ng-container *ngIf="avatarUrl; else warehouseAvatarDefault">
+            <img class="warehouse__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
+          </ng-container>
+          <ng-template #warehouseAvatarDefault>
+            <app-icon name="user" size="large" aria-hidden="true"></app-icon>
+          </ng-template>
+        </a>
+      </figure>
+      <hgroup class="warehouse__user-info">
+        <p class="warehouse__user-name">{{ currentUser?.name || 'Usuario' }}</p>
+        <p class="warehouse__user-email">{{ currentUser?.email || '' }}</p>
+      </hgroup>
+    </header>
+
+    <nav class="warehouse__sidebar-nav" aria-label="Navegación del menú">
+      <a routerLink="/dashboard" class="warehouse__sidebar-link" (click)="closeSidebar()">
+        <app-icon name="home" size="small"></app-icon>
+        <span>Dashboard</span>
+      </a>
+      <a routerLink="/tareas-importantes" class="warehouse__sidebar-link" (click)="closeSidebar()">
+        <app-icon name="star" size="small"></app-icon>
+        <span>Tareas Importantes</span>
+      </a>
+      <a routerLink="/tareas" class="warehouse__sidebar-link" (click)="closeSidebar()">
+        <app-icon name="check-square" size="small"></app-icon>
+        <span>Tareas</span>
+      </a>
+      <a routerLink="/categorias" class="warehouse__sidebar-link" (click)="closeSidebar()">
+        <app-icon name="folder" size="small"></app-icon>
+        <span>Categorias de Tareas</span>
+      </a>
+      <a routerLink="/almacen" class="warehouse__sidebar-link warehouse__sidebar-link--active" aria-current="page" (click)="closeSidebar()">
+        <app-icon name="package" size="small"></app-icon>
+        <span>Almacen</span>
+      </a>
+      <a routerLink="/ajustes" class="warehouse__sidebar-link" (click)="closeSidebar()">
+        <app-icon name="settings" size="small"></app-icon>
+        <span>Ajustes</span>
+      </a>
+    </nav>
+
+    <footer class="warehouse__sidebar-footer">
+      <button type="button" class="warehouse__logout" (click)="onLogout($event)">
+        <app-icon name="log-out" size="small"></app-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </footer>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="warehouse__main" role="main">
+    <!-- Header Section -->
+    <header class="warehouse__header">
+      <hgroup class="warehouse__title-group">
+        <h2 class="warehouse__title">Almacen y Stockage</h2>
+        <mark class="warehouse__subtitle">Productos</mark>
+      </hgroup>
+      <button 
+        class="warehouse__add-btn" 
+        type="button" 
+        (click)="openAddProductModal()"
+        aria-label="Añadir producto">
+        <app-icon name="plus" size="small"></app-icon>
+        <span>Añadir producto</span>
+      </button>
+    </header>
+
+    <!-- Statistics Cards -->
+    <section class="warehouse__stats" aria-label="Estadísticas de productos">
+      <article class="warehouse__stat-card">
+        <header class="warehouse__stat-header">
+          <h3 class="warehouse__stat-title">Total productos</h3>
+        </header>
+        <data class="warehouse__stat-value" [value]="statistics?.totalProducts || 0">
+          {{ statistics?.totalProducts || 0 }}
+        </data>
+      </article>
+
+      <article class="warehouse__stat-card">
+        <header class="warehouse__stat-header">
+          <h3 class="warehouse__stat-title">Alertas</h3>
+        </header>
+        <data class="warehouse__stat-value" [value]="(statistics?.lowStockProducts || 0) + (statistics?.outOfStockProducts || 0)">
+          {{ (statistics?.lowStockProducts || 0) + (statistics?.outOfStockProducts || 0) }}
+        </data>
+      </article>
+
+      <article class="warehouse__stat-card">
+        <header class="warehouse__stat-header">
+          <h3 class="warehouse__stat-title">Stock Bajo</h3>
+          <span class="warehouse__stat-indicator warehouse__stat-indicator--warning" aria-label="Alerta amarilla"></span>
+        </header>
+        <data class="warehouse__stat-value" [value]="statistics?.lowStockProducts || 0">
+          {{ statistics?.lowStockProducts || 0 }}
+        </data>
+      </article>
+
+      <article class="warehouse__stat-card">
+        <header class="warehouse__stat-header">
+          <h3 class="warehouse__stat-title">Sin Stock</h3>
+          <span class="warehouse__stat-indicator warehouse__stat-indicator--danger" aria-label="Alerta roja"></span>
+        </header>
+        <data class="warehouse__stat-value" [value]="statistics?.outOfStockProducts || 0">
+          {{ statistics?.outOfStockProducts || 0 }}
+        </data>
+      </article>
+    </section>
+
+    <!-- Products Table -->
+    <section class="warehouse__table-container" aria-label="Tabla de productos">
+      <!-- Loading State -->
+      <output *ngIf="isLoading" class="warehouse__loading" role="status" aria-live="polite">
+        <app-spinner size="medium"></app-spinner>
+        <p>Cargando productos...</p>
+      </output>
+
+      <!-- Error State -->
+      <output *ngIf="errorMessage" class="warehouse__error" role="alert">
+        <p>{{ errorMessage }}</p>
+      </output>
+
+      <!-- Empty State -->
+      <article *ngIf="!isLoading && filteredProducts.length === 0" class="warehouse__empty">
+        <app-icon name="package" size="large"></app-icon>
+        <p>No hay productos disponibles</p>
+        <button class="warehouse__empty-btn" type="button" (click)="openAddProductModal()">
+          Añadir primer producto
+        </button>
+      </article>
+
+      <!-- Products Table -->
+      <table *ngIf="!isLoading && filteredProducts.length > 0" class="warehouse__table">
+        <thead class="warehouse__table-head">
+          <tr>
+            <th scope="col" class="warehouse__th warehouse__th--sku">SKU</th>
+            <th scope="col" class="warehouse__th warehouse__th--name">Nombre</th>
+            <th scope="col" class="warehouse__th warehouse__th--category">Categoría</th>
+            <th scope="col" class="warehouse__th warehouse__th--description">Descripción</th>
+            <th scope="col" class="warehouse__th warehouse__th--price">Precio</th>
+            <th scope="col" class="warehouse__th warehouse__th--stock">Stock</th>
+            <th scope="col" class="warehouse__th warehouse__th--status">Estado</th>
+            <th scope="col" class="warehouse__th warehouse__th--actions">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="warehouse__table-body">
+          <tr *ngFor="let product of filteredProducts; trackBy: trackByProductId" class="warehouse__row">
+            <td class="warehouse__td warehouse__td--sku">{{ product.sku }}</td>
+            <td class="warehouse__td warehouse__td--name">{{ product.name }}</td>
+            <td class="warehouse__td warehouse__td--category">{{ getCategoryName(product.category) }}</td>
+            <td class="warehouse__td warehouse__td--description">{{ product.description || '-' }}</td>
+            <td class="warehouse__td warehouse__td--price">{{ product.unitPrice | currency:'EUR':'symbol':'1.2-2' }}</td>
+            <td class="warehouse__td warehouse__td--stock">{{ product.stockQuantity }}</td>
+            <td class="warehouse__td warehouse__td--status">
+              <span class="warehouse__status" [ngClass]="getStatusClass(product)">
+                <span class="warehouse__status-dot"></span>
+              </span>
+            </td>
+            <td class="warehouse__td warehouse__td--actions">
+              <menu class="warehouse__actions-menu">
+                <li>
+                  <button 
+                    class="warehouse__action-btn warehouse__action-btn--edit" 
+                    type="button" 
+                    (click)="openEditProductModal(product)"
+                    aria-label="Editar producto">
+                    <app-icon name="edit-2" size="small"></app-icon>
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    class="warehouse__action-btn warehouse__action-btn--delete" 
+                    type="button" 
+                    (click)="deleteProduct(product)"
+                    aria-label="Eliminar producto">
+                    <app-icon name="trash-2" size="small"></app-icon>
+                  </button>
+                </li>
+              </menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</article>

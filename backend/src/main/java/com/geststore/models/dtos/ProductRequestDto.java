@@ -20,4 +20,6 @@ public class ProductRequestDto {
     private BigDecimal unitPrice;
     private String category;
     private Boolean active;
+    private Integer stockQuantity;
+    private Integer minStockLevel;
 }

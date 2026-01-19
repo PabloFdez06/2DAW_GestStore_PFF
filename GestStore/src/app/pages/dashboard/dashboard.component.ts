@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest, TaskStatistics } from '../../models/task.model';
 import { User } from '../../models/auth.model';
+import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,7 +27,8 @@ import { User } from '../../models/auth.model';
     IconComponent,
     CalendarComponent,
     AddTaskModalComponent,
-    TaskMenuComponent
+    TaskMenuComponent,
+    SpinnerComponent
   ],
   providers: [TaskService],
   templateUrl: './dashboard.component.html',

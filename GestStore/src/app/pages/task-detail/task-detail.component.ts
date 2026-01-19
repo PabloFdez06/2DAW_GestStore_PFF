@@ -15,23 +15,28 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { TaskService } from '../../services/task.service';
+import { TaskProductService } from '../../services/task-product.service';
 import { ThemeService } from '../../services/theme.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest } from '../../models/task.model';
+import { TaskProduct } from '../../models/task-product.model';
 import { User } from '../../models/auth.model';
 import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
+import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent],
+  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, SpinnerComponent],
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.scss'
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
   task!: Task;
+  taskProducts: TaskProduct[] = [];
   isLoadingAction = false;
+  isLoadingProducts = false;
 
   search = '';
   currentDate = '';
@@ -52,6 +57,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private authService: AuthService,
     private taskService: TaskService,
+    private taskProductService: TaskProductService,
     private themeService: ThemeService,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
@@ -65,9 +71,28 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     this.setCurrentDate();
     this.loadAvatar();
     this.loadCurrentUser();
+    this.loadTaskProducts();
 
     this.route.queryParamMap.subscribe(params => {
       this.search = params.get('q') ?? '';
+    });
+  }
+
+  loadTaskProducts(): void {
+    const taskId = String(this.task.id || this.task._id);
+    if (!taskId) return;
+
+    this.isLoadingProducts = true;
+    this.taskProductService.getProductsByTaskId(taskId).subscribe({
+      next: (products) => {
+        this.taskProducts = products;
+        this.isLoadingProducts = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error loading task products:', error);
+        this.isLoadingProducts = false;
+      }
     });
   }
 

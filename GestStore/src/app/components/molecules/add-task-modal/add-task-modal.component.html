@@ -102,15 +102,53 @@
         <section class="add-task-modal__assign-section" aria-labelledby="assign-products-title">
           <h3 id="assign-products-title" class="add-task-modal__label">Asignar productos</h3>
           <article class="add-task-modal__assign-box add-task-modal__assign-box--tall">
-            <p class="add-task-modal__assign-text">
-              Asignar objetos del almacen, selecciona los objetos que se necesitaran para esta tarea.
-            </p>
-            <button type="button" class="add-task-modal__assign-btn">
-              Asignar
-            </button>
+            <ng-container *ngIf="selectedProducts.length === 0; else selectedProductsList">
+              <p class="add-task-modal__assign-text">
+                Asignar objetos del almacen, selecciona los objetos que se necesitaran para esta tarea.
+              </p>
+              <button type="button" class="add-task-modal__assign-btn" (click)="openProductSelector()">
+                Asignar
+              </button>
+            </ng-container>
+            <ng-template #selectedProductsList>
+              <ul class="add-task-modal__products-list" role="list">
+                <li *ngFor="let sp of selectedProducts; let i = index" class="add-task-modal__product-item">
+                  <span class="add-task-modal__product-name">{{ sp.product.name }}</span>
+                  <span class="add-task-modal__product-qty">x{{ sp.quantity }}</span>
+                  <button 
+                    type="button" 
+                    class="add-task-modal__product-remove"
+                    (click)="removeSelectedProduct(i)"
+                    aria-label="Eliminar producto">
+                    <app-icon name="x" size="small"></app-icon>
+                  </button>
+                </li>
+              </ul>
+              <button type="button" class="add-task-modal__assign-btn add-task-modal__assign-btn--small" (click)="openProductSelector()">
+                Editar productos
+              </button>
+            </ng-template>
           </article>
         </section>
       </fieldset>
+
+      <!-- Product Selector Modal -->
+      <dialog
+        *ngIf="isProductSelectorOpen"
+        class="add-task-modal__product-overlay"
+        open
+        role="dialog"
+        aria-modal="true"
+        aria-label="Seleccionar productos"
+        (click)="closeProductSelector()">
+        <section class="add-task-modal__product-content" (click)="$event.stopPropagation()">
+          <app-product-selector-modal
+            [selectedProducts]="selectedProducts"
+            (close)="closeProductSelector()"
+            (productsSelected)="handleProductsSelected($event)">
+          </app-product-selector-modal>
+        </section>
+      </dialog>
 
       <!-- Submit Button -->
       <footer class="add-task-modal__footer">

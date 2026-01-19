@@ -1,0 +1,125 @@
+<article class="product-selector">
+  <header class="product-selector__header">
+    <h2 class="product-selector__title">Seleccionar Productos</h2>
+    <button 
+      class="product-selector__close" 
+      type="button" 
+      (click)="onClose()"
+      aria-label="Cerrar modal">
+      <app-icon name="x" size="small"></app-icon>
+    </button>
+  </header>
+
+  <!-- Search -->
+  <search class="product-selector__search" role="search">
+    <app-icon name="search" size="small" class="product-selector__search-icon"></app-icon>
+    <input 
+      type="search" 
+      class="product-selector__search-input" 
+      placeholder="Buscar productos..."
+      [(ngModel)]="search"
+      (input)="onSearchChange()"
+      aria-label="Buscar productos"
+    />
+  </search>
+
+  <!-- Selected count badge -->
+  <output *ngIf="selectedCount > 0" class="product-selector__badge" role="status">
+    {{ selectedCount }} producto{{ selectedCount !== 1 ? 's' : '' }} seleccionado{{ selectedCount !== 1 ? 's' : '' }}
+  </output>
+
+  <!-- Loading State -->
+  <output *ngIf="isLoading" class="product-selector__loading" role="status" aria-live="polite">
+    <app-spinner size="medium"></app-spinner>
+    <p>Cargando productos...</p>
+  </output>
+
+  <!-- Empty State -->
+  <article *ngIf="!isLoading && filteredProducts.length === 0" class="product-selector__empty">
+    <app-icon name="package" size="large"></app-icon>
+    <p>No hay productos disponibles</p>
+  </article>
+
+  <!-- Products List -->
+  <ul *ngIf="!isLoading && filteredProducts.length > 0" class="product-selector__list" role="listbox" aria-label="Lista de productos">
+    <li 
+      *ngFor="let product of filteredProducts; trackBy: trackByProductId" 
+      class="product-selector__item"
+      [class.product-selector__item--selected]="isProductSelected(product)"
+      role="option"
+      [attr.aria-selected]="isProductSelected(product)">
+      
+      <button 
+        type="button" 
+        class="product-selector__item-btn"
+        (click)="toggleProductSelection(product)">
+        
+        <figure class="product-selector__item-check">
+          <app-icon 
+            *ngIf="isProductSelected(product)" 
+            name="check" 
+            size="small">
+          </app-icon>
+        </figure>
+
+        <section class="product-selector__item-info">
+          <h3 class="product-selector__item-name">{{ product.name }}</h3>
+          <p class="product-selector__item-category">{{ getCategoryName(product.category) }}</p>
+        </section>
+
+        <aside class="product-selector__item-stock">
+          <span class="product-selector__status" [ngClass]="getStatusClass(product)">
+            <span class="product-selector__status-dot"></span>
+          </span>
+          <span class="product-selector__stock-text">Stock: {{ product.stockQuantity }}</span>
+        </aside>
+      </button>
+
+      <!-- Quantity selector (visible only when selected) -->
+      <fieldset *ngIf="isProductSelected(product)" class="product-selector__quantity" (click)="$event.stopPropagation()">
+        <legend class="visually-hidden">Cantidad</legend>
+        <button 
+          type="button" 
+          class="product-selector__quantity-btn"
+          (click)="decrementQuantity(product, $event)"
+          [disabled]="getSelectedQuantity(product) <= 1"
+          aria-label="Reducir cantidad">
+          <app-icon name="minus" size="small"></app-icon>
+        </button>
+        <input 
+          type="number" 
+          class="product-selector__quantity-input"
+          [value]="getSelectedQuantity(product)"
+          (change)="updateQuantity(product, $any($event.target).valueAsNumber)"
+          [min]="1"
+          [max]="product.stockQuantity"
+          aria-label="Cantidad"
+        />
+        <button 
+          type="button" 
+          class="product-selector__quantity-btn"
+          (click)="incrementQuantity(product, $event)"
+          [disabled]="getSelectedQuantity(product) >= product.stockQuantity"
+          aria-label="Aumentar cantidad">
+          <app-icon name="plus" size="small"></app-icon>
+        </button>
+      </fieldset>
+    </li>
+  </ul>
+
+  <!-- Footer -->
+  <footer class="product-selector__footer">
+    <button 
+      type="button" 
+      class="product-selector__btn product-selector__btn--secondary"
+      (click)="onClose()">
+      Cancelar
+    </button>
+    <button 
+      type="button" 
+      class="product-selector__btn product-selector__btn--primary"
+      (click)="onConfirm()">
+      Confirmar ({{ selectedCount }})
+    </button>
+  </footer>
+</article>

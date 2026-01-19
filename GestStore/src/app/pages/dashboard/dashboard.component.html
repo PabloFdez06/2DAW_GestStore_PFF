@@ -195,6 +195,7 @@
 
         <!-- Estado de carga -->
         <output *ngIf="isLoadingTasks" class="dashboard__loading" role="status" aria-live="polite">
+          <app-spinner size="medium"></app-spinner>
           <p>Cargando tareas...</p>
         </output>
 

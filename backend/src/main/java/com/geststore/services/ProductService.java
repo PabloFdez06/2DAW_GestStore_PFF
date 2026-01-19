@@ -131,8 +131,8 @@ public class ProductService {
                 .unitPrice(requestDto.getUnitPrice())
                 .category(requestDto.getCategory())
                 .active(true)
-                .stockQuantity(0)
-                .minStockLevel(10)
+                .stockQuantity(requestDto.getStockQuantity() != null ? requestDto.getStockQuantity() : 0)
+                .minStockLevel(requestDto.getMinStockLevel() != null ? requestDto.getMinStockLevel() : 10)
                 .build();
 
         product.onCreate();
@@ -165,6 +165,15 @@ public class ProductService {
         product.setDescription(requestDto.getDescription());
         product.setUnitPrice(requestDto.getUnitPrice());
         product.setCategory(requestDto.getCategory());
+        
+        // Actualizar stock si se proporciona
+        if (requestDto.getStockQuantity() != null) {
+            product.setStockQuantity(requestDto.getStockQuantity());
+        }
+        if (requestDto.getMinStockLevel() != null) {
+            product.setMinStockLevel(requestDto.getMinStockLevel());
+        }
+        
         product.onUpdate();
 
         Product updatedProduct = productRepository.save(product);

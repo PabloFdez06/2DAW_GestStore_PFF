@@ -189,11 +189,47 @@
             <p class="task-view__notes-text task-view__notes-text--muted">Sin detalles adicionales.</p>
           </ng-template>
 
-          <section class="task-view__products" *ngIf="task.taskProducts?.length" aria-label="Productos">
-            <h4 class="task-view__products-title">Productos</h4>
-            <ul class="task-view__products-list" role="list">
-              <li *ngFor="let product of task.taskProducts" class="task-view__products-item" role="listitem">
-                <span class="task-view__products-name">{{ product.productName }}</span>
+          <!-- Productos asignados -->
+          <section class="task-view__products" aria-label="Productos asignados">
+            <header class="task-view__products-header">
+              <h4 class="task-view__products-title">
+                <app-icon name="package" size="small"></app-icon>
+                Productos Asignados
+              </h4>
+              <mark *ngIf="taskProducts.length > 0" class="task-view__products-count">
+                {{ taskProducts.length }}
+              </mark>
+            </header>
+
+            <!-- Loading -->
+            <output *ngIf="isLoadingProducts" class="task-view__products-loading" role="status">
+              <app-spinner size="small"></app-spinner>
+              <span>Cargando productos...</span>
+            </output>
+
+            <!-- Empty State -->
+            <p *ngIf="!isLoadingProducts && taskProducts.length === 0" class="task-view__products-empty">
+              No hay productos asignados a esta tarea.
+            </p>
+
+            <!-- Products List -->
+            <ul *ngIf="!isLoadingProducts && taskProducts.length > 0" class="task-view__products-list" role="list">
+              <li *ngFor="let tp of taskProducts" class="task-view__products-item" role="listitem">
+                <figure class="task-view__products-icon">
+                  <app-icon name="box" size="small"></app-icon>
+                </figure>
+                <section class="task-view__products-info">
+                  <h5 class="task-view__products-name">{{ tp.product.name }}</h5>
+                  <p class="task-view__products-meta">
+                    <span class="task-view__products-sku">SKU: {{ tp.product.sku }}</span>
+                    <span class="task-view__products-category">{{ tp.product.category }}</span>
+                  </p>
+                </section>
+                <aside class="task-view__products-quantity">
+                  <span class="task-view__products-qty-label">Cantidad:</span>
+                  <data class="task-view__products-qty-value" [value]="tp.quantity">{{ tp.quantity }}</data>
+                  <span *ngIf="tp.quantityUsed > 0" class="task-view__products-used">({{ tp.quantityUsed }} usados)</span>
+                </aside>
               </li>
             </ul>
           </section>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Task, TaskPriority } from '../../../models/task.model';
+import { ProductSelectorModalComponent, SelectedProduct } from '../product-selector-modal/product-selector-modal.component';
 
 interface Priority {
   label: string;
@@ -17,12 +18,13 @@ export interface TaskFormData {
   description: string;
   priority: string;
   important?: boolean;
+  selectedProducts?: SelectedProduct[];
 }
 
 @Component({
   selector: 'app-add-task-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, IconComponent],
+  imports: [CommonModule, FormsModule, IconComponent, ProductSelectorModalComponent],
   templateUrl: './add-task-modal.component.html',
   styleUrl: './add-task-modal.component.scss'
 })
@@ -47,6 +49,10 @@ export class AddTaskModalComponent implements OnChanges {
   date: string = '';
   description: string = '';
   selectedPriority: string = '';
+  
+  // Products selection
+  selectedProducts: SelectedProduct[] = [];
+  isProductSelectorOpen: boolean = false;
 
   priorities: Priority[] = [
     { label: 'Absoluta', value: 'absolute', color: '#F21E1E' },
@@ -104,6 +110,24 @@ export class AddTaskModalComponent implements OnChanges {
     this.selectedPriority = priority;
   }
 
+  // Product selection methods
+  openProductSelector(): void {
+    this.isProductSelectorOpen = true;
+  }
+
+  closeProductSelector(): void {
+    this.isProductSelectorOpen = false;
+  }
+
+  handleProductsSelected(products: SelectedProduct[]): void {
+    this.selectedProducts = products;
+    this.closeProductSelector();
+  }
+
+  removeSelectedProduct(index: number): void {
+    this.selectedProducts.splice(index, 1);
+  }
+
   onSubmit(event?: Event) {
     event?.preventDefault();
     if (!this.title || !this.date || !this.description || !this.selectedPriority) {
@@ -114,7 +138,8 @@ export class AddTaskModalComponent implements OnChanges {
       title: this.title,
       date: this.date,
       description: this.description,
-      priority: this.selectedPriority
+      priority: this.selectedPriority,
+      selectedProducts: this.selectedProducts
     };
 
     if (this.isEditMode && this.task) {
@@ -139,6 +164,8 @@ export class AddTaskModalComponent implements OnChanges {
     this.date = '';
     this.description = '';
     this.selectedPriority = '';
+    this.selectedProducts = [];
+    this.isProductSelectorOpen = false;
   }
 
   private attachKeydownTrap(): void {

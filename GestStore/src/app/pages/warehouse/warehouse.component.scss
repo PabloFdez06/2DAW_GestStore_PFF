@@ -1,0 +1,952 @@
+@use '../../../styles/00-settings/variables' as *;
+@use '../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
+
+// ============================================================================
+// RESET ELEMENTOS SEMÁNTICOS
+// ============================================================================
+.warehouse {
+  figure,
+  figcaption,
+  hgroup,
+  menu {
+    margin: 0;
+    padding: 0;
+  }
+
+  mark {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  ul,
+  ol,
+  menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+}
+
+// ============================================================================
+// LAYOUT PRINCIPAL - RESPONSIVE
+// ============================================================================
+.warehouse {
+  display: grid;
+  grid-template-columns: 330px 1fr;
+  grid-template-rows: 100px 1fr;
+  min-height: 100vh;
+  background-color: var(--bg-default);
+  position: relative;
+
+  @include respond-down(lg) {
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: 80px 1fr;
+  }
+
+  @include respond-down(md) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 70px auto 1fr;
+  }
+
+  @include respond-down(sm) {
+    grid-template-rows: 60px auto 1fr;
+  }
+}
+
+// ============================================================================
+// TOP NAVIGATION BAR
+// ============================================================================
+.warehouse__nav {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  padding: 0 $spacing-8;
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 10;
+
+  @include respond-down(lg) {
+    gap: $spacing-4;
+    padding: 0 $spacing-4;
+  }
+
+  @include respond-down(md) {
+    gap: $spacing-3;
+    padding: 0 $spacing-3;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+    padding: 0 $spacing-2;
+  }
+}
+
+// ============================================================================
+// HAMBURGER BUTTON
+// ============================================================================
+.warehouse__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-1;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: $spacing-2;
+  flex-shrink: 0;
+  z-index: 15;
+
+  @include respond-down(md) {
+    display: flex;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: $radius-sm;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.warehouse__hamburger-line {
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: all 0.3s ease;
+  transform-origin: center;
+
+  &--top {
+    transform: translateY(-6px);
+  }
+
+  &--middle {
+    transform: translateY(0);
+  }
+
+  &--bottom {
+    transform: translateY(6px);
+  }
+}
+
+.warehouse__hamburger.is-open {
+  .warehouse__hamburger-line--top {
+    transform: translateY(0) rotate(45deg);
+  }
+
+  .warehouse__hamburger-line--middle {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .warehouse__hamburger-line--bottom {
+    transform: translateY(0) rotate(-45deg);
+  }
+}
+
+// ============================================================================
+// LOGO
+// ============================================================================
+.warehouse__logo {
+  @include text-style($font-size-3xl, $font-weight-semibold, $line-tight);
+  margin: 0;
+  flex-shrink: 0;
+
+  @include respond-down(lg) {
+    font-size: $font-size-2xl;
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-xl;
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.warehouse__logo-gest {
+  color: var(--color-primary);
+}
+
+.warehouse__logo-store {
+  color: var(--text-default);
+}
+
+// ============================================================================
+// SEARCH
+// ============================================================================
+.warehouse__search {
+  position: relative;
+  flex: 0 0 695px;
+  max-width: 695px;
+
+  @include respond-down(lg) {
+    flex: 0 0 500px;
+    max-width: 500px;
+  }
+
+  @include respond-down(md) {
+    flex: 1 1 auto;
+    max-width: 400px;
+  }
+
+  @include respond-down(sm) {
+    display: none;
+  }
+}
+
+.warehouse__search-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 $spacing-12 0 $spacing-4;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+  @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
+  color: var(--text-muted);
+
+  @include respond-down(md) {
+    height: 32px;
+    padding: 0 $spacing-8 0 $spacing-3;
+    font-size: 0.625rem;
+  }
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 0;
+  }
+}
+
+.warehouse__search-btn {
+  all: unset;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  @include transition(color);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+// ============================================================================
+// NAV ACTIONS
+// ============================================================================
+.warehouse__nav-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.warehouse__nav-btn {
+  all: unset;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  border-radius: 8px;
+  color: var(--text-on-primary);
+  cursor: pointer;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: var(--interactive-hover);
+  }
+}
+
+.warehouse__date {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  margin-left: $spacing-4;
+}
+
+.warehouse__date-day {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: var(--text-default);
+  margin: 0;
+}
+
+.warehouse__date-full {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: var(--color-medium);
+  margin: 0;
+}
+
+// ============================================================================
+// SIDEBAR
+// ============================================================================
+.warehouse__sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  background-color: var(--color-primary);
+  padding: $spacing-8 $spacing-5;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-md);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  position: relative;
+  margin-left: -35px;
+  padding-left: calc($spacing-5 + 35px);
+
+  @include respond-down(lg) {
+    padding: $spacing-6 $spacing-4;
+    margin-left: -20px;
+    padding-left: calc($spacing-4 + 20px);
+  }
+
+  @include respond-down(md) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    margin-left: 0;
+    padding: $spacing-6 $spacing-4;
+    border-radius: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 20;
+    overflow-y: auto;
+
+    &.is-open {
+      transform: translateX(0);
+      box-shadow: var(--shadow-lg);
+    }
+  }
+
+  @include respond-down(sm) {
+    width: 260px;
+    padding: $spacing-4 $spacing-3;
+  }
+}
+
+.warehouse__sidebar-overlay {
+  display: none;
+
+  @include respond-down(md) {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 15;
+    animation: fadeIn 0.3s ease;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+// ============================================================================
+// USER SECTION
+// ============================================================================
+.warehouse__user {
+  display: flex;
+  gap: $spacing-4;
+  align-items: center;
+  margin-bottom: $spacing-6;
+
+  @include respond-down(lg) {
+    gap: $spacing-3;
+    margin-bottom: $spacing-4;
+  }
+
+  @include respond-down(md) {
+    margin-bottom: $spacing-6;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+  }
+}
+
+.warehouse__user-avatar {
+  width: 86px;
+  height: 86px;
+  flex-shrink: 0;
+
+  @include respond-down(lg) {
+    width: 60px;
+    height: 60px;
+  }
+
+  @include respond-down(sm) {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.warehouse__avatar-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--bg-surface);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--color-primary);
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.warehouse__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.warehouse__user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.warehouse__user-name {
+  @include text-style($font-size-base, $font-weight-semibold, $line-normal);
+  color: var(--text-on-primary);
+  margin: 0;
+  @include truncate;
+}
+
+.warehouse__user-email {
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: var(--text-on-primary);
+  margin: 0;
+  opacity: 0.8;
+  @include truncate;
+}
+
+// ============================================================================
+// SIDEBAR NAV
+// ============================================================================
+.warehouse__sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  flex: 1;
+}
+
+.warehouse__sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4 $spacing-4;
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--text-on-primary);
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  @include transition(background-color);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--text-on-primary);
+    outline-offset: 2px;
+  }
+
+  &--active {
+    background-color: var(--bg-surface);
+    color: var(--color-primary);
+
+    &:hover {
+      background-color: var(--bg-surface);
+    }
+  }
+}
+
+.warehouse__sidebar-footer {
+  margin-top: auto;
+  padding-top: $spacing-6;
+}
+
+.warehouse__logout {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  width: 100%;
+  border-radius: 14px;
+  color: var(--text-on-primary);
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  cursor: pointer;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--text-on-primary);
+    outline-offset: 2px;
+  }
+}
+
+// ============================================================================
+// MAIN CONTENT
+// ============================================================================
+.warehouse__main {
+  grid-column: 2;
+  grid-row: 2;
+  padding: $spacing-6 $spacing-8;
+  overflow-y: auto;
+  background-color: var(--bg-default);
+
+  @include respond-down(lg) {
+    padding: $spacing-5 $spacing-6;
+  }
+
+  @include respond-down(md) {
+    grid-column: 1;
+    grid-row: 3;
+    padding: $spacing-4;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+  }
+}
+
+// ============================================================================
+// HEADER SECTION
+// ============================================================================
+.warehouse__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-6;
+  gap: $spacing-4;
+
+  @include respond-down(sm) {
+    flex-direction: column;
+    gap: $spacing-3;
+  }
+}
+
+.warehouse__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.warehouse__title {
+  @include text-style($font-size-xl, $font-weight-semibold, $line-tight);
+  color: var(--text-default);
+  margin: 0;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 200px;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+  }
+}
+
+.warehouse__subtitle {
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: var(--text-default);
+  margin-top: $spacing-4;
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 51px;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+  }
+}
+
+.warehouse__add-btn {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  cursor: pointer;
+  @include transition(color);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// STATISTICS CARDS
+// ============================================================================
+.warehouse__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-4;
+  margin-bottom: $spacing-6;
+
+  @include respond-down(lg) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-down(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.warehouse__stat-card {
+  background-color: var(--color-primary-light);
+  border-radius: 8px;
+  padding: $spacing-4;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.warehouse__stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.warehouse__stat-title {
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: var(--text-default);
+  margin: 0;
+}
+
+.warehouse__stat-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  &--warning {
+    background-color: $color-accent-4;
+  }
+
+  &--danger {
+    background-color: $color-accent-1;
+  }
+}
+
+.warehouse__stat-value {
+  @include text-style($font-size-xl, $font-weight-semibold, $line-tight);
+  color: var(--text-default);
+  margin-top: auto;
+}
+
+// ============================================================================
+// TABLE CONTAINER
+// ============================================================================
+.warehouse__table-container {
+  border: 1px solid rgba(161, 163, 171, 0.63);
+  border-radius: 16px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  background-color: var(--bg-surface);
+}
+
+.warehouse__loading,
+.warehouse__error,
+.warehouse__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-12;
+  text-align: center;
+  gap: $spacing-4;
+  color: var(--text-muted);
+}
+
+.warehouse__empty-btn {
+  padding: $spacing-3 $spacing-6;
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: 8px;
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  cursor: pointer;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: var(--interactive-hover);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// TABLE
+// ============================================================================
+.warehouse__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.warehouse__table-head {
+  background-color: var(--bg-surface);
+}
+
+.warehouse__th {
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  color: var(--text-default);
+  padding: $spacing-4;
+  text-align: left;
+  border-bottom: 1px solid rgba(161, 163, 171, 0.63);
+
+  &--id {
+    width: 60px;
+  }
+
+  &--name {
+    min-width: 180px;
+  }
+
+  &--category {
+    width: 120px;
+  }
+
+  &--description,
+  &--details {
+    width: 140px;
+  }
+
+  &--stock {
+    width: 70px;
+    text-align: center;
+  }
+
+  &--status {
+    width: 80px;
+    text-align: center;
+  }
+
+  &--actions {
+    width: 100px;
+    text-align: center;
+  }
+}
+
+.warehouse__row {
+  border-bottom: 1px solid rgba(161, 163, 171, 0.63);
+  @include transition(background-color);
+
+  &:hover {
+    background-color: var(--bg-subtle);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.warehouse__td {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: var(--text-default);
+  padding: $spacing-3 $spacing-4;
+  vertical-align: middle;
+
+  &--stock {
+    text-align: center;
+  }
+
+  &--status {
+    text-align: center;
+  }
+
+  &--actions {
+    text-align: center;
+  }
+}
+
+// ============================================================================
+// STATUS INDICATOR
+// ============================================================================
+.warehouse__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.warehouse__status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.warehouse__status--available .warehouse__status-dot {
+  background-color: $color-accent-2;
+}
+
+.warehouse__status--low .warehouse__status-dot {
+  background-color: $color-accent-4;
+}
+
+.warehouse__status--out .warehouse__status-dot {
+  background-color: $color-accent-1;
+}
+
+// ============================================================================
+// ACTIONS MENU
+// ============================================================================
+.warehouse__actions-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+}
+
+.warehouse__action-btn {
+  all: unset;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  @include transition(background-color, color);
+
+  &--edit {
+    color: var(--color-primary);
+
+    &:hover {
+      background-color: var(--color-primary-light);
+    }
+  }
+
+  &--delete {
+    color: $color-accent-1;
+
+    &:hover {
+      background-color: rgba($color-accent-1, 0.1);
+    }
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// MODAL OVERLAY
+// ============================================================================
+.warehouse__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: $spacing-4;
+  border: none;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+
+  &::backdrop {
+    background-color: transparent;
+  }
+}
+
+.warehouse__modal-content {
+  background-color: var(--bg-surface);
+  border-radius: 16px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+
+// ============================================================================
+// RESPONSIVE TABLE
+// ============================================================================
+@include respond-down(lg) {
+  .warehouse__th--description,
+  .warehouse__td--description,
+  .warehouse__th--details,
+  .warehouse__td--details {
+    display: none;
+  }
+}
+
+@include respond-down(md) {
+  .warehouse__table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .warehouse__table {
+    min-width: 600px;
+  }
+}
+
+@include respond-down(sm) {
+  .warehouse__th--category,
+  .warehouse__td--category {
+    display: none;
+  }
+}

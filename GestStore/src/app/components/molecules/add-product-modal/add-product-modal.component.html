@@ -1,0 +1,154 @@
+<article class="add-product-modal">
+  <header class="add-product-modal__header">
+    <h2 class="add-product-modal__title">
+      {{ isEditMode ? 'Editar Producto' : 'Añadir Producto' }}
+    </h2>
+    <button 
+      class="add-product-modal__close" 
+      type="button" 
+      (click)="onClose()"
+      aria-label="Cerrar modal">
+      <app-icon name="x" size="small"></app-icon>
+    </button>
+  </header>
+
+  <form class="add-product-modal__form" (ngSubmit)="onSubmit($event)">
+    <fieldset class="add-product-modal__fieldset">
+      <legend class="visually-hidden">Datos del producto</legend>
+
+      <!-- Nombre -->
+      <label class="add-product-modal__field">
+        <span class="add-product-modal__label">Nombre *</span>
+        <input 
+          type="text" 
+          class="add-product-modal__input"
+          [class.add-product-modal__input--error]="errors['name']"
+          [(ngModel)]="name"
+          name="name"
+          placeholder="Nombre del producto"
+          autocomplete="off"
+        />
+        <span *ngIf="errors['name']" class="add-product-modal__error" role="alert">
+          {{ errors['name'] }}
+        </span>
+      </label>
+
+      <!-- SKU -->
+      <label class="add-product-modal__field">
+        <span class="add-product-modal__label">SKU *</span>
+        <input 
+          type="text" 
+          class="add-product-modal__input"
+          [class.add-product-modal__input--error]="errors['sku']"
+          [(ngModel)]="sku"
+          name="sku"
+          placeholder="Código único del producto"
+          autocomplete="off"
+        />
+        <span *ngIf="errors['sku']" class="add-product-modal__error" role="alert">
+          {{ errors['sku'] }}
+        </span>
+      </label>
+
+      <!-- Categoría -->
+      <label class="add-product-modal__field">
+        <span class="add-product-modal__label">Categoría</span>
+        <select 
+          class="add-product-modal__select"
+          [(ngModel)]="category"
+          name="category">
+          <option *ngFor="let cat of categories" [ngValue]="cat">
+            {{ getCategoryName(cat) }}
+          </option>
+        </select>
+      </label>
+
+      <!-- Descripción -->
+      <label class="add-product-modal__field">
+        <span class="add-product-modal__label">Descripción</span>
+        <textarea 
+          class="add-product-modal__textarea"
+          [(ngModel)]="description"
+          name="description"
+          placeholder="Descripción del producto"
+          rows="3">
+        </textarea>
+      </label>
+
+      <!-- Precio Unitario -->
+      <label class="add-product-modal__field">
+        <span class="add-product-modal__label">Precio Unitario (€)</span>
+        <input 
+          type="number" 
+          class="add-product-modal__input"
+          [class.add-product-modal__input--error]="errors['unitPrice']"
+          [(ngModel)]="unitPrice"
+          name="unitPrice"
+          min="0"
+          step="0.01"
+          placeholder="0.00"
+        />
+        <span *ngIf="errors['unitPrice']" class="add-product-modal__error" role="alert">
+          {{ errors['unitPrice'] }}
+        </span>
+      </label>
+
+      <!-- Stock Inicial -->
+      <label class="add-product-modal__field">
+        <span class="add-product-modal__label">Stock Inicial</span>
+        <input 
+          type="number" 
+          class="add-product-modal__input"
+          [class.add-product-modal__input--error]="errors['stockQuantity']"
+          [(ngModel)]="stockQuantity"
+          name="stockQuantity"
+          min="0"
+          step="1"
+          placeholder="0"
+        />
+        <span *ngIf="errors['stockQuantity']" class="add-product-modal__error" role="alert">
+          {{ errors['stockQuantity'] }}
+        </span>
+      </label>
+
+      <!-- Stock Mínimo -->
+      <label class="add-product-modal__field">
+        <span class="add-product-modal__label">Stock Mínimo (alerta)</span>
+        <input 
+          type="number" 
+          class="add-product-modal__input"
+          [class.add-product-modal__input--error]="errors['minStockLevel']"
+          [(ngModel)]="minStockLevel"
+          name="minStockLevel"
+          min="0"
+          step="1"
+          placeholder="10"
+        />
+        <span *ngIf="errors['minStockLevel']" class="add-product-modal__error" role="alert">
+          {{ errors['minStockLevel'] }}
+        </span>
+      </label>
+
+      <!-- Error de submit -->
+      <output *ngIf="errors['submit']" class="add-product-modal__submit-error" role="alert">
+        {{ errors['submit'] }}
+      </output>
+    </fieldset>
+
+    <footer class="add-product-modal__footer">
+      <button 
+        type="button" 
+        class="add-product-modal__btn add-product-modal__btn--secondary"
+        (click)="onClose()">
+        Cancelar
+      </button>
+      <button 
+        type="submit" 
+        class="add-product-modal__btn add-product-modal__btn--primary"
+        [disabled]="isSubmitting">
+        <app-spinner *ngIf="isSubmitting" size="small"></app-spinner>
+        <span *ngIf="!isSubmitting">{{ isEditMode ? 'Actualizar' : 'Añadir' }}</span>
+      </button>
+    </footer>
+  </form>
+</article>

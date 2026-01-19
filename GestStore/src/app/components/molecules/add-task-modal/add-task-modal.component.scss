@@ -493,3 +493,104 @@
     font-size: $font-size-xs;
   }
 }
+
+// ============================================================================
+// PRODUCTS LIST IN TASK MODAL
+// ============================================================================
+.add-task-modal__products-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-bottom: $spacing-3;
+}
+
+.add-task-modal__product-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  background-color: var(--bg-subtle);
+  border-radius: 6px;
+  @include transition(background-color);
+}
+
+.add-task-modal__product-name {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: var(--text-default);
+  flex: 1;
+  @include truncate;
+}
+
+.add-task-modal__product-qty {
+  @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
+  color: var(--color-primary);
+  padding: $spacing-1 $spacing-2;
+  background-color: var(--color-primary-light);
+  border-radius: 4px;
+}
+
+.add-task-modal__product-remove {
+  all: unset;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-muted);
+  @include transition(background-color, color);
+
+  &:hover {
+    background-color: rgba($color-accent-1, 0.1);
+    color: $color-accent-1;
+  }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+.add-task-modal__assign-btn--small {
+  padding: $spacing-2 $spacing-3;
+  font-size: $font-size-xs;
+}
+
+// ============================================================================
+// PRODUCT SELECTOR OVERLAY
+// ============================================================================
+.add-task-modal__product-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 110;
+  padding: $spacing-4;
+  border: none;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+
+  &::backdrop {
+    background-color: transparent;
+  }
+}
+
+.add-task-modal__product-content {
+  background-color: var(--bg-surface);
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
