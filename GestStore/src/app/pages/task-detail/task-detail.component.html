@@ -167,7 +167,22 @@
     <section class="task-view__panel" aria-label="Detalle de la tarea">
       <article class="task-view__card">
         <header class="task-view__card-top">
-          <figure class="task-view__thumb" aria-hidden="true"></figure>
+          <label class="task-view__thumb" [class.task-view__thumb--has-image]="task.imageUrl" aria-label="Cambiar imagen de la tarea">
+            <ng-container *ngIf="task.imageUrl; else taskImagePlaceholder">
+              <img class="task-view__thumb-img" [src]="task.imageUrl" alt="Imagen de la tarea" loading="lazy" decoding="async" />
+            </ng-container>
+            <ng-template #taskImagePlaceholder>
+              <span class="task-view__thumb-placeholder" role="presentation">
+                <app-icon name="camera" size="large"></app-icon>
+              </span>
+            </ng-template>
+            <input 
+              type="file" 
+              class="task-view__thumb-input" 
+              accept="image/png, image/jpeg, image/svg+xml, image/webp"
+              (change)="onTaskImageSelected($event)"
+              aria-hidden="true" />
+          </label>
           <section class="task-view__summary">
             <header class="task-view__summary-header">
               <section class="task-view__title-wrap" aria-label="Título de la tarea">

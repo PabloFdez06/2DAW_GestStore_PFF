@@ -28,6 +28,7 @@ public class TaskResponseDto {
     private String notes;
     private Boolean completed;
     private Boolean important;
+    private String imageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private UserResponseDto assignedUser;

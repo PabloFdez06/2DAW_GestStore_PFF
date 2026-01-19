@@ -223,7 +223,14 @@
             role="button"
             [attr.aria-label]="'Ver detalle de ' + task.title">
             
-            <figure class="task-card__image" role="img" aria-label="Imagen de la tarea"></figure>
+            <figure class="task-card__image" [class.task-card__image--has-image]="task.imageUrl" role="img" aria-label="Imagen de la tarea">
+              <ng-container *ngIf="task.imageUrl">
+                <img class="task-card__img" [src]="task.imageUrl" alt="" loading="lazy" decoding="async" />
+              </ng-container>
+              <ng-container *ngIf="!task.imageUrl">
+                <app-icon name="camera" size="small"></app-icon>
+              </ng-container>
+            </figure>
             
             <nav class="task-card__menu-wrapper" aria-label="Acciones de tarea">
               <button 

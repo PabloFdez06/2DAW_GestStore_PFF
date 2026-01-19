@@ -365,4 +365,47 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
         return TaskPriority.LOW;
     }
   }
+
+  /**
+   * Maneja la selección de imagen para la tarea
+   */
+  onTaskImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const file = input?.files?.[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/svg+xml', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      this.notificationService.error('Formato no soportado. Usa SVG, JPG, PNG o WebP.');
+      input.value = '';
+      return;
+    }
+
+    const maxBytes = 2 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      this.notificationService.error('La imagen es demasiado grande (máx 2MB).');
+      input.value = '';
+      return;
+    }
+
+    this.isLoadingAction = true;
+    this.cdr.detectChanges();
+
+    const taskId = String(this.task.id || this.task._id);
+    this.taskService.uploadTaskImage(taskId, file).subscribe({
+      next: (updatedTask) => {
+        this.task = updatedTask;
+        this.isLoadingAction = false;
+        this.notificationService.success('Imagen de tarea actualizada correctamente');
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.isLoadingAction = false;
+        this.notificationService.error('Error al subir la imagen');
+        this.cdr.detectChanges();
+      }
+    });
+
+    input.value = '';
+  }
 }

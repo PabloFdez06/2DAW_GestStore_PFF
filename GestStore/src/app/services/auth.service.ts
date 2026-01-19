@@ -63,6 +63,12 @@ export class AuthService {
           // Guardar token y usuario en localStorage
           localStorage.setItem('token', authResponse.token);
           localStorage.setItem('currentUser', JSON.stringify(authResponse.user));
+          // Guardar avatar para acceso rápido
+          if (authResponse.user.avatar && authResponse.user.avatar.trim().length > 0) {
+            localStorage.setItem('geststore.avatar', authResponse.user.avatar);
+          } else {
+            localStorage.removeItem('geststore.avatar');
+          }
           this.currentUserSubject.next(authResponse.user);
         })
       );
@@ -79,6 +85,12 @@ export class AuthService {
           // Guardar token y usuario en localStorage
           localStorage.setItem('token', authResponse.token);
           localStorage.setItem('currentUser', JSON.stringify(authResponse.user));
+          // Guardar avatar para acceso rápido (normalmente vacío al registrarse)
+          if (authResponse.user.avatar && authResponse.user.avatar.trim().length > 0) {
+            localStorage.setItem('geststore.avatar', authResponse.user.avatar);
+          } else {
+            localStorage.removeItem('geststore.avatar');
+          }
           this.currentUserSubject.next(authResponse.user);
         })
       );
@@ -91,6 +103,7 @@ export class AuthService {
     // Eliminar datos del localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('geststore.avatar');
     this.currentUserSubject.next(null);
     
     // Redirigir al login
@@ -102,6 +115,12 @@ export class AuthService {
    */
   setCurrentUser(user: User): void {
     localStorage.setItem('currentUser', JSON.stringify(user));
+    // Actualizar avatar para acceso rápido
+    if (user.avatar && user.avatar.trim().length > 0) {
+      localStorage.setItem('geststore.avatar', user.avatar);
+    } else {
+      localStorage.removeItem('geststore.avatar');
+    }
     this.currentUserSubject.next(user);
   }
 }

@@ -14,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -181,6 +183,17 @@ public class TaskController {
         log.info("DELETE /api/tasks/{} - Eliminando tarea", id);
         taskService.deleteTask(id);
         return ResponseEntity.ok(ApiResponse.<Void>success("Tarea eliminada exitosamente", null));
+    }
+
+    @PutMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
+    public ResponseEntity<ApiResponse<TaskResponseDto>> updateTaskImage(
+            @PathVariable String id,
+            @RequestPart("file") MultipartFile file
+    ) {
+        log.info("PUT /api/tasks/{}/image - Actualizando imagen de tarea", id);
+        TaskResponseDto task = taskService.updateTaskImage(id, file);
+        return ResponseEntity.ok(ApiResponse.success("Imagen de tarea actualizada exitosamente", task));
     }
 
     @GetMapping("/statistics")

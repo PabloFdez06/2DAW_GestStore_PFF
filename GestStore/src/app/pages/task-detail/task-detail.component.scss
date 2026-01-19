@@ -627,10 +627,58 @@
 }
 
 .task-view__thumb {
+  position: relative;
   width: 10rem;
   height: 10rem;
   border-radius: 0.875rem;
   background-color: var(--gray-300);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:focus-within {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.task-view__thumb--has-image {
+  background-color: transparent;
+}
+
+.task-view__thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.task-view__thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--text-muted);
+  transition: color 200ms ease-out;
+
+  .task-view__thumb:hover & {
+    color: var(--color-primary);
+  }
+}
+
+.task-view__thumb-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .task-view__summary {

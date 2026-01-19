@@ -235,6 +235,20 @@ export class TaskService {
   }
 
   /**
+   * Subir imagen para una tarea
+   */
+  uploadTaskImage(taskId: string | number, file: File): Observable<Task> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http
+      .put<ApiResponse<Task>>(`${this.apiUrl}/${taskId}/image`, formData)
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError('uploadTaskImage'))
+      );
+  }
+
+  /**
    * Obtener estadísticas de tareas
    */
   getTaskStatistics(): Observable<TaskStatistics> {

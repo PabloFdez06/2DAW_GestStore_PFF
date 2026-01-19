@@ -50,6 +50,11 @@ public class Task {
 
     private Boolean important = false;
 
+    /**
+     * Imagen de la tarea (Data URL base64)
+     */
+    private String imageUrl;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

@@ -44,6 +44,7 @@ export interface Task {
   notes?: string;
   completed: boolean;
   important?: boolean;
+  imageUrl?: string;
   createdAt: string;
   updatedAt: string;
   assignedUser?: User;

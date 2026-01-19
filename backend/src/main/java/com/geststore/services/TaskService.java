@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -352,6 +354,57 @@ public class TaskService {
     }
 
     /**
+     * Actualiza la imagen de una tarea a partir de un archivo (multipart/form-data).
+     * Se persiste como Data URL base64 en el campo "imageUrl".
+     */
+    public TaskResponseDto updateTaskImage(String taskId, MultipartFile file) {
+        log.info("Actualizando imagen de la tarea con ID: {}", taskId);
+
+        if (file == null || file.isEmpty()) {
+            throw new BusinessLogicException("El archivo de imagen es obligatorio", "INVALID_FILE");
+        }
+
+        String contentType = file.getContentType();
+        if (contentType == null || contentType.isBlank()) {
+            throw new BusinessLogicException("No se pudo determinar el tipo de archivo", "INVALID_FILE_TYPE");
+        }
+
+        boolean allowed = contentType.equals("image/png")
+                || contentType.equals("image/jpeg")
+                || contentType.equals("image/svg+xml")
+                || contentType.equals("image/webp");
+
+        if (!allowed) {
+            throw new BusinessLogicException(
+                    "Formato no soportado. Usa PNG, JPG, SVG o WEBP",
+                    "INVALID_FILE_TYPE"
+            );
+        }
+
+        long maxBytes = 2L * 1024L * 1024L;
+        if (file.getSize() > maxBytes) {
+            throw new BusinessLogicException("La imagen es demasiado grande (máx 2MB)", "FILE_TOO_LARGE");
+        }
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Tarea", taskId));
+
+        try {
+            byte[] bytes = file.getBytes();
+            String base64 = Base64.getEncoder().encodeToString(bytes);
+            String dataUrl = "data:" + contentType + ";base64," + base64;
+
+            task.setImageUrl(dataUrl);
+            task.onUpdate();
+            Task updatedTask = taskRepository.save(task);
+            log.info("Imagen de tarea actualizada exitosamente");
+            return convertToDto(updatedTask);
+        } catch (IOException e) {
+            throw new BusinessLogicException("No se pudo leer el archivo de imagen", "FILE_READ_ERROR");
+        }
+    }
+
+    /**
      * Busca tareas por título o descripción
      */
     public List<TaskResponseDto> searchTasks(String searchText) {
@@ -477,6 +530,7 @@ public class TaskService {
                 .notes(task.getNotes())
                 .completed(task.getCompleted())
                 .important(task.getImportant())
+                .imageUrl(task.getImageUrl())
                 .createdAt(task.getCreatedAt())
                 .updatedAt(task.getUpdatedAt())
                 .assignedUser(task.getAssignedUser() != null ? convertUserToDto(task.getAssignedUser()) : null)

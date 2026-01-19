@@ -238,7 +238,14 @@
               role="link"
               (keydown.enter)="goToTask(task.id)"
               (keydown.space)="goToTask(task.id); $event.preventDefault()">
-              <figure class="dashboard__task-image" role="img" aria-label="Imagen de la tarea"></figure>
+              <figure class="dashboard__task-image" [class.dashboard__task-image--has-image]="task.imageUrl" role="img" aria-label="Imagen de la tarea">
+                <ng-container *ngIf="task.imageUrl">
+                  <img class="dashboard__task-img" [src]="task.imageUrl" alt="" loading="lazy" decoding="async" />
+                </ng-container>
+                <ng-container *ngIf="!task.imageUrl">
+                  <app-icon name="camera" size="small"></app-icon>
+                </ng-container>
+              </figure>
               <nav class="dashboard__task-menu-wrapper" aria-label="Acciones de tarea">
                 <button class="dashboard__task-menu" type="button" (click)="toggleTaskMenu(i, $event)" aria-label="Menú" aria-haspopup="true">
                   <app-icon name="more-vertical" size="small"></app-icon>
