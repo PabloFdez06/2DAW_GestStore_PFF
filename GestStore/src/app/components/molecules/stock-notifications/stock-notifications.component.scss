@@ -1,0 +1,222 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+@use 'sass:color';
+
+// ============================================================================
+// STOCK NOTIFICATIONS COMPONENT
+// ============================================================================
+.stock-notifications {
+  border: none;
+  padding: 0;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-overlay);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 80px $spacing-4 $spacing-4;
+  
+  @include respond-down(md) {
+    padding: 70px $spacing-3 $spacing-3;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.stock-notifications__content {
+  background-color: var(--bg-surface);
+  border-radius: $radius-lg;
+  box-shadow: var(--shadow-xl);
+  width: 320px;
+  max-width: 90vw;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideInDown 0.2s ease-out;
+  
+  @include respond-down(md) {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+.stock-notifications__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-4;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.stock-notifications__title {
+  @include text-style($font-size-base, $font-weight-semibold, $line-normal);
+  color: var(--text-default);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.stock-notifications__close {
+  all: unset;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  color: var(--text-muted);
+  @include transition(all);
+  
+  &:hover {
+    background-color: var(--bg-subtle);
+    color: var(--text-default);
+  }
+}
+
+.stock-notifications__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-3;
+}
+
+.stock-notifications__loading {
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: var(--text-muted);
+  text-align: center;
+  padding: $spacing-4;
+  margin: 0;
+}
+
+.stock-notifications__section {
+  margin-bottom: $spacing-4;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.stock-notifications__section-title {
+  @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
+  margin: 0 0 $spacing-2;
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  
+  &--danger {
+    color: var(--color-error);
+  }
+  
+  &--warning {
+    color: var(--color-warning);
+  }
+}
+
+.stock-notifications__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.stock-notifications__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-2 $spacing-3;
+  border-radius: $radius-md;
+  
+  &--danger {
+    background-color: color-mix(in srgb, var(--color-error) 10%, transparent);
+    border-left: 3px solid var(--color-error);
+  }
+  
+  &--warning {
+    background-color: color-mix(in srgb, var(--color-warning) 10%, transparent);
+    border-left: 3px solid var(--color-warning);
+  }
+}
+
+.stock-notifications__name {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: var(--text-default);
+  flex: 1;
+  @include truncate;
+}
+
+.stock-notifications__sku,
+.stock-notifications__qty {
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.stock-notifications__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8;
+  text-align: center;
+  color: var(--text-muted);
+  
+  app-icon {
+    color: var(--color-success);
+    margin-bottom: $spacing-2;
+  }
+  
+  p {
+    @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+    margin: 0;
+  }
+}
+
+.stock-notifications__footer {
+  padding: $spacing-3 $spacing-4;
+  border-top: 1px solid var(--border-default);
+}
+
+.stock-notifications__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-4;
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: $radius-md;
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  cursor: pointer;
+  @include transition(all);
+  
+  &:hover {
+    background-color: var(--interactive-hover);
+  }
+}
+
+// Animation
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -8,6 +8,7 @@ import { TaskService } from '../../services/task.service';
 import { TaskProductService } from '../../services/task-product.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
+import { StockAlertService } from '../../services/stock-alert.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest } from '../../models/task.model';
 import { User } from '../../models/auth.model';
 import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
@@ -15,11 +16,12 @@ import { CalendarComponent } from '../../components/molecules/calendar/calendar.
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
+import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, TaskMenuComponent, SpinnerComponent],
+  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, TaskMenuComponent, SpinnerComponent, StockNotificationsComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
@@ -36,6 +38,7 @@ export class TasksComponent implements OnInit, OnDestroy {
   isCalendarOpen = false;
   currentUser: User | null = null;
   openTaskMenuIndex: number = -1;
+  isStockNotificationsOpen = false;
 
   avatarUrl: string | null = null;
   isSidebarOpen: boolean = false;
@@ -49,6 +52,7 @@ export class TasksComponent implements OnInit, OnDestroy {
     private taskProductService: TaskProductService,
     private themeService: ThemeService,
     private notificationService: NotificationService,
+    protected stockAlertService: StockAlertService,
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -61,10 +65,20 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.setCurrentDate();
     this.loadAvatar();
     this.loadCurrentUser();
+    this.stockAlertService.loadAlerts();
 
     this.route.queryParamMap.subscribe(params => {
       this.search = params.get('q') ?? '';
     });
+  }
+
+  // Stock notifications
+  toggleStockNotifications(): void {
+    this.isStockNotificationsOpen = !this.isStockNotificationsOpen;
+  }
+
+  closeStockNotifications(): void {
+    this.isStockNotificationsOpen = false;
   }
 
   private loadAvatar(): void {

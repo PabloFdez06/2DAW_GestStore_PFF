@@ -32,8 +32,14 @@
     </search>
 
     <section class="dashboard__nav-actions" aria-label="Acciones rápidas">
-      <button class="dashboard__nav-btn" type="button" aria-label="Notificaciones">
+      <button 
+        class="dashboard__nav-btn" 
+        [class.dashboard__nav-btn--has-alerts]="hasStockAlerts"
+        type="button" 
+        (click)="toggleStockNotifications()"
+        aria-label="Notificaciones de stock">
         <app-icon name="bell" size="small"></app-icon>
+        <span class="dashboard__notification-badge" *ngIf="stockAlertsCount > 0">{{ stockAlertsCount }}</span>
       </button>
       <button
         class="dashboard__nav-btn"
@@ -52,6 +58,71 @@
       </time>
     </section>
   </nav>
+  
+  <!-- Stock Notifications Modal -->
+  <dialog
+    *ngIf="isStockNotificationsOpen"
+    class="dashboard__stock-modal"
+    (click)="closeStockNotifications()"
+    open
+    role="dialog"
+    aria-modal="true"
+    aria-label="Notificaciones de stock">
+    <article class="dashboard__stock-content" (click)="$event.stopPropagation()">
+      <header class="dashboard__stock-header">
+        <h3 class="dashboard__stock-title">
+          <app-icon name="bell" size="small"></app-icon>
+          Alertas de Stock
+        </h3>
+        <button class="dashboard__stock-close" type="button" (click)="closeStockNotifications()" aria-label="Cerrar">
+          <app-icon name="x" size="small"></app-icon>
+        </button>
+      </header>
+      
+      <section class="dashboard__stock-body" *ngIf="outOfStockProducts.length > 0 || lowStockProducts.length > 0; else noAlerts">
+        <!-- Out of Stock -->
+        <section class="dashboard__stock-section" *ngIf="outOfStockProducts.length > 0">
+          <h4 class="dashboard__stock-section-title dashboard__stock-section-title--danger">
+            <app-icon name="alert-circle" size="small"></app-icon>
+            Sin Stock ({{ outOfStockProducts.length }})
+          </h4>
+          <ul class="dashboard__stock-list">
+            <li class="dashboard__stock-item dashboard__stock-item--danger" *ngFor="let product of outOfStockProducts">
+              <span class="dashboard__stock-name">{{ product.name }}</span>
+              <span class="dashboard__stock-sku">SKU: {{ product.sku }}</span>
+            </li>
+          </ul>
+        </section>
+        
+        <!-- Low Stock -->
+        <section class="dashboard__stock-section" *ngIf="lowStockProducts.length > 0">
+          <h4 class="dashboard__stock-section-title dashboard__stock-section-title--warning">
+            <app-icon name="alert-triangle" size="small"></app-icon>
+            Stock Bajo ({{ lowStockProducts.length }})
+          </h4>
+          <ul class="dashboard__stock-list">
+            <li class="dashboard__stock-item dashboard__stock-item--warning" *ngFor="let product of lowStockProducts">
+              <span class="dashboard__stock-name">{{ product.name }}</span>
+              <span class="dashboard__stock-qty">Quedan: {{ product.stockQuantity }} uds.</span>
+            </li>
+          </ul>
+        </section>
+      </section>
+      
+      <ng-template #noAlerts>
+        <section class="dashboard__stock-empty">
+          <app-icon name="check-circle" size="large"></app-icon>
+          <p>No hay alertas de stock</p>
+        </section>
+      </ng-template>
+      
+      <footer class="dashboard__stock-footer">
+        <button class="dashboard__stock-btn" type="button" routerLink="/almacen" (click)="closeStockNotifications()">
+          Ir al Almacén
+        </button>
+      </footer>
+    </article>
+  </dialog>
   
   <!-- Calendar Modal Overlay -->
   <dialog

@@ -11,8 +11,8 @@
   padding: $spacing-12;
   width: 57.375rem;
   max-width: 95vw;
-  max-height: none;
-  overflow: hidden;
+  max-height: 90vh;
+  overflow-y: auto;
 
   // Reset de elementos semánticos
   fieldset {

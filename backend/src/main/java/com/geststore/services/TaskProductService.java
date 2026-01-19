@@ -128,7 +128,7 @@ public class TaskProductService {
     }
 
     /**
-     * Registra uso de producto
+     * Registra uso de producto y decrementa el stock del producto
      */
     public TaskProductResponseDto useProduct(String id, int quantity) {
         log.info("Registrando uso de {} unidades en asignación ID: {}", quantity, id);
@@ -143,6 +143,23 @@ public class TaskProductService {
                     "QUANTITY_EXCEEDED"
             );
         }
+
+        // Decrementar el stock del producto
+        Product product = taskProduct.getProduct();
+        int currentStock = product.getStockQuantity() != null ? product.getStockQuantity() : 0;
+        int newStock = currentStock - quantity;
+        
+        if (newStock < 0) {
+            throw new BusinessLogicException(
+                    "No hay suficiente stock del producto. Stock actual: " + currentStock,
+                    "INSUFFICIENT_STOCK"
+            );
+        }
+        
+        product.setStockQuantity(newStock);
+        product.onUpdate();
+        productRepository.save(product);
+        log.info("Stock del producto {} decrementado de {} a {}", product.getId(), currentStock, newStock);
 
         taskProduct.setQuantityUsed(newQuantityUsed);
         TaskProduct updatedTaskProduct = taskProductRepository.save(taskProduct);

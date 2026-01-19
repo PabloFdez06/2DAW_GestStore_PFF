@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Inject, NgZone, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, NgZone } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
-import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { AuthService } from '../../services/auth.service';
@@ -15,14 +14,13 @@ import { User } from '../../models/auth.model';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent, SpinnerComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, SpinnerComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
   currentDayName: string = '';
   currentDate: string = '';
-  isCalendarOpen: boolean = false;
 
   currentUser: User | null = null;
 
@@ -37,8 +35,6 @@ export class ProfileComponent {
   isSaving: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
-
-  @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
 
   constructor(
     private authService: AuthService,
@@ -111,17 +107,6 @@ export class ProfileComponent {
 
   toggleTheme(): void {
     this.themeService.toggle();
-  }
-
-  toggleCalendar(): void {
-    this.isCalendarOpen = !this.isCalendarOpen;
-    if (this.isCalendarOpen) {
-      queueMicrotask(() => this.calendarDialog?.nativeElement?.focus());
-    }
-  }
-
-  closeCalendar(): void {
-    this.isCalendarOpen = false;
   }
 
   onAvatarSelected(event: Event): void {
@@ -247,14 +232,5 @@ export class ProfileComponent {
     event.preventDefault();
     event.stopPropagation();
     this.router.navigate(['/ajustes']);
-  }
-
-  @HostListener('document:keydown.escape', ['$event'])
-  onEscape(event: Event): void {
-    const keyboardEvent = event as KeyboardEvent;
-    if (this.isCalendarOpen) {
-      keyboardEvent.preventDefault();
-      this.closeCalendar();
-    }
   }
 }

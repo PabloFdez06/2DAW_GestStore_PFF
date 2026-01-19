@@ -5,15 +5,17 @@ import { RouterModule } from '@angular/router';
 
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
+import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
+import { StockAlertService } from '../../services/stock-alert.service';
 import { User } from '../../models/auth.model';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent, StockNotificationsComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
@@ -22,6 +24,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   currentDate: string = '';
 
   isCalendarOpen: boolean = false;
+  isStockNotificationsOpen: boolean = false;
 
   currentUser: User | null = null;
 
@@ -44,6 +47,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private themeService: ThemeService,
     private notificationService: NotificationService,
+    protected stockAlertService: StockAlertService,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
     private renderer: Renderer2,
@@ -55,6 +59,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.loadCurrentUser();
     this.loadPreferences();
     this.loadAvatar();
+    this.stockAlertService.loadAlerts();
   }
 
   ngOnDestroy(): void {
@@ -173,6 +178,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.currentDayName = days[now.getDay()];
     this.currentDate = `${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
+  }
+
+  // Stock notifications
+  toggleStockNotifications(): void {
+    this.isStockNotificationsOpen = !this.isStockNotificationsOpen;
+  }
+
+  closeStockNotifications(): void {
+    this.isStockNotificationsOpen = false;
   }
 
   toggleCalendar(): void {

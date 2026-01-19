@@ -33,8 +33,14 @@
     </search>
 
     <section class="important-tasks-page__nav-actions" aria-label="Acciones rápidas">
-      <button class="important-tasks-page__nav-btn" type="button" aria-label="Notificaciones">
+      <button 
+        class="important-tasks-page__nav-btn" 
+        [class.important-tasks-page__nav-btn--has-alerts]="stockAlertService.hasAlerts()"
+        type="button" 
+        (click)="toggleStockNotifications()"
+        aria-label="Notificaciones de stock">
         <app-icon name="bell" size="small"></app-icon>
+        <span class="important-tasks-page__notification-badge" *ngIf="stockAlertService.alertsCount() > 0">{{ stockAlertService.alertsCount() }}</span>
       </button>
       <button
         class="important-tasks-page__nav-btn"
@@ -53,6 +59,12 @@
       </time>
     </section>
   </nav>
+
+  <!-- Stock Notifications Modal -->
+  <app-stock-notifications 
+    *ngIf="isStockNotificationsOpen" 
+    (close)="closeStockNotifications()">
+  </app-stock-notifications>
 
   <!-- Calendar Modal Overlay -->
   <dialog

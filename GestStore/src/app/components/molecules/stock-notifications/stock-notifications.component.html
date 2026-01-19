@@ -1,0 +1,64 @@
+<dialog
+  class="stock-notifications"
+  (click)="onBackdropClick()"
+  open
+  role="dialog"
+  aria-modal="true"
+  aria-label="Notificaciones de stock">
+  <article class="stock-notifications__content" (click)="stopPropagation($event)">
+    <header class="stock-notifications__header">
+      <h3 class="stock-notifications__title">
+        <app-icon name="bell" size="small"></app-icon>
+        Alertas de Stock
+      </h3>
+      <button class="stock-notifications__close" type="button" (click)="onClose()" aria-label="Cerrar">
+        <app-icon name="x" size="small"></app-icon>
+      </button>
+    </header>
+    
+    <!-- Alerts Content -->
+    <section class="stock-notifications__body" *ngIf="hasAlerts">
+      <!-- Out of Stock -->
+      <section class="stock-notifications__section" *ngIf="outOfStockProducts.length > 0">
+        <h4 class="stock-notifications__section-title stock-notifications__section-title--danger">
+          <app-icon name="alert-circle" size="small"></app-icon>
+          Sin Stock ({{ outOfStockProducts.length }})
+        </h4>
+        <ul class="stock-notifications__list">
+          <li class="stock-notifications__item stock-notifications__item--danger" *ngFor="let product of outOfStockProducts">
+            <span class="stock-notifications__name">{{ product.name }}</span>
+            <span class="stock-notifications__sku">SKU: {{ product.sku }}</span>
+          </li>
+        </ul>
+      </section>
+      
+      <!-- Low Stock -->
+      <section class="stock-notifications__section" *ngIf="lowStockProducts.length > 0">
+        <h4 class="stock-notifications__section-title stock-notifications__section-title--warning">
+          <app-icon name="alert-triangle" size="small"></app-icon>
+          Stock Bajo ({{ lowStockProducts.length }})
+        </h4>
+        <ul class="stock-notifications__list">
+          <li class="stock-notifications__item stock-notifications__item--warning" *ngFor="let product of lowStockProducts">
+            <span class="stock-notifications__name">{{ product.name }}</span>
+            <span class="stock-notifications__qty">Quedan: {{ product.stockQuantity }} uds.</span>
+          </li>
+        </ul>
+      </section>
+    </section>
+    
+    <!-- Empty State -->
+    <section class="stock-notifications__body" *ngIf="!hasAlerts">
+      <article class="stock-notifications__empty">
+        <app-icon name="check-circle" size="large"></app-icon>
+        <p>No hay alertas de stock</p>
+      </article>
+    </section>
+    
+    <footer class="stock-notifications__footer">
+      <button class="stock-notifications__btn" type="button" routerLink="/almacen" (click)="onClose()">
+        Ir al Almacén
+      </button>
+    </footer>
+  </article>
+</dialog>

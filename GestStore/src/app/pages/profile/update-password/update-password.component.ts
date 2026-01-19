@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Inject, NgZone, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, NgZone } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
-import { CalendarComponent } from '../../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../../components/atoms/icon/icon.component';
 import { AuthService } from '../../../services/auth.service';
 import { ThemeService } from '../../../services/theme.service';
@@ -14,14 +13,13 @@ import { User } from '../../../models/auth.model';
 @Component({
   selector: 'app-update-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent],
   templateUrl: './update-password.component.html',
   styleUrl: './update-password.component.scss'
 })
 export class UpdatePasswordComponent {
   currentDayName: string = '';
   currentDate: string = '';
-  isCalendarOpen: boolean = false;
 
   currentUser: User | null = null;
   avatarUrl: string | null = null;
@@ -33,8 +31,6 @@ export class UpdatePasswordComponent {
   isSaving: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
-
-  @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
 
   constructor(
     private authService: AuthService,
@@ -77,17 +73,6 @@ export class UpdatePasswordComponent {
 
   toggleTheme(): void {
     this.themeService.toggle();
-  }
-
-  toggleCalendar(): void {
-    this.isCalendarOpen = !this.isCalendarOpen;
-    if (this.isCalendarOpen) {
-      queueMicrotask(() => this.calendarDialog?.nativeElement?.focus());
-    }
-  }
-
-  closeCalendar(): void {
-    this.isCalendarOpen = false;
   }
 
   onBack(event: Event): void {
@@ -151,14 +136,5 @@ export class UpdatePasswordComponent {
         this.cdr.detectChanges();
       }
     });
-  }
-
-  @HostListener('document:keydown.escape', ['$event'])
-  onEscape(event: Event): void {
-    const keyboardEvent = event as KeyboardEvent;
-    if (this.isCalendarOpen) {
-      keyboardEvent.preventDefault();
-      this.closeCalendar();
-    }
   }
 }

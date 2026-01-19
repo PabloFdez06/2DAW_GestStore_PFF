@@ -31,8 +31,14 @@
     </search>
 
     <section class="task-view__nav-actions" aria-label="Acciones rápidas">
-      <button class="task-view__nav-btn" type="button" aria-label="Notificaciones">
+      <button 
+        class="task-view__nav-btn" 
+        [class.task-view__nav-btn--has-alerts]="stockAlertService.hasAlerts()"
+        type="button" 
+        (click)="toggleStockNotifications()"
+        aria-label="Notificaciones de stock">
         <app-icon name="bell" size="small"></app-icon>
+        <span class="task-view__notification-badge" *ngIf="stockAlertService.alertsCount() > 0">{{ stockAlertService.alertsCount() }}</span>
       </button>
       <button
         class="task-view__nav-btn"
@@ -51,6 +57,12 @@
       </time>
     </section>
   </nav>
+
+  <!-- Stock Notifications Modal -->
+  <app-stock-notifications 
+    *ngIf="isStockNotificationsOpen" 
+    (close)="closeStockNotifications()">
+  </app-stock-notifications>
 
   <dialog
     #calendarDialog

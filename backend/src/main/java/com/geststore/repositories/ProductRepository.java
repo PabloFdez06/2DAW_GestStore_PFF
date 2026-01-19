@@ -17,57 +17,57 @@ import java.util.Optional;
 public interface ProductRepository extends MongoRepository<Product, String> {
 
     /**
-     * Busca un producto por SKU
+     * Busca un producto por SKU y userId
      */
-    Optional<Product> findBySku(String sku);
+    Optional<Product> findBySkuAndUserId(String sku, String userId);
 
     /**
-     * Busca todos los productos activos
+     * Busca todos los productos activos de un usuario
      */
-    List<Product> findByActive(Boolean active);
+    List<Product> findByActiveAndUserId(Boolean active, String userId);
 
     /**
-     * Busca todos los productos activos con paginación
+     * Busca todos los productos activos de un usuario con paginación
      */
-    Page<Product> findByActive(Boolean active, Pageable pageable);
+    Page<Product> findByActiveAndUserId(Boolean active, String userId, Pageable pageable);
 
     /**
-     * Busca productos por categoría
+     * Busca productos por categoría y usuario
      */
-    List<Product> findByCategory(String category);
+    List<Product> findByCategoryAndUserId(String category, String userId);
 
     /**
-     * Busca productos cuyo nombre contiene el texto buscado
+     * Busca productos cuyo nombre contiene el texto buscado para un usuario específico
      */
-    @Query("{'name': {$regex: ?0, $options: 'i'}}")
-    List<Product> searchByName(String searchText);
+    @Query("{'name': {$regex: ?0, $options: 'i'}, 'userId': ?1}")
+    List<Product> searchByNameAndUserId(String searchText, String userId);
 
     /**
-     * Busca productos activos de una categoría específica
+     * Busca productos activos de una categoría específica para un usuario
      */
-    List<Product> findByCategoryAndActive(String category, Boolean active);
+    List<Product> findByCategoryAndActiveAndUserId(String category, Boolean active, String userId);
 
     /**
      * Método para compatibilidad
      */
-    default List<Product> findActiveProductsByCategory(String category, Boolean active) {
-        return findByCategoryAndActive(category, active);
+    default List<Product> findActiveProductsByCategoryAndUserId(String category, Boolean active, String userId) {
+        return findByCategoryAndActiveAndUserId(category, active, userId);
     }
 
     /**
-     * Busca productos con bajo stock
+     * Busca productos con bajo stock de un usuario
      */
-    @Query("{ $expr: { $lt: ['$stockQuantity', '$minStockLevel'] }, 'active': true }")
-    List<Product> findLowStockProducts();
+    @Query("{ $expr: { $lt: ['$stockQuantity', '$minStockLevel'] }, 'active': true, 'userId': ?0 }")
+    List<Product> findLowStockProductsByUserId(String userId);
 
     /**
-     * Busca productos sin stock
+     * Busca productos sin stock de un usuario
      */
-    @Query("{ 'stockQuantity': 0, 'active': true }")
-    List<Product> findOutOfStockProducts();
+    @Query("{ 'stockQuantity': 0, 'active': true, 'userId': ?0 }")
+    List<Product> findOutOfStockProductsByUserId(String userId);
 
     /**
-     * Verifica si existe un producto con el SKU especificado
+     * Verifica si existe un producto con el SKU especificado para un usuario
      */
-    Boolean existsBySku(String sku);
+    Boolean existsBySkuAndUserId(String sku, String userId);
 }

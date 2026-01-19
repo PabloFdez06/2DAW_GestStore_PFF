@@ -33,35 +33,29 @@
       [class.calendar__day--other-month]="!calendarDay.isCurrentMonth"
       [class.calendar__day--selected]="calendarDay.isSelected"
       [class.calendar__day--today]="calendarDay.isToday"
+      [class.calendar__day--has-tasks]="calendarDay.hasTasks"
       [attr.aria-selected]="calendarDay.isSelected"
       [attr.aria-current]="calendarDay.isToday ? 'date' : null"
       (click)="selectDay(calendarDay)">
-      {{ calendarDay.day }}
+      <span class="calendar__day-number">{{ calendarDay.day }}</span>
+      <span class="calendar__day-indicator" *ngIf="calendarDay.hasTasks" aria-label="Tiene tareas"></span>
     </button>
   </section>
 
   <!-- Selected Info -->
   <output class="calendar__selected-info" *ngIf="selectedDate" role="status" aria-live="polite">
-    <mark class="calendar__selected-badge calendar__selected-badge--month">
-      {{ monthName }}
-    </mark>
-    <mark class="calendar__selected-badge calendar__selected-badge--weekday">
-      {{ getCurrentDayOfWeek() }}
-    </mark>
-    <mark class="calendar__selected-badge calendar__selected-badge--day">
-      {{ selectedDate.getDate() }}
-    </mark>
+    <span class="calendar__selected-date">
+      {{ selectedDate.getDate() }} de {{ monthName }}, {{ getSelectedDayOfWeek() }}
+    </span>
+    <span class="calendar__task-count" [class.calendar__task-count--has-tasks]="selectedTaskCount > 0">
+      {{ selectedTaskCount }} {{ selectedTaskCount === 1 ? 'tarea' : 'tareas' }}
+    </span>
   </output>
 
   <!-- Actions -->
-  <footer class="calendar__actions">
-    <button class="calendar__btn calendar__btn--outline" type="button" (click)="onRemove()">
-      <app-icon name="x" size="small"></app-icon>
-      <span>Remove</span>
-    </button>
-    <button class="calendar__btn calendar__btn--primary" type="button" (click)="onDone()">
-      <app-icon name="check" size="small"></app-icon>
-      <span>Done</span>
+  <footer class="calendar__actions calendar__actions--center">
+    <button class="calendar__btn calendar__btn--primary" type="button" (click)="onClose()">
+      Cerrar
     </button>
   </footer>
 </article>

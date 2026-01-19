@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
@@ -13,20 +15,30 @@ import java.time.LocalDateTime;
 /**
  * Entidad Product - Representa los productos disponibles en el almacén
  * Contiene información de cada producto y su disponibilidad.
+ * Cada producto pertenece a un usuario específico.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Document(collection = "products")
+@CompoundIndexes({
+    @CompoundIndex(name = "userId_sku_unique", def = "{'userId': 1, 'sku': 1}", unique = true)
+})
 public class Product {
 
     @Id
     private String id;
 
+    /**
+     * ID del usuario propietario del producto.
+     * Cada usuario tiene sus propios productos personales.
+     */
+    @Indexed
+    private String userId;
+
     private String name;
 
-    @Indexed(unique = true)
     private String sku;
 
     private String description;

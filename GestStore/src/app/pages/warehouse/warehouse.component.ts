@@ -6,12 +6,14 @@ import { AuthService } from '../../services/auth.service';
 import { ProductService } from '../../services/product.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
+import { StockAlertService } from '../../services/stock-alert.service';
 import { Product, ProductStatus, ProductCategory, ProductStatistics, calculateProductStatus } from '../../models/product.model';
 import { User } from '../../models/auth.model';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { AddProductModalComponent } from '../../components/molecules/add-product-modal/add-product-modal.component';
+import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 
 @Component({
   selector: 'app-warehouse',
@@ -23,7 +25,8 @@ import { AddProductModalComponent } from '../../components/molecules/add-product
     CalendarComponent, 
     IconComponent,
     SpinnerComponent,
-    AddProductModalComponent
+    AddProductModalComponent,
+    StockNotificationsComponent
   ],
   templateUrl: './warehouse.component.html',
   styleUrl: './warehouse.component.scss'
@@ -42,6 +45,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
   isEditMode = false;
   productToEdit: Product | null = null;
   currentUser: User | null = null;
+  isStockNotificationsOpen = false;
 
   avatarUrl: string | null = null;
   isSidebarOpen: boolean = false;
@@ -58,6 +62,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private themeService: ThemeService,
     private notificationService: NotificationService,
+    protected stockAlertService: StockAlertService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
@@ -71,6 +76,16 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     this.loadCurrentUser();
     this.loadProducts();
     this.loadStatistics();
+    this.stockAlertService.loadAlerts();
+  }
+
+  // Stock notifications
+  toggleStockNotifications(): void {
+    this.isStockNotificationsOpen = !this.isStockNotificationsOpen;
+  }
+
+  closeStockNotifications(): void {
+    this.isStockNotificationsOpen = false;
   }
 
   private loadAvatar(): void {

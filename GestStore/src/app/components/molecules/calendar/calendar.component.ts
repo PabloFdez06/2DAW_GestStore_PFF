@@ -1,12 +1,18 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../atoms/icon/icon.component';
+import { TaskService } from '../../../services/task.service';
+import { Task } from '../../../models/task.model';
+import { Subject, takeUntil } from 'rxjs';
 
 interface CalendarDay {
   day: number;
   isCurrentMonth: boolean;
   isSelected: boolean;
   isToday: boolean;
+  hasTasks: boolean;
+  taskCount: number;
+  fullDate: Date | null;
 }
 
 @Component({
@@ -16,18 +22,89 @@ interface CalendarDay {
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter<void>();
+  
+  private taskService = inject(TaskService);
+  private destroy$ = new Subject<void>();
   
   currentDate: Date = new Date();
   selectedDate: Date | null = null;
+  selectedTaskCount: number = 0;
   calendarDays: CalendarDay[] = [];
   monthName: string = '';
   year: number = 0;
-  weekDays: string[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  weekDays: string[] = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
+  
+  private tasks: Task[] = [];
+  private taskDatesMap: Map<string, number> = new Map();
   
   ngOnInit() {
-    this.updateCalendar();
+    this.selectToday();
+    this.loadTasks();
+  }
+  
+  private selectToday(): void {
+    const today = new Date();
+    this.selectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  }
+  
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  
+  private loadTasks(): void {
+    this.taskService.getAllTasks()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (tasks) => {
+          this.tasks = tasks;
+          this.processTaskDates();
+          this.updateCalendar();
+          this.updateSelectedTaskCount();
+        },
+        error: () => {
+          // Si falla, mostrar calendario sin tareas
+          this.updateCalendar();
+        }
+      });
+  }
+  
+  private processTaskDates(): void {
+    this.taskDatesMap.clear();
+    if (this.tasks && this.tasks.length > 0) {
+      this.tasks.forEach(task => {
+        const dateStr = task.dueDate || task.createdAt;
+        if (dateStr) {
+          const date = new Date(dateStr);
+          if (!isNaN(date.getTime())) {
+            const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+            const currentCount = this.taskDatesMap.get(key) || 0;
+            this.taskDatesMap.set(key, currentCount + 1);
+          }
+        }
+      });
+    }
+  }
+  
+  private getTaskCountOnDate(year: number, month: number, day: number): number {
+    const key = `${year}-${month}-${day}`;
+    return this.taskDatesMap.get(key) || 0;
+  }
+  
+  private updateSelectedTaskCount(): void {
+    if (this.selectedDate) {
+      this.selectedTaskCount = this.getTaskCountOnDate(
+        this.selectedDate.getFullYear(),
+        this.selectedDate.getMonth(),
+        this.selectedDate.getDate()
+      );
+    }
+  }
+  
+  private hasTaskOnDate(year: number, month: number, day: number): boolean {
+    return this.getTaskCountOnDate(year, month, day) > 0;
   }
   
   updateCalendar() {
@@ -59,12 +136,19 @@ export class CalendarComponent implements OnInit {
     this.calendarDays = [];
     
     // Días del mes anterior
+    const prevMonth = month === 0 ? 11 : month - 1;
+    const prevYear = month === 0 ? year - 1 : year;
     for (let i = daysFromPrevMonth - 1; i >= 0; i--) {
+      const day = prevMonthLastDay - i;
+      const taskCount = this.getTaskCountOnDate(prevYear, prevMonth, day);
       this.calendarDays.push({
-        day: prevMonthLastDay - i,
+        day,
         isCurrentMonth: false,
         isSelected: false,
-        isToday: false
+        isToday: false,
+        hasTasks: taskCount > 0,
+        taskCount,
+        fullDate: new Date(prevYear, prevMonth, day)
       });
     }
     
@@ -75,6 +159,7 @@ export class CalendarComponent implements OnInit {
                       today.getMonth() === month && 
                       today.getDate() === i;
       
+      const taskCount = this.getTaskCountOnDate(year, month, i);
       this.calendarDays.push({
         day: i,
         isCurrentMonth: true,
@@ -82,25 +167,34 @@ export class CalendarComponent implements OnInit {
                     this.selectedDate.getFullYear() === year &&
                     this.selectedDate.getMonth() === month &&
                     this.selectedDate.getDate() === i : false,
-        isToday
+        isToday,
+        hasTasks: taskCount > 0,
+        taskCount,
+        fullDate: new Date(year, month, i)
       });
     }
     
     // Días del siguiente mes
+    const nextMonth = month === 11 ? 0 : month + 1;
+    const nextYear = month === 11 ? year + 1 : year;
     for (let i = 1; i <= daysFromNextMonth; i++) {
+      const taskCount = this.getTaskCountOnDate(nextYear, nextMonth, i);
       this.calendarDays.push({
         day: i,
         isCurrentMonth: false,
         isSelected: false,
-        isToday: false
+        isToday: false,
+        hasTasks: taskCount > 0,
+        taskCount,
+        fullDate: new Date(nextYear, nextMonth, i)
       });
     }
   }
   
   getMonthName(month: number): string {
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
     ];
     return months[month];
   }
@@ -132,15 +226,18 @@ export class CalendarComponent implements OnInit {
       this.currentDate.getMonth(),
       calendarDay.day
     );
+    
+    // Guardar el número de tareas para la fecha seleccionada
+    this.selectedTaskCount = calendarDay.taskCount;
   }
   
-  onRemove() {
-    this.selectedDate = null;
-    this.calendarDays.forEach(day => day.isSelected = false);
+  getSelectedDayOfWeek(): string {
+    if (!this.selectedDate) return '';
+    const dayIndex = this.selectedDate.getDay();
+    return this.weekDays[dayIndex === 0 ? 6 : dayIndex - 1];
   }
   
-  onDone() {
-    // Aquí podrías emitir la fecha seleccionada si la necesitas
+  onClose() {
     this.close.emit();
   }
 }

@@ -62,10 +62,6 @@
       </section>
 
       <section class="profile__topbar-right" aria-label="Acciones">
-        <button class="profile__icon-button" type="button" (click)="toggleCalendar()" aria-label="Calendario">
-          <app-icon name="calendar"></app-icon>
-        </button>
-
         <button class="profile__icon-button" type="button" (click)="toggleTheme()" [attr.aria-label]="themeAriaLabel">
           <app-icon [name]="themeIcon"></app-icon>
         </button>
@@ -152,10 +148,5 @@
         </section>
       </form>
     </section>
-
-    <dialog class="profile__calendar" [open]="isCalendarOpen" aria-label="Calendario" #calendarDialog>
-      <app-calendar></app-calendar>
-      <button class="profile__calendar-close" type="button" (click)="closeCalendar()">Cerrar</button>
-    </dialog>
   </section>
 </main>

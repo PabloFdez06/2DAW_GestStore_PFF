@@ -11,10 +11,12 @@ import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
 import { TaskService } from '../../services/task.service';
 import { TaskProductService } from '../../services/task-product.service';
+import { ProductService } from '../../services/product.service';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest, TaskStatistics } from '../../models/task.model';
+import { Product } from '../../models/product.model';
 import { User } from '../../models/auth.model';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 
@@ -73,6 +75,24 @@ export class DashboardComponent implements OnInit {
   // Usuario actual
   currentUser: User | null = null;
 
+  // Getter para todas las tareas (para el calendario)
+  get allTasksForCalendar(): Task[] {
+    return [...this.tasks, ...this.completedTasksData];
+  }
+
+  // Stock notifications
+  isStockNotificationsOpen: boolean = false;
+  lowStockProducts: Product[] = [];
+  outOfStockProducts: Product[] = [];
+  
+  get hasStockAlerts(): boolean {
+    return this.lowStockProducts.length > 0 || this.outOfStockProducts.length > 0;
+  }
+  
+  get stockAlertsCount(): number {
+    return this.lowStockProducts.length + this.outOfStockProducts.length;
+  }
+
   avatarUrl: string | null = null;
 
   @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
@@ -81,6 +101,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private taskProductService: TaskProductService,
+    private productService: ProductService,
     private authService: AuthService,
     private themeService: ThemeService,
     private notificationService: NotificationService,
@@ -121,11 +142,38 @@ export class DashboardComponent implements OnInit {
     this.updateCurrentDate();
     this.loadAvatar();
     this.loadCurrentUser(); // Esto cargará las tareas cuando el usuario esté disponible
+    this.loadStockAlerts();
   }
 
   private loadAvatar(): void {
     const stored = localStorage.getItem('geststore.avatar');
     this.avatarUrl = stored && stored.trim().length > 0 ? stored : null;
+  }
+  
+  private loadStockAlerts(): void {
+    forkJoin({
+      lowStock: this.productService.getLowStockProducts(),
+      outOfStock: this.productService.getOutOfStockProducts()
+    }).subscribe({
+      next: ({ lowStock, outOfStock }) => {
+        this.lowStockProducts = lowStock;
+        this.outOfStockProducts = outOfStock;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        // Silently fail - not critical
+        this.lowStockProducts = [];
+        this.outOfStockProducts = [];
+      }
+    });
+  }
+  
+  toggleStockNotifications(): void {
+    this.isStockNotificationsOpen = !this.isStockNotificationsOpen;
+  }
+  
+  closeStockNotifications(): void {
+    this.isStockNotificationsOpen = false;
   }
 
   ngOnDestroy(): void {

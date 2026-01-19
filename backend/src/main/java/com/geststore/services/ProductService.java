@@ -28,23 +28,23 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     /**
-     * Obtiene todos los productos activos
+     * Obtiene todos los productos activos de un usuario
      */
-    public Page<ProductResponseDto> getAllProducts(Pageable pageable) {
-        log.info("Obteniendo todos los productos activos, página: {}", pageable.getPageNumber());
-        Page<Product> products = productRepository.findByActive(true, pageable);
+    public Page<ProductResponseDto> getAllProducts(String userId, Pageable pageable) {
+        log.info("Obteniendo todos los productos activos del usuario: {}, página: {}", userId, pageable.getPageNumber());
+        Page<Product> products = productRepository.findByActiveAndUserId(true, userId, pageable);
         return products.map(this::convertToDto);
     }
 
     /**
-     * Obtiene un producto por ID
+     * Obtiene un producto por ID (verificando que pertenece al usuario)
      */
-    public ProductResponseDto getProductById(String id) {
-        log.info("Buscando producto con ID: {}", id);
+    public ProductResponseDto getProductById(String id, String userId) {
+        log.info("Buscando producto con ID: {} para usuario: {}", id, userId);
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto", id));
         
-        if (!product.getActive()) {
+        if (!product.getActive() || !userId.equals(product.getUserId())) {
             throw new ResourceNotFoundException("Producto", id);
         }
         
@@ -52,11 +52,11 @@ public class ProductService {
     }
 
     /**
-     * Obtiene un producto por SKU
+     * Obtiene un producto por SKU del usuario
      */
-    public ProductResponseDto getProductBySku(String sku) {
-        log.info("Buscando producto con SKU: {}", sku);
-        Product product = productRepository.findBySku(sku)
+    public ProductResponseDto getProductBySku(String sku, String userId) {
+        log.info("Buscando producto con SKU: {} para usuario: {}", sku, userId);
+        Product product = productRepository.findBySkuAndUserId(sku, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto", "SKU", sku));
         
         if (!product.getActive()) {
@@ -67,44 +67,44 @@ public class ProductService {
     }
 
     /**
-     * Busca productos con bajo stock
+     * Busca productos con bajo stock del usuario
      */
-    public List<ProductResponseDto> getLowStockProducts() {
-        log.info("Obteniendo productos con bajo stock");
-        List<Product> products = productRepository.findLowStockProducts();
+    public List<ProductResponseDto> getLowStockProducts(String userId) {
+        log.info("Obteniendo productos con bajo stock del usuario: {}", userId);
+        List<Product> products = productRepository.findLowStockProductsByUserId(userId);
         return products.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     /**
-     * Busca productos sin stock
+     * Busca productos sin stock del usuario
      */
-    public List<ProductResponseDto> getOutOfStockProducts() {
-        log.info("Obteniendo productos sin stock");
-        List<Product> products = productRepository.findOutOfStockProducts();
+    public List<ProductResponseDto> getOutOfStockProducts(String userId) {
+        log.info("Obteniendo productos sin stock del usuario: {}", userId);
+        List<Product> products = productRepository.findOutOfStockProductsByUserId(userId);
         return products.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     /**
-     * Busca productos por categoría
+     * Busca productos por categoría del usuario
      */
-    public List<ProductResponseDto> getProductsByCategory(String category) {
-        log.info("Obteniendo productos de la categoría: {}", category);
-        List<Product> products = productRepository.findActiveProductsByCategory(category, true);
+    public List<ProductResponseDto> getProductsByCategory(String category, String userId) {
+        log.info("Obteniendo productos de la categoría: {} para usuario: {}", category, userId);
+        List<Product> products = productRepository.findActiveProductsByCategoryAndUserId(category, true, userId);
         return products.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     /**
-     * Busca productos por nombre
+     * Busca productos por nombre del usuario
      */
-    public List<ProductResponseDto> searchProductsByName(String searchText) {
-        log.info("Buscando productos con nombre: {}", searchText);
-        List<Product> products = productRepository.searchByName(searchText);
+    public List<ProductResponseDto> searchProductsByName(String searchText, String userId) {
+        log.info("Buscando productos con nombre: {} para usuario: {}", searchText, userId);
+        List<Product> products = productRepository.searchByNameAndUserId(searchText, userId);
         return products.stream()
                 .filter(Product::getActive)
                 .map(this::convertToDto)
@@ -112,12 +112,12 @@ public class ProductService {
     }
 
     /**
-     * Crea un nuevo producto
+     * Crea un nuevo producto para un usuario
      */
-    public ProductResponseDto createProduct(ProductRequestDto requestDto) {
-        log.info("Creando nuevo producto con SKU: {}", requestDto.getSku());
+    public ProductResponseDto createProduct(ProductRequestDto requestDto, String userId) {
+        log.info("Creando nuevo producto con SKU: {} para usuario: {}", requestDto.getSku(), userId);
 
-        if (productRepository.existsBySku(requestDto.getSku())) {
+        if (productRepository.existsBySkuAndUserId(requestDto.getSku(), userId)) {
             throw new BusinessLogicException(
                     "El SKU ya existe: " + requestDto.getSku(),
                     "DUPLICATE_SKU"
@@ -125,6 +125,7 @@ public class ProductService {
         }
 
         Product product = Product.builder()
+                .userId(userId)
                 .name(requestDto.getName())
                 .sku(requestDto.getSku())
                 .description(requestDto.getDescription())
@@ -144,16 +145,21 @@ public class ProductService {
     }
 
     /**
-     * Actualiza un producto
+     * Actualiza un producto (verificando que pertenece al usuario)
      */
-    public ProductResponseDto updateProduct(String id, ProductRequestDto requestDto) {
-        log.info("Actualizando producto con ID: {}", id);
+    public ProductResponseDto updateProduct(String id, ProductRequestDto requestDto, String userId) {
+        log.info("Actualizando producto con ID: {} para usuario: {}", id, userId);
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto", id));
 
+        // Verificar que el producto pertenece al usuario
+        if (!userId.equals(product.getUserId())) {
+            throw new ResourceNotFoundException("Producto", id);
+        }
+
         if (!product.getSku().equals(requestDto.getSku()) &&
-                productRepository.existsBySku(requestDto.getSku())) {
+                productRepository.existsBySkuAndUserId(requestDto.getSku(), userId)) {
             throw new BusinessLogicException(
                     "El SKU ya existe: " + requestDto.getSku(),
                     "DUPLICATE_SKU"
@@ -183,13 +189,18 @@ public class ProductService {
     }
 
     /**
-     * Desactiva un producto (soft delete)
+     * Desactiva un producto (soft delete) - verificando que pertenece al usuario
      */
-    public ProductResponseDto deactivateProduct(String id) {
-        log.info("Desactivando producto con ID: {}", id);
+    public ProductResponseDto deactivateProduct(String id, String userId) {
+        log.info("Desactivando producto con ID: {} para usuario: {}", id, userId);
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto", id));
+
+        // Verificar que el producto pertenece al usuario
+        if (!userId.equals(product.getUserId())) {
+            throw new ResourceNotFoundException("Producto", id);
+        }
 
         product.setActive(false);
         product.onUpdate();
@@ -200,16 +211,16 @@ public class ProductService {
     }
 
     /**
-     * Obtiene estadísticas de productos
+     * Obtiene estadísticas de productos del usuario
      */
     @Transactional(readOnly = true)
-    public ProductStatistics getProductStatistics() {
-        log.info("Obteniendo estadísticas de productos");
+    public ProductStatistics getProductStatistics(String userId) {
+        log.info("Obteniendo estadísticas de productos del usuario: {}", userId);
         
-        List<Product> activeProducts = productRepository.findByActive(true);
+        List<Product> activeProducts = productRepository.findByActiveAndUserId(true, userId);
         long totalProducts = activeProducts.size();
-        long lowStockProducts = productRepository.findLowStockProducts().size();
-        long outOfStockProducts = productRepository.findOutOfStockProducts().size();
+        long lowStockProducts = productRepository.findLowStockProductsByUserId(userId).size();
+        long outOfStockProducts = productRepository.findOutOfStockProductsByUserId(userId).size();
 
         return ProductStatistics.builder()
                 .totalProducts(totalProducts)
