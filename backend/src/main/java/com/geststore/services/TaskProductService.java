@@ -108,7 +108,7 @@ public class TaskProductService {
                 .task(task)
                 .product(product)
                 .quantity(quantityToAssign)
-                .quantityUsed(quantityToAssign)  // Ya se considera usado al asignar
+                .quantityUsed(0)  // Cantidad usada inicia en 0
                 .notes(requestDto.getNotes())
                 .build();
 
@@ -128,8 +128,40 @@ public class TaskProductService {
         TaskProduct taskProduct = taskProductRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Asignación", id));
 
+        // Ajustar stock si cambia la cantidad asignada
         if (requestDto.getQuantity() != null) {
-            taskProduct.setQuantity(requestDto.getQuantity());
+            int oldQuantity = taskProduct.getQuantity();
+            int newQuantity = requestDto.getQuantity();
+            int difference = oldQuantity - newQuantity;
+            
+            if (difference != 0) {
+                Product product = taskProduct.getProduct();
+                int currentStock = product.getStockQuantity() != null ? product.getStockQuantity() : 0;
+                
+                if (difference > 0) {
+                    // Se reduce la cantidad asignada -> devolver stock al almacén
+                    product.setStockQuantity(currentStock + difference);
+                    log.info("Stock del producto {} incrementado de {} a {} (devueltas {} unidades)", 
+                            product.getId(), currentStock, currentStock + difference, difference);
+                } else {
+                    // Se aumenta la cantidad asignada -> restar stock del almacén
+                    int quantityToSubtract = Math.abs(difference);
+                    if (currentStock < quantityToSubtract) {
+                        throw new BusinessLogicException(
+                                "No hay suficiente stock del producto. Stock actual: " + currentStock + ", requerido: " + quantityToSubtract,
+                                "INSUFFICIENT_STOCK"
+                        );
+                    }
+                    product.setStockQuantity(currentStock - quantityToSubtract);
+                    log.info("Stock del producto {} decrementado de {} a {} (asignadas {} unidades adicionales)", 
+                            product.getId(), currentStock, currentStock - quantityToSubtract, quantityToSubtract);
+                }
+                
+                product.onUpdate();
+                productRepository.save(product);
+            }
+            
+            taskProduct.setQuantity(newQuantity);
         }
         if (requestDto.getQuantityUsed() != null) {
             taskProduct.setQuantityUsed(requestDto.getQuantityUsed());
@@ -186,7 +218,7 @@ public class TaskProductService {
     }
 
     /**
-     * Elimina la asignación de un producto
+     * Elimina la asignación de un producto y devuelve el stock al almacén
      */
     public void removeProductFromTask(String id) {
         log.info("Eliminando asignación con ID: {}", id);
@@ -194,12 +226,15 @@ public class TaskProductService {
         TaskProduct taskProduct = taskProductRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Asignación", id));
 
-        if (taskProduct.getQuantityUsed() > 0) {
-            throw new BusinessLogicException(
-                    "No se puede eliminar una asignación con productos ya utilizados",
-                    "PRODUCTS_ALREADY_USED"
-            );
-        }
+        // Devolver el stock al almacén
+        Product product = taskProduct.getProduct();
+        int currentStock = product.getStockQuantity() != null ? product.getStockQuantity() : 0;
+        int quantityToReturn = taskProduct.getQuantity();
+        
+        product.setStockQuantity(currentStock + quantityToReturn);
+        product.onUpdate();
+        productRepository.save(product);
+        log.info("Stock del producto {} incrementado de {} a {}", product.getId(), currentStock, currentStock + quantityToReturn);
 
         taskProductRepository.delete(taskProduct);
         log.info("Asignación eliminada exitosamente");

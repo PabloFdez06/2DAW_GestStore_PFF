@@ -63,7 +63,38 @@
         </figure>
 
         <section class="product-selector__item-info">
-          <h3 class="product-selector__item-name">{{ product.name }}</h3>
+          <header class="product-selector__item-header">
+            <h3 class="product-selector__item-name">{{ product.name }}</h3>
+            <!-- Quantity selector inline (visible only when selected) -->
+            <fieldset *ngIf="isProductSelected(product)" class="product-selector__quantity" (click)="$event.stopPropagation()">
+              <legend class="visually-hidden">Cantidad</legend>
+              <button 
+                type="button" 
+                class="product-selector__quantity-btn"
+                (click)="decrementQuantity(product, $event)"
+                [disabled]="getSelectedQuantity(product) <= 1"
+                aria-label="Reducir cantidad">
+                <app-icon name="minus" size="small"></app-icon>
+              </button>
+              <input 
+                type="number" 
+                class="product-selector__quantity-input"
+                [value]="getSelectedQuantity(product)"
+                (change)="updateQuantity(product, $any($event.target).valueAsNumber)"
+                [min]="1"
+                [max]="product.stockQuantity"
+                aria-label="Cantidad"
+              />
+              <button 
+                type="button" 
+                class="product-selector__quantity-btn"
+                (click)="incrementQuantity(product, $event)"
+                [disabled]="getSelectedQuantity(product) >= product.stockQuantity"
+                aria-label="Aumentar cantidad">
+                <app-icon name="plus" size="small"></app-icon>
+              </button>
+            </fieldset>
+          </header>
           <p class="product-selector__item-category">{{ getCategoryName(product.category) }}</p>
         </section>
 
@@ -74,36 +105,6 @@
           <span class="product-selector__stock-text">Stock: {{ product.stockQuantity }}</span>
         </aside>
       </button>
-
-      <!-- Quantity selector (visible only when selected) -->
-      <fieldset *ngIf="isProductSelected(product)" class="product-selector__quantity" (click)="$event.stopPropagation()">
-        <legend class="visually-hidden">Cantidad</legend>
-        <button 
-          type="button" 
-          class="product-selector__quantity-btn"
-          (click)="decrementQuantity(product, $event)"
-          [disabled]="getSelectedQuantity(product) <= 1"
-          aria-label="Reducir cantidad">
-          <app-icon name="minus" size="small"></app-icon>
-        </button>
-        <input 
-          type="number" 
-          class="product-selector__quantity-input"
-          [value]="getSelectedQuantity(product)"
-          (change)="updateQuantity(product, $any($event.target).valueAsNumber)"
-          [min]="1"
-          [max]="product.stockQuantity"
-          aria-label="Cantidad"
-        />
-        <button 
-          type="button" 
-          class="product-selector__quantity-btn"
-          (click)="incrementQuantity(product, $event)"
-          [disabled]="getSelectedQuantity(product) >= product.stockQuantity"
-          aria-label="Aumentar cantidad">
-          <app-icon name="plus" size="small"></app-icon>
-        </button>
-      </fieldset>
     </li>
   </ul>
 

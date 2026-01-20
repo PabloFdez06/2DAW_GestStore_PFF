@@ -13,6 +13,7 @@ import {
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { forkJoin, of } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { TaskService } from '../../services/task.service';
 import { TaskProductService } from '../../services/task-product.service';
@@ -217,7 +218,11 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   }
 
   openEditModal(task: Task): void {
-    this.taskToEdit = task;
+    // Añadir los productos cargados a la tarea para que el modal los muestre
+    this.taskToEdit = {
+      ...task,
+      taskProducts: this.taskProducts as any
+    };
     this.isEditMode = true;
     this.isTaskModalOpen = true;
     this.syncModalSideEffects();
@@ -342,12 +347,81 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     this.taskService.updateTask(taskData.id, taskRequest).subscribe({
       next: (updated: Task) => {
         this.task = updated;
+        
+        // Actualizar productos si se han modificado
+        if (taskData.selectedProducts !== undefined) {
+          this.updateTaskProducts(String(taskData.id), taskData.selectedProducts);
+        }
+        
         this.closeTaskModal();
         this.notificationService.success('Tarea actualizada correctamente');
       },
       error: () => {
         this.notificationService.error('Error al actualizar la tarea');
         // Mantener el modal abierto para que el usuario pueda reintentar
+      }
+    });
+  }
+
+  private updateTaskProducts(taskId: string, newProducts: { product: any; quantity: number }[]): void {
+    // Obtener IDs de productos actuales
+    const currentProductIds = new Set(this.taskProducts.map(tp => tp.product.id));
+    // Obtener IDs de productos nuevos
+    const newProductIds = new Set(newProducts.map(sp => sp.product.id));
+
+    // Productos a eliminar (están en current pero no en new)
+    const productsToRemove = this.taskProducts.filter(tp => !newProductIds.has(tp.product.id));
+    
+    // Productos a añadir (están en new pero no en current)
+    const productsToAdd = newProducts.filter(sp => !currentProductIds.has(sp.product.id));
+    
+    // Productos a actualizar (están en ambos pero pueden tener cantidad diferente)
+    const productsToUpdate = newProducts.filter(sp => currentProductIds.has(sp.product.id));
+
+    // Crear arrays de observables para cada operación
+    const removeOperations = productsToRemove.map(tp => 
+      this.taskProductService.removeProductFromTask(tp.id)
+    );
+
+    const addOperations = productsToAdd.map(sp => 
+      this.taskProductService.assignProductToTask(taskId, {
+        productId: sp.product.id,
+        quantity: sp.quantity
+      })
+    );
+
+    const updateOperations = productsToUpdate
+      .filter(sp => {
+        const existingProduct = this.taskProducts.find(tp => tp.product.id === sp.product.id);
+        return existingProduct && existingProduct.quantity !== sp.quantity;
+      })
+      .map(sp => {
+        const existingProduct = this.taskProducts.find(tp => tp.product.id === sp.product.id)!;
+        return this.taskProductService.updateTaskProduct(existingProduct.id, {
+          productId: sp.product.id,
+          quantity: sp.quantity
+        });
+      });
+
+    // Combinar todas las operaciones
+    const allOperations = [...removeOperations, ...addOperations, ...updateOperations];
+
+    if (allOperations.length === 0) {
+      // No hay cambios en productos
+      return;
+    }
+
+    // Ejecutar todas las operaciones y esperar a que terminen
+    forkJoin(allOperations.length > 0 ? allOperations : [of(null)]).subscribe({
+      next: () => {
+        // Recargar productos después de que todas las operaciones terminen
+        this.loadTaskProducts();
+      },
+      error: (err) => {
+        console.error('Error updating task products:', err);
+        this.notificationService.error('Error al actualizar algunos productos');
+        // Recargar de todos modos para mostrar el estado actual
+        this.loadTaskProducts();
       }
     });
   }

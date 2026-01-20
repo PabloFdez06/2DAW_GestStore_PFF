@@ -1,8 +1,10 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { Task, TaskPriority } from '../../../models/task.model';
+import { TaskProduct } from '../../../models/task-product.model';
+import { TaskProductService } from '../../../services/task-product.service';
 import { ProductSelectorModalComponent, SelectedProduct } from '../product-selector-modal/product-selector-modal.component';
 
 interface Priority {
@@ -64,7 +66,8 @@ export class AddTaskModalComponent implements OnChanges {
   ];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['task'] && this.task && this.isEditMode) {
+    // Detectar cambios en task o isEditMode
+    if ((changes['task'] || changes['isEditMode']) && this.task && this.isEditMode) {
       this.populateFormFromTask(this.task);
     }
   }
@@ -81,6 +84,40 @@ export class AddTaskModalComponent implements OnChanges {
     } else {
       this.date = '';
     }
+
+    // Cargar productos asignados a la tarea
+    if (task.taskProducts && task.taskProducts.length > 0) {
+      this.selectedProducts = this.convertTaskProductsToSelected(task.taskProducts as unknown as TaskProduct[]);
+    } else {
+      // Si no vienen en la tarea, cargarlos desde el servicio
+      this.loadTaskProducts(task);
+    }
+  }
+
+  private loadTaskProducts(task: Task): void {
+    const taskId = String(task.id || task._id);
+    if (!taskId) {
+      this.selectedProducts = [];
+      return;
+    }
+
+    this.taskProductService.getProductsByTaskId(taskId).subscribe({
+      next: (products) => {
+        this.selectedProducts = this.convertTaskProductsToSelected(products);
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.selectedProducts = [];
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  private convertTaskProductsToSelected(taskProducts: TaskProduct[]): SelectedProduct[] {
+    return taskProducts.map(tp => ({
+      product: tp.product,
+      quantity: tp.quantity
+    }));
   }
 
   private convertPriorityToModal(priority: TaskPriority): string {
@@ -96,7 +133,11 @@ export class AddTaskModalComponent implements OnChanges {
     }
   }
 
-  constructor(private renderer: Renderer2) {}
+  constructor(
+    private renderer: Renderer2,
+    private taskProductService: TaskProductService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngAfterViewInit(): void {
     this.titleInput?.nativeElement?.focus();
@@ -129,6 +170,20 @@ export class AddTaskModalComponent implements OnChanges {
 
   removeSelectedProduct(index: number): void {
     this.selectedProducts.splice(index, 1);
+  }
+
+  incrementProductQuantity(index: number): void {
+    const sp = this.selectedProducts[index];
+    if (sp && sp.quantity < sp.product.stockQuantity) {
+      sp.quantity++;
+    }
+  }
+
+  decrementProductQuantity(index: number): void {
+    const sp = this.selectedProducts[index];
+    if (sp && sp.quantity > 1) {
+      sp.quantity--;
+    }
   }
 
   validateForm(): boolean {

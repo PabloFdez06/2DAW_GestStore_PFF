@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Search, Bell, Calendar, Home, Star, CheckSquare, Folder, Package, Settings, LogOut, UserPlus, Clipboard, MoreVertical, Plus, CheckCircle, BookOpen, ChevronLeft, ChevronRight, ChevronDown, X, Check, Sun, Moon, User, Mail, Phone, Upload, Pencil, AlertCircle, Trash2, Camera, icons } from 'lucide-angular';
+import { LucideAngularModule, Search, Bell, Calendar, Home, Star, CheckSquare, Folder, Package, Settings, LogOut, UserPlus, Clipboard, MoreVertical, Plus, Minus, CheckCircle, BookOpen, ChevronLeft, ChevronRight, ChevronDown, X, Check, Sun, Moon, User, Mail, Phone, Upload, Pencil, AlertCircle, Trash2, Camera, Box, icons } from 'lucide-angular';
 
 @Component({
   selector: 'app-icon',
@@ -38,6 +38,7 @@ export class IconComponent implements OnInit {
     'clipboard': Clipboard,
     'more-vertical': MoreVertical,
     'plus': Plus,
+    'minus': Minus,
     'check-circle': CheckCircle,
     'book-open': BookOpen,
     'chevron-left': ChevronLeft,
@@ -54,7 +55,8 @@ export class IconComponent implements OnInit {
     'pencil': Pencil,
     'alert-circle': AlertCircle,
     'trash': Trash2,
-    'camera': Camera
+    'camera': Camera,
+    'box': Box
   };
 
   ngOnInit() {
