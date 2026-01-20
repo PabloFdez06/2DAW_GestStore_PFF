@@ -2,8 +2,9 @@ import { Component, EventEmitter, OnInit, OnDestroy, Output, inject, ChangeDetec
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../atoms/icon/icon.component';
 import { TaskService } from '../../../services/task.service';
+import { AuthService } from '../../../services/auth.service';
 import { Task } from '../../../models/task.model';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, forkJoin } from 'rxjs';
 
 interface CalendarDay {
   day: number;
@@ -26,6 +27,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter<void>();
   
   private taskService = inject(TaskService);
+  private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
   
@@ -57,11 +59,34 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
   
   private loadTasks(): void {
-    this.taskService.getAllTasks()
+    const currentUser = this.authService.currentUserValue;
+    
+    if (!currentUser || !currentUser.id) {
+      // Si no hay usuario, mostrar calendario sin tareas
+      this.updateCalendar();
+      this.cdr.detectChanges();
+      return;
+    }
+    
+    const userId = String(currentUser.id);
+    
+    // Obtener tareas asignadas al usuario Y tareas creadas por el usuario
+    forkJoin({
+      assigned: this.taskService.getTasksByAssignedUser(userId),
+      created: this.taskService.getTasksCreatedByUser(userId)
+    })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (tasks) => {
-          this.tasks = tasks;
+        next: ({ assigned, created }) => {
+          // Combinar y eliminar duplicados por ID
+          const allTasks = [...assigned, ...created];
+          const uniqueTasksMap = new Map<number, Task>();
+          allTasks.forEach(task => {
+            if (task.id && !uniqueTasksMap.has(task.id)) {
+              uniqueTasksMap.set(task.id, task);
+            }
+          });
+          this.tasks = Array.from(uniqueTasksMap.values());
           this.processTaskDates();
           this.updateCalendar();
           this.updateSelectedTaskCount();

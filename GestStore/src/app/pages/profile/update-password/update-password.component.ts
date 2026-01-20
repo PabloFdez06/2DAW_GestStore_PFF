@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, NgZone } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Inject, NgZone, Renderer2 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -32,6 +32,8 @@ export class UpdatePasswordComponent {
   errorMessage: string = '';
   successMessage: string = '';
 
+  isSidebarOpen: boolean = false;
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
@@ -40,6 +42,7 @@ export class UpdatePasswordComponent {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
+    private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.updateCurrentDate();
@@ -136,5 +139,26 @@ export class UpdatePasswordComponent {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+    if (this.isSidebarOpen) {
+      this.renderer.addClass(this.document.body, 'sidebar-open');
+    } else {
+      this.renderer.removeClass(this.document.body, 'sidebar-open');
+    }
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
+    this.renderer.removeClass(this.document.body, 'sidebar-open');
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.isSidebarOpen) {
+      this.closeSidebar();
+    }
   }
 }

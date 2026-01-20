@@ -1,0 +1,69 @@
+<!-- Botón hamburguesa para mobile -->
+<button 
+  class="sidebar-layout__hamburger" 
+  type="button"
+  (click)="toggleSidebar()"
+  [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
+  [attr.aria-expanded]="isSidebarOpen"
+  [class.is-open]="isSidebarOpen">
+  <span class="sidebar-layout__hamburger-line sidebar-layout__hamburger-line--top" aria-hidden="true"></span>
+  <span class="sidebar-layout__hamburger-line sidebar-layout__hamburger-line--middle" aria-hidden="true"></span>
+  <span class="sidebar-layout__hamburger-line sidebar-layout__hamburger-line--bottom" aria-hidden="true"></span>
+</button>
+
+<!-- Overlay del sidebar para mobile -->
+<span 
+  *ngIf="isSidebarOpen" 
+  class="sidebar-layout__overlay"
+  role="presentation"
+  (click)="closeSidebar()"
+  aria-hidden="true"></span>
+
+<!-- Side Navigation -->
+<aside 
+  class="sidebar-layout__sidebar" 
+  role="complementary" 
+  aria-label="Menú lateral"
+  [class.is-open]="isSidebarOpen">
+  <header class="sidebar-layout__user">
+    <figure class="sidebar-layout__user-avatar">
+      <a class="sidebar-layout__avatar-link" routerLink="/perfil" (click)="closeSidebar()" aria-label="Ir a tu perfil">
+        <ng-container *ngIf="avatarUrl; else avatarDefault">
+          <img class="sidebar-layout__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
+        </ng-container>
+        <ng-template #avatarDefault>
+          <app-icon name="user" size="large" aria-hidden="true"></app-icon>
+        </ng-template>
+      </a>
+    </figure>
+    <hgroup class="sidebar-layout__user-info">
+      <p class="sidebar-layout__user-name">{{ currentUser?.name || 'Usuario' }}</p>
+      <p class="sidebar-layout__user-email">{{ currentUser?.email || '' }}</p>
+    </hgroup>
+  </header>
+
+  <nav class="sidebar-layout__nav" aria-label="Navegación del menú">
+    <a 
+      *ngFor="let link of navLinks"
+      [routerLink]="link.path" 
+      class="sidebar-layout__nav-link" 
+      [class.sidebar-layout__nav-link--active]="isActive(link.path)"
+      [attr.aria-current]="isActive(link.path) ? 'page' : null"
+      (click)="closeSidebar()">
+      <app-icon [name]="link.icon" size="small"></app-icon>
+      <span>{{ link.label }}</span>
+    </a>
+  </nav>
+
+  <footer class="sidebar-layout__footer" *ngIf="showLogout">
+    <button type="button" class="sidebar-layout__logout" (click)="onLogout($event)">
+      <app-icon name="log-out" size="small"></app-icon>
+      <span>Cerrar Sesión</span>
+    </button>
+  </footer>
+</aside>
+
+<!-- Contenido principal (proyectado) -->
+<main class="sidebar-layout__main" role="main">
+  <ng-content></ng-content>
+</main>
