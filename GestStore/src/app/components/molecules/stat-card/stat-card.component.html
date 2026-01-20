@@ -1,0 +1,29 @@
+<article [class]="getCardClasses()">
+  <!-- Default variant: with icon and trend -->
+  <ng-container *ngIf="variant === 'default'">
+    <span class="stat-card__icon-wrapper" [class]="'stat-card__icon-wrapper--' + bgColor">
+      <app-icon [name]="icon" size="medium" class="stat-card__icon"></app-icon>
+    </span>
+    <section class="stat-card__content">
+      <h3 class="stat-card__title">{{ title }}</h3>
+      <data class="stat-card__value" [value]="value">{{ value }}</data>
+      <p *ngIf="trend" class="stat-card__trend" [class]="getTrendClasses()">
+        <app-icon 
+          [name]="trendType === 'positive' ? 'trending-up' : 'trending-down'" 
+          size="small">
+        </app-icon>
+        <span>{{ trend }}</span>
+        <span class="stat-card__trend-label">vs último mes</span>
+      </p>
+    </section>
+  </ng-container>
+
+  <!-- Simple variant: just title, value and optional indicator -->
+  <ng-container *ngIf="variant === 'simple'">
+    <header class="stat-card__header">
+      <h3 class="stat-card__title">{{ title }}</h3>
+      <span *ngIf="indicator !== 'none'" [class]="getIndicatorClasses()" aria-label="Indicador de estado"></span>
+    </header>
+    <data class="stat-card__value" [value]="value">{{ value }}</data>
+  </ng-container>
+</article>

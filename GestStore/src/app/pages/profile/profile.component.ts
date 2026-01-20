@@ -1,10 +1,12 @@
-import { ChangeDetectorRef, Component, HostListener, Inject, NgZone, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, NgZone, Renderer2 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
+import { ButtonComponent } from '../../components/atoms/button/button.component';
+import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { UserService } from '../../services/user.service';
@@ -14,7 +16,7 @@ import { User } from '../../models/auth.model';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent, SpinnerComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, SpinnerComponent, ButtonComponent, SidebarLayoutComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -35,8 +37,6 @@ export class ProfileComponent {
   isSaving: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
-
-  isSidebarOpen: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -235,26 +235,5 @@ export class ProfileComponent {
     event.preventDefault();
     event.stopPropagation();
     this.router.navigate(['/ajustes']);
-  }
-
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (this.isSidebarOpen) {
-      this.renderer.addClass(this.document.body, 'sidebar-open');
-    } else {
-      this.renderer.removeClass(this.document.body, 'sidebar-open');
-    }
-  }
-
-  closeSidebar(): void {
-    this.isSidebarOpen = false;
-    this.renderer.removeClass(this.document.body, 'sidebar-open');
-  }
-
-  @HostListener('document:keydown.escape')
-  onEscape(): void {
-    if (this.isSidebarOpen) {
-      this.closeSidebar();
-    }
   }
 }

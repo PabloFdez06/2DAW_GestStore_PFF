@@ -1,115 +1,100 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../../atoms/icon/icon.component';
 
-export type TaskStatus = 'completed' | 'pending' | 'in-progress' | 'cancelled';
-
-export interface Task {
-  id: string | number;
-  title: string;
-  description: string;
-  status: TaskStatus;
-  completedAt?: Date;
-  imageUrl?: string;
-}
+export type TaskCardStatus = 'COMPLETED' | 'PENDING' | 'IN_PROGRESS' | 'CANCELLED' | 'NOT_STARTED';
+export type TaskCardPriority = 'HIGH' | 'MEDIUM' | 'LOW';
+export type TaskCardVariant = 'default' | 'grid' | 'compact';
 
 @Component({
   selector: 'app-task-card',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <article class="task-card" [class.task-card--hoverable]="hoverable">
-      <!-- Contenido principal -->
-      <section class="task-card__content">
-        <!-- Icono de estado -->
-        <span class="task-card__status-icon" [class]="'task-card__status-icon--' + status">
-          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </span>
-        
-        <!-- Información de la tarea -->
-        <section class="task-card__info">
-          <h3 class="task-card__title">{{ title }}</h3>
-          <p class="task-card__description">{{ description }}</p>
-          <p class="task-card__status-text">
-            Estatus: <span [class]="'task-card__status-value--' + status">{{ getStatusLabel() }}</span>
-          </p>
-          <p class="task-card__timestamp">{{ getTimestamp() }}</p>
-        </section>
-      </section>
-
-      <!-- Thumbnail -->
-      <figure class="task-card__thumbnail" *ngIf="imageUrl">
-        <img [src]="imageUrl" [alt]="title" class="task-card__image" />
-      </figure>
-      <figure class="task-card__thumbnail task-card__thumbnail--placeholder" *ngIf="!imageUrl" aria-hidden="true"></figure>
-
-      <!-- Menú de opciones -->
-      <button 
-        class="task-card__menu" 
-        (click)="onMenuClick($event)"
-        aria-label="Opciones de tarea"
-        type="button">
-        <svg viewBox="0 0 16 4" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="2" cy="2" r="1.5"/>
-          <circle cx="8" cy="2" r="1.5"/>
-          <circle cx="14" cy="2" r="1.5"/>
-        </svg>
-      </button>
-    </article>
-  `,
+  imports: [CommonModule, IconComponent],
+  templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.scss'
 })
 export class TaskCardComponent {
   @Input() title: string = '';
   @Input() description: string = '';
-  @Input() status: TaskStatus = 'pending';
-  @Input() completedAt?: Date;
+  @Input() status: TaskCardStatus = 'PENDING';
+  @Input() priority: TaskCardPriority = 'MEDIUM';
   @Input() imageUrl?: string;
-  @Input() hoverable: boolean = true;
+  @Input() important: boolean = false;
+  @Input() createdAt?: Date | string;
+  @Input() completedAt?: Date | string;
+  @Input() variant: TaskCardVariant = 'default';
+  @Input() showMenu: boolean = true;
+  @Input() isMenuOpen: boolean = false;
 
-  @Output() menuClick = new EventEmitter<void>();
+  @Output() cardClick = new EventEmitter<void>();
+  @Output() menuClick = new EventEmitter<MouseEvent>();
+  @Output() menuToggle = new EventEmitter<MouseEvent>();
+
+  onCardClick(): void {
+    this.cardClick.emit();
+  }
+
+  onMenuToggle(event: MouseEvent): void {
+    event.stopPropagation();
+    this.menuToggle.emit(event);
+  }
+
+  onMenuClick(event: MouseEvent): void {
+    event.stopPropagation();
+    this.menuClick.emit(event);
+  }
 
   getStatusLabel(): string {
-    const labels: Record<TaskStatus, string> = {
-      'completed': 'Completada',
-      'pending': 'Pendiente',
-      'in-progress': 'En progreso',
-      'cancelled': 'Cancelada'
+    const labels: Record<TaskCardStatus, string> = {
+      'COMPLETED': 'Completada',
+      'PENDING': 'Pendiente',
+      'IN_PROGRESS': 'En progreso',
+      'CANCELLED': 'Cancelada',
+      'NOT_STARTED': 'Sin comenzar'
     };
-    return labels[this.status];
+    return labels[this.status] || 'Pendiente';
   }
 
-  getTimestamp(): string {
-    if (!this.completedAt) {
-      return '';
-    }
+  getPriorityLabel(): string {
+    const labels: Record<TaskCardPriority, string> = {
+      'HIGH': 'Alta',
+      'MEDIUM': 'Media',
+      'LOW': 'Baja'
+    };
+    return labels[this.priority] || 'Media';
+  }
+
+  getPriorityClass(): string {
+    return this.priority?.toLowerCase() || 'medium';
+  }
+
+  getStatusClass(): string {
+    const statusMap: Record<TaskCardStatus, string> = {
+      'COMPLETED': 'completed',
+      'PENDING': 'pending',
+      'IN_PROGRESS': 'inprogress',
+      'CANCELLED': 'cancelled',
+      'NOT_STARTED': 'notstarted'
+    };
+    return statusMap[this.status] || 'pending';
+  }
+
+  formatDate(date?: Date | string): string {
+    if (!date) return '';
+    const d = typeof date === 'string' ? new Date(date) : date;
+    return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  getCompletedAgo(): string {
+    if (!this.completedAt) return '';
     
+    const date = typeof this.completedAt === 'string' ? new Date(this.completedAt) : this.completedAt;
     const now = new Date();
-    const diffTime = Math.abs(now.getTime() - this.completedAt.getTime());
+    const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays === 0) {
-      return `${this.getStatusAction()} hoy.`;
-    } else if (diffDays === 1) {
-      return `${this.getStatusAction()} hace 1 día.`;
-    } else {
-      return `${this.getStatusAction()} hace ${diffDays} días.`;
-    }
-  }
-
-  private getStatusAction(): string {
-    const actions: Record<TaskStatus, string> = {
-      'completed': 'Completada',
-      'pending': 'Creada',
-      'in-progress': 'Actualizada',
-      'cancelled': 'Cancelada'
-    };
-    return actions[this.status];
-  }
-
-  onMenuClick(event: Event): void {
-    event.stopPropagation();
-    this.menuClick.emit();
+    if (diffDays === 0) return 'hoy';
+    if (diffDays === 1) return '1 día';
+    return `${diffDays} días`;
   }
 }

@@ -12,8 +12,11 @@ import { User } from '../../models/auth.model';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
+import { ButtonComponent } from '../../components/atoms/button/button.component';
 import { AddProductModalComponent } from '../../components/molecules/add-product-modal/add-product-modal.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
+import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
+import { StatCardComponent } from '../../components/molecules/stat-card/stat-card.component';
 
 @Component({
   selector: 'app-warehouse',
@@ -25,8 +28,11 @@ import { StockNotificationsComponent } from '../../components/molecules/stock-no
     CalendarComponent, 
     IconComponent,
     SpinnerComponent,
+    ButtonComponent,
     AddProductModalComponent,
-    StockNotificationsComponent
+    StockNotificationsComponent,
+    SidebarLayoutComponent,
+    StatCardComponent
   ],
   templateUrl: './warehouse.component.html',
   styleUrl: './warehouse.component.scss'
@@ -46,9 +52,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
   productToEdit: Product | null = null;
   currentUser: User | null = null;
   isStockNotificationsOpen = false;
-
-  avatarUrl: string | null = null;
-  isSidebarOpen: boolean = false;
 
   // Enums para el template
   ProductStatus = ProductStatus;
@@ -72,7 +75,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setCurrentDate();
-    this.loadAvatar();
     this.loadCurrentUser();
     this.loadProducts();
     this.loadStatistics();
@@ -86,11 +88,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
 
   closeStockNotifications(): void {
     this.isStockNotificationsOpen = false;
-  }
-
-  private loadAvatar(): void {
-    const stored = localStorage.getItem('geststore.avatar');
-    this.avatarUrl = stored && stored.trim().length > 0 ? stored : null;
   }
 
   ngOnDestroy(): void {
@@ -111,11 +108,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
       keyboardEvent.preventDefault();
       this.closeCalendar();
       return;
-    }
-
-    if (this.isSidebarOpen) {
-      keyboardEvent.preventDefault();
-      this.closeSidebar();
     }
   }
 
@@ -228,23 +220,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
   }
 
   // ============================================================================
-  // SIDEBAR
-  // ============================================================================
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (this.isSidebarOpen) {
-      this.lockScroll();
-    } else {
-      this.unlockScroll();
-    }
-  }
-
-  closeSidebar(): void {
-    this.isSidebarOpen = false;
-    this.unlockScroll();
-  }
-
-  // ============================================================================
   // TEMA
   // ============================================================================
   get themeIcon(): string {
@@ -279,12 +254,6 @@ export class WarehouseComponent implements OnInit, OnDestroy {
 
   private unlockScroll(): void {
     this.renderer.removeClass(this.document.body, 'no-scroll');
-  }
-
-  onLogout(event: Event): void {
-    event.preventDefault();
-    this.authService.logout();
-    this.router.navigate(['/login']);
   }
 
   getCategoryName(category: string): string {

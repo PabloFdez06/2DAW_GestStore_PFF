@@ -147,17 +147,23 @@
   box-shadow: var(--shadow-sm);
   position: relative;
   z-index: 10;
+  min-height: 6.25rem;
 
   @include respond-down(lg) {
     padding: 0 $spacing-5;
+    min-height: 5rem;
   }
 
   @include respond-down(md) {
     padding: 0 $spacing-4;
+    padding-left: 4rem;
+    min-height: 4.375rem;
   }
 
   @include respond-down(sm) {
     padding: 0 $spacing-3;
+    padding-left: 3.5rem;
+    min-height: 3.75rem;
   }
 }
 

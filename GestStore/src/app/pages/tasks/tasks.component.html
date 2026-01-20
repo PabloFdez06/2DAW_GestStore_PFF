@@ -1,19 +1,6 @@
-<article class="tasks-page">
-  <!-- Top Navigation Bar -->
-  <nav class="tasks-page__nav" role="navigation" aria-label="Navegación principal">
-    <!-- Botón hamburguesa para mobile -->
-    <button 
-      class="tasks-page__hamburger" 
-      type="button"
-      (click)="toggleSidebar()"
-      [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
-      [attr.aria-expanded]="isSidebarOpen"
-      [class.is-open]="isSidebarOpen">
-      <span class="tasks-page__hamburger-line tasks-page__hamburger-line--top" aria-hidden="true"></span>
-      <span class="tasks-page__hamburger-line tasks-page__hamburger-line--middle" aria-hidden="true"></span>
-      <span class="tasks-page__hamburger-line tasks-page__hamburger-line--bottom" aria-hidden="true"></span>
-    </button>
-    
+<app-sidebar-layout activeRoute="/tareas">
+  <!-- Header slot -->
+  <nav slot="header" class="tasks-page__nav" role="navigation" aria-label="Navegación principal">
     <h1 class="tasks-page__logo">
       <span class="tasks-page__logo-gest">Gest</span><span class="tasks-page__logo-store">Store</span>
     </h1>
@@ -102,74 +89,8 @@
     </section>
   </dialog>
 
-  <!-- Overlay del sidebar para mobile -->
-  <span 
-    *ngIf="isSidebarOpen" 
-    class="tasks-page__sidebar-overlay"
-    role="presentation"
-    (click)="closeSidebar()"
-    aria-hidden="true"></span>
-  
-  <!-- Side Navigation -->
-  <aside 
-    class="tasks-page__sidebar" 
-    role="complementary" 
-    aria-label="Menú lateral"
-    [class.is-open]="isSidebarOpen">
-    <header class="tasks-page__user">
-      <figure class="tasks-page__user-avatar">
-        <a class="tasks-page__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
-          <ng-container *ngIf="avatarUrl; else tasksAvatarDefault">
-            <img class="tasks-page__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
-          </ng-container>
-          <ng-template #tasksAvatarDefault>
-            <app-icon name="user" size="large" aria-hidden="true"></app-icon>
-          </ng-template>
-        </a>
-      </figure>
-      <hgroup class="tasks-page__user-info">
-        <p class="tasks-page__user-name">{{ currentUser?.name || 'Usuario' }}</p>
-        <p class="tasks-page__user-email">{{ currentUser?.email || '' }}</p>
-      </hgroup>
-    </header>
-
-    <nav class="tasks-page__sidebar-nav" aria-label="Navegación del menú">
-      <a routerLink="/dashboard" class="tasks-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="home" size="small"></app-icon>
-        <span>Dashboard</span>
-      </a>
-      <a routerLink="/tareas-importantes" class="tasks-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="star" size="small"></app-icon>
-        <span>Tareas Importantes</span>
-      </a>
-      <a routerLink="/tareas" class="tasks-page__sidebar-link tasks-page__sidebar-link--active" aria-current="page" (click)="closeSidebar()">
-        <app-icon name="check-square" size="small"></app-icon>
-        <span>Tareas</span>
-      </a>
-      <a routerLink="/categorias" class="tasks-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="folder" size="small"></app-icon>
-        <span>Categorias de Tareas</span>
-      </a>
-      <a routerLink="/almacen" class="tasks-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="package" size="small"></app-icon>
-        <span>Almacen</span>
-      </a>
-      <a routerLink="/ajustes" class="tasks-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="settings" size="small"></app-icon>
-        <span>Ajustes</span>
-      </a>
-    </nav>
-
-    <footer class="tasks-page__sidebar-footer">
-      <button type="button" class="tasks-page__logout" (click)="onLogout($event)">
-        <app-icon name="log-out" size="small"></app-icon>
-        <span>Cerrar Sesión</span>
-      </button>
-    </footer>
-  </aside>
-
   <!-- Main Content -->
-  <main class="tasks-page__main" role="main">
+  <article class="tasks-page__content">
     <!-- Tasks Section -->
     <section class="tasks-page__section" aria-labelledby="tasks-title">
       <header class="tasks-page__section-header">
@@ -177,10 +98,13 @@
           <app-icon name="clipboard" size="small" class="tasks-page__section-icon"></app-icon>
           <h2 id="tasks-title" class="tasks-page__section-title">To-Do</h2>
         </hgroup>
-        <button type="button" class="tasks-page__add-btn" (click)="openAddTaskModal()" aria-label="Añadir tarea">
-          <app-icon name="plus" size="small"></app-icon>
-          <span>Añadir Tarea</span>
-        </button>
+        <app-button 
+          variant="link" 
+          icon="plus" 
+          ariaLabel="Añadir tarea"
+          (clicked)="openAddTaskModal()">
+          Añadir Tarea
+        </app-button>
       </header>
 
       <header class="tasks-page__section-subheader">
@@ -198,74 +122,40 @@
       <!-- Error state -->
       <aside *ngIf="!isLoading && errorMessage" class="tasks-page__error" role="alert">
         <p>{{ errorMessage }}</p>
-        <button (click)="loadTasks()" class="tasks-page__retry-btn" type="button">Reintentar</button>
+        <app-button variant="primary" size="small" (clicked)="loadTasks()">Reintentar</app-button>
       </aside>
 
       <!-- Empty state -->
       <section *ngIf="!isLoading && !errorMessage && filteredTasks.length === 0" class="tasks-page__empty-state">
         <app-icon name="inbox" size="large" class="tasks-page__empty-icon"></app-icon>
         <p class="tasks-page__empty-text">No hay tareas que coincidan con la búsqueda</p>
-        <button class="tasks-page__empty-create-btn" type="button" (click)="openAddTaskModal()">
-          <app-icon name="plus" size="small"></app-icon>
-          <span>Crear tarea</span>
-        </button>
+        <app-button variant="primary" icon="plus" (clicked)="openAddTaskModal()">Crear tarea</app-button>
       </section>
 
       <!-- Tasks grid -->
       <ul *ngIf="!isLoading && !errorMessage && filteredTasks.length > 0" class="tasks-page__grid" role="list">
         <li *ngFor="let task of filteredTasks; let i = index" role="listitem">
-          <article 
-            class="task-card"
-            (click)="goToTask(task)"
-            (keydown.enter)="goToTask(task)"
-            tabindex="0"
-            role="button"
-            [attr.aria-label]="'Ver detalle de ' + task.title">
-            
-            <figure class="task-card__image" [class.task-card__image--has-image]="task.imageUrl" role="img" aria-label="Imagen de la tarea">
-              <ng-container *ngIf="task.imageUrl">
-                <img class="task-card__img" [src]="task.imageUrl" alt="" loading="lazy" decoding="async" />
-              </ng-container>
-              <ng-container *ngIf="!task.imageUrl">
-                <app-icon name="camera" size="small"></app-icon>
-              </ng-container>
-            </figure>
-            
-            <nav class="task-card__menu-wrapper" aria-label="Acciones de tarea">
-              <button 
-                class="task-card__menu-btn" 
-                type="button" 
-                (click)="toggleTaskMenu(i, $event)" 
-                aria-label="Menú" 
-                aria-haspopup="true">
-                <app-icon name="more-vertical" size="small"></app-icon>
-              </button>
-              <menu *ngIf="openTaskMenuIndex === i" class="task-card__menu-dropdown">
-                <app-task-menu [isImportant]="task.important || false" [status]="task.status" (action)="handleTaskAction($event, i)"></app-task-menu>
-              </menu>
-            </nav>
-            
-            <mark *ngIf="task.important" class="task-card__important-badge" aria-label="Tarea importante">
-              <app-icon name="star" size="small"></app-icon>
-            </mark>
-            
-            <mark class="task-card__priority-indicator" [class]="'task-card__priority-indicator--' + task.priority.toLowerCase()"></mark>
-            
-            <section class="task-card__content">
-              <h3 class="task-card__title">{{ task.title }}</h3>
-              <p class="task-card__description">{{ task.description || 'Sin descripción' }}</p>
-              <dl class="task-card__meta">
-                <dt class="task-card__label">Prioridad: </dt>
-                <dd [class]="'task-card__value--' + task.priority.toLowerCase()">{{ getPriorityLabel(task.priority) }}</dd>
-                <dt class="task-card__label">Estatus: </dt>
-                <dd [class]="'task-card__value--status-' + task.status.toLowerCase()">{{ getStatusLabel(task.status) }}</dd>
-                <dt class="task-card__label">Creada en: </dt>
-                <dd class="task-card__value--date">{{ task.createdAt | date:'dd/MM/yyyy' }}</dd>
-              </dl>
-            </section>
-          </article>
+          <app-task-card
+            [title]="task.title"
+            [description]="task.description"
+            [status]="task.status"
+            [priority]="task.priority"
+            [imageUrl]="task.imageUrl"
+            [important]="task.important || false"
+            [createdAt]="task.createdAt"
+            [showMenu]="true"
+            [isMenuOpen]="openTaskMenuIndex === i"
+            (cardClick)="goToTask(task)"
+            (menuToggle)="toggleTaskMenu(i, $event)">
+            <app-task-menu 
+              slot="menu"
+              [isImportant]="task.important || false" 
+              [status]="task.status" 
+              (action)="handleTaskAction($event, i)">
+            </app-task-menu>
+          </app-task-card>
         </li>
       </ul>
     </section>
-  </main>
-</article>
+  </article>
+</app-sidebar-layout>

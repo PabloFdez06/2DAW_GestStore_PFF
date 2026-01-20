@@ -8,6 +8,7 @@
 :host {
   display: grid;
   grid-template-columns: 17.5rem 1fr;
+  grid-template-rows: auto 1fr;
   min-height: 100vh;
   background: var(--bg-default);
   color: var(--text-default);
@@ -18,7 +19,16 @@
 
   @include respond-down(md) {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
   }
+}
+
+// ============================================================================
+// HEADER SLOT - Ocupa toda la parte superior
+// ============================================================================
+::ng-deep [slot="header"] {
+  grid-column: 1 / -1;
+  grid-row: 1;
 }
 
 // ============================================================================
@@ -104,6 +114,7 @@
 // SIDEBAR
 // ============================================================================
 .sidebar-layout__sidebar {
+  grid-row: 2;
   background: var(--color-primary);
   color: var(--color-white);
   padding: 1.5rem 1.125rem;
@@ -255,14 +266,16 @@
 // MAIN CONTENT
 // ============================================================================
 .sidebar-layout__main {
+  grid-row: 2;
   padding: 1.5rem 2rem;
   overflow-y: auto;
 
   @include respond-down(md) {
-    padding: 4.5rem 1.5rem 1.5rem;
+    grid-row: 3;
+    padding: 1.5rem;
   }
 
   @include respond-down(sm) {
-    padding: 4.5rem 1rem 1rem;
+    padding: 1rem;
   }
 }

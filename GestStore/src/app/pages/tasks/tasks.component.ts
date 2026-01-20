@@ -17,11 +17,14 @@ import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
+import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
+import { TaskCardComponent } from '../../components/molecules/task-card/task-card.component';
+import { ButtonComponent } from '../../components/atoms/button/button.component';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, TaskMenuComponent, SpinnerComponent, StockNotificationsComponent],
+  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, TaskMenuComponent, SpinnerComponent, StockNotificationsComponent, SidebarLayoutComponent, TaskCardComponent, ButtonComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss'
 })
@@ -39,9 +42,6 @@ export class TasksComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   openTaskMenuIndex: number = -1;
   isStockNotificationsOpen = false;
-
-  avatarUrl: string | null = null;
-  isSidebarOpen: boolean = false;
 
   @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
   @ViewChild('taskDialog', { read: ElementRef }) taskDialog?: ElementRef<HTMLDialogElement>;
@@ -63,7 +63,6 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setCurrentDate();
-    this.loadAvatar();
     this.loadCurrentUser();
     this.stockAlertService.loadAlerts();
 
@@ -79,11 +78,6 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   closeStockNotifications(): void {
     this.isStockNotificationsOpen = false;
-  }
-
-  private loadAvatar(): void {
-    const stored = localStorage.getItem('geststore.avatar');
-    this.avatarUrl = stored && stored.trim().length > 0 ? stored : null;
   }
 
   ngOnDestroy(): void {
@@ -374,17 +368,6 @@ export class TasksComponent implements OnInit, OnDestroy {
     }
   }
 
-  onLogout(event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      this.authService.logout();
-    }
-  }
-
   onMenuClick(event: Event, task: Task): void {
     event.stopPropagation();
   }
@@ -499,17 +482,4 @@ export class TasksComponent implements OnInit, OnDestroy {
     return labels[status] ?? status;
   }
 
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (this.isSidebarOpen) {
-      this.renderer.addClass(this.document.body, 'sidebar-open');
-    } else {
-      this.renderer.removeClass(this.document.body, 'sidebar-open');
-    }
-  }
-
-  closeSidebar(): void {
-    this.isSidebarOpen = false;
-    this.renderer.removeClass(this.document.body, 'sidebar-open');
-  }
 }

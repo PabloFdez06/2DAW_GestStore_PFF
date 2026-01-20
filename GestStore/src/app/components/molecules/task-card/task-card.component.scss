@@ -2,7 +2,7 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 // ============================================================================
-// TASK CARD - Tarjeta de tarea con estado, descripción e imagen
+// TASK CARD - Tarjeta de tarea versátil con imagen, menú y metadatos
 // ============================================================================
 
 .task-card {
@@ -11,258 +11,18 @@
 
   // 2️⃣ DISPLAY
   display: flex;
-  align-items: flex-start;
-  gap: $spacing-4;
-
-  // 3️⃣ BOX MODEL - Desktop first
-  padding: $spacing-4;
-
-  // 4️⃣ BACKGROUND
-  background-color: var(--bg-surface);
-
-  // 5️⃣ BORDER
-  border: $border-thin solid var(--border-default);
-  border-radius: $radius-lg;
-
-  // 8️⃣ TRANSICIONES
-  transform: translateY(0);
-  transition: all 250ms ease-out;
-
-  // RESPONSIVE - Desktop first
-  @include respond-down(md) {
-    gap: $spacing-3;
-    padding: $spacing-3;
-  }
-
-  @include respond-down(sm) {
-    gap: $spacing-2;
-    padding: $spacing-2;
-    flex-direction: column;
-  }
-
-  &:hover {
-    border-color: var(--color-primary);
-    transform: translateY(-0.1875rem);
-    box-shadow: var(--shadow-md);
-  }
-
-  // Modificador: hoverable
-  &--hoverable {
-    // 7️⃣ EFECTOS VISUALES
-    cursor: pointer;
-
-    &:hover {
-      box-shadow: var(--shadow-md);
-
-      // 8️⃣ TRANSICIONES
-      transform: translateY(-0.125rem);
-
-      @include respond-down(sm) {
-        transform: translateY(0); // Desactivar en mobile
-      }
-    }
-  }
-}
-
-// ============================================================================
-// CONTENIDO PRINCIPAL
-// ============================================================================
-
-.task-card__content {
-  // 2️⃣ DISPLAY
-  display: flex;
-  flex: 1;
+  flex-direction: column;
   gap: $spacing-3;
 
   // 3️⃣ BOX MODEL
-  min-width: 0;
-}
-
-// ============================================================================
-// ICONO DE ESTADO
-// ============================================================================
-
-.task-card__status-icon {
-  // 2️⃣ DISPLAY
-  flex-shrink: 0;
-
-  // 3️⃣ BOX MODEL
-  width: $spacing-3;
-  height: $spacing-3;
-  margin-top: $spacing-1;
-
-  svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  // Variantes de estado
-  &--completed {
-    color: var(--color-success);
-  }
-
-  &--pending {
-    color: var(--color-warning);
-  }
-
-  &--in-progress {
-    color: var(--color-info);
-  }
-
-  &--cancelled {
-    color: var(--color-error);
-  }
-}
-
-// ============================================================================
-// INFORMACIÓN DE LA TAREA
-// ============================================================================
-
-.task-card__info {
-  // 2️⃣ DISPLAY
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: $spacing-1;
-
-  // 3️⃣ BOX MODEL
-  min-width: 0;
-}
-
-.task-card__title {
-  // 3️⃣ BOX MODEL
-  margin: 0;
-
-  // 6️⃣ TIPOGRAFÍA
-  @include text-style($font-size-base, $font-weight-semibold);
-  color: var(--text-default);
-  @include truncate;
-}
-
-.task-card__description {
-  // 2️⃣ DISPLAY
-  display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
-  -webkit-box-orient: vertical; /* stylelint-disable-line property-no-vendor-prefix */
-
-  // 3️⃣ BOX MODEL
-  margin: 0;
-
-  // 6️⃣ TIPOGRAFÍA
-  @include text-style($font-size-sm, $font-weight-regular);
-  line-clamp: 2;
-  -webkit-line-clamp: 2; /* stylelint-disable-line property-no-vendor-prefix */
-  color: var(--text-secondary);
-
-  // 7️⃣ EFECTOS VISUALES
-  overflow: hidden;
-}
-
-.task-card__status-text {
-  // 3️⃣ BOX MODEL
-  margin: 0;
-
-  // 6️⃣ TIPOGRAFÍA
-  @include text-style($font-size-xs, $font-weight-regular);
-  color: var(--text-default);
-}
-
-// Valores de estado con colores
-.task-card__status-value {
-  &--completed {
-    font-weight: $font-weight-medium;
-    color: var(--color-success);
-  }
-
-  &--pending {
-    font-weight: $font-weight-medium;
-    color: var(--color-warning);
-  }
-
-  &--in-progress {
-    font-weight: $font-weight-medium;
-    color: var(--color-info);
-  }
-
-  &--cancelled {
-    font-weight: $font-weight-medium;
-    color: var(--color-error);
-  }
-}
-
-.task-card__timestamp {
-  // 3️⃣ BOX MODEL
-  margin: 0;
-
-  // 6️⃣ TIPOGRAFÍA
-  @include text-style($font-size-xs, $font-weight-medium);
-  color: var(--text-muted);
-}
-
-// ============================================================================
-// THUMBNAIL
-// ============================================================================
-
-.task-card__thumbnail {
-  margin: 0;
-  // 2️⃣ DISPLAY
-  flex-shrink: 0;
-
-  // 3️⃣ BOX MODEL
-  width: 5.5rem;
-  height: 5.5rem;
+  padding: $spacing-4;
 
   // 4️⃣ BACKGROUND
-  background-color: var(--gray-200);
+  background-color: transparent;
 
   // 5️⃣ BORDER
-  border-radius: $radius-lg;
-
-  // 7️⃣ EFECTOS VISUALES
-  overflow: hidden;
-
-  &--placeholder {
-    background-color: var(--gray-200);
-  }
-}
-
-.task-card__image {
-  // 3️⃣ BOX MODEL
-  width: 100%;
-  height: 100%;
-
-  // 7️⃣ EFECTOS VISUALES
-  object-fit: cover;
-}
-
-// ============================================================================
-// MENÚ DE OPCIONES
-// ============================================================================
-
-.task-card__menu {
-  // 1️⃣ POSICIONAMIENTO
-  position: absolute;
-  top: $spacing-3;
-  right: $spacing-3;
-
-  // 2️⃣ DISPLAY
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // 3️⃣ BOX MODEL
-  width: $spacing-6;
-  height: $spacing-6;
-  padding: 0;
-
-  // 4️⃣ BACKGROUND
-  background: transparent;
-
-  // 5️⃣ BORDER
-  border: none;
-  border-radius: $radius-sm;
-
-  // 6️⃣ TIPOGRAFÍA
-  color: var(--text-muted);
+  border: $border-thin solid var(--border-default);
+  border-radius: 0.875rem;
 
   // 7️⃣ EFECTOS VISUALES
   cursor: pointer;
@@ -271,32 +31,313 @@
   @include transition;
 
   &:hover {
-    background-color: var(--bg-hover);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  // Variante: Grid (2 columnas)
+  &--grid {
+    min-height: 10rem;
+  }
+
+  // Variante: Compact
+  &--compact {
+    padding: $spacing-3;
+    gap: $spacing-2;
+  }
+}
+
+// ============================================================================
+// IMAGE / THUMBNAIL
+// ============================================================================
+
+.task-card__image {
+  position: absolute;
+  top: $spacing-4;
+  right: $spacing-4;
+  width: 5.625rem;
+  height: 5.5rem;
+  margin: 0;
+  background-color: var(--gray-300);
+  border-radius: 0.875rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+
+  &--has-image {
+    background-color: transparent;
+  }
+}
+
+.task-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// ============================================================================
+// MENU
+// ============================================================================
+
+.task-card__menu-wrapper {
+  position: absolute;
+  top: $spacing-4;
+  right: calc($spacing-4 + 6.25rem);
+}
+
+.task-card__menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: $radius-sm;
+  color: var(--text-muted);
+  cursor: pointer;
+  @include transition;
+
+  &:hover {
     color: var(--text-secondary);
+    background-color: var(--bg-hover);
   }
 
   &:focus-visible {
     @include focus-visible;
   }
+}
 
-  svg {
-    width: $spacing-4;
-    height: $spacing-1;
+.task-card__menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin: 0;
+  margin-top: 0.25rem;
+  padding: 0;
+  list-style: none;
+  z-index: 100;
+  animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================================================
+// IMPORTANT BADGE
+// ============================================================================
+
+.task-card__important-badge {
+  position: absolute;
+  top: $spacing-4;
+  left: calc(100% - 7.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--color-warning);
+}
+
+// ============================================================================
+// PRIORITY INDICATOR
+// ============================================================================
+
+.task-card__priority-indicator {
+  position: absolute;
+  top: $spacing-4;
+  left: $spacing-4;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid;
+  border-radius: 50%;
+  background-color: transparent;
+
+  &--high {
+    border-color: var(--color-error);
+  }
+
+  &--medium {
+    border-color: var(--color-medium);
+  }
+
+  &--low {
+    border-color: var(--color-success);
+  }
+}
+
+// ============================================================================
+// CONTENT
+// ============================================================================
+
+.task-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  padding-left: $spacing-5;
+  padding-right: 6.5rem;
+  min-height: 5rem;
+}
+
+.task-card__title {
+  @include text-style($font-size-base, $font-weight-semibold, $line-normal);
+  color: var(--text-default);
+  margin: 0;
+  @include truncate;
+}
+
+.task-card__description {
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+  color: var(--text-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.task-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-1;
+  margin: $spacing-2 0 0 0;
+}
+
+.task-card__label {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  color: var(--text-default);
+  display: inline;
+}
+
+.task-card__meta dd {
+  @include text-style($font-size-xs, $font-weight-medium, $line-normal);
+  display: inline;
+  margin: 0;
+  margin-right: $spacing-3;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+// Priority value colors
+.task-card__value {
+  &--high {
+    color: var(--color-error);
+  }
+
+  &--medium {
+    color: var(--color-medium);
+  }
+
+  &--low {
+    color: var(--color-success);
+  }
+}
+
+// Status value colors
+.task-card__value--status {
+  &-completed {
+    color: var(--color-success);
+  }
+
+  &-pending {
+    color: var(--color-warning);
+  }
+
+  &-inprogress {
+    color: var(--color-info);
+  }
+
+  &-notstarted {
+    color: var(--color-error);
+  }
+
+  &-cancelled {
+    color: var(--color-error);
+  }
+}
+
+.task-card__value--date {
+  color: var(--text-muted);
+}
+
+.task-card__completed-time {
+  @include text-style($font-size-xs, $font-weight-regular, $line-normal);
+  color: var(--text-muted);
+  margin: 0;
 }
 
 // ============================================================================
 // RESPONSIVE
 // ============================================================================
 
-@include respond(sm) {
-  .task-card {
-    flex-direction: column;
+@include respond-down(md) {
+  .task-card__image {
+    width: 4.5rem;
+    height: 4.5rem;
   }
 
-  .task-card__thumbnail {
+  .task-card__menu-wrapper {
+    right: calc($spacing-3 + 5.25rem);
+  }
+
+  .task-card__content {
+    padding-right: 5.5rem;
+  }
+}
+
+@include respond-down(sm) {
+  .task-card {
+    padding: $spacing-3;
+  }
+
+  .task-card__image {
+    position: static;
     width: 100%;
-    height: 7.5rem;
+    height: 8rem;
     order: -1;
+    border-radius: 0.75rem;
+  }
+
+  .task-card__menu-wrapper {
+    position: absolute;
+    top: $spacing-3;
+    right: $spacing-3;
+  }
+
+  .task-card__important-badge {
+    top: $spacing-3;
+    left: auto;
+    right: calc($spacing-3 + 2rem);
+  }
+
+  .task-card__priority-indicator {
+    top: auto;
+    left: $spacing-3;
+    bottom: auto;
+    position: relative;
+    margin-bottom: $spacing-2;
+  }
+
+  .task-card__content {
+    padding-left: $spacing-5;
+    padding-right: 0;
+    min-height: auto;
   }
 }

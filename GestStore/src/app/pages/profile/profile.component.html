@@ -1,94 +1,24 @@
-<main class="profile">
-  <!-- Botón hamburguesa para mobile -->
-  <button 
-    class="profile__hamburger" 
-    type="button"
-    (click)="toggleSidebar()"
-    [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
-    [attr.aria-expanded]="isSidebarOpen"
-    [class.is-open]="isSidebarOpen">
-    <span class="profile__hamburger-line profile__hamburger-line--top" aria-hidden="true"></span>
-    <span class="profile__hamburger-line profile__hamburger-line--middle" aria-hidden="true"></span>
-    <span class="profile__hamburger-line profile__hamburger-line--bottom" aria-hidden="true"></span>
-  </button>
+<app-sidebar-layout activeRoute="/perfil">
+  <!-- Header slot -->
+  <nav slot="header" class="profile__topbar" role="navigation" aria-label="Navegación principal">
+    <h1 class="profile__logo">
+      <span class="profile__logo-gest">Gest</span><span class="profile__logo-store">Store</span>
+    </h1>
 
-  <!-- Overlay del sidebar para mobile -->
-  <span 
-    *ngIf="isSidebarOpen" 
-    class="profile__sidebar-overlay"
-    role="presentation"
-    (click)="closeSidebar()"
-    aria-hidden="true"></span>
+    <section class="profile__topbar-content" aria-label="Fecha y acciones">
+      <hgroup class="profile__date-group">
+        <p class="profile__day">{{ currentDayName }}</p>
+        <p class="profile__full-date">{{ currentDate }}</p>
+      </hgroup>
 
-  <aside class="profile__sidebar" [class.is-open]="isSidebarOpen" aria-label="Menú lateral">
-    <header class="profile__sidebar-header">
-      <a class="profile__brand" routerLink="/dashboard" aria-label="GestStore">
-        <app-icon name="check-circle" size="large"></app-icon>
-        <span class="profile__brand-text">GestStore</span>
-      </a>
-    </header>
+      <button class="profile__icon-button" type="button" (click)="toggleTheme()" [attr.aria-label]="themeAriaLabel">
+        <app-icon [name]="themeIcon"></app-icon>
+      </button>
+    </section>
+  </nav>
 
-    <nav class="profile__nav" aria-label="Navegación principal">
-      <ul class="profile__nav-list">
-        <li class="profile__nav-item">
-          <a class="profile__nav-link" routerLink="/dashboard">
-            <app-icon name="home"></app-icon>
-            <span>Inicio</span>
-          </a>
-        </li>
-
-        <li class="profile__nav-item">
-          <a class="profile__nav-link" routerLink="/tareas">
-            <app-icon name="check-square"></app-icon>
-            <span>Tareas</span>
-          </a>
-        </li>
-
-        <li class="profile__nav-item">
-          <a class="profile__nav-link" routerLink="/tareas-importantes">
-            <app-icon name="star"></app-icon>
-            <span>Importantes</span>
-          </a>
-        </li>
-
-        <li class="profile__nav-item">
-          <a class="profile__nav-link" routerLink="/ajustes">
-            <app-icon name="settings"></app-icon>
-            <span>Ajustes</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-
-    <footer class="profile__sidebar-footer">
-      <a class="profile__user" routerLink="/perfil" aria-label="Ir a tu perfil">
-        <ng-container *ngIf="avatarUrl; else profileSidebarAvatarDefault">
-          <img class="profile__user-avatar" [src]="avatarUrl" alt="Avatar" loading="lazy" decoding="async" />
-        </ng-container>
-        <ng-template #profileSidebarAvatarDefault>
-          <span class="profile__user-avatar profile__user-avatar--empty" aria-hidden="true">
-            <app-icon name="user" size="large"></app-icon>
-          </span>
-        </ng-template>
-        <span class="profile__user-name">{{ currentUser?.name || 'Usuario' }}</span>
-      </a>
-    </footer>
-  </aside>
-
-  <section class="profile__content" aria-label="Contenido">
-    <header class="profile__topbar">
-      <section class="profile__topbar-left" aria-label="Fecha">
-        <h1 class="profile__title">Perfil</h1>
-        <p class="profile__subtitle">{{ currentDayName }}, {{ currentDate }}</p>
-      </section>
-
-      <section class="profile__topbar-right" aria-label="Acciones">
-        <button class="profile__icon-button" type="button" (click)="toggleTheme()" [attr.aria-label]="themeAriaLabel">
-          <app-icon [name]="themeIcon"></app-icon>
-        </button>
-      </section>
-    </header>
-
+  <!-- Main Content -->
+  <article class="profile__content" aria-label="Contenido">
     <section class="profile__card" aria-label="Información de tu cuenta">
       <header class="profile__card-header">
         <a class="profile__back" href="#" (click)="onBack($event)">
@@ -157,17 +87,17 @@
         <p class="profile__error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
         <section class="profile__actions" aria-label="Acciones">
-          <button class="profile__primary" type="submit" [disabled]="isSaving">
+          <app-button variant="primary" type="submit" [disabled]="isSaving">
             <app-spinner *ngIf="isSaving" size="small"></app-spinner>
             <span *ngIf="!isSaving">Actualizar Info</span>
             <span *ngIf="isSaving">Guardando…</span>
-          </button>
+          </app-button>
 
-          <button class="profile__secondary" type="button" (click)="onGoToPassword($event)">
+          <app-button variant="secondary" (clicked)="onGoToPassword($event)">
             Cambiar Contraseña
-          </button>
+          </app-button>
         </section>
       </form>
     </section>
-  </section>
-</main>
+  </article>
+</app-sidebar-layout>

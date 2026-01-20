@@ -1,19 +1,6 @@
-<article class="dashboard">
-  <!-- Top Navigation Bar -->
-  <nav class="dashboard__nav" role="navigation" aria-label="Navegación principal">
-    <!-- Botón hamburguesa para mobile -->
-    <button 
-      class="dashboard__hamburger" 
-      type="button"
-      (click)="toggleSidebar()"
-      [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
-      [attr.aria-expanded]="isSidebarOpen"
-      [class.is-open]="isSidebarOpen">
-      <span class="hamburger__line hamburger__line--top" aria-hidden="true"></span>
-      <span class="hamburger__line hamburger__line--middle" aria-hidden="true"></span>
-      <span class="hamburger__line hamburger__line--bottom" aria-hidden="true"></span>
-    </button>
-    
+<app-sidebar-layout activeRoute="/dashboard">
+  <!-- Header slot -->
+  <nav slot="header" class="dashboard__nav" role="navigation" aria-label="Navegación principal">
     <h1 class="dashboard__logo">
       <span class="dashboard__logo-gest">Gest</span><span class="dashboard__logo-store">Store</span>
     </h1>
@@ -101,74 +88,8 @@
     </section>
   </dialog>
 
-  <!-- Overlay del sidebar para mobile -->
-  <span 
-    *ngIf="isSidebarOpen" 
-    class="dashboard__sidebar-overlay"
-    role="presentation"
-    (click)="closeSidebar()"
-    aria-hidden="true"></span>
-  
-  <!-- Side Navigation -->
-  <aside 
-    class="dashboard__sidebar" 
-    role="complementary" 
-    aria-label="Menú lateral"
-    [class.is-open]="isSidebarOpen">
-    <header class="dashboard__user">
-      <figure class="dashboard__user-avatar">
-        <a class="dashboard__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
-          <ng-container *ngIf="avatarUrl; else dashboardAvatarDefault">
-            <img class="dashboard__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
-          </ng-container>
-          <ng-template #dashboardAvatarDefault>
-            <app-icon name="user" size="large" aria-hidden="true"></app-icon>
-          </ng-template>
-        </a>
-      </figure>
-      <hgroup class="dashboard__user-info">
-        <p class="dashboard__user-name">{{ currentUser?.name || 'Usuario' }}</p>
-        <p class="dashboard__user-email">{{ currentUser?.email || '' }}</p>
-      </hgroup>
-    </header>
-
-    <nav class="dashboard__sidebar-nav" aria-label="Navegación del menú">
-      <a routerLink="/dashboard" class="dashboard__sidebar-link dashboard__sidebar-link--active" aria-current="page" (click)="closeSidebar()">
-        <app-icon name="home" size="small"></app-icon>
-        <span>Dashboard</span>
-      </a>
-      <a routerLink="/tareas-importantes" class="dashboard__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="star" size="small"></app-icon>
-        <span>Tareas Importantes</span>
-      </a>
-      <a routerLink="/tareas" class="dashboard__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="check-square" size="small"></app-icon>
-        <span>Tareas</span>
-      </a>
-      <a routerLink="/categorias" class="dashboard__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="folder" size="small"></app-icon>
-        <span>Categorias de Tareas</span>
-      </a>
-      <a routerLink="/almacen" class="dashboard__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="package" size="small"></app-icon>
-        <span>Almacen</span>
-      </a>
-      <a routerLink="/ajustes" class="dashboard__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="settings" size="small"></app-icon>
-        <span>Ajustes</span>
-      </a>
-    </nav>
-
-    <footer class="dashboard__sidebar-footer">
-      <button type="button" class="dashboard__logout" (click)="onLogout($event)">
-        <app-icon name="log-out" size="small"></app-icon>
-        <span>Cerrar Sesión</span>
-      </button>
-    </footer>
-  </aside>
-
   <!-- Main Content -->
-  <main class="dashboard__main" role="main">
+  <article class="dashboard__content">
     <!-- Welcome Header -->
     <header class="dashboard__welcome">
       <h2 class="dashboard__welcome-title">Bienvenido de nuevo, {{ currentUser?.name || 'Usuario' }}</h2>
@@ -201,17 +122,14 @@
         <!-- Mensaje de error -->
         <aside *ngIf="errorMessage" class="dashboard__error" role="alert">
           <p>{{ errorMessage }}</p>
-          <button (click)="loadTasks()" class="dashboard__retry-btn" type="button">Reintentar</button>
+          <app-button variant="primary" size="small" (clicked)="loadTasks()">Reintentar</app-button>
         </aside>
 
         <!-- Mensaje cuando no hay tareas -->
         <section *ngIf="!isLoadingTasks && !errorMessage && tasks.length === 0" class="dashboard__empty-state">
           <app-icon name="inbox" size="large" class="dashboard__empty-icon"></app-icon>
           <p class="dashboard__empty-text">Aún no existen tareas</p>
-          <button class="dashboard__empty-create-btn" type="button" (click)="toggleTaskModal()">
-            <app-icon name="plus" size="small"></app-icon>
-            <span>Crear tarea</span>
-          </button>
+          <app-button variant="primary" icon="plus" (clicked)="toggleTaskModal()">Crear tarea</app-button>
         </section>
 
         <!-- Lista de tareas -->
@@ -261,10 +179,7 @@
           </li>
         </ul>
 
-        <button class="dashboard__add-task" type="button" (click)="toggleTaskModal()">
-          <app-icon name="plus" size="small"></app-icon>
-          <span>Añadir Tarea</span>
-        </button>
+        <app-button variant="link" icon="plus" (clicked)="toggleTaskModal()">Añadir Tarea</app-button>
       </section>
 
       <!-- Status Charts Section (Top Right) -->
@@ -359,5 +274,5 @@
         </ul>
       </section>
     </section>
-  </main>
-</article>
+  </article>
+</app-sidebar-layout>

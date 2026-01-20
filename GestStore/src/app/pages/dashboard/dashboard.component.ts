@@ -6,10 +6,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
+import { ButtonComponent } from '../../components/atoms/button/button.component';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
+import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
 import { TaskService } from '../../services/task.service';
 import { TaskProductService } from '../../services/task-product.service';
 import { ProductService } from '../../services/product.service';
@@ -31,11 +33,13 @@ import { SpinnerComponent } from '../../components/atoms/spinner/spinner.compone
     HttpClientModule,
     RouterModule,
     IconComponent,
+    ButtonComponent,
     CalendarComponent,
     AddTaskModalComponent,
     TaskMenuComponent,
     SpinnerComponent,
-    StockNotificationsComponent
+    StockNotificationsComponent,
+    SidebarLayoutComponent
   ],
   providers: [TaskService],
   templateUrl: './dashboard.component.html',
@@ -56,9 +60,6 @@ export class DashboardComponent implements OnInit {
   
   // Control del menú de tarea (índice de la tarea con menú abierto, -1 si ninguno)
   openTaskMenuIndex: number = -1;
-  
-  // Control del sidebar mobile
-  isSidebarOpen: boolean = false;
   
   // Tareas desde la API
   tasks: Task[] = [];
@@ -85,8 +86,6 @@ export class DashboardComponent implements OnInit {
 
   // Stock notifications
   isStockNotificationsOpen: boolean = false;
-
-  avatarUrl: string | null = null;
 
   @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
   @ViewChild('taskDialog', { read: ElementRef }) taskDialog?: ElementRef<HTMLDialogElement>;
@@ -118,30 +117,10 @@ export class DashboardComponent implements OnInit {
     this.themeService.toggle();
   }
   
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (this.isSidebarOpen) {
-      this.renderer.addClass(this.document.body, 'sidebar-open');
-    } else {
-      this.renderer.removeClass(this.document.body, 'sidebar-open');
-    }
-  }
-  
-  closeSidebar(): void {
-    this.isSidebarOpen = false;
-    this.renderer.removeClass(this.document.body, 'sidebar-open');
-  }
-  
   ngOnInit() {
     this.updateCurrentDate();
-    this.loadAvatar();
     this.loadCurrentUser(); // Esto cargará las tareas cuando el usuario esté disponible
     this.stockAlertService.loadAlerts();
-  }
-
-  private loadAvatar(): void {
-    const stored = localStorage.getItem('geststore.avatar');
-    this.avatarUrl = stored && stored.trim().length > 0 ? stored : null;
   }
   
   toggleStockNotifications(): void {
@@ -199,20 +178,6 @@ export class DashboardComponent implements OnInit {
         }
       });
     });
-  }
-  
-  /**
-   * Cerrar sesión
-   */
-  onLogout(event?: Event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      this.authService.logout();
-    }
   }
   
   @HostListener('document:click', ['$event'])

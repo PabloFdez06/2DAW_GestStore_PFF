@@ -28,11 +28,12 @@ import { CalendarComponent } from '../../components/molecules/calendar/calendar.
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
+import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, SpinnerComponent, StockNotificationsComponent],
+  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, SpinnerComponent, StockNotificationsComponent, SidebarLayoutComponent],
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.scss'
 })
@@ -50,8 +51,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   isEditMode = false;
   taskToEdit: Task | null = null;
   currentUser: User | null = null;
-  avatarUrl: string | null = null;
-  isSidebarOpen = false;
   isStockNotificationsOpen = false;
 
   @ViewChild('calendarDialog', { read: ElementRef }) calendarDialog?: ElementRef<HTMLDialogElement>;
@@ -76,7 +75,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     this.task = this.route.snapshot.data['task'] as Task;
 
     this.setCurrentDate();
-    this.loadAvatar();
     this.loadCurrentUser();
     this.loadTaskProducts();
     this.stockAlertService.loadAlerts();
@@ -145,11 +143,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     this.currentDate = `${day} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
   }
 
-  private loadAvatar(): void {
-    const stored = localStorage.getItem('geststore.avatar');
-    this.avatarUrl = stored && stored.trim().length > 0 ? stored : null;
-  }
-
   loadCurrentUser(): void {
     this.authService.currentUser.subscribe(user => {
       this.ngZone.run(() => {
@@ -169,20 +162,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
 
   toggleTheme(): void {
     this.themeService.toggle();
-  }
-
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (this.isSidebarOpen) {
-      this.lockScroll();
-    } else {
-      this.unlockScroll();
-    }
-  }
-
-  closeSidebar(): void {
-    this.isSidebarOpen = false;
-    this.unlockScroll();
   }
 
   onSearchChange(): void {
@@ -242,11 +221,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     } else {
       this.unlockScroll();
     }
-    
-    // Cerrar sidebar si está abierto cuando se abre un modal
-    if ((this.isCalendarOpen || this.isTaskModalOpen) && this.isSidebarOpen) {
-      this.isSidebarOpen = false;
-    }
   }
 
   private lockScroll(): void {
@@ -259,17 +233,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     const body = this.document?.body;
     if (!body) return;
     this.renderer.removeClass(body, 'is-scroll-locked');
-  }
-
-  onLogout(event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      this.authService.logout();
-    }
   }
 
   backToList(): void {

@@ -1,0 +1,63 @@
+<article 
+  class="task-card"
+  [class.task-card--grid]="variant === 'grid'"
+  [class.task-card--compact]="variant === 'compact'"
+  (click)="onCardClick()"
+  (keydown.enter)="onCardClick()"
+  (keydown.space)="onCardClick(); $event.preventDefault()"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Ver detalle de ' + title">
+
+  <!-- Image/Thumbnail -->
+  <figure class="task-card__image" [class.task-card__image--has-image]="imageUrl" role="img" aria-label="Imagen de la tarea">
+    <ng-container *ngIf="imageUrl">
+      <img class="task-card__img" [src]="imageUrl" alt="" loading="lazy" decoding="async" />
+    </ng-container>
+    <ng-container *ngIf="!imageUrl">
+      <app-icon name="camera" size="small"></app-icon>
+    </ng-container>
+  </figure>
+
+  <!-- Menu wrapper -->
+  <nav *ngIf="showMenu" class="task-card__menu-wrapper" aria-label="Acciones de tarea">
+    <button 
+      class="task-card__menu-btn" 
+      type="button" 
+      (click)="onMenuToggle($event)" 
+      aria-label="Menú" 
+      aria-haspopup="true">
+      <app-icon name="more-vertical" size="small"></app-icon>
+    </button>
+    <menu *ngIf="isMenuOpen" class="task-card__menu-dropdown" (click)="onMenuClick($event)">
+      <ng-content select="[slot=menu]"></ng-content>
+    </menu>
+  </nav>
+
+  <!-- Important badge -->
+  <mark *ngIf="important" class="task-card__important-badge" aria-label="Tarea importante">
+    <app-icon name="star" size="small"></app-icon>
+  </mark>
+
+  <!-- Priority indicator -->
+  <mark class="task-card__priority-indicator" [class]="'task-card__priority-indicator--' + getPriorityClass()"></mark>
+
+  <!-- Content -->
+  <section class="task-card__content">
+    <h3 class="task-card__title">{{ title }}</h3>
+    <p class="task-card__description">{{ description || 'Sin descripción' }}</p>
+    <dl class="task-card__meta">
+      <dt class="task-card__label">Prioridad: </dt>
+      <dd [class]="'task-card__value--' + getPriorityClass()">{{ getPriorityLabel() }}</dd>
+      <dt class="task-card__label">Estatus: </dt>
+      <dd [class]="'task-card__value--status-' + getStatusClass()">{{ getStatusLabel() }}</dd>
+      <ng-container *ngIf="createdAt">
+        <dt class="task-card__label">Creada en: </dt>
+        <dd class="task-card__value--date">{{ formatDate(createdAt) }}</dd>
+      </ng-container>
+    </dl>
+    <time *ngIf="completedAt && status === 'COMPLETED'" class="task-card__completed-time">
+      Completada hace {{ getCompletedAgo() }}.
+    </time>
+  </section>
+</article>

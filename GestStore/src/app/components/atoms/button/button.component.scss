@@ -146,6 +146,64 @@
     }
   }
 
+  // Link variant
+  &--link {
+    padding: 0;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+
+    &:hover {
+      color: var(--color-primary);
+      background: transparent;
+    }
+  }
+
+  // Icon-only button (like nav buttons)
+  &--icon {
+    width: 2.125rem;
+    height: 2.125rem;
+    padding: 0;
+    background-color: transparent;
+    color: var(--text-muted);
+    border: none;
+
+    &:hover {
+      color: var(--color-primary);
+      background-color: var(--bg-hover);
+    }
+  }
+
+  // Navigation button (square with bg)
+  &--nav {
+    width: 2.125rem;
+    height: 2.125rem;
+    padding: 0;
+    background-color: var(--color-primary);
+    color: var(--text-on-primary);
+    border: none;
+    border-radius: 0.5rem;
+
+    &:hover {
+      background-color: var(--interactive-hover);
+    }
+  }
+
+  // Icon-only modifier
+  &--icon-only {
+    padding: 0;
+    width: 2.125rem;
+    height: 2.125rem;
+    justify-content: center;
+  }
+
+  // With icon modifier
+  &--with-icon {
+    .button__content {
+      display: inline;
+    }
+  }
+
   // Estados activo
   &--active {
     background-color: var(--color-primary);

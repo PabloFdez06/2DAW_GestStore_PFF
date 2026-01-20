@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
+import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
@@ -15,7 +16,7 @@ import { User } from '../../models/auth.model';
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent, StockNotificationsComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent, StockNotificationsComponent, SidebarLayoutComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
@@ -29,7 +30,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
 
   avatarUrl: string | null = null;
-  isSidebarOpen: boolean = false;
 
   // Form data (UI only for now)
   fullName: string = '';
@@ -90,7 +90,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private loadAvatar(): void {
+  loadAvatar(): void {
     const stored = localStorage.getItem('geststore.avatar');
     this.avatarUrl = stored && stored.trim().length > 0 ? stored : null;
   }
@@ -222,17 +222,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.renderer.removeClass(body, 'is-scroll-locked');
   }
 
-  onLogout(event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-      this.authService.logout();
-    }
-  }
-
   get themeIcon(): string {
     return this.themeService.mode() === 'dark' ? 'moon' : 'sun';
   }
@@ -252,19 +241,5 @@ export class SettingsComponent implements OnInit, OnDestroy {
       keyboardEvent.preventDefault();
       this.closeCalendar();
     }
-  }
-
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (this.isSidebarOpen) {
-      this.renderer.addClass(this.document.body, 'sidebar-open');
-    } else {
-      this.renderer.removeClass(this.document.body, 'sidebar-open');
-    }
-  }
-
-  closeSidebar(): void {
-    this.isSidebarOpen = false;
-    this.renderer.removeClass(this.document.body, 'sidebar-open');
   }
 }

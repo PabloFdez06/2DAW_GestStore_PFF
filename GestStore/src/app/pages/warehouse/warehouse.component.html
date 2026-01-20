@@ -1,19 +1,6 @@
-<article class="warehouse">
-  <!-- Top Navigation Bar -->
-  <nav class="warehouse__nav" role="navigation" aria-label="Navegación principal">
-    <!-- Botón hamburguesa para mobile -->
-    <button 
-      class="warehouse__hamburger" 
-      type="button"
-      (click)="toggleSidebar()"
-      [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
-      [attr.aria-expanded]="isSidebarOpen"
-      [class.is-open]="isSidebarOpen">
-      <span class="warehouse__hamburger-line warehouse__hamburger-line--top" aria-hidden="true"></span>
-      <span class="warehouse__hamburger-line warehouse__hamburger-line--middle" aria-hidden="true"></span>
-      <span class="warehouse__hamburger-line warehouse__hamburger-line--bottom" aria-hidden="true"></span>
-    </button>
-    
+<app-sidebar-layout activeRoute="/almacen">
+  <!-- Header slot -->
+  <nav slot="header" class="warehouse__nav" role="navigation" aria-label="Navegación principal">
     <h1 class="warehouse__logo">
       <span class="warehouse__logo-gest">Gest</span><span class="warehouse__logo-store">Store</span>
     </h1>
@@ -102,128 +89,54 @@
     </section>
   </dialog>
 
-  <!-- Overlay del sidebar para mobile -->
-  <section 
-    *ngIf="isSidebarOpen" 
-    class="warehouse__sidebar-overlay"
-    (click)="closeSidebar()"
-    aria-hidden="true"></section>
-  
-  <!-- Side Navigation -->
-  <aside 
-    class="warehouse__sidebar" 
-    role="complementary" 
-    aria-label="Menú lateral"
-    [class.is-open]="isSidebarOpen">
-    <header class="warehouse__user">
-      <figure class="warehouse__user-avatar">
-        <a class="warehouse__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
-          <ng-container *ngIf="avatarUrl; else warehouseAvatarDefault">
-            <img class="warehouse__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
-          </ng-container>
-          <ng-template #warehouseAvatarDefault>
-            <app-icon name="user" size="large" aria-hidden="true"></app-icon>
-          </ng-template>
-        </a>
-      </figure>
-      <hgroup class="warehouse__user-info">
-        <p class="warehouse__user-name">{{ currentUser?.name || 'Usuario' }}</p>
-        <p class="warehouse__user-email">{{ currentUser?.email || '' }}</p>
-      </hgroup>
-    </header>
-
-    <nav class="warehouse__sidebar-nav" aria-label="Navegación del menú">
-      <a routerLink="/dashboard" class="warehouse__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="home" size="small"></app-icon>
-        <span>Dashboard</span>
-      </a>
-      <a routerLink="/tareas-importantes" class="warehouse__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="star" size="small"></app-icon>
-        <span>Tareas Importantes</span>
-      </a>
-      <a routerLink="/tareas" class="warehouse__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="check-square" size="small"></app-icon>
-        <span>Tareas</span>
-      </a>
-      <a routerLink="/categorias" class="warehouse__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="folder" size="small"></app-icon>
-        <span>Categorias de Tareas</span>
-      </a>
-      <a routerLink="/almacen" class="warehouse__sidebar-link warehouse__sidebar-link--active" aria-current="page" (click)="closeSidebar()">
-        <app-icon name="package" size="small"></app-icon>
-        <span>Almacen</span>
-      </a>
-      <a routerLink="/ajustes" class="warehouse__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="settings" size="small"></app-icon>
-        <span>Ajustes</span>
-      </a>
-    </nav>
-
-    <footer class="warehouse__sidebar-footer">
-      <button type="button" class="warehouse__logout" (click)="onLogout($event)">
-        <app-icon name="log-out" size="small"></app-icon>
-        <span>Cerrar Sesión</span>
-      </button>
-    </footer>
-  </aside>
-
   <!-- Main Content -->
-  <main class="warehouse__main" role="main">
+  <article class="warehouse__content">
     <!-- Header Section -->
     <header class="warehouse__header">
       <hgroup class="warehouse__title-group">
         <h2 class="warehouse__title">Almacen y Stockage</h2>
-        <mark class="warehouse__subtitle">Productos</mark>
+        <span class="warehouse__subtitle">Productos</span>
       </hgroup>
-      <button 
-        class="warehouse__add-btn" 
-        type="button" 
-        (click)="openAddProductModal()"
-        aria-label="Añadir producto">
-        <app-icon name="plus" size="small"></app-icon>
-        <span>Añadir producto</span>
-      </button>
+      <app-button 
+        variant="link" 
+        icon="plus" 
+        ariaLabel="Añadir producto"
+        (clicked)="openAddProductModal()">
+        Añadir producto
+      </app-button>
     </header>
 
     <!-- Statistics Cards -->
     <section class="warehouse__stats" aria-label="Estadísticas de productos">
-      <article class="warehouse__stat-card">
-        <header class="warehouse__stat-header">
-          <h3 class="warehouse__stat-title">Total productos</h3>
-        </header>
-        <data class="warehouse__stat-value" [value]="statistics?.totalProducts || 0">
-          {{ statistics?.totalProducts || 0 }}
-        </data>
-      </article>
+      <app-stat-card
+        title="Total productos"
+        [value]="statistics?.totalProducts || 0"
+        variant="simple"
+        [hoverable]="false">
+      </app-stat-card>
 
-      <article class="warehouse__stat-card">
-        <header class="warehouse__stat-header">
-          <h3 class="warehouse__stat-title">Alertas</h3>
-        </header>
-        <data class="warehouse__stat-value" [value]="(statistics?.lowStockProducts || 0) + (statistics?.outOfStockProducts || 0)">
-          {{ (statistics?.lowStockProducts || 0) + (statistics?.outOfStockProducts || 0) }}
-        </data>
-      </article>
+      <app-stat-card
+        title="Alertas"
+        [value]="(statistics?.lowStockProducts || 0) + (statistics?.outOfStockProducts || 0)"
+        variant="simple"
+        [hoverable]="false">
+      </app-stat-card>
 
-      <article class="warehouse__stat-card">
-        <header class="warehouse__stat-header">
-          <h3 class="warehouse__stat-title">Stock Bajo</h3>
-          <span class="warehouse__stat-indicator warehouse__stat-indicator--warning" aria-label="Alerta amarilla"></span>
-        </header>
-        <data class="warehouse__stat-value" [value]="statistics?.lowStockProducts || 0">
-          {{ statistics?.lowStockProducts || 0 }}
-        </data>
-      </article>
+      <app-stat-card
+        title="Stock Bajo"
+        [value]="statistics?.lowStockProducts || 0"
+        variant="simple"
+        indicator="warning"
+        [hoverable]="false">
+      </app-stat-card>
 
-      <article class="warehouse__stat-card">
-        <header class="warehouse__stat-header">
-          <h3 class="warehouse__stat-title">Sin Stock</h3>
-          <span class="warehouse__stat-indicator warehouse__stat-indicator--danger" aria-label="Alerta roja"></span>
-        </header>
-        <data class="warehouse__stat-value" [value]="statistics?.outOfStockProducts || 0">
-          {{ statistics?.outOfStockProducts || 0 }}
-        </data>
-      </article>
+      <app-stat-card
+        title="Sin Stock"
+        [value]="statistics?.outOfStockProducts || 0"
+        variant="simple"
+        indicator="danger"
+        [hoverable]="false">
+      </app-stat-card>
     </section>
 
     <!-- Products Table -->
@@ -243,9 +156,9 @@
       <article *ngIf="!isLoading && filteredProducts.length === 0" class="warehouse__empty">
         <app-icon name="package" size="large"></app-icon>
         <p>No hay productos disponibles</p>
-        <button class="warehouse__empty-btn" type="button" (click)="openAddProductModal()">
+        <app-button variant="primary" (clicked)="openAddProductModal()">
           Añadir primer producto
-        </button>
+        </app-button>
       </article>
 
       <!-- Products Table -->
@@ -301,5 +214,5 @@
         </tbody>
       </table>
     </section>
-  </main>
-</article>
+  </article>
+</app-sidebar-layout>

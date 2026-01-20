@@ -4,7 +4,7 @@ import { BadgeComponent } from '../../components/atoms/badge/badge.component';
 import { TagComponent } from '../../components/atoms/tag/tag.component';
 import { AlertComponent } from '../../components/molecules/alert/alert.component';
 import { CardComponent } from '../../components/molecules/card/card.component';
-import { TaskCardComponent, TaskStatus } from '../../components/molecules/task-card/task-card.component';
+import { TaskCardComponent } from '../../components/molecules/task-card/task-card.component';
 import { FormInputComponent } from '../../components/shared/form-input/form-input.component';
 import { FormTextareaComponent } from '../../components/shared/form-textarea/form-textarea.component';
 import { FormSelectComponent, SelectOption } from '../../components/shared/form-select/form-select.component';
@@ -15,6 +15,8 @@ import { HomeFooterComponent } from '../../components/molecules/home-footer/home
 import { AccordionComponent, AccordionItem } from '../../components/molecules/accordion/accordion.component';
 import { TabsComponent, TabItem } from '../../components/molecules/tabs/tabs.component';
 import { TooltipDirective } from '../../directives/tooltip.directive';
+
+type TaskStatus = 'COMPLETED' | 'PENDING' | 'IN_PROGRESS' | 'CANCELLED' | 'NOT_STARTED';
 
 @Component({
   selector: 'app-style-guide',
@@ -55,25 +57,25 @@ export class StyleGuideComponent {
     completed: {
       title: 'Revisión cableado',
       description: 'En la obra de calle x, revisar y terminar cableado.',
-      status: 'completed' as TaskStatus,
+      status: 'COMPLETED' as TaskStatus,
       completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // Hace 2 días
     },
     pending: {
       title: 'Inspección equipos',
       description: 'Revisar estado de los equipos del almacén principal.',
-      status: 'pending' as TaskStatus,
+      status: 'PENDING' as TaskStatus,
       completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
     },
     inProgress: {
       title: 'Actualizar inventario',
       description: 'Registrar nuevos productos recibidos esta semana.',
-      status: 'in-progress' as TaskStatus,
+      status: 'IN_PROGRESS' as TaskStatus,
       completedAt: new Date()
     },
     cancelled: {
       title: 'Mantenimiento cancelado',
       description: 'El mantenimiento programado ha sido cancelado.',
-      status: 'cancelled' as TaskStatus,
+      status: 'CANCELLED' as TaskStatus,
       completedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
     }
   };

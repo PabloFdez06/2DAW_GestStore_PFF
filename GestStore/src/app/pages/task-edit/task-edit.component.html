@@ -8,10 +8,8 @@
     </hgroup>
 
     <menu class="task-edit__actions">
-      <button class="button button--secondary" type="button" (click)="cancel()">Cancelar</button>
-      <button class="button button--primary" type="button" (click)="save()" [disabled]="isSaving">
-        Guardar
-      </button>
+      <app-button variant="secondary" (clicked)="cancel()">Cancelar</app-button>
+      <app-button variant="primary" (clicked)="save()" [disabled]="isSaving">Guardar</app-button>
     </menu>
   </header>
 
@@ -87,8 +85,8 @@
     <footer class="task-edit__footer">
       <span class="task-edit__muted" *ngIf="isDirty()">Cambios pendientes</span>
       <menu class="task-edit__actions">
-        <button class="button button--secondary" type="button" (click)="cancel()">Cancelar</button>
-        <button class="button button--primary" type="submit" [disabled]="isSaving">Guardar</button>
+        <app-button variant="secondary" (clicked)="cancel()">Cancelar</app-button>
+        <app-button variant="primary" type="submit" [disabled]="isSaving">Guardar</app-button>
       </menu>
     </footer>
   </form>

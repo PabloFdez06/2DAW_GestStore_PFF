@@ -1,0 +1,36 @@
+<button 
+  [class]="getButtonClasses()"
+  [disabled]="disabled"
+  [type]="type"
+  [attr.aria-label]="ariaLabel"
+  (click)="onClick($event)">
+  
+  <!-- Icon left -->
+  <app-icon 
+    *ngIf="icon && iconPosition === 'left'" 
+    [name]="icon" 
+    size="small"
+    class="button__icon button__icon--left">
+  </app-icon>
+  
+  <!-- Content -->
+  <span class="button__content" *ngIf="!iconOnly">
+    <ng-content></ng-content>
+  </span>
+  
+  <!-- Icon right -->
+  <app-icon 
+    *ngIf="icon && iconPosition === 'right'" 
+    [name]="icon" 
+    size="small"
+    class="button__icon button__icon--right">
+  </app-icon>
+  
+  <!-- Icon only (centered) -->
+  <app-icon 
+    *ngIf="iconOnly && icon" 
+    [name]="icon" 
+    size="small"
+    class="button__icon">
+  </app-icon>
+</button>

@@ -1,19 +1,6 @@
-<article class="settings-page">
-  <!-- Top Navigation Bar -->
-  <nav class="settings-page__nav" role="navigation" aria-label="Navegación principal">
-    <!-- Botón hamburguesa para mobile -->
-    <button 
-      class="settings-page__hamburger" 
-      type="button"
-      (click)="toggleSidebar()"
-      [attr.aria-label]="isSidebarOpen ? 'Cerrar menú' : 'Abrir menú'"
-      [attr.aria-expanded]="isSidebarOpen"
-      [class.is-open]="isSidebarOpen">
-      <span class="settings-page__hamburger-line settings-page__hamburger-line--top" aria-hidden="true"></span>
-      <span class="settings-page__hamburger-line settings-page__hamburger-line--middle" aria-hidden="true"></span>
-      <span class="settings-page__hamburger-line settings-page__hamburger-line--bottom" aria-hidden="true"></span>
-    </button>
-    
+<app-sidebar-layout activeRoute="/ajustes">
+  <!-- Header slot -->
+  <nav slot="header" class="settings-page__nav" role="navigation" aria-label="Navegación principal">
     <h1 class="settings-page__logo">
       <span class="settings-page__logo-gest">Gest</span><span class="settings-page__logo-store">Store</span>
     </h1>
@@ -67,74 +54,8 @@
     </section>
   </dialog>
 
-  <!-- Overlay del sidebar para mobile -->
-  <span 
-    *ngIf="isSidebarOpen" 
-    class="settings-page__sidebar-overlay"
-    role="presentation"
-    (click)="closeSidebar()"
-    aria-hidden="true"></span>
-  
-  <!-- Side Navigation -->
-  <aside 
-    class="settings-page__sidebar" 
-    role="complementary" 
-    aria-label="Menú lateral"
-    [class.is-open]="isSidebarOpen">
-    <header class="settings-page__user">
-      <figure class="settings-page__user-avatar">
-        <a class="settings-page__avatar-link" routerLink="/perfil" aria-label="Ir a tu perfil">
-          <ng-container *ngIf="avatarUrl; else settingsAvatarDefault">
-            <img class="settings-page__avatar-img" [src]="avatarUrl" alt="Avatar del usuario" loading="lazy" decoding="async" />
-          </ng-container>
-          <ng-template #settingsAvatarDefault>
-            <app-icon name="user" size="large" aria-hidden="true"></app-icon>
-          </ng-template>
-        </a>
-      </figure>
-      <hgroup class="settings-page__user-info">
-        <p class="settings-page__user-name">{{ currentUser?.name || 'Usuario' }}</p>
-        <p class="settings-page__user-email">{{ currentUser?.email || '' }}</p>
-      </hgroup>
-    </header>
-
-    <nav class="settings-page__sidebar-nav" aria-label="Navegación del menú">
-      <a routerLink="/dashboard" class="settings-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="home" size="small"></app-icon>
-        <span>Dashboard</span>
-      </a>
-      <a routerLink="/tareas-importantes" class="settings-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="star" size="small"></app-icon>
-        <span>Tareas Importantes</span>
-      </a>
-      <a routerLink="/tareas" class="settings-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="check-square" size="small"></app-icon>
-        <span>Tareas</span>
-      </a>
-      <a routerLink="/categorias" class="settings-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="folder" size="small"></app-icon>
-        <span>Categorias de Tareas</span>
-      </a>
-      <a routerLink="/almacen" class="settings-page__sidebar-link" (click)="closeSidebar()">
-        <app-icon name="package" size="small"></app-icon>
-        <span>Almacen</span>
-      </a>
-      <a routerLink="/ajustes" class="settings-page__sidebar-link settings-page__sidebar-link--active" aria-current="page" (click)="closeSidebar()">
-        <app-icon name="settings" size="small"></app-icon>
-        <span>Ajustes</span>
-      </a>
-    </nav>
-
-    <footer class="settings-page__sidebar-footer">
-      <button type="button" class="settings-page__logout" (click)="onLogout($event)">
-        <app-icon name="log-out" size="small"></app-icon>
-        <span>Cerrar Sesión</span>
-      </button>
-    </footer>
-  </aside>
-
   <!-- Main Content -->
-  <main class="settings-page__main" role="main">
+  <article class="settings-page__main" role="main">
     <section class="settings-page__content" aria-label="Ajustes">
       <section class="settings-page__panel" aria-label="Información personal">
         <header class="settings-page__panel-aside">
@@ -144,7 +65,7 @@
 
         <article class="settings-page__card" aria-label="Formulario de información personal">
           <form class="settings-page__form" (ngSubmit)="$event.preventDefault()">
-            <fieldset class="settings-page__fields" aria-label="Datos personales">
+            <section class="settings-page__fields" aria-label="Datos personales">
               <section class="settings-page__row" aria-label="Nombre y correo">
                 <label class="settings-page__field">
                   <span class="settings-page__label">Nombre completo</span>
@@ -236,7 +157,7 @@
                   </label>
                 </section>
               </section>
-            </fieldset>
+            </section>
           </form>
         </article>
       </section>
@@ -249,7 +170,7 @@
 
         <article class="settings-page__card" aria-label="Preferencias de la aplicación">
           <form class="settings-page__form" (ngSubmit)="$event.preventDefault()">
-            <fieldset class="settings-page__fields" aria-label="Preferencias">
+            <section class="settings-page__fields" aria-label="Preferencias">
               <section class="settings-page__row" aria-label="Idioma y notificaciones">
                 <label class="settings-page__field">
                   <span class="settings-page__label">Idioma</span>
@@ -277,7 +198,7 @@
                   </span>
                 </label>
               </section>
-            </fieldset>
+            </section>
           </form>
         </article>
       </section>
@@ -285,5 +206,5 @@
       <hr class="settings-page__divider" aria-hidden="true" />
       <footer class="settings-page__footer" aria-hidden="true"></footer>
     </section>
-  </main>
-</article>
+  </article>
+</app-sidebar-layout>

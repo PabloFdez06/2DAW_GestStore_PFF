@@ -1,9 +1,11 @@
-import { ChangeDetectorRef, Component, HostListener, Inject, NgZone, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, NgZone, Renderer2 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
 import { IconComponent } from '../../../components/atoms/icon/icon.component';
+import { ButtonComponent } from '../../../components/atoms/button/button.component';
+import { SidebarLayoutComponent } from '../../../components/layout/sidebar-layout/sidebar-layout.component';
 import { AuthService } from '../../../services/auth.service';
 import { ThemeService } from '../../../services/theme.service';
 import { UserService } from '../../../services/user.service';
@@ -13,7 +15,7 @@ import { User } from '../../../models/auth.model';
 @Component({
   selector: 'app-update-password',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, ButtonComponent, SidebarLayoutComponent],
   templateUrl: './update-password.component.html',
   styleUrl: './update-password.component.scss'
 })
@@ -22,7 +24,6 @@ export class UpdatePasswordComponent {
   currentDate: string = '';
 
   currentUser: User | null = null;
-  avatarUrl: string | null = null;
 
   currentPassword: string = '';
   newPassword: string = '';
@@ -31,8 +32,6 @@ export class UpdatePasswordComponent {
   isSaving: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
-
-  isSidebarOpen: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -52,9 +51,6 @@ export class UpdatePasswordComponent {
         this.cdr.detectChanges();
       });
     });
-
-    const storedAvatar = localStorage.getItem('geststore.avatar');
-    this.avatarUrl = storedAvatar && storedAvatar.trim().length > 0 ? storedAvatar : null;
   }
 
   updateCurrentDate(): void {
@@ -139,26 +135,5 @@ export class UpdatePasswordComponent {
         this.cdr.detectChanges();
       }
     });
-  }
-
-  toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen;
-    if (this.isSidebarOpen) {
-      this.renderer.addClass(this.document.body, 'sidebar-open');
-    } else {
-      this.renderer.removeClass(this.document.body, 'sidebar-open');
-    }
-  }
-
-  closeSidebar(): void {
-    this.isSidebarOpen = false;
-    this.renderer.removeClass(this.document.body, 'sidebar-open');
-  }
-
-  @HostListener('document:keydown.escape')
-  onEscape(): void {
-    if (this.isSidebarOpen) {
-      this.closeSidebar();
-    }
   }
 }

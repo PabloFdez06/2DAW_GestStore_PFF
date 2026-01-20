@@ -7,6 +7,7 @@ import { BreadcrumbsComponent } from '../../components/layout/breadcrumbs/breadc
 import { FormInputComponent } from '../../components/shared/form-input/form-input.component';
 import { FormTextareaComponent } from '../../components/shared/form-textarea/form-textarea.component';
 import { FormSelectComponent, type SelectOption } from '../../components/shared/form-select/form-select.component';
+import { ButtonComponent } from '../../components/atoms/button/button.component';
 
 import { TaskService } from '../../services/task.service';
 import { NotificationService } from '../../services/notification.service';
@@ -23,7 +24,8 @@ import { TaskPriority, TaskStatus, type Task, type TaskRequest } from '../../mod
     BreadcrumbsComponent,
     FormInputComponent,
     FormTextareaComponent,
-    FormSelectComponent
+    FormSelectComponent,
+    ButtonComponent
   ],
   templateUrl: './task-edit.component.html',
   styleUrl: './task-edit.component.scss'
