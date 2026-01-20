@@ -80,7 +80,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         next: ({ assigned, created }) => {
           // Combinar y eliminar duplicados por ID
           const allTasks = [...assigned, ...created];
-          const uniqueTasksMap = new Map<number, Task>();
+          const uniqueTasksMap = new Map<string | number, Task>();
           allTasks.forEach(task => {
             if (task.id && !uniqueTasksMap.has(task.id)) {
               uniqueTasksMap.set(task.id, task);
