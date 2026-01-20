@@ -2,11 +2,14 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .empty-state {
-  display: flex;
+  // 2. Display
+  @include flex-center;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+
+  // 3. Box Model
   padding: $spacing-12 $spacing-6;
+
+  // 6. Tipografía
   text-align: center;
 
   &--small {
@@ -15,13 +18,21 @@
 }
 
 .empty-state__icon {
-  color: var(--text-muted);
+  // 3. Box Model
   margin-bottom: $spacing-4;
+
+  // 6. Tipografía
+  color: var(--text-muted);
+
+  // 7. Efectos visuales
   opacity: 0.5;
 }
 
 .empty-state__message {
+  // 3. Box Model
+  margin: 0 0 $spacing-6 0;
+
+  // 6. Tipografía
   @include text-style($font-size-lg, $font-weight-medium, $line-normal);
   color: var(--text-muted);
-  margin: 0 0 $spacing-6 0;
 }

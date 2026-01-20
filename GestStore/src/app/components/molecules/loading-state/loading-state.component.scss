@@ -2,16 +2,20 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .loading-state {
-  display: flex;
+  // 2. Display
+  @include flex-center;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: $spacing-4;
+
+  // 3. Box Model
   padding: $spacing-12 $spacing-6;
 }
 
 .loading-state__message {
+  // 3. Box Model
+  margin: 0;
+
+  // 6. Tipografía
   @include text-style($font-size-lg, $font-weight-medium, $line-normal);
   color: var(--text-secondary);
-  margin: 0;
 }

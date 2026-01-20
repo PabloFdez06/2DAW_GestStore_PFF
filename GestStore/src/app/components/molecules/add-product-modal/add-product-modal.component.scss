@@ -2,8 +2,14 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .add-product-modal {
+  background-color: var(--bg-surface);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-xl);
   padding: $spacing-6;
-  max-width: 100%;
+  width: 32rem;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
 
   @include respond-down(sm) {
     padding: $spacing-4;

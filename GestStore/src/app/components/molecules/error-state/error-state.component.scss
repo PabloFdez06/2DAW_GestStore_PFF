@@ -2,20 +2,30 @@
 @use '../../../../styles/01-tools/mixins' as *;
 
 .error-state {
+  // 2. Display
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: $spacing-4;
-  padding: $spacing-8 $spacing-6;
-  background-color: color-mix(in srgb, var(--color-error) 6%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-error) 20%, transparent);
-  border-radius: 0.75rem;
+
+  // 3. Box Model
   margin-bottom: $spacing-4;
+  padding: $spacing-8 $spacing-6;
+
+  // 4. Background
+  background-color: color-mix(in srgb, var(--color-error) 6%, transparent);
+
+  // 5. Border
+  border: $border-thin solid color-mix(in srgb, var(--color-error) 20%, transparent);
+  border-radius: $radius-lg;
 }
 
 .error-state__message {
-  @include text-style($font-size-base, $font-weight-medium, $line-normal);
-  color: var(--color-error);
-  text-align: center;
+  // 3. Box Model
   margin: 0;
+
+  // 6. Tipografía
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  text-align: center;
+  color: var(--color-error);
 }
