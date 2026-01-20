@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [class]="'spinner ' + sizeClass" [attr.aria-label]="ariaLabel"></div>
+    <div [class]="getSpinnerClasses()" [attr.aria-label]="ariaLabel"></div>
   `,
   styles: [`
     @use '../../../../styles/00-settings/variables' as *;
@@ -17,6 +17,11 @@ import { CommonModule } from '@angular/common';
       border-top-color: $color-primary;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
+    }
+
+    .spinner--light {
+      border-color: rgba(255, 255, 255, 0.3);
+      border-top-color: #ffffff;
     }
 
     .spinner-small {
@@ -49,9 +54,14 @@ import { CommonModule } from '@angular/common';
 })
 export class SpinnerComponent {
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
+  @Input() variant: 'default' | 'light' = 'default';
   @Input() ariaLabel: string = 'Cargando...';
 
-  get sizeClass(): string {
-    return `spinner-${this.size}`;
+  getSpinnerClasses(): string {
+    const classes = ['spinner', `spinner-${this.size}`];
+    if (this.variant === 'light') {
+      classes.push('spinner--light');
+    }
+    return classes.join(' ');
   }
 }

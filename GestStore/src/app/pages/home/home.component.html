@@ -1,0 +1,374 @@
+<!-- HOME PAGE -->
+<main class="home" role="main" aria-label="Página principal de GestStore">
+  
+  <!-- ========================================================================== -->
+  <!-- HEADER -->
+  <!-- ========================================================================== -->
+  <header class="header" [class.header--scrolled]="isScrolled">
+    <nav class="header__container" aria-label="Navegación principal">
+      <!-- Logo -->
+      <a routerLink="/" class="header__logo">
+        <span class="header__logo-icon">
+          <app-icon name="box" size="large"></app-icon>
+        </span>
+        <span class="header__logo-text">GestStore</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <ul class="header__nav" role="list">
+        <li>
+          <button type="button" class="header__nav-link" (click)="scrollToSection('servicios')">
+            Servicios
+          </button>
+        </li>
+        <li>
+          <button type="button" class="header__nav-link" (click)="scrollToSection('precios')">
+            Precios
+          </button>
+        </li>
+        <li>
+          <button type="button" class="header__nav-link" (click)="scrollToSection('newsletter')">
+            Contacto
+          </button>
+        </li>
+      </ul>
+
+      <!-- CTA Buttons -->
+      <section class="header__actions">
+        @if (isAuthenticated) {
+          <a routerLink="/dashboard" class="header__btn header__btn--primary">
+            Ir al Dashboard
+          </a>
+        } @else {
+          <a routerLink="/login" class="header__btn header__btn--ghost">
+            Iniciar sesión
+          </a>
+          <a routerLink="/register" class="header__btn header__btn--primary">
+            Comenzar gratis
+          </a>
+        }
+      </section>
+
+      <!-- Mobile Menu Button -->
+      <button 
+        type="button" 
+        class="header__mobile-toggle"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        aria-label="Abrir menú de navegación">
+        <span class="header__mobile-toggle-bar"></span>
+        <span class="header__mobile-toggle-bar"></span>
+        <span class="header__mobile-toggle-bar"></span>
+      </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    @if (isMobileMenuOpen) {
+      <nav class="header__mobile-menu" aria-label="Menú móvil">
+        <ul class="header__mobile-nav" role="list">
+          <li>
+            <button type="button" class="header__mobile-link" (click)="scrollToSection('servicios')">
+              Servicios
+            </button>
+          </li>
+          <li>
+            <button type="button" class="header__mobile-link" (click)="scrollToSection('precios')">
+              Precios
+            </button>
+          </li>
+          <li>
+            <button type="button" class="header__mobile-link" (click)="scrollToSection('newsletter')">
+              Contacto
+            </button>
+          </li>
+        </ul>
+        <section class="header__mobile-actions">
+          @if (isAuthenticated) {
+            <a routerLink="/dashboard" class="header__btn header__btn--primary header__btn--full" (click)="closeMobileMenu()">
+              Ir al Dashboard
+            </a>
+          } @else {
+            <a routerLink="/login" class="header__btn header__btn--ghost header__btn--full" (click)="closeMobileMenu()">
+              Iniciar sesión
+            </a>
+            <a routerLink="/register" class="header__btn header__btn--primary header__btn--full" (click)="closeMobileMenu()">
+              Comenzar gratis
+            </a>
+          }
+        </section>
+      </nav>
+    }
+  </header>
+
+  <!-- ========================================================================== -->
+  <!-- HERO SECTION -->
+  <!-- ========================================================================== -->
+  <section class="hero" aria-labelledby="hero-title">
+    <figure class="hero__background" aria-hidden="true">
+      <img [src]="heroImage" alt="" class="hero__background-image" loading="eager" />
+      <span class="hero__background-overlay"></span>
+    </figure>
+
+    <article class="hero__content">
+      <app-badge variant="primary" size="medium">Gestión inteligente de almacén</app-badge>
+      <h1 id="hero-title" class="hero__title">
+        Organiza tu inventario y tareas desde un solo lugar
+      </h1>
+      <p class="hero__description">
+        La plataforma todo en uno que te permite gestionar productos, asignar responsabilidades 
+        y mantener tu almacén siempre bajo control. Ya somos más de 5.000 empresas optimizando su trabajo.
+      </p>
+      <section class="hero__actions">
+        <a routerLink="/register" class="hero__cta hero__cta--primary">
+          Empezar gratis
+          <app-icon name="chevron-right" size="small"></app-icon>
+        </a>
+        <button type="button" class="hero__cta hero__cta--secondary" (click)="scrollToSection('servicios')">
+          Ver características
+        </button>
+      </section>
+      <p class="hero__trust">
+        <app-icon name="check-circle" size="small"></app-icon>
+        <span>Sin tarjeta de crédito requerida</span>
+      </p>
+    </article>
+  </section>
+
+  <!-- ========================================================================== -->
+  <!-- SERVICES SECTION -->
+  <!-- ========================================================================== -->
+  <section id="servicios" class="services" aria-labelledby="services-title">
+    <header class="services__header">
+      <span class="services__label">Características</span>
+      <h2 id="services-title" class="services__title">
+        Todo lo que necesitas para gestionar tu negocio
+      </h2>
+      <p class="services__subtitle">
+        Herramientas potentes diseñadas para equipos que buscan eficiencia y resultados
+      </p>
+    </header>
+
+    <ul class="services__grid" role="list">
+      @for (service of services; track service.id) {
+        <li class="service-card" role="listitem">
+          <figure class="service-card__icon" aria-hidden="true">
+            <app-icon [name]="service.icon" size="large"></app-icon>
+          </figure>
+          <h3 class="service-card__title">{{ service.title }}</h3>
+          <p class="service-card__description">{{ service.description }}</p>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- ========================================================================== -->
+  <!-- PRICING SECTION -->
+  <!-- ========================================================================== -->
+  <section id="precios" class="pricing" aria-labelledby="pricing-title">
+    <header class="pricing__header">
+      <span class="pricing__label">Planes</span>
+      <h2 id="pricing-title" class="pricing__title">
+        Elige el plan perfecto para tu negocio
+      </h2>
+      <p class="pricing__subtitle">
+        Precios transparentes sin sorpresas. Cambia o cancela en cualquier momento.
+      </p>
+    </header>
+
+    <ul class="pricing__grid" role="list">
+      @for (plan of subscriptionPlans; track plan.id) {
+        <li class="pricing-card" 
+            [class.pricing-card--featured]="plan.isPopular"
+            role="listitem">
+          @if (plan.isPopular) {
+            <span class="pricing-card__badge">Recomendado</span>
+          }
+          
+          <header class="pricing-card__header">
+            <h3 class="pricing-card__name">{{ plan.name }}</h3>
+            <p class="pricing-card__price">
+              <span class="pricing-card__amount">{{ plan.price }}</span>
+              <span class="pricing-card__period">{{ plan.period }}</span>
+            </p>
+            <p class="pricing-card__description">{{ plan.description }}</p>
+          </header>
+
+          <ul class="pricing-card__features" role="list">
+            @for (feature of plan.features; track feature) {
+              <li class="pricing-card__feature">
+                <app-icon name="check" size="small"></app-icon>
+                <span>{{ feature }}</span>
+              </li>
+            }
+          </ul>
+
+          <footer class="pricing-card__footer">
+            <a 
+              routerLink="/register" 
+              class="pricing-card__cta"
+              [class.pricing-card__cta--primary]="plan.isPopular"
+              [class.pricing-card__cta--secondary]="!plan.isPopular">
+              {{ plan.ctaText }}
+            </a>
+          </footer>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- ========================================================================== -->
+  <!-- NEWSLETTER SECTION -->
+  <!-- ========================================================================== -->
+  <section id="newsletter" class="newsletter" aria-labelledby="newsletter-title">
+    <article class="newsletter__container">
+      <header class="newsletter__header">
+        <span class="newsletter__label">Newsletter</span>
+        <h2 id="newsletter-title" class="newsletter__title">
+          Mantente informado
+        </h2>
+        <p class="newsletter__subtitle">
+          Recibe las últimas novedades, consejos de productividad y ofertas exclusivas directamente en tu bandeja de entrada.
+        </p>
+      </header>
+
+      <form 
+        class="newsletter__form" 
+        (ngSubmit)="submitNewsletter()"
+        aria-label="Formulario de suscripción">
+        
+        <fieldset class="newsletter__fieldset">
+          <section class="newsletter__row">
+            <app-form-input
+              id="newsletter-name"
+              name="name"
+              label="Nombre"
+              type="text"
+              placeholder="Tu nombre"
+              [required]="true"
+              [value]="newsletterForm.name"
+              (valueChange)="newsletterForm.name = $event">
+            </app-form-input>
+
+            <app-form-input
+              id="newsletter-lastName"
+              name="lastName"
+              label="Apellidos"
+              type="text"
+              placeholder="Tus apellidos"
+              [required]="true"
+              [value]="newsletterForm.lastName"
+              (valueChange)="newsletterForm.lastName = $event">
+            </app-form-input>
+          </section>
+
+          <section class="newsletter__row">
+            <app-form-input
+              id="newsletter-city"
+              name="city"
+              label="Ciudad"
+              type="text"
+              placeholder="Tu ciudad"
+              helpText="Opcional"
+              [value]="newsletterForm.city"
+              (valueChange)="newsletterForm.city = $event">
+            </app-form-input>
+
+            <app-form-input
+              id="newsletter-email"
+              name="email"
+              label="Email"
+              type="email"
+              placeholder="tu@email.com"
+              [required]="true"
+              [value]="newsletterForm.email"
+              (valueChange)="newsletterForm.email = $event">
+            </app-form-input>
+          </section>
+        </fieldset>
+
+        @if (submitError) {
+          <p class="newsletter__message newsletter__message--error" role="alert">
+            <app-icon name="alert-circle" size="small"></app-icon>
+            {{ submitError }}
+          </p>
+        }
+
+        @if (submitSuccess) {
+          <p class="newsletter__message newsletter__message--success" role="status">
+            <app-icon name="check-circle" size="small"></app-icon>
+            ¡Gracias por suscribirte! Pronto recibirás nuestras novedades.
+          </p>
+        }
+
+        <button 
+          type="submit" 
+          class="newsletter__submit"
+          [disabled]="isSubmitting">
+          @if (isSubmitting) {
+            <app-spinner size="small" variant="light" ariaLabel="Enviando formulario"></app-spinner>
+            <span>Enviando...</span>
+          } @else {
+            <span>Suscribirse</span>
+            <app-icon name="chevron-right" size="small"></app-icon>
+          }
+        </button>
+      </form>
+    </article>
+  </section>
+
+  <!-- ========================================================================== -->
+  <!-- FOOTER -->
+  <!-- ========================================================================== -->
+  <footer class="footer" role="contentinfo">
+    <section class="footer__container">
+      <!-- Brand Column -->
+      <article class="footer__brand">
+        <a routerLink="/" class="footer__logo">
+          <span class="footer__logo-icon">
+            <app-icon name="box" size="large"></app-icon>
+          </span>
+          <span class="footer__logo-text">GestStore</span>
+        </a>
+        <p class="footer__tagline">
+          La plataforma inteligente para la gestión de inventario y tareas de tu negocio.
+        </p>
+        <nav class="footer__social" aria-label="Redes sociales">
+          <a href="#" class="footer__social-link" aria-label="LinkedIn">
+            <app-icon name="user" size="small"></app-icon>
+          </a>
+          <a href="#" class="footer__social-link" aria-label="Twitter">
+            <app-icon name="mail" size="small"></app-icon>
+          </a>
+        </nav>
+      </article>
+
+      <!-- Link Columns -->
+      @for (column of footerColumns; track column.title) {
+        <nav class="footer__column" [attr.aria-label]="column.title">
+          <h3 class="footer__column-title">{{ column.title }}</h3>
+          <ul class="footer__links" role="list">
+            @for (link of column.links; track link.label) {
+              <li>
+                <a [href]="link.href" class="footer__link">{{ link.label }}</a>
+              </li>
+            }
+          </ul>
+        </nav>
+      }
+    </section>
+
+    <!-- Footer Bottom -->
+    <section class="footer__bottom">
+      <p class="footer__copyright">
+        © {{ currentYear }} GestStore. Todos los derechos reservados.
+      </p>
+      <nav class="footer__legal" aria-label="Enlaces legales">
+        <a href="#" class="footer__legal-link">Privacidad</a>
+        <span class="footer__legal-separator">·</span>
+        <a href="#" class="footer__legal-link">Términos</a>
+        <span class="footer__legal-separator">·</span>
+        <a href="#" class="footer__legal-link">Cookies</a>
+      </nav>
+    </section>
+  </footer>
+</main>
