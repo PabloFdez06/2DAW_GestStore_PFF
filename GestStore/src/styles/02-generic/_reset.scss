@@ -73,6 +73,12 @@ a {
   color: inherit;
 }
 
+// Mark (reset del subrayado amarillo por defecto)
+mark {
+  background: none;
+  color: inherit;
+}
+
 // Media
 img, picture, video, canvas, svg {
   display: block;

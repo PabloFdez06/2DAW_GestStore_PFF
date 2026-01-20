@@ -1,0 +1,41 @@
+<nav class="nav-header" role="navigation" aria-label="Navegación principal">
+  <h1 class="nav-header__logo">
+    <span class="nav-header__logo-gest">Gest</span><span class="nav-header__logo-store">Store</span>
+  </h1>
+
+  <app-search-input
+    *ngIf="showSearch"
+    class="nav-header__search"
+    [placeholder]="searchPlaceholder"
+    [ariaLabel]="searchAriaLabel"
+    [ngModel]="searchValue"
+    (searchChange)="onSearchValueChange($event)">
+  </app-search-input>
+
+  <section class="nav-header__actions" aria-label="Acciones rápidas">
+    <button 
+      class="nav-header__btn" 
+      [class.nav-header__btn--has-alerts]="stockAlertService.hasAlerts()"
+      type="button" 
+      (click)="toggleNotifications()"
+      aria-label="Notificaciones de stock">
+      <app-icon name="bell" size="small"></app-icon>
+      <span class="nav-header__badge" *ngIf="stockAlertService.alertsCount() > 0">{{ stockAlertService.alertsCount() }}</span>
+    </button>
+    <button
+      class="nav-header__btn"
+      type="button"
+      (click)="toggleTheme()"
+      (keydown.enter)="toggleTheme(); $event.preventDefault()"
+      [attr.aria-label]="themeAriaLabel">
+      <app-icon [name]="themeIcon" size="small"></app-icon>
+    </button>
+    <button class="nav-header__btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
+      <app-icon name="calendar" size="small"></app-icon>
+    </button>
+    <time class="nav-header__date" [attr.dateTime]="currentDate">
+      <p class="nav-header__date-day">{{ currentDayName }}</p>
+      <p class="nav-header__date-full">{{ currentDate }}</p>
+    </time>
+  </section>
+</nav>

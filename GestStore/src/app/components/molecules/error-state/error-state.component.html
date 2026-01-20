@@ -1,0 +1,10 @@
+<aside class="error-state" role="alert">
+  <p class="error-state__message">{{ message }}</p>
+  <app-button 
+    *ngIf="showRetry"
+    variant="primary" 
+    size="small" 
+    (clicked)="onRetry()">
+    {{ retryText }}
+  </app-button>
+</aside>

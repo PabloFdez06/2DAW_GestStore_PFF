@@ -1,51 +1,14 @@
 <app-sidebar-layout activeRoute="/tareas-importantes">
   <!-- Header slot -->
-  <nav slot="header" class="important-tasks-page__nav" role="navigation" aria-label="Navegación principal">
-    <h1 class="important-tasks-page__logo">
-      <span class="important-tasks-page__logo-gest">Gest</span><span class="important-tasks-page__logo-store">Store</span>
-    </h1>
-
-    <search class="important-tasks-page__search" role="search">
-      <input 
-        type="search" 
-        class="important-tasks-page__search-input" 
-        placeholder="Busca tu tarea aqui..."
-        [(ngModel)]="search"
-        (input)="onSearchChange()"
-        aria-label="Buscar tareas"
-      />
-      <button class="important-tasks-page__search-btn" type="button" aria-label="Buscar">
-        <app-icon name="search" size="small"></app-icon>
-      </button>
-    </search>
-
-    <section class="important-tasks-page__nav-actions" aria-label="Acciones rápidas">
-      <button 
-        class="important-tasks-page__nav-btn" 
-        [class.important-tasks-page__nav-btn--has-alerts]="stockAlertService.hasAlerts()"
-        type="button" 
-        (click)="toggleStockNotifications()"
-        aria-label="Notificaciones de stock">
-        <app-icon name="bell" size="small"></app-icon>
-        <span class="important-tasks-page__notification-badge" *ngIf="stockAlertService.alertsCount() > 0">{{ stockAlertService.alertsCount() }}</span>
-      </button>
-      <button
-        class="important-tasks-page__nav-btn"
-        type="button"
-        (click)="toggleTheme()"
-        (keydown.enter)="toggleTheme(); $event.preventDefault()"
-        [attr.aria-label]="themeAriaLabel">
-        <app-icon [name]="themeIcon" size="small"></app-icon>
-      </button>
-      <button class="important-tasks-page__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
-        <app-icon name="calendar" size="small"></app-icon>
-      </button>
-      <time class="important-tasks-page__date" [attr.dateTime]="currentDate">
-        <p class="important-tasks-page__date-day">{{ currentDayName }}</p>
-        <p class="important-tasks-page__date-full">{{ currentDate }}</p>
-      </time>
-    </section>
-  </nav>
+  <app-nav-header
+    slot="header"
+    searchPlaceholder="Busca tu tarea aqui..."
+    searchAriaLabel="Buscar tareas"
+    [searchValue]="search"
+    (searchValueChange)="search = $event; onSearchChange()"
+    (notificationsToggle)="toggleStockNotifications()"
+    (calendarToggle)="toggleCalendar()">
+  </app-nav-header>
 
   <!-- Stock Notifications Modal -->
   <app-stock-notifications 
@@ -54,40 +17,26 @@
   </app-stock-notifications>
 
   <!-- Calendar Modal Overlay -->
-  <dialog
-    #calendarDialog
-    *ngIf="isCalendarOpen"
-    class="important-tasks-page__modal-overlay"
-    (click)="closeCalendar()"
-    open
-    role="dialog"
-    aria-modal="true"
-    aria-label="Calendario">
-    <section class="important-tasks-page__modal-content" (click)="$event.stopPropagation()">
-      <app-calendar (close)="closeCalendar()"></app-calendar>
-    </section>
-  </dialog>
+  <app-modal-wrapper 
+    [isOpen]="isCalendarOpen" 
+    ariaLabel="Calendario"
+    (close)="closeCalendar()">
+    <app-calendar (close)="closeCalendar()"></app-calendar>
+  </app-modal-wrapper>
 
   <!-- Add Task Modal Overlay -->
-  <dialog
-    #taskDialog
-    *ngIf="isTaskModalOpen"
-    class="important-tasks-page__modal-overlay"
-    (click)="closeTaskModal()"
-    open
-    role="dialog"
-    aria-modal="true"
-    [attr.aria-label]="isEditMode ? 'Editar tarea' : 'Añadir tarea'">
-    <section class="important-tasks-page__modal-content" (click)="$event.stopPropagation()">
-      <app-add-task-modal 
-        [task]="taskToEdit"
-        [isEditMode]="isEditMode"
-        (close)="closeTaskModal()" 
-        (taskAdded)="handleTaskAdded($event)"
-        (taskUpdated)="handleTaskUpdated($event)">
-      </app-add-task-modal>
-    </section>
-  </dialog>
+  <app-modal-wrapper 
+    [isOpen]="isTaskModalOpen" 
+    [ariaLabel]="isEditMode ? 'Editar tarea' : 'Añadir tarea'"
+    (close)="closeTaskModal()">
+    <app-add-task-modal 
+      [task]="taskToEdit"
+      [isEditMode]="isEditMode"
+      (close)="closeTaskModal()" 
+      (taskAdded)="handleTaskAdded($event)"
+      (taskUpdated)="handleTaskUpdated($event)">
+    </app-add-task-modal>
+  </app-modal-wrapper>
 
   <!-- Main Content -->
   <article class="important-tasks-page__content">
@@ -114,24 +63,27 @@
       </header>
 
       <!-- Loading state -->
-      <output *ngIf="isLoading" class="important-tasks-page__loading" role="status" aria-live="polite">
-        <app-spinner size="medium"></app-spinner>
-        <p>Cargando tareas...</p>
-      </output>
+      <app-loading-state 
+        *ngIf="isLoading" 
+        message="Cargando tareas...">
+      </app-loading-state>
 
       <!-- Error state -->
-      <aside *ngIf="!isLoading && errorMessage" class="important-tasks-page__error" role="alert">
-        <p>{{ errorMessage }}</p>
-        <app-button variant="primary" size="small" (clicked)="loadTasks()">Reintentar</app-button>
-      </aside>
+      <app-error-state 
+        *ngIf="!isLoading && errorMessage" 
+        [message]="errorMessage"
+        (retry)="loadTasks()">
+      </app-error-state>
 
       <!-- Empty state -->
-      <section *ngIf="!isLoading && !errorMessage && filteredTasks.length === 0" class="important-tasks-page__empty-state">
-        <app-icon name="star" size="large" class="important-tasks-page__empty-icon"></app-icon>
-        <p class="important-tasks-page__empty-text">No hay tareas importantes</p>
-        <p class="important-tasks-page__empty-subtext">Marca una tarea como importante desde el menú de opciones</p>
-        <app-button variant="primary" icon="plus" (clicked)="openAddTaskModal()">Crear tarea importante</app-button>
-      </section>
+      <app-empty-state 
+        *ngIf="!isLoading && !errorMessage && filteredTasks.length === 0"
+        icon="star"
+        message="No hay tareas importantes"
+        buttonText="Crear tarea importante"
+        buttonIcon="plus"
+        (buttonClick)="openAddTaskModal()">
+      </app-empty-state>
 
       <!-- Tasks grid -->
       <ul *ngIf="!isLoading && !errorMessage && filteredTasks.length > 0" class="important-tasks-page__grid" role="list">

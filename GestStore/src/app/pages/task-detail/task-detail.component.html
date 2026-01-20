@@ -1,50 +1,14 @@
 <app-sidebar-layout activeRoute="/tareas">
   <!-- Header slot -->
-  <nav slot="header" class="task-view__nav" role="navigation" aria-label="Navegación principal">
-    <h1 class="task-view__logo">
-      <span class="task-view__logo-gest">Gest</span><span class="task-view__logo-store">Store</span>
-    </h1>
-
-    <search class="task-view__search" role="search">
-      <input
-        type="search"
-        class="task-view__search-input"
-        placeholder="Busca tu tarea aqui..."
-        [(ngModel)]="search"
-        (input)="onSearchChange()"
-        aria-label="Buscar tareas" />
-      <button class="task-view__search-btn" type="button" aria-label="Buscar">
-        <app-icon name="search" size="small"></app-icon>
-      </button>
-    </search>
-
-    <section class="task-view__nav-actions" aria-label="Acciones rápidas">
-      <button 
-        class="task-view__nav-btn" 
-        [class.task-view__nav-btn--has-alerts]="stockAlertService.hasAlerts()"
-        type="button" 
-        (click)="toggleStockNotifications()"
-        aria-label="Notificaciones de stock">
-        <app-icon name="bell" size="small"></app-icon>
-        <span class="task-view__notification-badge" *ngIf="stockAlertService.alertsCount() > 0">{{ stockAlertService.alertsCount() }}</span>
-      </button>
-      <button
-        class="task-view__nav-btn"
-        type="button"
-        (click)="toggleTheme()"
-        (keydown.enter)="toggleTheme(); $event.preventDefault()"
-        [attr.aria-label]="themeAriaLabel">
-        <app-icon [name]="themeIcon" size="small"></app-icon>
-      </button>
-      <button class="task-view__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
-        <app-icon name="calendar" size="small"></app-icon>
-      </button>
-      <time class="task-view__date" [attr.dateTime]="currentDate">
-        <p class="task-view__date-day">{{ currentDayName }}</p>
-        <p class="task-view__date-full">{{ currentDate }}</p>
-      </time>
-    </section>
-  </nav>
+  <app-nav-header
+    slot="header"
+    searchPlaceholder="Busca tu tarea aqui..."
+    searchAriaLabel="Buscar tareas"
+    [searchValue]="search"
+    (searchValueChange)="search = $event; onSearchChange()"
+    (notificationsToggle)="toggleStockNotifications()"
+    (calendarToggle)="toggleCalendar()">
+  </app-nav-header>
 
   <!-- Stock Notifications Modal -->
   <app-stock-notifications 
@@ -52,38 +16,26 @@
     (close)="closeStockNotifications()">
   </app-stock-notifications>
 
-  <dialog
-    #calendarDialog
-    *ngIf="isCalendarOpen"
-    class="task-view__modal-overlay"
-    (click)="closeCalendar()"
-    open
-    role="dialog"
-    aria-modal="true"
-    aria-label="Calendario">
-    <section class="task-view__modal-content" (click)="$event.stopPropagation()">
-      <app-calendar (close)="closeCalendar()"></app-calendar>
-    </section>
-  </dialog>
+  <!-- Calendar Modal Overlay -->
+  <app-modal-wrapper 
+    [isOpen]="isCalendarOpen" 
+    ariaLabel="Calendario"
+    (close)="closeCalendar()">
+    <app-calendar (close)="closeCalendar()"></app-calendar>
+  </app-modal-wrapper>
 
-  <dialog
-    #taskDialog
-    *ngIf="isTaskModalOpen"
-    class="task-view__modal-overlay"
-    (click)="closeTaskModal()"
-    open
-    role="dialog"
-    aria-modal="true"
-    [attr.aria-label]="isEditMode ? 'Editar tarea' : 'Añadir tarea'">
-    <section class="task-view__modal-content" (click)="$event.stopPropagation()">
-      <app-add-task-modal
-        [task]="taskToEdit"
-        [isEditMode]="isEditMode"
-        (close)="closeTaskModal()"
-        (taskUpdated)="handleTaskUpdated($event)">
-      </app-add-task-modal>
-    </section>
-  </dialog>
+  <!-- Task Modal Overlay -->
+  <app-modal-wrapper 
+    [isOpen]="isTaskModalOpen" 
+    [ariaLabel]="isEditMode ? 'Editar tarea' : 'Añadir tarea'"
+    (close)="closeTaskModal()">
+    <app-add-task-modal
+      [task]="taskToEdit"
+      [isEditMode]="isEditMode"
+      (close)="closeTaskModal()"
+      (taskUpdated)="handleTaskUpdated($event)">
+    </app-add-task-modal>
+  </app-modal-wrapper>
 
   <!-- Main Content -->
   <article class="task-view__main" role="main" id="detalle">

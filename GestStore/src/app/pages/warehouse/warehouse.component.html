@@ -1,51 +1,14 @@
 <app-sidebar-layout activeRoute="/almacen">
   <!-- Header slot -->
-  <nav slot="header" class="warehouse__nav" role="navigation" aria-label="Navegación principal">
-    <h1 class="warehouse__logo">
-      <span class="warehouse__logo-gest">Gest</span><span class="warehouse__logo-store">Store</span>
-    </h1>
-
-    <search class="warehouse__search" role="search">
-      <input 
-        type="search" 
-        class="warehouse__search-input" 
-        placeholder="Buscar productos..."
-        [(ngModel)]="search"
-        (input)="onSearchChange()"
-        aria-label="Buscar productos"
-      />
-      <button class="warehouse__search-btn" type="button" aria-label="Buscar">
-        <app-icon name="search" size="small"></app-icon>
-      </button>
-    </search>
-
-    <section class="warehouse__nav-actions" aria-label="Acciones rápidas">
-      <button 
-        class="warehouse__nav-btn" 
-        [class.warehouse__nav-btn--has-alerts]="stockAlertService.hasAlerts()"
-        type="button" 
-        (click)="toggleStockNotifications()"
-        aria-label="Notificaciones de stock">
-        <app-icon name="bell" size="small"></app-icon>
-        <span class="warehouse__notification-badge" *ngIf="stockAlertService.alertsCount() > 0">{{ stockAlertService.alertsCount() }}</span>
-      </button>
-      <button
-        class="warehouse__nav-btn"
-        type="button"
-        (click)="toggleTheme()"
-        (keydown.enter)="toggleTheme(); $event.preventDefault()"
-        [attr.aria-label]="themeAriaLabel">
-        <app-icon [name]="themeIcon" size="small"></app-icon>
-      </button>
-      <button class="warehouse__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
-        <app-icon name="calendar" size="small"></app-icon>
-      </button>
-      <time class="warehouse__date" [attr.dateTime]="currentDate">
-        <p class="warehouse__date-day">{{ currentDayName }}</p>
-        <p class="warehouse__date-full">{{ currentDate }}</p>
-      </time>
-    </section>
-  </nav>
+  <app-nav-header
+    slot="header"
+    searchPlaceholder="Buscar productos..."
+    searchAriaLabel="Buscar productos"
+    [searchValue]="search"
+    (searchValueChange)="search = $event; onSearchChange()"
+    (notificationsToggle)="toggleStockNotifications()"
+    (calendarToggle)="toggleCalendar()">
+  </app-nav-header>
 
   <!-- Stock Notifications Modal -->
   <app-stock-notifications 
@@ -54,40 +17,26 @@
   </app-stock-notifications>
 
   <!-- Calendar Modal Overlay -->
-  <dialog
-    #calendarDialog
-    *ngIf="isCalendarOpen"
-    class="warehouse__modal-overlay"
-    (click)="closeCalendar()"
-    open
-    role="dialog"
-    aria-modal="true"
-    aria-label="Calendario">
-    <section class="warehouse__modal-content" (click)="$event.stopPropagation()">
-      <app-calendar (close)="closeCalendar()"></app-calendar>
-    </section>
-  </dialog>
+  <app-modal-wrapper 
+    [isOpen]="isCalendarOpen" 
+    ariaLabel="Calendario"
+    (close)="closeCalendar()">
+    <app-calendar (close)="closeCalendar()"></app-calendar>
+  </app-modal-wrapper>
 
   <!-- Add/Edit Product Modal Overlay -->
-  <dialog
-    #productDialog
-    *ngIf="isProductModalOpen"
-    class="warehouse__modal-overlay"
-    (click)="closeProductModal()"
-    open
-    role="dialog"
-    aria-modal="true"
-    [attr.aria-label]="isEditMode ? 'Editar producto' : 'Añadir producto'">
-    <section class="warehouse__product-modal-content" (click)="$event.stopPropagation()">
-      <app-add-product-modal 
-        [product]="productToEdit"
-        [isEditMode]="isEditMode"
-        (close)="closeProductModal()" 
-        (productAdded)="handleProductAdded($event)"
-        (productUpdated)="handleProductUpdated($event)">
-      </app-add-product-modal>
-    </section>
-  </dialog>
+  <app-modal-wrapper 
+    [isOpen]="isProductModalOpen" 
+    [ariaLabel]="isEditMode ? 'Editar producto' : 'Añadir producto'"
+    (close)="closeProductModal()">
+    <app-add-product-modal 
+      [product]="productToEdit"
+      [isEditMode]="isEditMode"
+      (close)="closeProductModal()" 
+      (productAdded)="handleProductAdded($event)"
+      (productUpdated)="handleProductUpdated($event)">
+    </app-add-product-modal>
+  </app-modal-wrapper>
 
   <!-- Main Content -->
   <article class="warehouse__content">
@@ -142,24 +91,29 @@
     <!-- Products Table -->
     <section class="warehouse__table-container" aria-label="Tabla de productos">
       <!-- Loading State -->
-      <output *ngIf="isLoading" class="warehouse__loading" role="status" aria-live="polite">
-        <app-spinner size="medium"></app-spinner>
-        <p>Cargando productos...</p>
-      </output>
+      <app-loading-state 
+        *ngIf="isLoading" 
+        message="Cargando productos..." 
+        spinnerSize="medium">
+      </app-loading-state>
 
       <!-- Error State -->
-      <output *ngIf="errorMessage" class="warehouse__error" role="alert">
-        <p>{{ errorMessage }}</p>
-      </output>
+      <app-error-state 
+        *ngIf="errorMessage" 
+        [message]="errorMessage" 
+        [showRetry]="true" 
+        (retry)="loadProducts()">
+      </app-error-state>
 
       <!-- Empty State -->
-      <article *ngIf="!isLoading && filteredProducts.length === 0" class="warehouse__empty">
-        <app-icon name="package" size="large"></app-icon>
-        <p>No hay productos disponibles</p>
-        <app-button variant="primary" (clicked)="openAddProductModal()">
-          Añadir primer producto
-        </app-button>
-      </article>
+      <app-empty-state 
+        *ngIf="!isLoading && !errorMessage && filteredProducts.length === 0"
+        icon="package"
+        message="No hay productos disponibles"
+        buttonText="Añadir primer producto"
+        buttonIcon="plus"
+        (buttonClick)="openAddProductModal()">
+      </app-empty-state>
 
       <!-- Products Table -->
       <table *ngIf="!isLoading && filteredProducts.length > 0" class="warehouse__table">

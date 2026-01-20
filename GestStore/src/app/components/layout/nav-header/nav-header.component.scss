@@ -1,0 +1,162 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+// ============================================================================
+// NAV HEADER COMPONENT
+// ============================================================================
+.nav-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  padding: 0 $spacing-8;
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 10;
+  min-height: 6.25rem;
+
+  @include respond-down(lg) {
+    gap: $spacing-4;
+    padding: 0 $spacing-4;
+    min-height: 5rem;
+  }
+
+  @include respond-down(md) {
+    gap: $spacing-3;
+    padding: 0 $spacing-3;
+    padding-left: 4rem; // Espacio para el botón hamburguesa del sidebar-layout
+    min-height: 4.375rem;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+    padding: 0 $spacing-2;
+    padding-left: 3.5rem;
+    min-height: 3.75rem;
+  }
+}
+
+// ============================================================================
+// SEARCH - Ocupa todo el espacio disponible
+// ============================================================================
+.nav-header__search {
+  flex: 1;
+  min-width: 0; // Permite que el flex-item se encoja si es necesario
+}
+
+// ============================================================================
+// LOGO
+// ============================================================================
+.nav-header__logo {
+  @include text-style($font-size-3xl, $font-weight-semibold, $line-tight);
+  margin: 0;
+  flex-shrink: 0;
+
+  @include respond-down(lg) {
+    font-size: $font-size-2xl;
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-xl;
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-lg;
+  }
+}
+
+.nav-header__logo-gest {
+  color: var(--color-primary);
+}
+
+.nav-header__logo-store {
+  color: var(--text-default);
+}
+
+// ============================================================================
+// ACTIONS
+// ============================================================================
+.nav-header__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.nav-header__btn {
+  all: unset;
+  position: relative;
+  width: 2.125rem;
+  height: 2.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  border-radius: 0.5rem;
+  color: var(--text-on-primary);
+  cursor: pointer;
+  @include transition(background-color);
+  
+  &:hover {
+    background-color: var(--interactive-hover);
+  }
+
+  &--has-alerts {
+    animation: pulse 2s infinite;
+  }
+}
+
+.nav-header__badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 1rem;
+  height: 1rem;
+  padding: 0 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-error);
+  color: var(--text-on-primary);
+  border-radius: 50%;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+}
+
+// ============================================================================
+// DATE
+// ============================================================================
+.nav-header__date {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  margin-left: $spacing-4;
+
+  @include respond-down(sm) {
+    display: none;
+  }
+}
+
+.nav-header__date-day {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: var(--text-default);
+  margin: 0;
+}
+
+.nav-header__date-full {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: var(--color-medium);
+  margin: 0;
+}
+
+// ============================================================================
+// ANIMATIONS
+// ============================================================================
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb), 0);
+  }
+}

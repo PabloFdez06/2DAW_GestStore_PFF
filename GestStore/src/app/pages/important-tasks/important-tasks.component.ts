@@ -14,17 +14,21 @@ import { User } from '../../models/auth.model';
 import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
-import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
+import { NavHeaderComponent } from '../../components/layout/nav-header/nav-header.component';
 import { TaskCardComponent } from '../../components/molecules/task-card/task-card.component';
 import { ButtonComponent } from '../../components/atoms/button/button.component';
+import { ModalWrapperComponent } from '../../components/molecules/modal-wrapper/modal-wrapper.component';
+import { LoadingStateComponent } from '../../components/molecules/loading-state/loading-state.component';
+import { ErrorStateComponent } from '../../components/molecules/error-state/error-state.component';
+import { EmptyStateComponent } from '../../components/molecules/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-important-tasks',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, TaskMenuComponent, SpinnerComponent, StockNotificationsComponent, SidebarLayoutComponent, TaskCardComponent, ButtonComponent],
+  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, TaskMenuComponent, StockNotificationsComponent, SidebarLayoutComponent, NavHeaderComponent, TaskCardComponent, ButtonComponent, ModalWrapperComponent, LoadingStateComponent, ErrorStateComponent, EmptyStateComponent],
   templateUrl: './important-tasks.component.html',
   styleUrl: './important-tasks.component.scss'
 })

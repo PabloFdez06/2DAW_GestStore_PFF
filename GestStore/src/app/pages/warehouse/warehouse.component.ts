@@ -11,12 +11,16 @@ import { Product, ProductStatus, ProductCategory, ProductStatistics, calculatePr
 import { User } from '../../models/auth.model';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
-import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { ButtonComponent } from '../../components/atoms/button/button.component';
 import { AddProductModalComponent } from '../../components/molecules/add-product-modal/add-product-modal.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
+import { NavHeaderComponent } from '../../components/layout/nav-header/nav-header.component';
 import { StatCardComponent } from '../../components/molecules/stat-card/stat-card.component';
+import { ModalWrapperComponent } from '../../components/molecules/modal-wrapper/modal-wrapper.component';
+import { LoadingStateComponent } from '../../components/molecules/loading-state/loading-state.component';
+import { ErrorStateComponent } from '../../components/molecules/error-state/error-state.component';
+import { EmptyStateComponent } from '../../components/molecules/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-warehouse',
@@ -27,12 +31,16 @@ import { StatCardComponent } from '../../components/molecules/stat-card/stat-car
     FormsModule, 
     CalendarComponent, 
     IconComponent,
-    SpinnerComponent,
     ButtonComponent,
     AddProductModalComponent,
     StockNotificationsComponent,
     SidebarLayoutComponent,
-    StatCardComponent
+    NavHeaderComponent,
+    StatCardComponent,
+    ModalWrapperComponent,
+    LoadingStateComponent,
+    ErrorStateComponent,
+    EmptyStateComponent
   ],
   templateUrl: './warehouse.component.html',
   styleUrl: './warehouse.component.scss'

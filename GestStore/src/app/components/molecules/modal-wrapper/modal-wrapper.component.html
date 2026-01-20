@@ -1,0 +1,12 @@
+<dialog
+  *ngIf="isOpen"
+  class="modal-wrapper"
+  (click)="onOverlayClick()"
+  open
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="ariaLabel">
+  <section class="modal-wrapper__content" (click)="onContentClick($event)">
+    <ng-content></ng-content>
+  </section>
+</dialog>

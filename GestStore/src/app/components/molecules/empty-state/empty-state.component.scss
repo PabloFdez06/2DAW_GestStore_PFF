@@ -1,0 +1,27 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-12 $spacing-6;
+  text-align: center;
+
+  &--small {
+    padding: $spacing-8 $spacing-4;
+  }
+}
+
+.empty-state__icon {
+  color: var(--text-muted);
+  margin-bottom: $spacing-4;
+  opacity: 0.5;
+}
+
+.empty-state__message {
+  @include text-style($font-size-lg, $font-weight-medium, $line-normal);
+  color: var(--text-muted);
+  margin: 0 0 $spacing-6 0;
+}

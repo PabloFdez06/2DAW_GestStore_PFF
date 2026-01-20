@@ -7,6 +7,8 @@ import { CalendarComponent } from '../../components/molecules/calendar/calendar.
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
+import { NavHeaderComponent } from '../../components/layout/nav-header/nav-header.component';
+import { ModalWrapperComponent } from '../../components/molecules/modal-wrapper/modal-wrapper.component';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
 import { NotificationService } from '../../services/notification.service';
@@ -16,7 +18,7 @@ import { User } from '../../models/auth.model';
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent, StockNotificationsComponent, SidebarLayoutComponent],
+  imports: [CommonModule, FormsModule, RouterModule, IconComponent, CalendarComponent, StockNotificationsComponent, SidebarLayoutComponent, NavHeaderComponent, ModalWrapperComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })

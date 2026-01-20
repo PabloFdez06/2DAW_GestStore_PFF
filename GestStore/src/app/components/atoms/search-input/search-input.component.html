@@ -1,0 +1,17 @@
+<search class="search-input" role="search">
+  <input 
+    type="search" 
+    class="search-input__field" 
+    [placeholder]="placeholder"
+    [value]="value"
+    (input)="onInputChange($event)"
+    [attr.aria-label]="ariaLabel"
+  />
+  <button 
+    class="search-input__btn" 
+    type="button" 
+    aria-label="Buscar"
+    (click)="onSearchClick()">
+    <app-icon name="search" size="small"></app-icon>
+  </button>
+</search>

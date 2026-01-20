@@ -1,0 +1,17 @@
+<section 
+  class="empty-state" 
+  [class.empty-state--small]="size === 'small'">
+  <app-icon 
+    [name]="icon" 
+    size="large" 
+    class="empty-state__icon">
+  </app-icon>
+  <p class="empty-state__message">{{ message }}</p>
+  <app-button 
+    *ngIf="showButton"
+    variant="primary" 
+    [icon]="buttonIcon || undefined"
+    (clicked)="onButtonClick()">
+    {{ buttonText }}
+  </app-button>
+</section>

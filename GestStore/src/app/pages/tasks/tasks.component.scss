@@ -691,6 +691,7 @@
 .tasks-page__section-today {
   @include text-style($font-size-xs, $font-weight-medium, $line-normal);
   color: var(--text-muted);
+  background: none;
 }
 
 // ============================================================================

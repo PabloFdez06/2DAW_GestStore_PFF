@@ -1,0 +1,63 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.search-input {
+  position: relative;
+  width: 100%;
+
+  @include respond-down(sm) {
+    display: none; // Ocultar en mobile muy pequeño
+  }
+}
+
+.search-input__field {
+  width: 100%;
+  height: 2.25rem;
+  padding: 0 $spacing-12 0 $spacing-4;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
+  
+  @include text-style($font-size-xs, $font-weight-semibold, $line-normal);
+  color: var(--text-muted);
+
+  @include respond-down(md) {
+    height: 2rem;
+    padding: 0 $spacing-8 0 $spacing-3;
+    font-size: 0.625rem; // 10px
+  }
+  
+  &::placeholder {
+    color: var(--text-muted);
+  }
+  
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 0;
+  }
+}
+
+.search-input__btn {
+  all: unset;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  @include transition(color);
+  
+  &:hover {
+    color: var(--color-primary);
+  }
+}

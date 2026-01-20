@@ -7,11 +7,16 @@ import { Router, RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { ButtonComponent } from '../../components/atoms/button/button.component';
+import { NavHeaderComponent } from '../../components/layout/nav-header/nav-header.component';
 import { CalendarComponent } from '../../components/molecules/calendar/calendar.component';
 import { AddTaskModalComponent, TaskFormData } from '../../components/molecules/add-task-modal/add-task-modal.component';
 import { TaskMenuComponent, TaskMenuAction } from '../../components/molecules/task-menu/task-menu.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
+import { ModalWrapperComponent } from '../../components/molecules/modal-wrapper/modal-wrapper.component';
+import { LoadingStateComponent } from '../../components/molecules/loading-state/loading-state.component';
+import { ErrorStateComponent } from '../../components/molecules/error-state/error-state.component';
+import { EmptyStateComponent } from '../../components/molecules/empty-state/empty-state.component';
 import { TaskService } from '../../services/task.service';
 import { TaskProductService } from '../../services/task-product.service';
 import { ProductService } from '../../services/product.service';
@@ -22,7 +27,6 @@ import { StockAlertService } from '../../services/stock-alert.service';
 import { Task, TaskStatus, TaskPriority, TaskRequest, TaskStatistics } from '../../models/task.model';
 import { Product } from '../../models/product.model';
 import { User } from '../../models/auth.model';
-import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,12 +38,16 @@ import { SpinnerComponent } from '../../components/atoms/spinner/spinner.compone
     RouterModule,
     IconComponent,
     ButtonComponent,
+    NavHeaderComponent,
     CalendarComponent,
     AddTaskModalComponent,
     TaskMenuComponent,
-    SpinnerComponent,
     StockNotificationsComponent,
-    SidebarLayoutComponent
+    SidebarLayoutComponent,
+    ModalWrapperComponent,
+    LoadingStateComponent,
+    ErrorStateComponent,
+    EmptyStateComponent
   ],
   providers: [TaskService],
   templateUrl: './dashboard.component.html',

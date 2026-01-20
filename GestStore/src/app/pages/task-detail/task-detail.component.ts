@@ -29,11 +29,13 @@ import { IconComponent } from '../../components/atoms/icon/icon.component';
 import { SpinnerComponent } from '../../components/atoms/spinner/spinner.component';
 import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
 import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
+import { NavHeaderComponent } from '../../components/layout/nav-header/nav-header.component';
+import { ModalWrapperComponent } from '../../components/molecules/modal-wrapper/modal-wrapper.component';
 
 @Component({
   selector: 'app-task-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, SpinnerComponent, StockNotificationsComponent, SidebarLayoutComponent],
+  imports: [CommonModule, RouterModule, FormsModule, AddTaskModalComponent, CalendarComponent, IconComponent, SpinnerComponent, StockNotificationsComponent, SidebarLayoutComponent, NavHeaderComponent, ModalWrapperComponent],
   templateUrl: './task-detail.component.html',
   styleUrl: './task-detail.component.scss'
 })

@@ -1,50 +1,14 @@
 <app-sidebar-layout activeRoute="/dashboard">
   <!-- Header slot -->
-  <nav slot="header" class="dashboard__nav" role="navigation" aria-label="Navegación principal">
-    <h1 class="dashboard__logo">
-      <span class="dashboard__logo-gest">Gest</span><span class="dashboard__logo-store">Store</span>
-    </h1>
-
-    <search class="dashboard__search" role="search">
-      <input 
-        type="search" 
-        class="dashboard__search-input" 
-        placeholder="Busca tu tarea aqui..."
-        [(ngModel)]="searchTerm"
-        aria-label="Buscar tareas"
-      />
-      <button class="dashboard__search-btn" type="button" aria-label="Buscar">
-        <app-icon name="search" size="small"></app-icon>
-      </button>
-    </search>
-
-    <section class="dashboard__nav-actions" aria-label="Acciones rápidas">
-      <button 
-        class="dashboard__nav-btn" 
-        [class.dashboard__nav-btn--has-alerts]="stockAlertService.hasAlerts()"
-        type="button" 
-        (click)="toggleStockNotifications()"
-        aria-label="Notificaciones de stock">
-        <app-icon name="bell" size="small"></app-icon>
-        <span class="dashboard__notification-badge" *ngIf="stockAlertService.alertsCount() > 0">{{ stockAlertService.alertsCount() }}</span>
-      </button>
-      <button
-        class="dashboard__nav-btn"
-        type="button"
-        (click)="toggleTheme()"
-        (keydown.enter)="toggleTheme(); $event.preventDefault()"
-        [attr.aria-label]="themeAriaLabel">
-        <app-icon [name]="themeIcon" size="small"></app-icon>
-      </button>
-      <button class="dashboard__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
-        <app-icon name="calendar" size="small"></app-icon>
-      </button>
-      <time class="dashboard__date" [attr.dateTime]="currentDate">
-        <p class="dashboard__date-day">{{ currentDayName }}</p>
-        <p class="dashboard__date-full">{{ currentDate }}</p>
-      </time>
-    </section>
-  </nav>
+  <app-nav-header
+    slot="header"
+    searchPlaceholder="Busca tu tarea aqui..."
+    searchAriaLabel="Buscar tareas"
+    [searchValue]="searchTerm"
+    (searchValueChange)="searchTerm = $event"
+    (notificationsToggle)="toggleStockNotifications()"
+    (calendarToggle)="toggleCalendar()">
+  </app-nav-header>
   
   <!-- Stock Notifications Modal -->
   <app-stock-notifications 
@@ -53,40 +17,26 @@
   </app-stock-notifications>
   
   <!-- Calendar Modal Overlay -->
-  <dialog
-    #calendarDialog
-    *ngIf="isCalendarOpen"
-    class="dashboard__modal-overlay"
-    (click)="closeCalendar()"
-    open
-    role="dialog"
-    aria-modal="true"
-    aria-label="Calendario">
-    <section class="dashboard__modal-content" (click)="$event.stopPropagation()">
-      <app-calendar (close)="closeCalendar()"></app-calendar>
-    </section>
-  </dialog>
+  <app-modal-wrapper 
+    [isOpen]="isCalendarOpen" 
+    ariaLabel="Calendario"
+    (close)="closeCalendar()">
+    <app-calendar (close)="closeCalendar()"></app-calendar>
+  </app-modal-wrapper>
   
   <!-- Add Task Modal Overlay -->
-  <dialog
-    #taskDialog
-    *ngIf="isTaskModalOpen"
-    class="dashboard__modal-overlay"
-    (click)="closeTaskModal()"
-    open
-    role="dialog"
-    aria-modal="true"
-    [attr.aria-label]="isEditMode ? 'Editar tarea' : 'Añadir tarea'">
-    <section class="dashboard__modal-content" (click)="$event.stopPropagation()">
-      <app-add-task-modal 
-        [task]="taskToEdit"
-        [isEditMode]="isEditMode"
-        (close)="closeTaskModal()" 
-        (taskAdded)="handleTaskAdded($event)"
-        (taskUpdated)="handleTaskUpdated($event)">
-      </app-add-task-modal>
-    </section>
-  </dialog>
+  <app-modal-wrapper 
+    [isOpen]="isTaskModalOpen" 
+    [ariaLabel]="isEditMode ? 'Editar tarea' : 'Añadir tarea'"
+    (close)="closeTaskModal()">
+    <app-add-task-modal 
+      [task]="taskToEdit"
+      [isEditMode]="isEditMode"
+      (close)="closeTaskModal()" 
+      (taskAdded)="handleTaskAdded($event)"
+      (taskUpdated)="handleTaskUpdated($event)">
+    </app-add-task-modal>
+  </app-modal-wrapper>
 
   <!-- Main Content -->
   <article class="dashboard__content">
@@ -114,23 +64,27 @@
         </header>
 
         <!-- Estado de carga -->
-        <output *ngIf="isLoadingTasks" class="dashboard__loading" role="status" aria-live="polite">
-          <app-spinner size="medium"></app-spinner>
-          <p>Cargando tareas...</p>
-        </output>
+        <app-loading-state 
+          *ngIf="isLoadingTasks" 
+          message="Cargando tareas...">
+        </app-loading-state>
 
         <!-- Mensaje de error -->
-        <aside *ngIf="errorMessage" class="dashboard__error" role="alert">
-          <p>{{ errorMessage }}</p>
-          <app-button variant="primary" size="small" (clicked)="loadTasks()">Reintentar</app-button>
-        </aside>
+        <app-error-state 
+          *ngIf="errorMessage" 
+          [message]="errorMessage"
+          (retry)="loadTasks()">
+        </app-error-state>
 
         <!-- Mensaje cuando no hay tareas -->
-        <section *ngIf="!isLoadingTasks && !errorMessage && tasks.length === 0" class="dashboard__empty-state">
-          <app-icon name="inbox" size="large" class="dashboard__empty-icon"></app-icon>
-          <p class="dashboard__empty-text">Aún no existen tareas</p>
-          <app-button variant="primary" icon="plus" (clicked)="toggleTaskModal()">Crear tarea</app-button>
-        </section>
+        <app-empty-state 
+          *ngIf="!isLoadingTasks && !errorMessage && tasks.length === 0"
+          icon="inbox"
+          message="Aún no existen tareas"
+          buttonText="Crear tarea"
+          buttonIcon="plus"
+          (buttonClick)="toggleTaskModal()">
+        </app-empty-state>
 
         <!-- Lista de tareas -->
         <ul *ngIf="!isLoadingTasks && !errorMessage && tasks.length > 0" class="dashboard__tasks" role="list">
@@ -245,9 +199,12 @@
         </header>
 
         <!-- Mensaje cuando no hay tareas completadas -->
-        <section *ngIf="!isLoadingTasks && completedTasksData.length === 0" class="dashboard__empty-state dashboard__empty-state--small">
-          <p class="dashboard__empty-text">No hay tareas completadas aún</p>
-        </section>
+        <app-empty-state 
+          *ngIf="!isLoadingTasks && completedTasksData.length === 0"
+          icon="check-circle"
+          message="No hay tareas completadas aún"
+          size="small">
+        </app-empty-state>
 
         <ul *ngIf="completedTasksData.length > 0" class="dashboard__completed-tasks" role="list">
           <li *ngFor="let task of filteredCompletedTasks" role="listitem">

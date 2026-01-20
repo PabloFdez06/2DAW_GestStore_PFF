@@ -1,37 +1,11 @@
 <app-sidebar-layout activeRoute="/ajustes">
   <!-- Header slot -->
-  <nav slot="header" class="settings-page__nav" role="navigation" aria-label="Navegación principal">
-    <h1 class="settings-page__logo">
-      <span class="settings-page__logo-gest">Gest</span><span class="settings-page__logo-store">Store</span>
-    </h1>
-
-    <section class="settings-page__nav-actions" aria-label="Acciones rápidas">
-      <button 
-        class="settings-page__nav-btn" 
-        [class.settings-page__nav-btn--has-alerts]="stockAlertService.hasAlerts()"
-        type="button" 
-        (click)="toggleStockNotifications()"
-        aria-label="Notificaciones de stock">
-        <app-icon name="bell" size="small"></app-icon>
-        <span class="settings-page__notification-badge" *ngIf="stockAlertService.alertsCount() > 0">{{ stockAlertService.alertsCount() }}</span>
-      </button>
-      <button
-        class="settings-page__nav-btn"
-        type="button"
-        (click)="toggleTheme()"
-        (keydown.enter)="toggleTheme(); $event.preventDefault()"
-        [attr.aria-label]="themeAriaLabel">
-        <app-icon [name]="themeIcon" size="small"></app-icon>
-      </button>
-      <button class="settings-page__nav-btn" type="button" (click)="toggleCalendar()" aria-label="Calendario">
-        <app-icon name="calendar" size="small"></app-icon>
-      </button>
-      <time class="settings-page__date" [attr.dateTime]="currentDate">
-        <p class="settings-page__date-day">{{ currentDayName }}</p>
-        <p class="settings-page__date-full">{{ currentDate }}</p>
-      </time>
-    </section>
-  </nav>
+  <app-nav-header
+    slot="header"
+    [showSearch]="false"
+    (notificationsToggle)="toggleStockNotifications()"
+    (calendarToggle)="toggleCalendar()">
+  </app-nav-header>
 
   <!-- Stock Notifications Modal -->
   <app-stock-notifications 
@@ -40,19 +14,12 @@
   </app-stock-notifications>
 
   <!-- Calendar Modal Overlay -->
-  <dialog
-    #calendarDialog
-    *ngIf="isCalendarOpen"
-    class="settings-page__modal-overlay"
-    (click)="closeCalendar()"
-    open
-    role="dialog"
-    aria-modal="true"
-    aria-label="Calendario">
-    <section class="settings-page__modal-content" (click)="$event.stopPropagation()">
-      <app-calendar (close)="closeCalendar()"></app-calendar>
-    </section>
-  </dialog>
+  <app-modal-wrapper 
+    [isOpen]="isCalendarOpen" 
+    ariaLabel="Calendario"
+    (close)="closeCalendar()">
+    <app-calendar (close)="closeCalendar()"></app-calendar>
+  </app-modal-wrapper>
 
   <!-- Main Content -->
   <article class="settings-page__main" role="main">

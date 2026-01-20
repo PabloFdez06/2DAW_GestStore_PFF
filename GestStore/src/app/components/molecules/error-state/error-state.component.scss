@@ -1,0 +1,21 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-4;
+  padding: $spacing-8 $spacing-6;
+  background-color: color-mix(in srgb, var(--color-error) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-error) 20%, transparent);
+  border-radius: 0.75rem;
+  margin-bottom: $spacing-4;
+}
+
+.error-state__message {
+  @include text-style($font-size-base, $font-weight-medium, $line-normal);
+  color: var(--color-error);
+  text-align: center;
+  margin: 0;
+}
