@@ -8,6 +8,7 @@
 4. [Fase 4: Sistema de Rutas y Navegación](#fase-4-sistema-de-rutas-y-navegación)
 5. [Fase 5: Servicios y Comunicación HTTP](#fase-5-servicios-y-comunicación-http)
 6. [Fase 6: Gestión de Estado y Actualización Dinámica](#fase-6-gestión-de-estado-y-actualización-dinámica)
+7. [Fase 7: Testing, Optimización y Entrega Final](#fase-7-testing-optimización-y-entrega-final)
 
 ---
 
