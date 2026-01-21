@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../atoms/icon/icon.component';
 
@@ -11,7 +11,8 @@ export type TaskCardVariant = 'default' | 'grid' | 'compact';
   standalone: true,
   imports: [CommonModule, IconComponent],
   templateUrl: './task-card.component.html',
-  styleUrl: './task-card.component.scss'
+  styleUrl: './task-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskCardComponent {
   @Input() title: string = '';

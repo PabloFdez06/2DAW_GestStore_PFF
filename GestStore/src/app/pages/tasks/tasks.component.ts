@@ -486,4 +486,11 @@ export class TasksComponent implements OnInit, OnDestroy {
     return labels[status] ?? status;
   }
 
+  /**
+   * TrackBy para optimizar el rendimiento de ngFor
+   */
+  trackByTaskId(index: number, task: Task): string | number {
+    return task.id;
+  }
+
 }

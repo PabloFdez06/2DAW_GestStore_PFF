@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../atoms/icon/icon.component';
 
@@ -11,7 +11,8 @@ export type StatCardIndicator = 'none' | 'warning' | 'danger' | 'success';
   standalone: true,
   imports: [CommonModule, IconComponent],
   templateUrl: './stat-card.component.html',
-  styleUrl: './stat-card.component.scss'
+  styleUrl: './stat-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatCardComponent {
   @Input() title: string = '';

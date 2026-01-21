@@ -712,4 +712,11 @@ export class DashboardComponent implements OnInit {
     if (diffDays === 1) return '1 día';
     return `${diffDays} días`;
   }
+
+  /**
+   * TrackBy para optimizar el rendimiento de ngFor en listas de tareas
+   */
+  trackByTaskId(index: number, task: Task): string | number {
+    return task.id;
+  }
 }

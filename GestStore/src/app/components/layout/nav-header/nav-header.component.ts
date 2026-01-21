@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../atoms/icon/icon.component';
@@ -11,7 +11,8 @@ import { StockAlertService } from '../../../services/stock-alert.service';
   standalone: true,
   imports: [CommonModule, FormsModule, IconComponent, SearchInputComponent],
   templateUrl: './nav-header.component.html',
-  styleUrl: './nav-header.component.scss'
+  styleUrl: './nav-header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavHeaderComponent {
   @Input() searchPlaceholder: string = 'Buscar...';
@@ -21,6 +22,12 @@ export class NavHeaderComponent {
   
   @Output() searchValueChange = new EventEmitter<string>();
   @Output() searchChange = new EventEmitter<string>();
+  
+  /**
+   * Evento emitido después del debounce (recomendado para búsquedas con API)
+   */
+  @Output() debouncedSearchChange = new EventEmitter<string>();
+  
   @Output() notificationsToggle = new EventEmitter<void>();
   @Output() themeToggle = new EventEmitter<void>();
   @Output() calendarToggle = new EventEmitter<void>();
@@ -57,6 +64,13 @@ export class NavHeaderComponent {
     this.searchValue = value;
     this.searchValueChange.emit(value);
     this.searchChange.emit(value);
+  }
+  
+  /**
+   * Maneja el evento de búsqueda con debounce
+   */
+  onDebouncedSearch(value: string): void {
+    this.debouncedSearchChange.emit(value);
   }
 
   toggleNotifications(): void {

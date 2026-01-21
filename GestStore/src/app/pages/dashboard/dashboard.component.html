@@ -88,7 +88,7 @@
 
         <!-- Lista de tareas -->
         <ul *ngIf="!isLoadingTasks && !errorMessage && tasks.length > 0" class="dashboard__tasks" role="list">
-          <li *ngFor="let task of filteredTasks; let i = index" role="listitem">
+          <li *ngFor="let task of filteredTasks; let i = index; trackBy: trackByTaskId" role="listitem">
             <article
               class="dashboard__task-card"
               [routerLink]="['/tareas', task.id]"
@@ -207,7 +207,7 @@
         </app-empty-state>
 
         <ul *ngIf="completedTasksData.length > 0" class="dashboard__completed-tasks" role="list">
-          <li *ngFor="let task of filteredCompletedTasks" role="listitem">
+          <li *ngFor="let task of filteredCompletedTasks; trackBy: trackByTaskId" role="listitem">
             <article
               class="dashboard__completed-card"
               [routerLink]="['/tareas', task.id]"

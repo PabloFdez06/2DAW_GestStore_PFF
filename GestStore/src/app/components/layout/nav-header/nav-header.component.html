@@ -9,7 +9,9 @@
     [placeholder]="searchPlaceholder"
     [ariaLabel]="searchAriaLabel"
     [ngModel]="searchValue"
-    (searchChange)="onSearchValueChange($event)">
+    [debounceMs]="300"
+    (searchChange)="onSearchValueChange($event)"
+    (debouncedSearch)="onDebouncedSearch($event)">
   </app-search-input>
 
   <section class="nav-header__actions" aria-label="Acciones rápidas">

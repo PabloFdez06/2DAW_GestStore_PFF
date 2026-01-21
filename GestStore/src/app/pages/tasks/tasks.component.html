@@ -87,7 +87,7 @@
 
       <!-- Tasks grid -->
       <ul *ngIf="!isLoading && !errorMessage && filteredTasks.length > 0" class="tasks-page__grid" role="list">
-        <li *ngFor="let task of filteredTasks; let i = index" role="listitem">
+        <li *ngFor="let task of filteredTasks; let i = index; trackBy: trackByTaskId" role="listitem">
           <app-task-card
             [title]="task.title"
             [description]="task.description"

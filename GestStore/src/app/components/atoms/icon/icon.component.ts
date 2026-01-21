@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, Search, Bell, Calendar, Home, Star, CheckSquare, Folder, Package, Settings, LogOut, UserPlus, Clipboard, MoreVertical, Plus, Minus, CheckCircle, BookOpen, ChevronLeft, ChevronRight, ChevronDown, X, Check, Sun, Moon, User, Mail, Phone, Upload, Pencil, AlertCircle, Trash2, Camera, Box, icons } from 'lucide-angular';
 
@@ -16,7 +16,7 @@ import { LucideAngularModule, Search, Bell, Calendar, Home, Star, CheckSquare, F
   `,
   styleUrl: './icon.component.scss'
 })
-export class IconComponent implements OnInit {
+export class IconComponent implements OnInit, OnChanges {
   @Input() name: string = 'search';
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
   
@@ -60,6 +60,16 @@ export class IconComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.updateIcon();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['name']) {
+      this.updateIcon();
+    }
+  }
+
+  private updateIcon(): void {
     this.iconImg = this.iconMap[this.name] || Search;
   }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../atoms/button/button.component';
 
@@ -7,7 +7,8 @@ import { ButtonComponent } from '../../atoms/button/button.component';
   standalone: true,
   imports: [CommonModule, ButtonComponent],
   templateUrl: './error-state.component.html',
-  styleUrl: './error-state.component.scss'
+  styleUrl: './error-state.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorStateComponent {
   @Input() message = 'Ha ocurrido un error';
