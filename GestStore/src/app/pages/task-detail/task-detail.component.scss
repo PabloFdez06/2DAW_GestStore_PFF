@@ -687,6 +687,26 @@
   cursor: pointer;
 }
 
+.task-view__thumb-hint {
+  position: absolute;
+  bottom: $spacing-1;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: $font-size-xs;
+  color: var(--text-muted);
+  background: var(--bg-default);
+  padding: $spacing-1 $spacing-2;
+  border-radius: $radius-sm;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+
+  .task-view__thumb:hover & {
+    opacity: 1;
+  }
+}
+
 .task-view__summary {
   min-width: 0;
 }

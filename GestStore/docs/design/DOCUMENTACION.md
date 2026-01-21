@@ -27,8 +27,6 @@ En mi interfaz aplico los cinco principios básicos de comunicación visual para
 - Esto mantiene consistencia visual en todo el sistema.
 
 ![Foto dashboard](image.png)
-
-
 ---
 
 ## 1.2 Metodología CSS
@@ -207,8 +205,6 @@ h1: Título principal
       └─ h3: Subsección
 ```
 
-proximamente adjuntare aqui la imagen
-
 ---
 
 ## 2.3 Estructura de formularios
@@ -298,6 +294,22 @@ Ejemplo real del componente app-form-input:
 - Ejemplo real:
 ```html
 <app-tag variant="primary">Primary</app-tag>
+```
+
+**app-search-input**
+- Propósito: campo de búsqueda con debounce integrado.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: focus, hover, con icono de búsqueda.
+- Props: placeholder, ariaLabel, debounceMs.
+- Ejemplo real:
+```html
+<app-search-input 
+  placeholder="Buscar tareas..." 
+  ariaLabel="Buscar" 
+  [debounceMs]="300"
+  (debouncedSearch)="onSearch($event)">
+</app-search-input>
 ```
 
 ---
@@ -426,6 +438,109 @@ Ejemplo real del componente app-form-input:
 <app-home-footer></app-home-footer>
 ```
 
+**app-add-product-modal**
+- Propósito: modal para crear/editar productos del almacén.
+- Variantes: isEditMode.
+- Tamaños: no aplica.
+- Estados: validaciones del formulario, isSubmitting.
+- Props: product, isEditMode.
+- Ejemplo real:
+```html
+<app-add-product-modal 
+  [isEditMode]="true" 
+  [product]="product"
+  (close)="onClose()"
+  (productAdded)="onProductAdded($event)">
+</app-add-product-modal>
+```
+
+**app-empty-state**
+- Propósito: estado vacío cuando no hay elementos que mostrar.
+- Variantes: size="default|small".
+- Tamaños: default, small.
+- Estados: con/sin botón de acción.
+- Props: icon, message, buttonText, buttonIcon.
+- Ejemplo real:
+```html
+<app-empty-state 
+  icon="inbox" 
+  message="No hay tareas" 
+  buttonText="Crear tarea"
+  (buttonClick)="onCreate()">
+</app-empty-state>
+```
+
+**app-error-state**
+- Propósito: estado de error con opción de reintentar.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: showRetry.
+- Props: message, showRetry, retryText.
+- Ejemplo real:
+```html
+<app-error-state 
+  message="Error al cargar los datos" 
+  [showRetry]="true"
+  (retry)="onRetry()">
+</app-error-state>
+```
+
+**app-loading-state**
+- Propósito: estado de carga con spinner y mensaje.
+- Variantes: spinnerSize="small|medium|large".
+- Tamaños: small, medium, large.
+- Estados: no aplica.
+- Props: message, spinnerSize.
+- Ejemplo real:
+```html
+<app-loading-state 
+  message="Cargando tareas..." 
+  spinnerSize="medium">
+</app-loading-state>
+```
+
+**app-modal-wrapper**
+- Propósito: wrapper genérico para modales con overlay y accesibilidad.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: isOpen.
+- Props: isOpen, ariaLabel.
+- Ejemplo real:
+```html
+<app-modal-wrapper 
+  [isOpen]="showModal" 
+  ariaLabel="Modal de confirmación"
+  (close)="onClose()">
+  <ng-content></ng-content>
+</app-modal-wrapper>
+```
+
+**app-product-selector-modal**
+- Propósito: modal para seleccionar productos y cantidades.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: isLoading, búsqueda activa, selección múltiple.
+- Props: selectedProducts.
+- Ejemplo real:
+```html
+<app-product-selector-modal 
+  [selectedProducts]="taskProducts"
+  (close)="onClose()"
+  (productsSelected)="onProductsSelected($event)">
+</app-product-selector-modal>
+```
+
+**app-stock-notifications**
+- Propósito: panel de notificaciones de stock bajo y agotado.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: alertas de stock bajo, alertas de agotado.
+- Props: no aplica (usa StockAlertService internamente).
+- Ejemplo real:
+```html
+<app-stock-notifications (close)="onCloseNotifications()"></app-stock-notifications>
+```
+
 ---
 
 ### Layout
@@ -468,6 +583,36 @@ Ejemplo real del componente app-form-input:
 - Ejemplo real:
 ```html
 <app-breadcrumbs></app-breadcrumbs>
+```
+
+**app-nav-header**
+- Propósito: cabecera de navegación con búsqueda, fecha y acciones.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: búsqueda activa, notificaciones visibles.
+- Props: searchPlaceholder, searchAriaLabel, showSearch, searchValue.
+- Ejemplo real:
+```html
+<app-nav-header 
+  searchPlaceholder="Buscar tareas..." 
+  [showSearch]="true"
+  (debouncedSearchChange)="onSearch($event)"
+  (notificationsToggle)="toggleNotifications()"
+  (themeToggle)="toggleTheme()">
+</app-nav-header>
+```
+
+**app-sidebar-layout**
+- Propósito: layout con sidebar colapsable y navegación principal.
+- Variantes: no aplica.
+- Tamaños: no aplica.
+- Estados: sidebar abierto/cerrado (responsive), enlace activo.
+- Props: activeRoute, showLogout.
+- Ejemplo real:
+```html
+<app-sidebar-layout [activeRoute]="'/dashboard'" [showLogout]="true">
+  <ng-content></ng-content>
+</app-sidebar-layout>
 ```
 
 ---
@@ -524,6 +669,22 @@ Ejemplo real del componente app-form-input:
 <app-register-form></app-register-form>
 ```
 
+**app-notification-container**
+- Propósito: contenedor de notificaciones toast globales.
+- Variantes: no aplica (hereda variantes de app-alert: success, warning, error, info).
+- Tamaños: no aplica.
+- Estados: múltiples notificaciones apiladas, animación de entrada/salida.
+- Props: no aplica (usa NotificationService internamente).
+- Ejemplo real:
+```html
+<!-- Se incluye una vez en el componente raíz (app.component) -->
+<app-notification-container></app-notification-container>
+
+<!-- Uso desde cualquier componente vía servicio -->
+<!-- this.notificationService.success('Tarea creada correctamente'); -->
+<!-- this.notificationService.error('Error al guardar'); -->
+```
+
 ---
 
 ## 3.2 Nomenclatura y metodología
@@ -553,8 +714,8 @@ Estrategia:
 
 He creado la página de Style Guide en src/app/pages/style-guide, donde documento visualmente componentes, colores y tipografía. Me sirve como referencia visual, validación rápida y testing manual de estados.
 
-Capturas de la página de Style Guide:
-- proximamente adjuntare aqui la imagen
+Style Guide:
+![style-guide](image-9.png)
 
 ---
 
@@ -634,19 +795,28 @@ Implementé Container Queries en el componente app-card para adaptar el layout p
 ## 4.6 Screenshots comparativos
 
 Dashboard
-- Mobile (375px): proximamente adjuntare aqui la imagen
-- Tablet (768px): proximamente adjuntare aqui la imagen
-- Desktop (1280px): proximamente adjuntare aqui la imagen
+- Mobile (375px):
+![mobile-dashboard](image-17.png)
+- Tablet (768px):
+![tablet-dashboard](image-16.png)
+- Desktop (1280px):
+![desktop-dashboard](image-15.png)
 
 Tasks
-- Mobile (375px): proximamente adjuntare aqui la imagen
-- Tablet (768px): proximamente adjuntare aqui la imagen
-- Desktop (1280px): proximamente adjuntare aqui la imagen
+- Mobile (375px):
+![mobile-tasks](image-18.png)
+- Tablet (768px):
+![tablet-tasks](image-13.png)
+- Desktop (1280px):
+![desktop-tasks](image-14.png)
 
 Profile
-- Mobile (375px): proximamente adjuntare aqui la imagen
-- Tablet (768px): proximamente adjuntare aqui la imagen
-- Desktop (1280px): proximamente adjuntare aqui la imagen
+- Mobile (375px): 
+![mobile-profile](image-10.png)
+- Tablet (768px): 
+![tablet-profile](image-11.png)
+- Desktop (1280px):
+![desktop-profile](image-12.png)
 
 ---
 
@@ -654,27 +824,26 @@ Profile
 
 ## 5.1 Formatos elegidos
 
-Actualmente solo uso **PNG** en las ilustraciones (login/register y assets públicos). No tengo implementados AVIF, WebP o JPG en el repositorio. La comparación AVIF vs WebP vs JPG queda pendiente hasta que los incorpore.
+Mi formato era PNG, y voy a elegir transformar a JPG, ese será el formato que usaré en mi proyecto.
 
 ---
 
 ## 5.2 Herramientas utilizadas
 
-Pendiente.
+Squoosh
 
 ---
 
 ## 5.3 Resultados de optimización
 
-Aún no tengo versiones optimizadas. Dejo la tabla con el tamaño actual y el campo de optimización pendiente:
+He transformado las imagenes que anteriormente eran PNG a WEBP, y optimizado las mismas:
 
-| Imagen | Tamaño original | Tamaño optimizado | % reducción |
-|---|---:|---:|---:|
-| docs/design/image-1.png | 222.4 KB | pendiente | N/A |
-| docs/design/image-2.png | 31.7 KB | pendiente | N/A |
-| docs/design/image.png | 124.2 KB | pendiente | N/A |
-| public/login-illustration.png | 42.1 KB | pendiente | N/A |
-| public/register-illustration.png | 37.9 KB | pendiente | N/A |
+| Imagen | Tamaño original | Imagen actualizada | Tamaño optimizado | % reducción |
+|---|---:|---:|---:|---:|
+| public/login-illustration.png | 42.1 KB | public/login-illustration.webp | 7.71 KB | 	81.7% |
+| public/register-illustration.png | 37.9 KB | public/register-illustration.webp | 12.8 KB | 66.2% |
+
+Las imagenes de las mismas pero en 400 y 800 pixeles han sido obtenidas directamente optimizadas al reajustarlas en el software Squoosh, tambien en webp por lo que no es necesario añadirlas a la tabla.
 
 ---
 
@@ -687,12 +856,12 @@ Ejemplo real (login/register):
 ```html
 <picture>
   <source
-    type="image/png"
-    srcset="login-illustration.png 600w, /assets/images/login/login-illustration.png 1200w"
+    type="image/webp"
+    srcset="login-illustration.webp 600w, /assets/images/login/login-illustration.webp 1200w"
     sizes="(max-width: 768px) 100vw, 600px"
   />
   <img
-    src="login-illustration.png"
+    src="login-illustration.webp"
     alt="Ilustración de inicio de sesión"
     loading="lazy"
     decoding="async"
@@ -803,3 +972,108 @@ Claro:
 Oscuro:
 
 ![modo_oscuro_profile](image-8.png)
+
+
+---
+
+# Sección 7: Aplicación completa y despliegue
+
+## 7.1 Estado final de la aplicación
+
+### Páginas implementadas
+
+| Página | Ruta | Descripción | Estado |
+|--------|------|-------------|--------|
+| **Home** | `/` | Landing page con presentación del producto | ✅ Completa |
+| **Dashboard** | `/dashboard` | Panel principal con resumen de tareas, estadísticas y accesos rápidos | ✅ Completa |
+| **Tasks** | `/tasks` | Listado de tareas con filtros, búsqueda y paginación | ✅ Completa |
+| **Task Detail** | `/tasks/:id` | Vista detallada de una tarea con productos asociados | ✅ Completa |
+| **Task Edit** | `/tasks/:id/edit` | Edición de tarea existente | ✅ Completa |
+| **Important Tasks** | `/important` | Tareas marcadas como importantes/favoritas | ✅ Completa |
+| **Warehouse** | `/warehouse` | Gestión de inventario y productos | ✅ Completa |
+| **Profile** | `/profile` | Perfil de usuario con estadísticas | ✅ Completa |
+| **Settings** | `/settings` | Configuración de la aplicación | ✅ Completa |
+| **Style Guide** | `/style-guide` | Guía de estilos y componentes UI | ✅ Completa |
+| **Not Found** | `**` | Página 404 para rutas no encontradas | ✅ Completa |
+
+### Funcionalidades implementadas
+
+| Funcionalidad | Descripción | Estado |
+|---------------|-------------|--------|
+| **Autenticación** | Login/registro con JWT y refresh tokens | ✅ |
+| **CRUD Tareas** | Crear, leer, actualizar y eliminar tareas | ✅ |
+| **CRUD Productos** | Gestión completa de productos en almacén | ✅ |
+| **Asignación de productos** | Vincular productos a tareas con cantidades | ✅ |
+| **Filtros avanzados** | Filtrar por estado, prioridad, fechas | ✅ |
+| **Búsqueda** | Búsqueda en tiempo real con debounce | ✅ |
+| **Paginación** | Navegación por páginas en listados | ✅ |
+| **Scroll infinito** | Carga progresiva de contenido | ✅ |
+| **Favoritos** | Marcar tareas como importantes | ✅ |
+| **Tema claro/oscuro** | Cambio de tema con persistencia | ✅ |
+| **Notificaciones toast** | Sistema de notificaciones visuales | ✅ |
+| **Responsive design** | Adaptación a móvil (375px), tablet y desktop | ✅ |
+| **Guards de ruta** | Protección de rutas autenticadas | ✅ |
+| **Interceptors HTTP** | Manejo de tokens y errores | ✅ |
+| **Estados de carga** | Loading, empty y error states | ✅ |
+
+---
+
+## 7.2 Despliegue
+
+### URL de producción
+
+
+https://satisfactory-chandra-geststore-0b06e3cf.koyeb.app/
+
+### Verificación de funcionamiento
+
+| Verificación | Estado |
+|--------------|--------|
+| Carga inicial de la aplicación | ✅ Funcional |
+| Login y autenticación | ✅ Funcional |
+| Navegación entre páginas | ✅ Funcional |
+| CRUD de tareas | ✅ Funcional |
+| CRUD de productos | ✅ Funcional |
+| Cambio de tema | ✅ Funcional |
+| Responsive en móvil | ✅ Funcional |
+| HTTPS habilitado | ✅ Activo |
+| Compresión gzip | ✅ Activo |
+
+### Configuración de despliegue
+
+
+
+---
+
+## 7.3 Problemas conocidos y mejoras futuras
+
+### Problemas conocidos
+
+| Problema | Severidad | Descripción |
+|----------|-----------|-------------|
+| Falta de desarrollo | Media | Falta la implementación de la funcion de agregar trabajadores y de las categorias |
+
+### Mejoras futuras
+
+| Mejora | Prioridad | Descripción |
+|--------|-----------|-------------|
+| **PWA** | Alta | Convertir en Progressive Web App con offline support |
+| **Drag & Drop** | Media | Reordenar tareas arrastrando |
+| **Exportar a PDF** | Baja | Generar informes de tareas en PDF |
+| **Internacionalización** | Baja | Soporte multi-idioma (i18n) |
+| **Colaboración** | Alta | Asignar tareas a múltiples usuarios |
+| **Historial de cambios** | Baja | Log de modificaciones por tarea |
+| **Optimización imágenes** | Media | Conversión automática a WebP con fallbacks |
+
+---
+
+## 7.4 Conclusiones
+
+GestStore es una aplicación web completa de gestión de tareas y almacén desarrollada con:
+
+- **Frontend**: Angular 19+ con componentes standalone, SCSS modular (ITCSS + BEM)
+- **Backend**: Spring Boot 3 con API REST y autenticación JWT
+- **Base de datos**: MongoDB
+- **Despliegue**: Docker + Koyeb
+
+La aplicación cumple con los requisitos de diseño responsivo, accesibilidad básica, sistema de temas y arquitectura modular, proporcionando una experiencia de usuario consistente en todos los dispositivos.

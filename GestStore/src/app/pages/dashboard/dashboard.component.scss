@@ -213,6 +213,18 @@
 .dashboard__content {
   padding: $spacing-8;
   overflow-y: auto;
+
+  @include respond-down(lg) {
+    padding: $spacing-6;
+  }
+
+  @include respond-down(md) {
+    padding: $spacing-4;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+  }
 }
 
 .dashboard__welcome {
@@ -220,12 +232,32 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: $spacing-6;
+
+  @include respond-down(md) {
+    margin-bottom: $spacing-4;
+  }
+
+  @include respond-down(sm) {
+    margin-bottom: $spacing-3;
+  }
 }
 
 .dashboard__welcome-title {
   @include text-style($font-size-4xl, $font-weight-medium, $line-tight);
   color: var(--text-default);
   margin: 0;
+
+  @include respond-down(lg) {
+    font-size: $font-size-3xl;
+  }
+
+  @include respond-down(md) {
+    font-size: $font-size-2xl;
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-lg;
+  }
 }
 
 // ============================================================================
@@ -236,6 +268,21 @@
   grid-template-columns: 29.125rem 1fr;
   grid-template-rows: auto 1fr;
   gap: $spacing-6;
+
+  @include respond-down(lg) {
+    grid-template-columns: 22rem 1fr;
+    gap: $spacing-4;
+  }
+
+  @include respond-down(md) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: $spacing-4;
+  }
+
+  @include respond-down(sm) {
+    gap: $spacing-3;
+  }
 }
 
 .dashboard__section {
@@ -243,21 +290,45 @@
   border-radius: 0.875rem;
   padding: $spacing-6;
   box-shadow: var(--shadow-sm);
+
+  @include respond-down(md) {
+    padding: $spacing-4;
+    border-radius: 0.75rem;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+    border-radius: 0.625rem;
+  }
 }
 
 .dashboard__section--todo {
   grid-column: 1;
   grid-row: 1 / 3;
+
+  @include respond-down(md) {
+    grid-row: 1;
+  }
 }
 
 .dashboard__section--status {
   grid-column: 2;
   grid-row: 1;
+
+  @include respond-down(md) {
+    grid-column: 1;
+    grid-row: 2;
+  }
 }
 
 .dashboard__section--completed {
   grid-column: 2;
   grid-row: 2;
+
+  @include respond-down(md) {
+    grid-column: 1;
+    grid-row: 3;
+  }
 }
 
 .dashboard__section-header {
@@ -265,12 +336,21 @@
   align-items: center;
   gap: $spacing-3;
   margin-bottom: $spacing-5;
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+    margin-bottom: $spacing-3;
+  }
 }
 
 .dashboard__section-title-wrap {
   display: flex;
   align-items: center;
   gap: $spacing-3;
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+  }
 }
 
 .dashboard__section-icon {
@@ -323,6 +403,11 @@
   flex-direction: column;
   gap: $spacing-4;
   margin-bottom: $spacing-4;
+
+  @include respond-down(sm) {
+    gap: $spacing-3;
+    margin-bottom: $spacing-3;
+  }
 }
 
 .dashboard__task-card {
@@ -337,6 +422,19 @@
   gap: $spacing-3;
   @include transition(all);
   cursor: pointer;
+
+  @include respond-down(md) {
+    padding: $spacing-3;
+    gap: $spacing-2;
+    grid-template-columns: 0.75rem 1fr 4.5rem;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+    border-radius: 0.625rem;
+    grid-template-columns: 0.625rem 1fr 3.5rem;
+    gap: $spacing-2;
+  }
   
   &:hover {
     border-color: var(--color-primary);
@@ -405,6 +503,18 @@
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
+
+  @include respond-down(md) {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 0.75rem;
+  }
+
+  @include respond-down(sm) {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.5rem;
+  }
 }
 
 .dashboard__task-image--has-image {
@@ -454,12 +564,25 @@
   @include text-style($font-size-base, $font-weight-semibold, $line-normal);
   color: var(--text-default);
   margin: 0;
+
+  @include respond-down(sm) {
+    font-size: $font-size-sm;
+  }
 }
 
 .dashboard__task-description {
   @include text-style($font-size-sm, $font-weight-regular, $line-normal);
   color: var(--text-muted);
   margin: 0;
+
+  @include respond-down(sm) {
+    font-size: $font-size-xs;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
 .dashboard__task-meta {
@@ -467,6 +590,11 @@
   flex-wrap: wrap;
   gap: $spacing-1;
   margin-top: $spacing-2;
+
+  @include respond-down(sm) {
+    margin-top: $spacing-1;
+    gap: $spacing-1;
+  }
 }
 
 .dashboard__task-label {
@@ -537,6 +665,19 @@
   grid-template-columns: repeat(3, 1fr);
   gap: $spacing-6;
   align-items: center;
+
+  @include respond-down(lg) {
+    gap: $spacing-4;
+  }
+
+  @include respond-down(md) {
+    gap: $spacing-3;
+  }
+
+  @include respond-down(sm) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-2;
+  }
 }
 
 .dashboard__status-chart {
@@ -544,6 +685,10 @@
   flex-direction: column;
   align-items: center;
   gap: $spacing-3;
+
+  @include respond-down(sm) {
+    gap: $spacing-2;
+  }
 }
 
 .dashboard__status-circle-wrap {
@@ -553,6 +698,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @include respond-down(lg) {
+    width: 7rem;
+    height: 7rem;
+  }
+
+  @include respond-down(md) {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  @include respond-down(sm) {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
 }
 
 .dashboard__status-svg {
@@ -596,18 +756,35 @@
   margin: 0;
   position: relative;
   z-index: 1;
+
+  @include respond-down(md) {
+    font-size: $font-size-lg;
+  }
+
+  @include respond-down(sm) {
+    font-size: $font-size-sm;
+  }
 }
 
 .dashboard__status-legend {
   display: flex;
   align-items: center;
   gap: $spacing-2;
+
+  @include respond-down(sm) {
+    gap: $spacing-1;
+  }
 }
 
 .dashboard__status-dot {
   width: 0.4375rem;
   height: 0.4375rem;
   border-radius: 50%;
+
+  @include respond-down(sm) {
+    width: 0.375rem;
+    height: 0.375rem;
+  }
   
   &--completed {
     background-color: var(--color-success);
@@ -625,6 +802,10 @@
 .dashboard__status-label {
   @include text-style($font-size-sm, $font-weight-medium, $line-normal);
   color: var(--text-default);
+
+  @include respond-down(sm) {
+    font-size: $font-size-xs;
+  }
 }
 
 // ============================================================================
@@ -634,6 +815,10 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-4;
+
+  @include respond-down(sm) {
+    gap: $spacing-3;
+  }
 }
 
 .dashboard__completed-card {
@@ -648,6 +833,19 @@
   gap: $spacing-3;
   @include transition(all);
   cursor: pointer;
+
+  @include respond-down(md) {
+    padding: $spacing-3;
+    gap: $spacing-2;
+    grid-template-columns: 0.75rem 1fr 4.5rem;
+  }
+
+  @include respond-down(sm) {
+    padding: $spacing-3;
+    border-radius: 0.625rem;
+    grid-template-columns: 0.625rem 1fr 3.5rem;
+    gap: $spacing-2;
+  }
   
   &:hover {
     border-color: var(--color-success);
@@ -697,6 +895,18 @@
   height: 5.6875rem;
   background-color: var(--gray-300);
   border-radius: 0.875rem;
+
+  @include respond-down(md) {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 0.75rem;
+  }
+
+  @include respond-down(sm) {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.5rem;
+  }
 }
 
 .dashboard__completed-menu {
@@ -719,12 +929,25 @@
   @include text-style($font-size-sm, $font-weight-semibold, $line-normal);
   color: var(--text-default);
   margin: 0;
+
+  @include respond-down(sm) {
+    font-size: $font-size-xs;
+  }
 }
 
 .dashboard__completed-description {
   @include text-style($font-size-xs, $font-weight-regular, $line-normal);
   color: var(--text-muted);
   margin: 0;
+
+  @include respond-down(sm) {
+    font-size: 0.625rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 
 .dashboard__completed-status {
@@ -818,41 +1041,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-// ============================================================================
-// RESPONSIVE ADAPTACIONES
-// ============================================================================
-@media (max-width: 1400px) {
-  .dashboard {
-    grid-template-columns: 17.5rem 1fr;
-  }
-  
-  .dashboard__content-grid {
-    grid-template-columns: 25rem 1fr;
-  }
-}
-
-@media (max-width: 1200px) {
-  .dashboard__content-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-  }
-  
-  .dashboard__section--todo {
-    grid-column: 1;
-    grid-row: 1;
-  }
-  
-  .dashboard__section--status {
-    grid-column: 1;
-    grid-row: 2;
-  }
-  
-  .dashboard__section--completed {
-    grid-column: 1;
-    grid-row: 3;
   }
 }
 

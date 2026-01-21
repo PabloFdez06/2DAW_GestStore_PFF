@@ -72,6 +72,8 @@
   flex: 1;
   display: flex;
   align-items: center;
+  margin: 0;
+  line-height: $spacing-5; // Misma altura que el icono para alineamiento perfecto
 }
 
 .alert__close {
