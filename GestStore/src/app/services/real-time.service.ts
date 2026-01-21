@@ -1,7 +1,8 @@
-import { Injectable, signal, computed, OnDestroy } from '@angular/core';
+import { Injectable, signal, computed, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { interval, Subject, Subscription, of, timer } from 'rxjs';
-import { takeUntil, switchMap, catchError, map, tap } from 'rxjs/operators';
+import { interval, Subject, Subscription, of, timer, fromEvent, merge } from 'rxjs';
+import { takeUntil, switchMap, catchError, map, tap, filter, debounceTime } from 'rxjs/operators';
 import { NotificationService } from './notification.service';
 
 /**
@@ -34,9 +35,9 @@ export interface RealTimeConfig {
 
 const DEFAULT_CONFIG: RealTimeConfig = {
   pollInterval: 30000,      // 30 segundos
-  maxRetries: 15,            // 5 reintentos
-  baseRetryDelay: 2000,     // 1 segundo base
-  maxRetryDelay: 60000      // 1 minuto máximo
+  maxRetries: 10,           // 10 reintentos (más tolerante)
+  baseRetryDelay: 5000,     // 5 segundos base (más paciencia)
+  maxRetryDelay: 120000     // 2 minutos máximo
 };
 
 /**
@@ -94,6 +95,7 @@ const DEFAULT_CONFIG: RealTimeConfig = {
 export class RealTimeService implements OnDestroy {
   private readonly API_URL = '/api';
   private config: RealTimeConfig = DEFAULT_CONFIG;
+  private isBrowser: boolean;
   
   // ============================================================================
   // ESTADO REACTIVO (Signals)
@@ -104,6 +106,8 @@ export class RealTimeService implements OnDestroy {
   private eventsSignal = signal<RealTimeEvent[]>([]);
   private retryCountSignal = signal<number>(0);
   private errorMessageSignal = signal<string | null>(null);
+  private isPageVisibleSignal = signal<boolean>(true);
+  private isPausedSignal = signal<boolean>(false);
   
   // Señales públicas de solo lectura
   readonly connectionState = computed(() => this.connectionStateSignal());
@@ -114,6 +118,8 @@ export class RealTimeService implements OnDestroy {
   readonly events = computed(() => this.eventsSignal());
   readonly retryCount = computed(() => this.retryCountSignal());
   readonly errorMessage = computed(() => this.errorMessageSignal());
+  readonly isPageVisible = computed(() => this.isPageVisibleSignal());
+  readonly isPaused = computed(() => this.isPausedSignal());
   
   // ============================================================================
   // CONTROL DE POLLING Y RECONEXIÓN
@@ -121,6 +127,7 @@ export class RealTimeService implements OnDestroy {
   
   private pollingSubscription: Subscription | null = null;
   private reconnectSubscription: Subscription | null = null;
+  private visibilitySubscription: Subscription | null = null;
   private destroy$ = new Subject<void>();
   private consecutiveErrors = 0;
   
@@ -135,14 +142,92 @@ export class RealTimeService implements OnDestroy {
   
   constructor(
     private http: HttpClient,
-    private notificationService: NotificationService
-  ) {}
+    private notificationService: NotificationService,
+    @Inject(PLATFORM_ID) platformId: object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+    
+    // Escuchar cambios de visibilidad de la página
+    if (this.isBrowser) {
+      this.setupVisibilityListener();
+    }
+  }
   
   ngOnDestroy(): void {
     this.stopPolling();
     this.cancelReconnect();
+    this.visibilitySubscription?.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  
+  /**
+   * Configura el listener de visibilidad de la página.
+   * Cuando la ventana pierde el foco o está oculta, pausamos el polling
+   * para evitar errores innecesarios por throttling del navegador.
+   */
+  private setupVisibilityListener(): void {
+    if (typeof document === 'undefined') return;
+    
+    // Escuchar cambios de visibilidad del documento
+    const visibilityChange$ = fromEvent(document, 'visibilitychange').pipe(
+      map(() => document.visibilityState === 'visible')
+    );
+    
+    // Escuchar focus/blur de la ventana
+    const focus$ = fromEvent(window, 'focus').pipe(map(() => true));
+    const blur$ = fromEvent(window, 'blur').pipe(map(() => false));
+    
+    this.visibilitySubscription = merge(visibilityChange$, focus$, blur$).pipe(
+      takeUntil(this.destroy$),
+      debounceTime(500) // Evitar cambios rápidos
+    ).subscribe(isVisible => {
+      this.isPageVisibleSignal.set(isVisible);
+      
+      if (isVisible && this.isPausedSignal()) {
+        // La página volvió a ser visible, reanudar polling suavemente
+        console.log('[RealTimeService] Página visible, reanudando polling...');
+        this.isPausedSignal.set(false);
+        this.resumePolling();
+      } else if (!isVisible && this.pollingSubscription) {
+        // La página se ocultó, pausar polling para evitar errores
+        console.log('[RealTimeService] Página oculta, pausando polling...');
+        this.pausePolling();
+      }
+    });
+  }
+  
+  /**
+   * Pausa el polling sin mostrar errores (para cuando la ventana no está visible)
+   */
+  private pausePolling(): void {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+      this.pollingSubscription = null;
+    }
+    this.cancelReconnect();
+    this.isPausedSignal.set(true);
+    // No cambiar el estado de conexión, solo pausar
+  }
+  
+  /**
+   * Reanuda el polling después de una pausa
+   */
+  private resumePolling(): void {
+    if (this.pollingSubscription) return; // Ya está activo
+    
+    // Resetear errores acumulados durante la pausa
+    this.resetErrorState();
+    
+    // Esperar un momento antes de reanudar para evitar race conditions
+    timer(1000).pipe(
+      takeUntil(this.destroy$),
+      filter(() => this.isPageVisibleSignal()) // Solo si sigue visible
+    ).subscribe(() => {
+      if (!this.pollingSubscription) {
+        this.startPollingInternal();
+      }
+    });
   }
   
   // ============================================================================
@@ -160,8 +245,22 @@ export class RealTimeService implements OnDestroy {
    * Inicia el polling de actualizaciones
    */
   startPolling(): void {
+    this.isPausedSignal.set(false);
+    this.startPollingInternal();
+  }
+  
+  /**
+   * Lógica interna de inicio de polling (usada también para reanudar)
+   */
+  private startPollingInternal(): void {
     if (this.pollingSubscription) {
       console.log('[RealTimeService] Polling ya activo');
+      return;
+    }
+    
+    // No iniciar si la página no está visible
+    if (!this.isPageVisibleSignal()) {
+      console.log('[RealTimeService] Página no visible, postponiendo inicio');
       return;
     }
     
@@ -175,6 +274,7 @@ export class RealTimeService implements OnDestroy {
     // Configurar polling periódico
     this.pollingSubscription = interval(this.config.pollInterval).pipe(
       takeUntil(this.destroy$),
+      filter(() => this.isPageVisibleSignal()), // Solo sincronizar si la página es visible
       switchMap(() => this.performSyncWithRetry())
     ).subscribe();
   }
@@ -190,6 +290,7 @@ export class RealTimeService implements OnDestroy {
     }
     this.cancelReconnect();
     this.connectionStateSignal.set('disconnected');
+    this.isPausedSignal.set(false);
     this.resetErrorState();
   }
   
@@ -200,7 +301,7 @@ export class RealTimeService implements OnDestroy {
     console.log('[RealTimeService] Reconexión manual solicitada');
     this.stopPolling();
     this.startPolling();
-    this.notificationService.info('Reconectando...');
+    // No mostrar notificación para evitar spam
   }
   
   /**
@@ -258,13 +359,14 @@ export class RealTimeService implements OnDestroy {
   }
   
   /**
-   * Programa un reintento de conexión
+   * Programa un reintento de conexión (silencioso)
    */
   private scheduleReconnect(): void {
     this.cancelReconnect();
     
     const delay = this.calculateRetryDelay();
-    console.log(`[RealTimeService] Reintentando en ${delay / 1000}s (intento ${this.consecutiveErrors}/${this.config.maxRetries})`);
+    // Solo log en desarrollo, no molestar al usuario
+    console.log(`[RealTimeService] Reintentando en ${delay / 1000}s`);
     
     this.reconnectSubscription = timer(delay).pipe(
       takeUntil(this.destroy$),
@@ -280,11 +382,16 @@ export class RealTimeService implements OnDestroy {
    * Ejecuta sincronización con gestión de errores y reconexión
    */
   private performSyncWithRetry() {
+    // No intentar sincronizar si la página no está visible
+    if (!this.isPageVisibleSignal()) {
+      return of(null);
+    }
+    
     return this.performSync().pipe(
       tap({
         next: () => {
-          // Éxito: notificar si estábamos en error
-          if (this.consecutiveErrors > 0) {
+          // Éxito: solo notificar si teníamos un problema grave (5+ errores)
+          if (this.consecutiveErrors >= 5) {
             console.log('[RealTimeService] ✓ Conexión restaurada');
             this.emitEvent({
               type: 'reconnected',
@@ -402,6 +509,7 @@ export class RealTimeService implements OnDestroy {
       }),
       catchError(() => {
         // Si también falla, marcar como conectado (modo degradado)
+        // No es un error crítico, simplemente el endpoint no está disponible
         this.connectionStateSignal.set('connected');
         this.lastSyncSignal.set(new Date());
         return of(null);
@@ -410,24 +518,36 @@ export class RealTimeService implements OnDestroy {
   }
   
   /**
-   * Maneja errores de sincronización con reconexión automática
+   * Maneja errores de sincronización con reconexión automática.
+   * Es más tolerante y no molesta al usuario con errores transitorios.
    */
   private handleSyncError(error: unknown): void {
+    // Si la página no está visible, ignorar el error silenciosamente
+    if (!this.isPageVisibleSignal()) {
+      console.log('[RealTimeService] Error ignorado (página no visible)');
+      return;
+    }
+    
     this.consecutiveErrors++;
     this.retryCountSignal.set(this.consecutiveErrors);
     
     const errorMsg = error instanceof Error ? error.message : 'Error de conexión';
     this.errorMessageSignal.set(errorMsg);
     
-    console.warn(`[RealTimeService] ✗ Error de sincronización (intento ${this.consecutiveErrors}/${this.config.maxRetries}):`, error);
+    // Solo loguear en consola, no molestar al usuario con cada error
+    console.warn(`[RealTimeService] Error de sincronización (intento ${this.consecutiveErrors}/${this.config.maxRetries})`);
     
     if (this.consecutiveErrors >= this.config.maxRetries) {
-      // Máximo de reintentos alcanzado
+      // Máximo de reintentos alcanzado - pero solo notificar si es realmente un problema
       this.connectionStateSignal.set('error');
-      this.notificationService.error('Error de conexión. Pulsa para reintentar.');
-      console.error('[RealTimeService] Máximo de reintentos alcanzado, entrando en estado de error');
+      // No mostrar notificación automática, dejar que el usuario decida reconectar
+      console.error('[RealTimeService] Máximo de reintentos alcanzado');
+    } else if (this.consecutiveErrors <= 3) {
+      // Primeros errores: silenciosos, solo reintentar
+      this.connectionStateSignal.set('reconnecting');
+      this.scheduleReconnect();
     } else {
-      // Programar reconexión con backoff exponencial
+      // Más de 3 errores: cambiar a estado reconnecting pero sin notificar
       this.connectionStateSignal.set('reconnecting');
       this.scheduleReconnect();
     }
