@@ -824,13 +824,23 @@ Profile
 
 ## 5.1 Formatos elegidos
 
-Mi formato era PNG, y voy a elegir transformar a JPG, ese será el formato que usaré en mi proyecto.
+Elegí **WebP** como formato principal para las imágenes del proyecto. Originalmente las imágenes estaban en PNG, pero al convertirlas a WebP con Squoosh, el proceso preservaba la transparencia sin añadir fondos no deseados, algo que me resultó muy cómodo. Además, WebP ofrece una excelente relación calidad/peso, reduciendo significativamente el tamaño de archivo manteniendo la calidad visual.
+
+Para iconos utilizo **SVG** a través del componente `app-icon`, lo que garantiza escalabilidad perfecta y un peso mínimo.
 
 ---
 
 ## 5.2 Herramientas utilizadas
 
-Squoosh
+**Herramientas analizadas:**
+
+- **Squoosh** (elegida): Herramienta web de Google, gratuita y sin instalación.
+- **TinyPNG**: Servicio online de compresión, limitado a PNG/JPG.
+- **ImageOptim**: Aplicación de escritorio para macOS.
+
+**¿Por qué Squoosh?**
+
+Elegí Squoosh porque es extremadamente fácil de usar: solo arrastras la imagen, ajustas la calidad con un slider y ves el resultado en tiempo real con comparación lado a lado. No requiere instalación, funciona directamente en el navegador y permite exportar a múltiples formatos (WebP, AVIF, JPG, PNG) desde la misma interfaz. Además, ofrece opciones avanzadas como redimensionado y control de calidad sin complicaciones.
 
 ---
 
