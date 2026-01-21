@@ -18,3 +18,13 @@ En el apartado de cliente he implementado la lógica funcional de la aplicación
 ## Deploy
 
 Aplicación desplegada en Koyeb actualmente (intentare migrar a otro servicio ya que es muy lento), con base de datos en MongoDB Atlas. 
+
+#### Deploy en local
+
+1. Descargar la carpeta del proyecto.
+2. Tener Docker hub abierto (depende del SO), ya que el siguiente comando generara los contenedores.
+3. Ejecutar el siguiente comando: docker-compose up --build
+
+El docker-compose esta diseñado de forma que tal como se ejecute ese comando, te generará las imagenes necesarias, contenedores, etc. Y autimaticamente se enlazaran de forma que permitira en local la comunicacion entre backend, frontend y base de datos, sin necesidad de instalar nada ya que tambien te instala las dependencias necesarias durante la ejecucion del mismo, como?
+
+Este tiene conexión con el dockerfile, el cual es el que se encarga de instalar todo lo necesario, y todo esto automatizado con un solo comando.
