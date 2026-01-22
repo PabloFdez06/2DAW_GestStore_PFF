@@ -17,7 +17,7 @@ En el apartado de cliente he implementado la lógica funcional de la aplicación
 
 ## Deploy
 
-Aplicación desplegada en Koyeb actualmente (intentare migrar a otro servicio ya que es muy lento), con base de datos en MongoDB Atlas. 
+Como primera opción por comodidad, opte por desplegar la aplicación en koyeb con la base de datos en MongoDB Atlas. Tras ver que era extremadamente lento, he optado por migrar a Digital Ocean, donde tengo un App Platform con frontend y backend, en el cual configuro las respectivas variables de entorno para enlazarlo con un cluster que he creado tambien en Digital Ocean, donde se aloja mi base de datos en MongoDB.
 
 #### Deploy en local
 
