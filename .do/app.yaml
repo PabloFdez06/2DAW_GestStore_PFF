@@ -1,0 +1,91 @@
+# ============================================
+# Digital Ocean App Platform - Configuración
+# ============================================
+# Este archivo define la estructura de tu aplicación
+# Digital Ocean lo detecta automáticamente al conectar el repo
+#
+# Docs: https://docs.digitalocean.com/products/app-platform/reference/app-spec/
+
+name: geststore
+
+# ============================================
+# SERVICIOS
+# ============================================
+services:
+  # --------------------------------------------
+  # BACKEND - Spring Boot API
+  # --------------------------------------------
+  - name: backend
+    # Configuración del repositorio
+    github:
+      repo: PabloFdez06/2DAW_GestStore_PFF  # <-- Cambiar por tu usuario/repo
+      branch: main
+      deploy_on_push: true
+    
+    # Ruta del Dockerfile
+    dockerfile_path: backend/Dockerfile
+    source_dir: backend
+    
+    # Configuración del servicio
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb  # Plan básico
+    
+    # Health check
+    health_check:
+      http_path: /api/actuator/health
+      initial_delay_seconds: 60
+      period_seconds: 30
+    
+    # Variables de entorno del backend
+    envs:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATA_MONGODB_URI
+        value: ${db-mongodb.CONNECTION_STRING}/geststore?authSource=admin&tls=true
+        type: SECRET
+      - key: MONGODB_DATABASE
+        value: geststore
+      - key: JAVA_OPTS
+        value: -Xms256m -Xmx512m
+
+  # --------------------------------------------
+  # FRONTEND - Angular (Static Site)
+  # --------------------------------------------
+  - name: frontend
+    github:
+      repo: PabloFdez06/2DAW_GestStore_PFF  # <-- Cambiar por tu usuario/repo
+      branch: main
+      deploy_on_push: true
+    
+    # Ruta del Dockerfile
+    dockerfile_path: GestStore/Dockerfile
+    source_dir: GestStore
+    
+    # Configuración
+    http_port: 80
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    
+    # Rutas - El frontend maneja la raíz
+    routes:
+      - path: /
+    
+    # Variables de entorno del frontend
+    envs:
+      - key: API_URL
+        value: ${backend.PRIVATE_URL}
+
+# ============================================
+# BASE DE DATOS (si la creas desde App Platform)
+# ============================================
+# Descomenta esto si quieres crear el cluster MongoDB desde aquí
+# Si ya tienes un cluster existente, usa la variable SPRING_DATA_MONGODB_URI
+# con el connection string directamente
+
+# databases:
+#   - name: db-mongodb
+#     engine: MONGODB
+#     production: false
+#     cluster_name: geststore-db
+#     db_name: geststore
