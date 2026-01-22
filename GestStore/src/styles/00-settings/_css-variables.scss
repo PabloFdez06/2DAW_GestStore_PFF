@@ -120,7 +120,7 @@
   --bg-active: #{$gray-700};
 
   // Color del sidebar en modo oscuro - gris oscuro que conjunta bien
-  --color-side-menu: #2d3748;
+  --color-side-menu: var(--bg-surface);
 
   // Textos - Invertidos con menor intensidad para reducir fatiga visual
   --text-default: #{$gray-50};
@@ -191,7 +191,7 @@
     --bg-active: #{$gray-700};
 
     // Color del sidebar en modo oscuro - gris oscuro que conjunta bien
-    --color-side-menu: #2d3748;
+    --color-side-menu: var(--bg-surface);
 
     // Textos
     --text-default: #{$gray-50};
