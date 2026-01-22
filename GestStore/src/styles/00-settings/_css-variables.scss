@@ -119,6 +119,9 @@
   --bg-hover: #{$gray-800};
   --bg-active: #{$gray-700};
 
+  // Color del sidebar en modo oscuro - gris oscuro que conjunta bien
+  --color-side-menu: #2d3748;
+
   // Textos - Invertidos con menor intensidad para reducir fatiga visual
   --text-default: #{$gray-50};
   --text-secondary: #{$gray-300};
@@ -187,6 +190,9 @@
     --bg-hover: #{$gray-800};
     --bg-active: #{$gray-700};
 
+    // Color del sidebar en modo oscuro - gris oscuro que conjunta bien
+    --color-side-menu: #2d3748;
+
     // Textos
     --text-default: #{$gray-50};
     --text-secondary: #{$gray-300};
@@ -243,6 +249,10 @@
   --bg-overlay: rgba(0, 0, 0, 0.5);
   --bg-hover: #{$gray-50};
   --bg-active: #{$gray-100};
+
+  // Restaurar color del sidebar en modo claro
+  --color-side-menu: #{$color-side-menu};
+  --color-primary: #{$color-primary};
 
   --text-default: #{$text-default};
   --text-secondary: #{$text-secondary};

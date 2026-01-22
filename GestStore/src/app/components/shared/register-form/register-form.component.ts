@@ -1,13 +1,15 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { SpinnerComponent } from '../../atoms/spinner/spinner.component';
+import { AlertComponent } from '../../molecules/alert/alert.component';
 
 @Component({
   selector: 'app-register-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, SpinnerComponent, AlertComponent],
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.scss']
 })
@@ -29,7 +31,8 @@ export class RegisterFormComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   onSubmit(event: any): void {
@@ -75,6 +78,7 @@ export class RegisterFormComponent {
 
     if (Object.keys(this.errors).length === 0) {
       this.isLoading = true;
+      this.errorMessage = '';
 
       this.authService.register({
         name: this.name,
@@ -97,7 +101,20 @@ export class RegisterFormComponent {
         error: (error) => {
           console.error('Error en registro:', error);
           this.isLoading = false;
-          this.errorMessage = error.error?.message || 'Error al registrarse. El email puede estar ya registrado.';
+          
+          // Manejar diferentes tipos de errores HTTP
+          if (error.status === 409) {
+            this.errorMessage = 'Este email ya está registrado. Prueba a iniciar sesión.';
+          } else if (error.status === 400) {
+            this.errorMessage = error.error?.message || 'Datos de registro inválidos. Revisa los campos.';
+          } else if (error.status === 0) {
+            this.errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión.';
+          } else if (error.status >= 500) {
+            this.errorMessage = 'Error del servidor. Inténtalo más tarde.';
+          } else {
+            this.errorMessage = error.error?.message || error.message || 'Error al registrarse. Inténtalo de nuevo.';
+          }
+          this.cdr.detectChanges();
         }
       });
     }

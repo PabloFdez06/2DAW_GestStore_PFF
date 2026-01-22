@@ -5,7 +5,9 @@ import { IconComponent } from '../../atoms/icon/icon.component';
 import { Task, TaskPriority } from '../../../models/task.model';
 import { TaskProduct } from '../../../models/task-product.model';
 import { TaskProductService } from '../../../services/task-product.service';
+import { NotificationService } from '../../../services/notification.service';
 import { ProductSelectorModalComponent, SelectedProduct } from '../product-selector-modal/product-selector-modal.component';
+import { AlertComponent } from '../alert/alert.component';
 
 interface Priority {
   label: string;
@@ -26,7 +28,7 @@ export interface TaskFormData {
 @Component({
   selector: 'app-add-task-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, IconComponent, ProductSelectorModalComponent],
+  imports: [CommonModule, FormsModule, IconComponent, ProductSelectorModalComponent, AlertComponent],
   templateUrl: './add-task-modal.component.html',
   styleUrl: './add-task-modal.component.scss'
 })
@@ -58,6 +60,9 @@ export class AddTaskModalComponent implements OnChanges {
 
   // Validation errors
   errors: { [key: string]: string } = {};
+  
+  // Para usar Object en el template
+  Object = Object;
 
   priorities: Priority[] = [
     { label: 'Absoluta', value: 'absolute', color: '#F21E1E' },
@@ -136,7 +141,8 @@ export class AddTaskModalComponent implements OnChanges {
   constructor(
     private renderer: Renderer2,
     private taskProductService: TaskProductService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private notificationService: NotificationService
   ) {}
 
   ngAfterViewInit(): void {
@@ -205,7 +211,15 @@ export class AddTaskModalComponent implements OnChanges {
       this.errors['priority'] = 'Debes seleccionar una prioridad';
     }
 
-    return Object.keys(this.errors).length === 0;
+    const hasErrors = Object.keys(this.errors).length > 0;
+    
+    if (hasErrors) {
+      // Mostrar notificación con los campos que faltan
+      const errorMessages = Object.values(this.errors);
+      this.notificationService.warning(`Por favor, completa los campos requeridos: ${errorMessages.join(', ')}`);
+    }
+
+    return !hasErrors;
   }
 
   onSubmit(event?: Event) {

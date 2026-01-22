@@ -107,6 +107,11 @@
   position: relative;
 }
 
+.add-task-modal__validation-alert {
+  grid-column: 1 / -1;
+  margin-bottom: $spacing-4;
+}
+
 .add-task-modal__form {
   display: grid;
   grid-template-columns: 31.9375rem 1fr;

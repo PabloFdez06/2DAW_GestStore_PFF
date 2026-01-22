@@ -30,6 +30,13 @@
           <fieldset>
             <legend class="visually-hidden">Datos de registro</legend>
             
+            <!-- Error general del formulario -->
+            @if (errorMessage) {
+              <app-alert type="error" [closable]="true" (close)="errorMessage = ''">
+                {{ errorMessage }}
+              </app-alert>
+            }
+            
             <label class="form-group">
               <input type="text" 
                      id="name"
@@ -158,11 +165,22 @@
                      id="agree-terms" 
                      [(ngModel)]="agreeTerms"
                      name="agreeTerms"
-                     class="form-checkbox__input">
+                     class="form-checkbox__input"
+                     [class.form-checkbox__input--error]="errors['agreeTerms']">
               <span class="form-checkbox__label">De acuerdo con las condiciones</span>
             </label>
+            @if (errors['agreeTerms']) {
+              <output class="form-error" role="alert">{{ errors['agreeTerms'] }}</output>
+            }
 
-            <button type="submit" class="button button--primary">Register</button>
+            <button type="submit" class="button button--primary" [disabled]="isLoading">
+              @if (isLoading) {
+                <app-spinner size="small" variant="light" ariaLabel="Registrando..."></app-spinner>
+                <span>Registrando...</span>
+              } @else {
+                Register
+              }
+            </button>
           </fieldset>
         </form>
 

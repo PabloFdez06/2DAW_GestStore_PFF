@@ -11,6 +11,13 @@
 
   <section class="add-task-modal__content">
     <form class="add-task-modal__form" (ngSubmit)="onSubmit($event)">
+      <!-- Alerta de validación general -->
+      @if (Object.keys(errors).length > 0) {
+        <app-alert type="warning" class="add-task-modal__validation-alert">
+          Por favor, completa todos los campos requeridos marcados con *
+        </app-alert>
+      }
+
       <!-- Left Column -->
       <fieldset class="add-task-modal__left-column">
         <legend class="visually-hidden">Información de la tarea</legend>

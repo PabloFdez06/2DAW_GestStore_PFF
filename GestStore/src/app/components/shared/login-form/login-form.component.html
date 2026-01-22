@@ -15,6 +15,13 @@
         <form class="login-form" (ngSubmit)="onSubmit($event)">
           <fieldset>
             <legend class="visually-hidden">Datos de acceso</legend>
+            <!-- Error general del formulario -->
+            @if (errorMessage) {
+              <app-alert type="error" [closable]="true" (close)="errorMessage = ''">
+                {{ errorMessage }}
+              </app-alert>
+            }
+
             <!-- Usuario Input -->
             <label class="form-group">
               <span class="form-input-wrapper">
@@ -33,13 +40,16 @@
                   type="text"
                   id="login-email"
                   class="form-input"
-                  placeholder="Introduce el nombre"
+                  placeholder="Introduce el email"
                   [(ngModel)]="email"
                   name="email"
                   autocomplete="email"
                   [class.form-input--error]="errors['email']"
                 />
               </span>
+              @if (errors['email']) {
+                <output class="form-error" role="alert">{{ errors['email'] }}</output>
+              }
             </label>
 
             <!-- Password Input -->
@@ -66,6 +76,9 @@
                   [class.form-input--error]="errors['password']"
                 />
               </span>
+              @if (errors['password']) {
+                <output class="form-error" role="alert">{{ errors['password'] }}</output>
+              }
             </label>
 
             <!-- Remember Me -->
@@ -86,8 +99,14 @@
             <button
               type="submit"
               class="button button--primary"
+              [disabled]="isLoading"
             >
-              Login
+              @if (isLoading) {
+                <app-spinner size="small" variant="light" ariaLabel="Iniciando sesión..."></app-spinner>
+                <span>Iniciando sesión...</span>
+              } @else {
+                Login
+              }
             </button>
           </fieldset>
         </form>

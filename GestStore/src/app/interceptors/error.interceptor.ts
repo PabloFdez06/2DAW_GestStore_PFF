@@ -10,11 +10,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((err: unknown) => {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('currentUser');
-
+          // No redirigir si estamos en login o register (el usuario está intentando autenticarse)
           const currentUrl = router.url || '/';
-          if (!currentUrl.startsWith('/login')) {
+          const isAuthPage = currentUrl.startsWith('/login') || currentUrl.startsWith('/register');
+          const isAuthRequest = req.url.includes('/auth/login') || req.url.includes('/auth/register');
+          
+          if (!isAuthPage && !isAuthRequest) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('currentUser');
             router.navigate(['/login'], { queryParams: { returnUrl: currentUrl } });
           }
         }
