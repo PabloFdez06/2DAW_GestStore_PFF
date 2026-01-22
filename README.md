@@ -26,8 +26,8 @@ Como primera opción por comodidad, opte por desplegar la aplicación en koyeb c
 
 Como en ambos dispongo de un periodo o bien de prueba o con las suscripicones estudiantiles, mantengo ambos despliegues:
 
-https://geststore-av5zv.ondigitalocean.app/
-https://satisfactory-chandra-geststore-0b06e3cf.koyeb.app/
+- https://geststore-av5zv.ondigitalocean.app/
+- https://satisfactory-chandra-geststore-0b06e3cf.koyeb.app/
 
 #### Deploy en local
 
