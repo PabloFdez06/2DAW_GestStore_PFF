@@ -17,7 +17,8 @@ public class CorsConfig implements WebMvcConfigurer {
                     "http://localhost:*",
                     "http://127.0.0.1:*",
                     "http://frontend:*",
-                    "https://*.koyeb.app"
+                    "https://*.koyeb.app",
+                    "https://*.ondigitalocean.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
