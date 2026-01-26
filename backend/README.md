@@ -185,11 +185,19 @@ He generado documentación detallada del backend que incluye:
 
 Una vez ejecutada la aplicación:
 
+**Desarrollo local:**
 - **Swagger UI**: http://localhost:8080/api/swagger-ui.html
 - **OpenAPI JSON**: http://localhost:8080/api/v3/api-docs
 - **OpenAPI YAML**: http://localhost:8080/api/v3/api-docs.yaml
 - **Health Check**: http://localhost:8080/api/actuator/health
 - **Métricas**: http://localhost:8080/api/actuator/metrics
+
+**Producción (Digital Ocean):**
+- **Swagger UI**: https://geststore-av5zv.ondigitalocean.app/api/swagger-ui.html
+- **OpenAPI JSON**: https://geststore-av5zv.ondigitalocean.app/api/v3/api-docs
+- **OpenAPI YAML**: https://geststore-av5zv.ondigitalocean.app/api/v3/api-docs.yaml
+- **Health Check**: https://geststore-av5zv.ondigitalocean.app/api/actuator/health
+- **Métricas**: https://geststore-av5zv.ondigitalocean.app/api/actuator/metrics
 
 ---
 
