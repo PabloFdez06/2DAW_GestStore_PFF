@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 @Tag(name = "Autenticación", description = "Endpoints para registro e inicio de sesión")
 public class AuthController {

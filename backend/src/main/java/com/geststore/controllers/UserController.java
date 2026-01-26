@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Usuarios", description = "Endpoints para gestión de perfiles de usuario")

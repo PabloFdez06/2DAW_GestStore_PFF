@@ -35,7 +35,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Tareas", description = "Endpoints para gestión de tareas")
