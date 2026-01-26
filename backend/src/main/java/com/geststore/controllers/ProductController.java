@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
  */
 @Slf4j
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Productos", description = "Endpoints para gestión de productos personales")

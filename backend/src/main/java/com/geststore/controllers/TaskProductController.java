@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
  */
 @Slf4j
 @RestController
-@RequestMapping("/task-products")
+@RequestMapping("/api/task-products")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Productos de Tareas", description = "Endpoints para gestionar asignación de productos a tareas")
