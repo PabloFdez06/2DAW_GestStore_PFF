@@ -16,16 +16,25 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Controlador REST para operaciones con productos
- * Los productos son personales de cada usuario
+ * 
+ * Los productos son elementos personales de cada usuario.
+ * Se utilizan para crear un almacén de productos disponibles
+ * que pueden ser asignados a tareas específicas.
  */
 @Slf4j
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Productos", description = "Endpoints para gestión de productos personales")
+@SecurityRequirement(name = "bearerAuth")
 public class ProductController {
 
     private final ProductService productService;
@@ -41,6 +50,10 @@ public class ProductController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Obtener productos del usuario",
+            description = "Retorna una lista paginada de todos los productos del usuario autenticado"
+    )
     public ResponseEntity<ApiResponse<Page<ProductResponseDto>>> getAllProducts(
             @RequestHeader(value = "X-User-Id", required = false) String userId,
             Pageable pageable) {
@@ -51,6 +64,10 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Obtener producto por ID",
+            description = "Retorna los detalles de un producto específico"
+    )
     public ResponseEntity<ApiResponse<ProductResponseDto>> getProductById(
             @PathVariable String id,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
@@ -61,6 +78,10 @@ public class ProductController {
     }
 
     @GetMapping("/sku/{sku}")
+    @Operation(
+            summary = "Obtener producto por SKU",
+            description = "Busca un producto por su código SKU único"
+    )
     public ResponseEntity<ApiResponse<ProductResponseDto>> getProductBySku(
             @PathVariable String sku,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
@@ -71,6 +92,10 @@ public class ProductController {
     }
 
     @GetMapping("/search")
+    @Operation(
+            summary = "Buscar productos",
+            description = "Busca productos por nombre o descripción"
+    )
     public ResponseEntity<ApiResponse<List<ProductResponseDto>>> searchProducts(
             @RequestParam String q,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
@@ -82,6 +107,10 @@ public class ProductController {
 
     @GetMapping("/low-stock")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @Operation(
+            summary = "Obtener productos con bajo stock",
+            description = "Retorna todos los productos del usuario con inventario bajo"
+    )
     public ResponseEntity<ApiResponse<List<ProductResponseDto>>> getLowStockProducts(
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
         log.info("GET /api/products/low-stock - Obteniendo productos con bajo stock del usuario: {}", userId);
@@ -92,6 +121,10 @@ public class ProductController {
 
     @GetMapping("/out-of-stock")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @Operation(
+            summary = "Obtener productos sin stock",
+            description = "Retorna todos los productos del usuario sin inventario disponible"
+    )
     public ResponseEntity<ApiResponse<List<ProductResponseDto>>> getOutOfStockProducts(
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
         log.info("GET /api/products/out-of-stock - Obteniendo productos sin stock del usuario: {}", userId);
@@ -101,6 +134,10 @@ public class ProductController {
     }
 
     @GetMapping("/category/{category}")
+    @Operation(
+            summary = "Obtener productos por categoría",
+            description = "Retorna todos los productos del usuario en una categoría específica"
+    )
     public ResponseEntity<ApiResponse<List<ProductResponseDto>>> getProductsByCategory(
             @PathVariable String category,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
@@ -112,6 +149,10 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @Operation(
+            summary = "Crear nuevo producto",
+            description = "Crea un nuevo producto en el almacén personal del usuario"
+    )
     public ResponseEntity<ApiResponse<ProductResponseDto>> createProduct(
             @Valid @RequestBody ProductRequestDto requestDto,
             @RequestHeader(value = "X-User-Id", required = false) String userId) {
@@ -124,6 +165,10 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @Operation(
+            summary = "Actualizar producto",
+            description = "Actualiza la información de un producto existente"
+    )
     public ResponseEntity<ApiResponse<ProductResponseDto>> updateProduct(
             @PathVariable String id,
             @Valid @RequestBody ProductRequestDto requestDto,

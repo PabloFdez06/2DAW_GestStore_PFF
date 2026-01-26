@@ -13,21 +13,34 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Controlador REST para gestionar la relación Task-Product
+ * 
+ * Proporciona endpoints para asignar productos a tareas y
+ * registrar el consumo de productos durante la ejecución de tareas.
  */
 @Slf4j
 @RestController
 @RequestMapping("/task-products")
 @RequiredArgsConstructor
 @Validated
+@Tag(name = "Productos de Tareas", description = "Endpoints para gestionar asignación de productos a tareas")
+@SecurityRequirement(name = "bearerAuth")
 public class TaskProductController {
 
     private final TaskProductService taskProductService;
 
     @GetMapping("/task/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
+    @Operation(
+            summary = "Obtener productos de una tarea",
+            description = "Retorna todos los productos asignados a una tarea específica"
+    )
     public ResponseEntity<ApiResponse<List<TaskProductResponseDto>>> getProductsByTaskId(
             @PathVariable String taskId) {
         log.info("GET /api/task-products/task/{} - Obteniendo productos", taskId);
@@ -37,6 +50,10 @@ public class TaskProductController {
 
     @GetMapping("/product/{productId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @Operation(
+            summary = "Obtener tareas de un producto",
+            description = "Retorna todas las tareas a las que está asignado un producto específico"
+    )
     public ResponseEntity<ApiResponse<List<TaskProductResponseDto>>> getTasksByProductId(
             @PathVariable String productId) {
         log.info("GET /api/task-products/product/{} - Obteniendo tareas", productId);
@@ -46,6 +63,20 @@ public class TaskProductController {
 
     @PostMapping("/assign")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @Operation(
+            summary = "Asignar producto a tarea",
+            description = "Asigna un producto con cantidad específica a una tarea"
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "201",
+                    description = "Producto asignado exitosamente"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "400",
+                    description = "Datos inválidos o recurso no encontrado"
+            )
+    })
     public ResponseEntity<ApiResponse<TaskProductResponseDto>> assignProductToTask(
             @RequestParam String taskId,
             @Valid @RequestBody TaskProductRequestDto requestDto) {
@@ -57,6 +88,10 @@ public class TaskProductController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @Operation(
+            summary = "Actualizar asignación de producto",
+            description = "Actualiza la cantidad de producto asignado a una tarea"
+    )
     public ResponseEntity<ApiResponse<TaskProductResponseDto>> updateTaskProduct(
             @PathVariable String id,
             @Valid @RequestBody TaskProductRequestDto requestDto) {
@@ -67,6 +102,10 @@ public class TaskProductController {
 
     @PostMapping("/{id}/use")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
+    @Operation(
+            summary = "Registrar uso de producto",
+            description = "Registra el consumo de unidades de un producto en una tarea"
+    )
     public ResponseEntity<ApiResponse<TaskProductResponseDto>> useProduct(
             @PathVariable String id,
             @RequestParam int quantity) {
@@ -77,6 +116,10 @@ public class TaskProductController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    @Operation(
+            summary = "Remover producto de tarea",
+            description = "Elimina la asignación de un producto a una tarea"
+    )
     public ResponseEntity<ApiResponse<Void>> removeProductFromTask(@PathVariable String id) {
         log.info("DELETE /api/task-products/{} - Eliminando asignación", id);
         taskProductService.removeProductFromTask(id);
