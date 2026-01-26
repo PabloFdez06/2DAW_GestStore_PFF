@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Configuration;
  * Configuración de Swagger/OpenAPI para documentación automática de la API REST
  * 
  * Documentación disponible en:
- * - Swagger UI: http://localhost:8080/swagger-ui.html
- * - OpenAPI JSON: http://localhost:8080/v3/api-docs
- * - OpenAPI YAML: http://localhost:8080/v3/api-docs.yaml
+ * - Swagger UI: http://localhost:8080/api/swagger-ui.html
+ * - OpenAPI JSON: http://localhost:8080/api/v3/api-docs
+ * - OpenAPI YAML: http://localhost:8080/api/v3/api-docs.yaml
  */
 @Configuration
 public class SwaggerConfig {
@@ -42,14 +42,14 @@ public class SwaggerConfig {
                         .license(new License()
                                 .name("MIT License")))
                 .addServersItem(new Server()
+                        .url("")
+                        .description("Servidor actual"))
+                .addServersItem(new Server()
                         .url("http://localhost:8080/api")
                         .description("Servidor de desarrollo"))
                 .addServersItem(new Server()
                         .url("https://geststore-av5zv.ondigitalocean.app/api")
                         .description("Servidor de producción (Digital Ocean)"))
-                .addServersItem(new Server()
-                        .url("https://api.example.com")
-                        .description("Servidor de producción alternativo"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)
