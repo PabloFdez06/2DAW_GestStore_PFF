@@ -46,7 +46,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())  // Habilitar CORS usando la configuración de CorsConfig
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/webjars/**").permitAll()
+                        .anyRequest().permitAll());
 
         return http.build();
     }
