@@ -1,4 +1,4 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, ElementRef, QueryList, ViewChildren, Renderer2, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -36,6 +36,7 @@ interface NewsletterForm {
 interface FooterLink {
   label: string;
   href: string;
+  isRouterLink?: boolean;
 }
 
 interface FooterColumn {
@@ -58,8 +59,9 @@ interface FooterColumn {
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
   private authService = inject(AuthService);
+  private renderer = inject(Renderer2);
 
   // Header state
   isScrolled = false;
@@ -85,6 +87,11 @@ export class HomeComponent {
   isSubmitting = false;
   submitSuccess = false;
   submitError = '';
+
+  // Accordion state for services
+  openServiceIndexes = new Set<number>();
+  @ViewChildren('servicePanel', { read: ElementRef }) servicePanelElements!: QueryList<ElementRef<HTMLElement>>;
+  @ViewChildren('serviceBtn', { read: ElementRef }) serviceButtons!: QueryList<ElementRef<HTMLButtonElement>>;
 
   // Footer columns
   footerColumns: FooterColumn[] = [
@@ -125,6 +132,10 @@ export class HomeComponent {
       ]
     }
   ];
+
+  ngAfterViewInit(): void {
+    this.syncAllServicePanels();
+  }
 
   // Subscription plans
   subscriptionPlans: SubscriptionPlan[] = [
@@ -194,23 +205,6 @@ export class HomeComponent {
     if (window.innerWidth >= 1024) {
       this.isMobileMenuOpen = false;
     }
-    this.updateVisibleServicesCount();
-  }
-
-  constructor() {
-    this.updateVisibleServicesCount();
-  }
-
-  private updateVisibleServicesCount(): void {
-    if (typeof window !== 'undefined') {
-      if (window.innerWidth < 768) {
-        this.visibleServicesCount = 1;
-      } else if (window.innerWidth < 1024) {
-        this.visibleServicesCount = 2;
-      } else {
-        this.visibleServicesCount = 3;
-      }
-    }
   }
 
   toggleMobileMenu(): void {
@@ -231,6 +225,79 @@ export class HomeComponent {
 
   get currentYear(): number {
     return new Date().getFullYear();
+  }
+
+  // ============================================================================
+  // ACCORDION SERVICES METHODS
+  // ============================================================================
+
+  /**
+   * Verifica si un servicio está abierto
+   */
+  isServiceOpen(index: number): boolean {
+    return this.openServiceIndexes.has(index);
+  }
+
+  /**
+   * Toggle para abrir/cerrar un servicio (modo multiple)
+   */
+  toggleService(index: number): void {
+    if (this.openServiceIndexes.has(index)) {
+      this.openServiceIndexes.delete(index);
+    } else {
+      this.openServiceIndexes.add(index);
+    }
+    this.syncServicePanel(index);
+  }
+
+  /**
+   * Maneja la navegación por teclado del acordeón
+   */
+  onServiceKeydown(event: KeyboardEvent, index: number): void {
+    const key = event.key;
+    const total = this.services.length;
+
+    if (total === 0) return;
+
+    if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'Home' || key === 'End') {
+      event.preventDefault();
+    }
+
+    let nextIndex = index;
+
+    if (key === 'ArrowDown') nextIndex = (index + 1) % total;
+    if (key === 'ArrowUp') nextIndex = (index - 1 + total) % total;
+    if (key === 'Home') nextIndex = 0;
+    if (key === 'End') nextIndex = total - 1;
+
+    this.serviceButtons.get(nextIndex)?.nativeElement.focus();
+  }
+
+  /**
+   * Sincroniza todos los paneles del acordeón
+   */
+  private syncAllServicePanels(): void {
+    this.servicePanelElements?.forEach((_, index) => this.syncServicePanel(index));
+  }
+
+  /**
+   * Sincroniza un panel individual del acordeón
+   */
+  private syncServicePanel(index: number): void {
+    const panel = this.servicePanelElements?.get(index)?.nativeElement;
+    if (!panel) return;
+
+    const isOpen = this.isServiceOpen(index);
+
+    if (isOpen) {
+      const content = panel.querySelector<HTMLElement>('.service-accordion__panel-inner');
+      const height = content?.scrollHeight ?? panel.scrollHeight;
+      this.renderer.setStyle(panel, 'maxHeight', `${height}px`);
+      this.renderer.addClass(panel, 'is-open');
+    } else {
+      this.renderer.setStyle(panel, 'maxHeight', '0px');
+      this.renderer.removeClass(panel, 'is-open');
+    }
   }
 
   // Services
@@ -272,27 +339,6 @@ export class HomeComponent {
       description: 'Visualiza todas tus tareas y eventos importantes en un calendario unificado.'
     }
   ];
-
-  // Carousel control
-  currentServiceIndex = 0;
-  visibleServicesCount = 3;
-
-  get visibleServices(): Service[] {
-    const services: Service[] = [];
-    for (let i = 0; i < this.visibleServicesCount; i++) {
-      const index = (this.currentServiceIndex + i) % this.services.length;
-      services.push(this.services[index]);
-    }
-    return services;
-  }
-
-  nextServices(): void {
-    this.currentServiceIndex = (this.currentServiceIndex + 1) % this.services.length;
-  }
-
-  prevServices(): void {
-    this.currentServiceIndex = (this.currentServiceIndex - 1 + this.services.length) % this.services.length;
-  }
 
   // Newsletter form submission
   submitNewsletter(): void {

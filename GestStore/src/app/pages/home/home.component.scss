@@ -1,6 +1,5 @@
 @use '../../../styles/00-settings/variables' as *;
 @use '../../../styles/01-tools/mixins' as *;
-@use 'sass:color';
 
 // ============================================================================
 // HOME PAGE - Professional & Formal Design
@@ -12,6 +11,29 @@
 
   // EFECTOS VISUALES
   overflow-x: hidden;
+}
+
+// ============================================================================
+// VISUALLY HIDDEN (Accesibilidad)
+// ============================================================================
+
+.visually-hidden {
+  // POSICIONAMIENTO
+  position: absolute;
+
+  // BOX MODEL
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+
+  // BORDER
+  border: 0;
+
+  // EFECTOS VISUALES
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 // ============================================================================
@@ -49,14 +71,12 @@
   border-bottom: $border-thin solid var(--border-default);
 
   // EFECTOS VISUALES
-  box-shadow: var(--shadow-sm);
+  @include themed-shadow(sm);
 }
 
 .header__container {
   // DISPLAY
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-between;
 
   // BOX MODEL
   max-width: 80rem;
@@ -77,6 +97,10 @@
 
   &:hover {
     opacity: 0.8;
+  }
+
+  &:focus-visible {
+    @include focus-visible;
   }
 }
 
@@ -100,9 +124,7 @@
 
 .header__logo-text {
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-xl;
-  font-weight: $font-weight-bold;
+  @include text-style($font-size-xl, $font-weight-bold);
   color: var(--text-default);
 
   // RESPONSIVE
@@ -138,9 +160,7 @@
   border: none;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
+  @include text-style($font-size-sm, $font-weight-medium);
   color: var(--text-secondary);
 
   // EFECTOS VISUALES
@@ -183,9 +203,7 @@
   border-radius: $radius-md;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
+  @include text-style($font-size-sm, $font-weight-medium);
   text-decoration: none;
 
   // TRANSICIONES
@@ -250,6 +268,10 @@
   @include respond-down(lg) {
     display: flex;
   }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
 }
 
 .header__mobile-toggle-bar {
@@ -284,7 +306,7 @@
   border-top: $border-thin solid var(--border-default);
 
   // EFECTOS VISUALES
-  box-shadow: var(--shadow-lg);
+  @include themed-shadow(lg);
 
   // ANIMATION
   animation: fadeInDown 200ms ease-out;
@@ -317,9 +339,7 @@
   border-radius: $radius-md;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-base;
-  font-weight: $font-weight-medium;
+  @include text-style($font-size-base, $font-weight-medium);
   text-align: left;
   color: var(--text-default);
 
@@ -332,6 +352,10 @@
   &:hover {
     background-color: var(--bg-hover);
     color: var(--color-primary);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
   }
 }
 
@@ -351,9 +375,7 @@
   position: relative;
 
   // DISPLAY
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
 
   // BOX MODEL
   min-height: 100vh;
@@ -438,10 +460,7 @@
   margin: 0 0 $spacing-6;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-5xl;
-  font-weight: $font-weight-bold;
-  line-height: 1.1;
+  @include text-style($font-size-5xl, $font-weight-bold, 1.1);
   letter-spacing: -0.02em;
   color: var(--text-default);
 
@@ -465,10 +484,7 @@
   margin: 0 0 $spacing-8;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-regular;
-  line-height: $line-relaxed;
+  @include text-style($font-size-lg, $font-weight-regular, $line-relaxed);
   color: var(--text-secondary);
 
   // RESPONSIVE
@@ -509,9 +525,7 @@
   border-radius: $radius-lg;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-base;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-base, $font-weight-semibold);
   text-decoration: none;
 
   // EFECTOS VISUALES
@@ -570,8 +584,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
+  @include text-style($font-size-sm, $font-weight-regular);
   color: var(--text-muted);
 
   app-icon {
@@ -580,7 +593,7 @@
 }
 
 // ============================================================================
-// SERVICES SECTION
+// SERVICES SECTION - ACCORDION
 // ============================================================================
 
 .services {
@@ -618,9 +631,7 @@
   margin-bottom: $spacing-4;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-sm, $font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-primary);
@@ -631,10 +642,7 @@
   margin: 0 0 $spacing-4;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-3xl;
-  font-weight: $font-weight-bold;
-  line-height: 1.2;
+  @include text-style($font-size-3xl, $font-weight-bold, 1.2);
   letter-spacing: -0.01em;
   color: var(--text-default);
 
@@ -649,10 +657,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-regular;
-  line-height: $line-normal;
+  @include text-style($font-size-lg, $font-weight-regular, $line-normal);
   color: var(--text-secondary);
 
   // RESPONSIVE
@@ -686,30 +691,38 @@
   }
 }
 
-.service-card {
+// ============================================================================
+// SERVICE ACCORDION (Cards with accordion behavior)
+// ============================================================================
+
+.service-accordion {
+  // DISPLAY
+  display: block;
+}
+
+.service-accordion__item {
   // DISPLAY
   display: flex;
   flex-direction: column;
 
-  // BOX MODEL
-  padding: $spacing-8;
-
   // BACKGROUND
-  background-color: var(--bg-surface);
+  @include surface;
 
   // BORDER
-  border: $border-thin solid var(--border-default);
+  @include themed-border;
   border-radius: $radius-xl;
+
+  // EFECTOS VISUALES
+  overflow: hidden;
 
   // TRANSICIONES
   @include transition;
 
   &:hover {
     border-color: var(--color-primary);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-0.25rem);
+    @include themed-shadow(md);
 
-    .service-card__icon {
+    .service-accordion__icon {
       background-color: var(--color-primary);
       color: var(--text-on-primary);
     }
@@ -717,22 +730,71 @@
 
   // RESPONSIVE
   @include respond-down(md) {
-    padding: $spacing-6;
-
     &:hover {
       transform: none;
     }
   }
 }
 
-.service-card__icon {
+.service-accordion__item--open {
+  border-color: var(--color-primary);
+  @include themed-shadow(md);
+
+  .service-accordion__icon {
+    background-color: var(--color-primary);
+    color: var(--text-on-primary);
+  }
+}
+
+.service-accordion__header {
+  // BOX MODEL
+  margin: 0;
+}
+
+.service-accordion__trigger {
+  // DISPLAY
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+
+  // BOX MODEL
+  width: 100%;
+  padding: $spacing-8;
+
+  // BACKGROUND
+  background: none;
+
+  // BORDER
+  border: none;
+
+  // TIPOGRAFÍA
+  text-align: left;
+
+  // EFECTOS VISUALES
+  cursor: pointer;
+
+  // TRANSICIONES
+  @include transition;
+
+  &:focus-visible {
+    @include focus-visible;
+  }
+
+  // RESPONSIVE
+  @include respond-down(md) {
+    padding: $spacing-6;
+  }
+}
+
+.service-accordion__icon {
   // DISPLAY
   @include flex-center;
+  flex-shrink: 0;
 
   // BOX MODEL
   width: 3.5rem;
   height: 3.5rem;
-  margin: 0 0 $spacing-5;
+  margin: 0;
 
   // BACKGROUND
   background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
@@ -747,26 +809,73 @@
   @include transition;
 }
 
-.service-card__title {
-  // BOX MODEL
-  margin: 0 0 $spacing-3;
+.service-accordion__title {
+  // DISPLAY
+  flex-grow: 1;
 
-  // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-semibold;
-  color: var(--text-default);
-}
-
-.service-card__description {
   // BOX MODEL
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
-  line-height: $line-relaxed;
+  @include text-style($font-size-lg, $font-weight-semibold);
+  color: var(--text-default);
+}
+
+.service-accordion__chevron {
+  // DISPLAY
+  @include flex-center;
+  flex-shrink: 0;
+
+  // BOX MODEL
+  width: 1.5rem;
+  height: 1.5rem;
+
+  // TIPOGRAFÍA
+  color: var(--text-muted);
+
+  // TRANSICIONES
+  @include transition;
+}
+
+.service-accordion__chevron--open {
+  transform: rotate(180deg);
+  color: var(--color-primary);
+}
+
+.service-accordion__panel {
+  // BOX MODEL
+  max-height: 0;
+
+  // BORDER
+  border-top: $border-thin solid transparent;
+
+  // EFECTOS VISUALES
+  overflow: hidden;
+
+  // TRANSICIONES
+  transition: max-height 250ms ease, border-color 250ms ease;
+
+  &.is-open {
+    border-top-color: var(--border-default);
+  }
+}
+
+.service-accordion__panel-inner {
+  // BOX MODEL
+  padding: 0 $spacing-8 $spacing-8;
+
+  // RESPONSIVE
+  @include respond-down(md) {
+    padding: 0 $spacing-6 $spacing-6;
+  }
+}
+
+.service-accordion__description {
+  // BOX MODEL
+  margin: 0;
+
+  // TIPOGRAFÍA
+  @include text-style($font-size-sm, $font-weight-regular, $line-relaxed);
   color: var(--text-secondary);
 }
 
@@ -809,9 +918,7 @@
   margin-bottom: $spacing-4;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-sm, $font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-primary);
@@ -822,10 +929,7 @@
   margin: 0 0 $spacing-4;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-3xl;
-  font-weight: $font-weight-bold;
-  line-height: 1.2;
+  @include text-style($font-size-3xl, $font-weight-bold, 1.2);
   letter-spacing: -0.01em;
   color: var(--text-default);
 
@@ -840,10 +944,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-regular;
-  line-height: $line-normal;
+  @include text-style($font-size-lg, $font-weight-regular, $line-normal);
   color: var(--text-secondary);
 
   // RESPONSIVE
@@ -890,17 +991,17 @@
   padding: $spacing-8;
 
   // BACKGROUND
-  background-color: var(--bg-surface);
+  @include surface;
 
   // BORDER
-  border: $border-thin solid var(--border-default);
+  @include themed-border;
   border-radius: $radius-xl;
 
   // TRANSICIONES
   @include transition;
 
   &:hover {
-    box-shadow: var(--shadow-md);
+    @include themed-shadow(md);
   }
 
   // RESPONSIVE
@@ -915,7 +1016,7 @@
   border-width: $border-medium;
 
   // EFECTOS VISUALES
-  box-shadow: var(--shadow-lg);
+  @include themed-shadow(lg);
   transform: scale(1.02);
 
   // RESPONSIVE
@@ -941,9 +1042,7 @@
   border-radius: $radius-full;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-xs, $font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-on-primary);
@@ -966,9 +1065,7 @@
   margin: 0 0 $spacing-4;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-lg, $font-weight-semibold);
   color: var(--text-default);
 }
 
@@ -984,10 +1081,7 @@
 
 .pricing-card__amount {
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-4xl;
-  font-weight: $font-weight-bold;
-  line-height: 1;
+  @include text-style($font-size-4xl, $font-weight-bold, 1);
   color: var(--text-default);
 
   // RESPONSIVE
@@ -998,9 +1092,7 @@
 
 .pricing-card__period {
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
+  @include text-style($font-size-sm, $font-weight-regular);
   color: var(--text-muted);
 }
 
@@ -1009,10 +1101,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
-  line-height: $line-normal;
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
   color: var(--text-secondary);
 }
 
@@ -1038,10 +1127,7 @@
   gap: $spacing-3;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
-  line-height: $line-normal;
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
   color: var(--text-default);
 
   app-icon {
@@ -1073,9 +1159,7 @@
   border-radius: $radius-lg;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-sm, $font-weight-semibold);
   text-align: center;
   text-decoration: none;
 
@@ -1145,14 +1229,14 @@
   padding: $spacing-12;
 
   // BACKGROUND
-  background-color: var(--bg-surface);
+  @include surface;
 
   // BORDER
-  border: $border-thin solid var(--border-default);
+  @include themed-border;
   border-radius: $radius-xl;
 
   // EFECTOS VISUALES
-  box-shadow: var(--shadow-md);
+  @include themed-shadow(md);
 
   // RESPONSIVE
   @include respond-down(md) {
@@ -1180,9 +1264,7 @@
   margin-bottom: $spacing-3;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-sm, $font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-primary);
@@ -1193,9 +1275,7 @@
   margin: 0 0 $spacing-3;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-2xl;
-  font-weight: $font-weight-bold;
+  @include text-style($font-size-2xl, $font-weight-bold);
   color: var(--text-default);
 
   // RESPONSIVE
@@ -1209,10 +1289,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-base;
-  font-weight: $font-weight-regular;
-  line-height: $line-normal;
+  @include text-style($font-size-base, $font-weight-regular, $line-normal);
   color: var(--text-secondary);
 
   // RESPONSIVE
@@ -1268,9 +1345,7 @@
   border-radius: $radius-md;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-medium;
+  @include text-style($font-size-sm, $font-weight-medium);
 
   app-icon {
     flex-shrink: 0;
@@ -1313,9 +1388,7 @@
   border-radius: $radius-lg;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-sm, $font-weight-semibold);
   color: var(--text-on-primary);
 
   // EFECTOS VISUALES
@@ -1349,7 +1422,7 @@
 
 .footer {
   // BACKGROUND
-  background-color: var(--bg-surface);
+  @include surface;
 
   // BORDER
   border-top: $border-thin solid var(--border-default);
@@ -1403,6 +1476,10 @@
 
   // TIPOGRAFÍA
   text-decoration: none;
+
+  &:focus-visible {
+    @include focus-visible;
+  }
 }
 
 .footer__logo-icon {
@@ -1425,9 +1502,7 @@
 
 .footer__logo-text {
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-xl;
-  font-weight: $font-weight-bold;
+  @include text-style($font-size-xl, $font-weight-bold);
   color: var(--text-default);
 }
 
@@ -1437,10 +1512,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
-  line-height: $line-relaxed;
+  @include text-style($font-size-sm, $font-weight-regular, $line-relaxed);
   color: var(--text-secondary);
 }
 
@@ -1474,6 +1546,10 @@
     background-color: var(--color-primary);
     color: var(--text-on-primary);
   }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
 }
 
 .footer__column {
@@ -1488,9 +1564,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
+  @include text-style($font-size-sm, $font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-default);
@@ -1512,9 +1586,7 @@
 
 .footer__link {
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
+  @include text-style($font-size-sm, $font-weight-regular);
   color: var(--text-secondary);
   text-decoration: none;
 
@@ -1524,13 +1596,15 @@
   &:hover {
     color: var(--color-primary);
   }
+
+  &:focus-visible {
+    @include focus-visible;
+  }
 }
 
 .footer__bottom {
   // DISPLAY
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-between;
   flex-wrap: wrap;
   gap: $spacing-4;
 
@@ -1555,9 +1629,7 @@
   margin: 0;
 
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
+  @include text-style($font-size-sm, $font-weight-regular);
   color: var(--text-muted);
 }
 
@@ -1570,9 +1642,7 @@
 
 .footer__legal-link {
   // TIPOGRAFÍA
-  font-family: $font-primary;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-regular;
+  @include text-style($font-size-sm, $font-weight-regular);
   color: var(--text-muted);
   text-decoration: none;
 
@@ -1581,6 +1651,10 @@
 
   &:hover {
     color: var(--color-primary);
+  }
+
+  &:focus-visible {
+    @include focus-visible;
   }
 }
 
@@ -1601,14 +1675,5 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
