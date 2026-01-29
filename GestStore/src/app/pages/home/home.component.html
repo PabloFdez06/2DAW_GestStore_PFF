@@ -206,6 +206,7 @@
                 [attr.aria-expanded]="isServiceOpen(i)"
                 [attr.aria-controls]="'service-panel-' + service.id"
                 [attr.id]="'service-trigger-' + service.id">
+                <span class="sr-only">Servicio {{ i + 1 }} de {{ services.length }}:</span>
                 <figure class="service-accordion__icon" aria-hidden="true">
                   <app-icon [name]="service.icon" size="large"></app-icon>
                 </figure>
@@ -225,7 +226,8 @@
               class="service-accordion__panel"
               role="region"
               [attr.id]="'service-panel-' + service.id"
-              [attr.aria-labelledby]="'service-trigger-' + service.id">
+              [attr.aria-labelledby]="'service-trigger-' + service.id"
+              [attr.hidden]="!isServiceOpen(i) ? '' : null">
               <article class="service-accordion__panel-inner">
                 <p class="service-accordion__description">{{ service.description }}</p>
               </article>

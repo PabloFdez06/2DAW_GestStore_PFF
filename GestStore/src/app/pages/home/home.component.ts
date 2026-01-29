@@ -252,6 +252,9 @@ export class HomeComponent implements AfterViewInit {
 
   /**
    * Maneja la navegación por teclado del acordeón
+   * - ArrowDown/ArrowUp: Navegar entre items
+   * - Home/End: Ir al primero/último item
+   * - Space: Prevenir scroll de página
    */
   onServiceKeydown(event: KeyboardEvent, index: number): void {
     const key = event.key;
@@ -259,7 +262,8 @@ export class HomeComponent implements AfterViewInit {
 
     if (total === 0) return;
 
-    if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'Home' || key === 'End') {
+    // Prevenir scroll con Space y comportamiento por defecto de flechas
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End', ' '].includes(key)) {
       event.preventDefault();
     }
 
@@ -270,7 +274,9 @@ export class HomeComponent implements AfterViewInit {
     if (key === 'Home') nextIndex = 0;
     if (key === 'End') nextIndex = total - 1;
 
-    this.serviceButtons.get(nextIndex)?.nativeElement.focus();
+    if (nextIndex !== index) {
+      this.serviceButtons.get(nextIndex)?.nativeElement.focus();
+    }
   }
 
   /**
