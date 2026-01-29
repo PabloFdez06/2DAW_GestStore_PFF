@@ -4,7 +4,7 @@
 
 ---
 
-## 1. Fundamentos de accesibilidad web
+# 1. Fundamentos de accesibilidad web
 
 ### ¿Por qué es necesaria la accesibilidad?
 
@@ -54,7 +54,7 @@ WCAG define tres niveles de conformidad que indican el grado de accesibilidad:
 
 ---
 
-## 2. Componente multimedia/interactivo implementado
+# 2. Componente multimedia/interactivo implementado
 
 **Tipo de componente:** Acordeón interactivo
 
@@ -178,3 +178,11 @@ He probado el acordeón de estas formas:
 
 ---
 
+
+# 3. Auditoría automatizada inicial
+
+| Herramienta | Puntuación/Errores | Captura |
+|-------------|-------------------|---------|
+| Lighthouse | [96]/100 | ![home-deploy-inicial](./screenshots/home-deploy-lighthouse.png) |
+| WAVE | [15] errores, [X] alertas | ![WAVE-deploy-inicial](./screenshots/home-deploy-wave.png) |
+| TAW | [X] problemas | ![TAW](./screenshots/home-deploy-tawdis.png) |
