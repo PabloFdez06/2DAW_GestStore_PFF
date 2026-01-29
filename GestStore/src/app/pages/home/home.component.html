@@ -226,8 +226,7 @@
               class="service-accordion__panel"
               role="region"
               [attr.id]="'service-panel-' + service.id"
-              [attr.aria-labelledby]="'service-trigger-' + service.id"
-              [attr.hidden]="!isServiceOpen(i) ? '' : null">
+              [attr.aria-labelledby]="'service-trigger-' + service.id">
               <article class="service-accordion__panel-inner">
                 <p class="service-accordion__description">{{ service.description }}</p>
               </article>
@@ -444,9 +443,7 @@
               <li>
                 <a 
                   [href]="link.href" 
-                  class="footer__link">
-                  {{ link.label }}
-                </a>
+                  class="footer__link">{{ link.label }}</a>
               </li>
             }
           </ul>
