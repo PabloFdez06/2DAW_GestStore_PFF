@@ -421,16 +421,16 @@
           <a 
             href="https://linkedin.com" 
             class="footer__social-link" 
-            aria-label="Visitar LinkedIn"
             target="_blank"
             rel="noopener noreferrer">
             <app-icon name="user" size="small" aria-hidden="true"></app-icon>
+            <span class="sr-only">Visitar LinkedIn</span>
           </a>
           <a 
             href="mailto:contacto@geststore.com" 
-            class="footer__social-link" 
-            aria-label="Enviar email">
+            class="footer__social-link">
             <app-icon name="mail" size="small" aria-hidden="true"></app-icon>
+            <span class="sr-only">Enviar email a contacto@geststore.com</span>
           </a>
         </nav>
       </article>
@@ -444,8 +444,7 @@
               <li>
                 <a 
                   [href]="link.href" 
-                  class="footer__link"
-                  [attr.aria-label]="link.label">
+                  class="footer__link">
                   {{ link.label }}
                 </a>
               </li>
