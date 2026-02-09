@@ -60,8 +60,7 @@
   <app-empty-state 
     *ngIf="!isLoading() && filteredIssues().length === 0"
     icon="alert-circle"
-    [title]="searchTerm() ? 'No se encontraron incidencias' : 'No hay incidencias reportadas'"
-    [description]="searchTerm() ? 'Intenta con otros términos de búsqueda' : 'Reporta la primera incidencia usando el botón superior'">
+    [message]="searchTerm() ? 'No se encontraron incidencias. Intenta con otros términos de búsqueda' : 'No hay incidencias reportadas. Reporta la primera usando el botón superior'">
   </app-empty-state>
 </app-sidebar-layout>
 
