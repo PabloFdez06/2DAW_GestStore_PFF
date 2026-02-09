@@ -37,6 +37,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'incidencias',
+    loadComponent: () => import('./pages/issues/issues.component').then(m => m.IssuesComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'perfil/cambiar-contrasena',
     loadComponent: () => import('./pages/profile/update-password/update-password.component').then(m => m.UpdatePasswordComponent),
     canActivate: [authGuard]

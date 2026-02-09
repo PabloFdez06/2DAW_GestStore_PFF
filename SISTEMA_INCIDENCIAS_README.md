@@ -60,6 +60,20 @@ He implementado un sistema completo para que los trabajadores puedan reportar in
     - MEDIUM → Azul ($color-accent-5)
     - LOW → Verde (var(--color-success))
 
+### Página de Incidencias (COMPLETA)
+- **Ubicación**: `GestStore/src/app/pages/issues/`
+- **Ruta**: `/incidencias` (protegida con authGuard)
+- **Funcionalidades**:
+  - Vista completa con layout y sidebar
+  - Listado de incidencias en grid con issue-cards
+  - Estadísticas por severidad (solo ADMIN/MANAGER)
+  - Buscador de incidencias por título/descripción
+  - Filtros por severidad (todas, alta, media, baja)
+  - Modal para reportar nuevas incidencias
+  - Formulario reactivo con validación
+  - Estados: loading, empty, error
+- **Enlace en menú**: Añadido automáticamente al sidebar con icono `alert-circle`
+
 ## Uso del componente
 
 ```typescript
@@ -72,6 +86,17 @@ import { IssueCardComponent } from './components/molecules/issue-card/issue-card
   (click)="handleClick(issue)">
 </app-issue-card>
 ```
+
+## Acceso a la aplicación
+
+Una vez que ejecutes el proyecto, la página de incidencias está accesible en:
+
+1. **Navega a**: `http://localhost:4200/incidencias` (o tu URL de desarrollo)
+2. **O usa el menú lateral**: Haz clic en "Incidencias" en el sidebar (icono de alerta)
+
+La página detecta automáticamente tu rol:
+- **ADMIN/MANAGER**: Ve todas las incidencias del sistema con estadísticas
+- **WORKER**: Ve solo sus propias incidencias reportadas
 
 ## Ejemplo de creación de incidencia
 
@@ -89,11 +114,44 @@ crearIncidencia() {
   this.issueService.createIssue(nueva).subscribe({
     next: (issue) => console.log('Incidencia creada:', issue),
     error: (err) => console.error('Error:', err)
-  });
-}
+✓ **Backend**: Lombok, MongoDB, Spring Security con @PreAuthorize  
+✓ **Frontend**: Signals de Angular, Standalone Components, RxJS  
+✓ **Estilos**: ITCSS, Atomic Design, Mixins SCSS, Variables CSS  
+✓ **Página completa**: Grid responsive, filtros, búsqueda, modal  
+✓ **Routing**: Integrado en app.routes.ts con lazy loading  
+✓ **Navegación**: Enlace añadido al sidebar principal  
+✓ **Testing**: Archivos spec incluidos para componente y página  
+✓ **Documentación**: JSDoc en código, comentarios explicativos
 
-// Para listar todas (solo ADMIN/MANAGER)
-this.issueService.getIssues().subscribe({
+## Archivos creados
+
+### Backend (7 archivos)
+- `Issue.java` - Entidad
+- `IssueSeverity.java` - Enum
+- `IssueRepository.java` - Repositorio MongoDB
+- `IssueService.java` - Lógica de negocio
+- `IssueController.java` - API REST
+- `IssueRequestDto.java` - DTO entrada
+- `IssueResponseDto.java` - DTO salida
+
+### Frontend (9 archivos)
+- `issue.model.ts` - Interfaces y enums
+- `issue.service.ts` - Servicio con signals
+- `issue-card.component.ts` - Componente card
+- `issue-card.component.html` - Template card
+- `issue-card.component.scss` - Estilos card
+- `issue-card.component.spec.ts` - Tests card
+- `issues.component.ts` - Página completa
+- `issues.component.html` - Template página
+- `issues.component.scss` - Estilos página
+- `issues.component.spec.ts` - Tests página
+
+### Configuración (2 archivos modificados)
+- `app.routes.ts` - Ruta añadida
+- `sidebar-layout.component.ts` - Enlace en menú
+
+---
+
   next: (issues) => console.log('Incidencias:', issues)
 });
 ```

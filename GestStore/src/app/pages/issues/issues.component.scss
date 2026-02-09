@@ -1,0 +1,195 @@
+@use '../../../styles/00-settings/variables' as *;
+@use '../../../styles/01-tools/mixins' as *;
+
+/**
+ * Página de Incidencias
+ * 
+ * He aplicado los mismos estilos que el resto de páginas del proyecto,
+ * usando el sistema de espaciado, colores y mixins para mantener consistencia.
+ */
+
+// ============================================================================
+// ESTADÍSTICAS
+// ============================================================================
+.issues__stats {
+  display: flex;
+  gap: $spacing-4;
+  margin-bottom: $spacing-6;
+  flex-wrap: wrap;
+}
+
+.stat-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-4 $spacing-6;
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-light);
+  border-radius: $radius-lg;
+  cursor: pointer;
+  @include transition(all);
+
+  &:hover {
+    border-color: var(--color-primary);
+    @include themed-shadow(md);
+  }
+
+  &.active {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary-light);
+  }
+
+  &--high {
+    &.active {
+      border-color: var(--color-error);
+      background-color: rgba(242, 30, 30, 0.1);
+    }
+  }
+
+  &--medium {
+    &.active {
+      border-color: $color-accent-5;
+      background-color: rgba(66, 173, 226, 0.1);
+    }
+  }
+
+  &--low {
+    &.active {
+      border-color: var(--color-success);
+      background-color: rgba(5, 163, 1, 0.1);
+    }
+  }
+}
+
+.stat-badge__label {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.0625rem;
+}
+
+.stat-badge__value {
+  @include text-style($font-size-2xl, $font-weight-bold, $line-tight);
+  color: var(--text-default);
+}
+
+// ============================================================================
+// BUSCADOR
+// ============================================================================
+.issues__search {
+  margin-bottom: $spacing-6;
+}
+
+.issues__search-input {
+  width: 100%;
+  padding: $spacing-4;
+  @include text-style($font-size-base, $font-weight-regular, $line-normal);
+  color: var(--text-default);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: $radius-md;
+  @include transition(all);
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    @include themed-shadow(sm);
+  }
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+}
+
+// ============================================================================
+// GRID DE INCIDENCIAS
+// ============================================================================
+.issues__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: $spacing-6;
+}
+
+// ============================================================================
+// FORMULARIO EN MODAL
+// ============================================================================
+.issue-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-5;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.form-label {
+  @include text-style($font-size-sm, $font-weight-medium, $line-normal);
+  color: var(--text-default);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  padding: $spacing-3 $spacing-4;
+  @include text-style($font-size-base, $font-weight-regular, $line-normal);
+  color: var(--text-default);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: $radius-md;
+  @include transition(all);
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    @include themed-shadow(sm);
+  }
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 7.5rem;
+  font-family: $font-primary;
+}
+
+.form-actions {
+  @include flex-between;
+  gap: $spacing-3;
+  margin-top: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: 1px solid var(--border-light);
+}
+
+// ============================================================================
+// RESPONSIVE
+// ============================================================================
+@include mobile {
+  .issues__stats {
+    gap: $spacing-3;
+  }
+
+  .stat-badge {
+    flex: 1;
+    min-width: calc(50% - #{$spacing-2});
+  }
+
+  .issues__grid {
+    grid-template-columns: 1fr;
+    gap: $spacing-4;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    
+    app-button {
+      width: 100%;
+    }
+  }
+}
