@@ -1,0 +1,32 @@
+<!-- 
+  Issue Card Component
+  
+  Card semántica que muestra la información de una incidencia.
+  Uso etiquetas HTML5 semánticas para mejorar accesibilidad y SEO.
+-->
+<article [class]="getCardClasses()">
+  <!-- Header con título y badge de severidad -->
+  <header class="issue-card__header">
+    <h3 class="issue-card__title">{{ issue.title }}</h3>
+    <span [class]="getSeverityClasses()" role="status">
+      {{ getSeverityLabel() }}
+    </span>
+  </header>
+
+  <!-- Descripción del problema -->
+  <p class="issue-card__description">{{ issue.description }}</p>
+
+  <!-- Footer con metadatos -->
+  <footer class="issue-card__footer">
+    <span class="issue-card__meta">
+      <span class="issue-card__meta-label">Reportado por:</span>
+      <span class="issue-card__meta-value">{{ issue.reportedBy }}</span>
+    </span>
+    <span class="issue-card__meta">
+      <span class="issue-card__meta-label">Fecha:</span>
+      <time [dateTime]="issue.createdAt" class="issue-card__meta-value">
+        {{ getFormattedDate() }}
+      </time>
+    </span>
+  </footer>
+</article>

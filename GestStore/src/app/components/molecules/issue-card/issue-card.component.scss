@@ -1,0 +1,178 @@
+@use '../../../../styles/00-settings/variables' as *;
+@use '../../../../styles/01-tools/mixins' as *;
+
+/**
+ * Issue Card Styles
+ * 
+ * Componente tipo card para mostrar incidencias de inventario.
+ * Uso el sistema de espaciado, colores y mixins del proyecto para mantener
+ * consistencia con el resto de componentes. Las sombras y transiciones
+ * replican el comportamiento de las task cards.
+ */
+
+// ============================================================================
+// ISSUE CARD - BLOCK
+// ============================================================================
+.issue-card {
+  // 2️⃣ DISPLAY - Disposición vertical
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+
+  // 3️⃣ BOX MODEL
+  padding: $spacing-6;
+  max-width: 100%;
+
+  // 4️⃣ BACKGROUND
+  background-color: var(--bg-surface);
+
+  // 5️⃣ BORDER
+  border: $border-thin solid var(--border-light);
+  border-radius: $radius-lg;
+
+  // 7️⃣ EFECTOS VISUALES - Uso el mixin themed-shadow para la sombra
+  @include themed-shadow(sm);
+  overflow: hidden;
+
+  // 8️⃣ TRANSICIONES - Uso el mixin transition del proyecto
+  @include transition(all);
+
+  // Modifier: Clickable (cuando la card es interactiva)
+  &--clickable {
+    cursor: pointer;
+
+    &:hover {
+      @include themed-shadow(md);
+      transform: translateY(-0.125rem);
+      border-color: var(--color-primary);
+    }
+
+    &:active {
+      transform: translateY(0);
+      @include themed-shadow(sm);
+    }
+  }
+
+  // Focus visible para accesibilidad
+  &:focus-visible {
+    @include focus-visible;
+  }
+}
+
+// ============================================================================
+// ISSUE CARD HEADER
+// ============================================================================
+.issue-card__header {
+  @include flex-between; // Mixin del proyecto para space-between
+  align-items: flex-start;
+  gap: $spacing-3;
+}
+
+.issue-card__title {
+  // Uso el mixin text-style del proyecto
+  @include text-style($font-size-lg, $font-weight-semibold, $line-normal);
+  color: var(--text-default);
+  margin: 0;
+  flex: 1;
+}
+
+// ============================================================================
+// SEVERITY BADGE
+// ============================================================================
+.issue-card__severity {
+  // Aplico tipografía con el mixin
+  @include text-style($font-size-xs, $font-weight-medium, $line-tight);
+  
+  padding: $spacing-1 $spacing-3;
+  border-radius: $radius-full;
+  text-transform: uppercase;
+  letter-spacing: 0.03125rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  // Modifier: High severity (urgente - rojo)
+  &--high {
+    background-color: rgba(242, 30, 30, 0.15); // Color error con opacidad
+    color: var(--color-error);
+    border: 1px solid var(--color-error);
+  }
+
+  // Modifier: Medium severity (media - azul)
+  &--medium {
+    background-color: rgba(66, 173, 226, 0.15); // Color medium con opacidad
+    color: $color-accent-5;
+    border: 1px solid $color-accent-5;
+  }
+
+  // Modifier: Low severity (baja - verde)
+  &--low {
+    background-color: rgba(5, 163, 1, 0.15); // Color success con opacidad
+    color: var(--color-success);
+    border: 1px solid var(--color-success);
+  }
+}
+
+// ============================================================================
+// DESCRIPTION
+// ============================================================================
+.issue-card__description {
+  @include text-style($font-size-base, $font-weight-regular, $line-relaxed);
+  color: var(--text-secondary);
+  margin: 0;
+  
+  // Limito la descripción a 3 líneas con ellipsis
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ============================================================================
+// FOOTER CON METADATOS
+// ============================================================================
+.issue-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+  padding-top: $spacing-2;
+  border-top: 1px solid var(--border-light);
+}
+
+.issue-card__meta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  @include text-style($font-size-sm, $font-weight-regular, $line-normal);
+}
+
+.issue-card__meta-label {
+  color: var(--text-muted);
+}
+
+.issue-card__meta-value {
+  color: var(--text-default);
+  font-weight: $font-weight-medium;
+}
+
+// ============================================================================
+// RESPONSIVE
+// ============================================================================
+
+// En móvil ajusto el padding y los gaps
+@include mobile {
+  .issue-card {
+    padding: $spacing-4;
+    gap: $spacing-3;
+  }
+
+  .issue-card__title {
+    @include text-style($font-size-base, $font-weight-semibold, $line-normal);
+  }
+
+  .issue-card__footer {
+    flex-direction: column;
+    gap: $spacing-2;
+  }
+}
