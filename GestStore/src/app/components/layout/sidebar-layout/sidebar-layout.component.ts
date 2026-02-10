@@ -33,9 +33,10 @@ export class SidebarLayoutComponent {
     { path: '/tareas-importantes', icon: 'star', label: 'Tareas Importantes' },
     { path: '/tareas', icon: 'check-square', label: 'Tareas' },
     { path: '/almacen', icon: 'package', label: 'Almacén' },
+    { path: '/incidencias', icon: 'alert-circle', label: 'Incidencias' },
     { path: '/ajustes', icon: 'settings', label: 'Ajustes' }
   ];
-
+  
   constructor(
     private authService: AuthService,
     private renderer: Renderer2,

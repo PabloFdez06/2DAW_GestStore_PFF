@@ -6,13 +6,14 @@ import { IssueService } from '../../services/issue';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { Issue, IssueRequest, IssueSeverity } from '../../models/issue.model';
-import { IssueCardComponent } from '../../components/molecules/issue-card/issue-card.component';
 import { SidebarLayoutComponent } from '../../components/layout/sidebar-layout/sidebar-layout.component';
 import { NavHeaderComponent } from '../../components/layout/nav-header/nav-header.component';
 import { ButtonComponent } from '../../components/atoms/button/button.component';
 import { LoadingStateComponent } from '../../components/molecules/loading-state/loading-state.component';
 import { EmptyStateComponent } from '../../components/molecules/empty-state/empty-state.component';
 import { ModalWrapperComponent } from '../../components/molecules/modal-wrapper/modal-wrapper.component';
+import { StockNotificationsComponent } from '../../components/molecules/stock-notifications/stock-notifications.component';
+
 import { FooterComponent } from "../../components/layout/footer/footer.component";
 import { HeaderComponent } from "../../components/layout/header/header.component";
 
@@ -33,12 +34,13 @@ import { HeaderComponent } from "../../components/layout/header/header.component
     FormsModule,
     SidebarLayoutComponent,
     NavHeaderComponent,
+    EmptyStateComponent,
     ButtonComponent,
     LoadingStateComponent,
-    EmptyStateComponent,
     ModalWrapperComponent,
-    FooterComponent,
-    HeaderComponent
+
+    /*FooterComponent,
+    HeaderComponent */
 ],
   templateUrl: './issues.html',
   styleUrls: ['./issues.scss']
@@ -87,6 +89,8 @@ export class IssuesComponent implements OnInit {
     
     return filtered;
   });
+
+  
 
   constructor(
     protected issueService: IssueService,
@@ -193,3 +197,4 @@ export class IssuesComponent implements OnInit {
     return user?.role === 'ADMIN' || user?.role === 'MANAGER';
   }
 }
+
