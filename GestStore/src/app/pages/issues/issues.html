@@ -1,0 +1,22 @@
+<app-sidebar-layout activeRoute="/dashboard">
+  <!-- Header slot -->
+  <app-nav-header
+    slot="header"
+    searchPlaceholder="Busca tu incidencia aqui..."
+    searchAriaLabel="Buscar incidencias"
+    [searchValue]="searchTerm"
+    (searchValueChange)="searchTerm = $event"
+    (notificationsToggle)="toggleStockNotifications()"
+    (calendarToggle)="toggleCalendar()">
+  </app-nav-header>
+
+  
+
+  <app-button
+    slot="header"
+    variant="primary"
+    (click)="openModal()">
+    Reportar Incidencia
+  </app-button>
+
+</app-sidebar-layout>
