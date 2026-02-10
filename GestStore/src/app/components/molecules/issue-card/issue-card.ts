@@ -19,7 +19,6 @@ import { Issue, IssueSeverity } from '../../../models/issue.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './issue-card.html',
-  styleUrl: './issue-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IssueCardComponent {

@@ -16,6 +16,7 @@ import { StockNotificationsComponent } from '../../components/molecules/stock-no
 
 import { FooterComponent } from "../../components/layout/footer/footer.component";
 import { HeaderComponent } from "../../components/layout/header/header.component";
+import { IssueCardComponent } from '../../components/molecules/issue-card/issue-card';
 
 /**
  * Página de Incidencias
@@ -38,6 +39,7 @@ import { HeaderComponent } from "../../components/layout/header/header.component
     ButtonComponent,
     LoadingStateComponent,
     ModalWrapperComponent,
+    IssueCardComponent
 
     /*FooterComponent,
     HeaderComponent */

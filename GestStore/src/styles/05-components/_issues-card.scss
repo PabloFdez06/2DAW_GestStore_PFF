@@ -1,0 +1,67 @@
+@use '../00-settings/variables' as *;
+@use '../01-tools/mixins' as *;
+
+.issue-card {
+  background: $color-white;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+  padding: $spacing-4;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  transition: box-shadow $transition-base $transition-easing;
+
+  &.is-clickable {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: $shadow-md;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-2;
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $gray-900;
+    margin: 0;
+  }
+
+  &__severity {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    padding: $spacing-1 $spacing-2;
+    border-radius: $radius-sm;
+    color: $color-white;
+
+    &.severity-low {
+      background-color: color-primary('low');
+    }
+
+    &.severity-medium {
+      background-color: color-primary('medium');
+    }
+
+    &.severity-high {
+      background-color: color-primary('high');
+    }
+  }
+}
+
+/* .issue-card {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+
+    padding: $spacing-6;
+    max-width: 100%;
+
+    background-color: var(--bg-surface);
+
+} */

@@ -1,15 +1,16 @@
 <app-sidebar-layout activeRoute="/incidencias">
   <!-- Header con título y botón de nueva incidencia -->
   <app-nav-header title="Incidencias de Inventario">
-    <app-button
-      slot="header"
+
+  </app-nav-header>
+
+      <app-button
       label="Reportar Incidencia"
       variant="primary"
       icon="alert-circle"
       (click)="openModal()"
       [disabled]="isLoading()">
     </app-button>
-  </app-nav-header>
 
     <article>
         <!-- Estadísticas de incidencias por severidad -->
@@ -40,14 +41,14 @@
         <app-loading-state *ngIf="isLoading()" message="Cargando incidencias..."></app-loading-state>
 
         <!-- Lista de incidencias -->
-        <!--   <div class="issues__grid" *ngIf="!isLoading() && filteredIssues().length > 0">
+       <div class="issues__grid" *ngIf="!isLoading() && filteredIssues().length > 0">
             <app-issue-card 
             *ngFor="let issue of filteredIssues()"
             [issue]="issue"
             [clickable]="false">
             </app-issue-card>
-        </div> -->
 
+        </div>
         <!-- Estado vacío -->
         <app-empty-state 
             *ngIf="!isLoading() && filteredIssues().length === 0"

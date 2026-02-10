@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -43,12 +42,21 @@ public class IssueController {
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
     public ResponseEntity<ApiResponse<IssueResponseDto>> createIssue(
             @Valid @RequestBody IssueRequestDto requestDto,
-            Authentication authentication) {
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
         
-        String username = authentication.getName();
-        log.info("POST /api/issues - Usuario {} creando nueva incidencia", username);
+        if (userId == null || userId.isEmpty()) {
+            log.error("No se proporcionó el ID del usuario");
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.<IssueResponseDto>builder()
+                            .success(false)
+                            .message("Se requiere el ID del usuario para crear una incidencia")
+                            .timestamp(java.time.LocalDateTime.now())
+                            .build());
+        }
         
-        IssueResponseDto issue = issueService.createIssue(requestDto, username);
+        log.info("POST /api/issues - Usuario {} creando nueva incidencia", userId);
+        
+        IssueResponseDto issue = issueService.createIssue(requestDto, userId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Incidencia creada exitosamente", issue));
@@ -88,11 +96,22 @@ public class IssueController {
      */
     @GetMapping("/my-issues")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'WORKER')")
-    public ResponseEntity<ApiResponse<List<IssueResponseDto>>> getMyIssues(Authentication authentication) {
-        String username = authentication.getName();
-        log.info("GET /api/issues/my-issues - Obteniendo incidencias de {}", username);
+    public ResponseEntity<ApiResponse<List<IssueResponseDto>>> getMyIssues(
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
         
-        List<IssueResponseDto> issues = issueService.getIssuesByReportedBy(username);
+        if (userId == null || userId.isEmpty()) {
+            log.error("No se proporcionó el ID del usuario");
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.<List<IssueResponseDto>>builder()
+                            .success(false)
+                            .message("Se requiere el ID del usuario")
+                            .timestamp(java.time.LocalDateTime.now())
+                            .build());
+        }
+        
+        log.info("GET /api/issues/my-issues - Obteniendo incidencias de {}", userId);
+        
+        List<IssueResponseDto> issues = issueService.getIssuesByUser(userId);
         return ResponseEntity.ok(
                 ApiResponse.success("Tus incidencias obtenidas exitosamente", issues));
     }

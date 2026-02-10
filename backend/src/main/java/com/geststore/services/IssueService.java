@@ -5,7 +5,9 @@ import com.geststore.models.dtos.IssueRequestDto;
 import com.geststore.models.dtos.IssueResponseDto;
 import com.geststore.models.entities.Issue;
 import com.geststore.models.entities.IssueSeverity;
+import com.geststore.models.entities.User;
 import com.geststore.repositories.IssueRepository;
+import com.geststore.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,20 +30,26 @@ import java.util.stream.Collectors;
 public class IssueService {
 
     private final IssueRepository issueRepository;
+    private final UserRepository userRepository;
 
     /**
      * Crea una nueva incidencia en el sistema
-     * Establezco la fecha de creación automáticamente y asigno el usuario desde el contexto
+     * Busca el usuario por su ID para obtener su nombre y establecerlo como reportedBy
      */
-    public IssueResponseDto createIssue(IssueRequestDto requestDto, String username) {
+    public IssueResponseDto createIssue(IssueRequestDto requestDto, String userId) {
         log.info("Creando nueva incidencia con título: {}", requestDto.getTitle());
+        
+        // Busco el usuario por ID para obtener su nombre
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", userId));
+        String reportedByName = user.getName() + " " + user.getLastName();
         
         Issue issue = Issue.builder()
                 .title(requestDto.getTitle())
                 .description(requestDto.getDescription())
                 .severity(requestDto.getSeverity() != null ? requestDto.getSeverity() : IssueSeverity.MEDIUM)
                 .createdAt(LocalDateTime.now())
-                .reportedBy(username)
+                .reportedBy(reportedByName)
                 .build();
 
         Issue savedIssue = issueRepository.save(issue);
@@ -85,14 +93,26 @@ public class IssueService {
     }
 
     /**
-     * Busca las incidencias reportadas por un usuario específico
+     * Busca las incidencias reportadas por un usuario específico (por nombre)
      */
-    public List<IssueResponseDto> getIssuesByReportedBy(String username) {
-        log.info("Buscando incidencias reportadas por: {}", username);
-        List<Issue> issues = issueRepository.findByReportedBy(username);
+    public List<IssueResponseDto> getIssuesByReportedBy(String reportedBy) {
+        log.info("Buscando incidencias reportadas por: {}", reportedBy);
+        List<Issue> issues = issueRepository.findByReportedBy(reportedBy);
         return issues.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Busca las incidencias de un usuario por su ID
+     * Primero busca el usuario para obtener su nombre y luego filtra por ese nombre
+     */
+    public List<IssueResponseDto> getIssuesByUser(String userId) {
+        log.info("Buscando incidencias del usuario con ID: {}", userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", userId));
+        String reportedByName = user.getName() + " " + user.getLastName();
+        return getIssuesByReportedBy(reportedByName);
     }
 
     /**
