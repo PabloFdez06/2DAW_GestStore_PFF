@@ -52,8 +52,6 @@ public class IssueController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Incidencia creada exitosamente", issue));
-                console.log("Usuario " + username + " ha creado una nueva incidencia");
-                /* si llega hasta aqui, la peticion se ha realizado */
     }
 
     /**
@@ -68,8 +66,6 @@ public class IssueController {
         List<IssueResponseDto> issues = issueService.getAllIssues();
         return ResponseEntity.ok(
                 ApiResponse.success("Incidencias obtenidas exitosamente", issues));
-                console.log("Admin o manager obteniendo todas las incidencias");
-                /* si llega hasta aqui, la peticion se ha realizado */
     }
 
     /**
@@ -84,8 +80,6 @@ public class IssueController {
         IssueResponseDto issue = issueService.getIssueById(id);
         return ResponseEntity.ok(
                 ApiResponse.success("Incidencia obtenida exitosamente", issue));
-                console.log("Usuario obteniendo incidencia por ID: " + id);
-                /* si llega hasta aqui, la peticion se ha realizado */
     }
 
     /**
@@ -101,7 +95,5 @@ public class IssueController {
         List<IssueResponseDto> issues = issueService.getIssuesByReportedBy(username);
         return ResponseEntity.ok(
                 ApiResponse.success("Tus incidencias obtenidas exitosamente", issues));
-                console.log("Usuario obteniendo incidencias reportadas por: " + username);
-                /* si llega hasta aqui, la peticion se ha realizado */
     }
 }
