@@ -5,6 +5,11 @@
   // COLORES BASE - Light Theme (default)
   // ============================================================================
   --color-primary: #{$color-primary};
+  /* estos 2 siguientes colores son los añadidos por el examen */
+  --color-practica-1: #{$color-practica-1};
+  --color-practica-2: #{$color-practica-2};
+
+  /* ----------- */
   --color-primary-rgb: #{red($color-primary)}, #{green($color-primary)}, #{blue($color-primary)};
   --color-primary-hover: #{map-get($color-primary-scale, 'normal-hover')};
   --color-primary-active: #{map-get($color-primary-scale, 'normal-active')};

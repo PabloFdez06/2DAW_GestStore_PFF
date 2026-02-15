@@ -36,7 +36,7 @@ export class SidebarLayoutComponent {
     { path: '/incidencias', icon: 'alert-circle', label: 'Incidencias' },
     { path: '/ajustes', icon: 'settings', label: 'Ajustes' }
   ];
-
+  
   constructor(
     private authService: AuthService,
     private renderer: Renderer2,

@@ -1,0 +1,25 @@
+
+<article [class]="getCardClasses()">
+    <header class="issue-card__header">
+        <h3 class="issue-card__title">{{ issue.title }}</h3>
+        <span class="issue-card__severity" [class]="getSeverityClasses()" role="status">
+            {{ getSeverityLabel() }}
+        </span>
+    </header>
+
+    <p class="issue-card__description">{{ issue.description }}</p>
+
+    <footer class="issue-card__footer">
+        <span class="issue-card__meta">
+            <span class="issue-card__meta-label">Reportado por:</span>
+            <span class="issue-card__meta--value">{{ issue.reportedBy }}</span>
+        </span>
+        
+        <span class="issue-card__meta">
+            <span class="issue-card__meta-label">Fecha:</span>
+            <time [dateTime]="issue.createdAt" class="issue-card__meta-value">
+                {{ getFormattedDate() }}
+            </time>
+        </span>
+    </footer>
+</article>

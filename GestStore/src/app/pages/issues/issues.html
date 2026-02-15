@@ -1,0 +1,124 @@
+<app-sidebar-layout activeRoute="/incidencias">
+  <!-- Header con título y botón de nueva incidencia -->
+  <app-nav-header title="Incidencias de Inventario">
+
+  </app-nav-header>
+
+      <app-button
+      label="Reportar Incidencia"
+      variant="primary"
+      icon="alert-circle"
+      (click)="openModal()"
+      [disabled]="isLoading()">
+    </app-button>
+
+    <article>
+        <!-- Estadísticas de incidencias por severidad -->
+        <section class="issues__stats" *ngIf="isAdminOrManager()">
+            <div class="stat-badge stat-badge--high" [class.active]="selectedSeverityFilter() === IssueSeverity.HIGH"
+                (click)="filterBySeverity(IssueSeverity.HIGH)">
+            <span class="stat-badge__label">Urgentes</span>
+            <span class="stat-badge__value">{{ highCount() }}</span>
+            </div>
+            <div class="stat-badge stat-badge--medium" [class.active]="selectedSeverityFilter() === IssueSeverity.MEDIUM"
+                (click)="filterBySeverity(IssueSeverity.MEDIUM)">
+            <span class="stat-badge__label">Medias</span>
+            <span class="stat-badge__value">{{ mediumCount() }}</span>
+            </div>
+            <div class="stat-badge stat-badge--low" [class.active]="selectedSeverityFilter() === IssueSeverity.LOW"
+                (click)="filterBySeverity(IssueSeverity.LOW)">
+            <span class="stat-badge__label">Bajas</span>
+            <span class="stat-badge__value">{{ lowCount() }}</span>
+            </div>
+            <div class="stat-badge" [class.active]="selectedSeverityFilter() === 'ALL'"
+                (click)="filterBySeverity('ALL')">
+            <span class="stat-badge__label">Todas</span>
+            <span class="stat-badge__value">{{ issues().length }}</span>
+            </div>
+        </section>
+
+        <!-- Estados de carga -->
+        <app-loading-state *ngIf="isLoading()" message="Cargando incidencias..."></app-loading-state>
+
+        <!-- Lista de incidencias -->
+       <div class="issues__grid" *ngIf="!isLoading() && filteredIssues().length > 0">
+            <app-issue-card 
+            *ngFor="let issue of filteredIssues()"
+            [issue]="issue"
+            [clickable]="false">
+            </app-issue-card>
+
+        </div>
+        <!-- Estado vacío -->
+        <app-empty-state 
+            *ngIf="!isLoading() && filteredIssues().length === 0"
+            icon="alert-circle"
+            [message]="searchTerm() ? 'No se encontraron incidencias. Intenta con otros términos de búsqueda' : 'No hay incidencias reportadas. Reporta la primera usando el botón superior'">
+        </app-empty-state>
+
+        <!-- Modal para crear nueva incidencia -->
+        <app-modal-wrapper
+        [isOpen]="isModalOpen()"
+        title="Reportar Nueva Incidencia"
+        (close)="closeModal()">
+        <form class="issue-form" (ngSubmit)="createIssue()">
+            <!-- Título -->
+            <div class="form-group">
+            <label for="title" class="form-label">Título de la incidencia *</label>
+            <input 
+                type="text" 
+                id="title"
+                class="form-input"
+                placeholder="Ej: Estante B3 dañado"
+                [(ngModel)]="newIssue.title"
+                name="title"
+                required>
+            </div>
+
+            <!-- Descripción -->
+            <div class="form-group">
+            <label for="description" class="form-label">Descripción detallada *</label>
+            <textarea 
+                id="description"
+                class="form-textarea"
+                placeholder="Describe el problema encontrado..."
+                [(ngModel)]="newIssue.description"
+                name="description"
+                rows="5"
+                required></textarea>
+            </div>
+
+            <!-- Severidad -->
+            <div class="form-group">
+            <label for="severity" class="form-label">Nivel de urgencia *</label>
+            <select 
+                id="severity"
+                class="form-select"
+                [(ngModel)]="newIssue.severity"
+                name="severity"
+                required>
+                <option [value]="IssueSeverity.LOW">Baja - No afecta la operación</option>
+                <option [value]="IssueSeverity.MEDIUM">Media - Requiere atención</option>
+                <option [value]="IssueSeverity.HIGH">Alta - Solución inmediata</option>
+            </select>
+            </div>
+
+            <!-- Botones -->
+            <div class="form-actions">
+            <app-button
+                label="Cancelar"
+                variant="secondary"
+                type="button"
+                (click)="closeModal()">
+            </app-button>
+            <app-button
+                label="Reportar Incidencia"
+                variant="primary"
+                type="submit"
+                icon="alert-circle">
+            </app-button>
+            </div>
+        </form>
+        </app-modal-wrapper>
+    </article>
+</app-sidebar-layout>

@@ -1,0 +1,1 @@
+No me ha dado tiempo a documentar, brevemente comento que los endpoints creado son para generar reportes donde el usuario puede generarlos con 3 niveles de severidad. funcionan correctamente se solicita y se envia correctamente la peticion entre cliente y servidor

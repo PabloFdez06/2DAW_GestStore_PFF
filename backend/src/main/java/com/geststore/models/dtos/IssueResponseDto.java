@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
  * 
  * Incluye todos los campos para que el frontend pueda mostrar
  * la información completa: quién reportó, cuándo, y todos los detalles.
+ * Es decir es lo que verá el usuario cuando consulte sus incidencias o el admin las revise.
  */
 @Data
 @NoArgsConstructor

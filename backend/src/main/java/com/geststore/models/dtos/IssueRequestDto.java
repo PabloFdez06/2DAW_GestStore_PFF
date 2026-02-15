@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 /**
  * DTO para crear una nueva incidencia
  * 
- * He mantenido esto simple: solo recibimos el título, descripción y severidad
+ * Será simple: solo recibimos el título, descripción y severidad
  * del cliente. La fecha de creación y el usuario que reporta se establecerán
  * automáticamente en el backend desde la autenticación.
  */
