@@ -634,7 +634,7 @@
   @include text-style($font-size-sm, $font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-primary);
+  color: var(--color-primary-hover); // Más oscuro (#6051e6) para cumplir contraste AA 4.5:1 sobre --bg-subtle
 }
 
 .services__title {

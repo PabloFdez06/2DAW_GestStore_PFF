@@ -1,5 +1,5 @@
 <!-- HOME PAGE -->
-<main class="home" role="main" aria-label="Página principal de GestStore">
+<main class="home" aria-label="Página principal de GestStore">
   
   <!-- ========================================================================== -->
   <!-- HEADER -->
@@ -193,7 +193,7 @@
     <!-- Services Accordion Grid -->
     <ul class="services__grid" role="list">
       @for (service of services; track service.id; let i = $index) {
-        <li class="service-accordion" role="listitem">
+        <li class="service-accordion">
           <article class="service-accordion__item" [class.service-accordion__item--open]="isServiceOpen(i)">
             <!-- Accordion Header (always visible - styled like original card) -->
             <header class="service-accordion__header">
@@ -255,8 +255,7 @@
       @for (plan of subscriptionPlans; track plan.id) {
         <li 
           class="pricing-card" 
-          [class.pricing-card--featured]="plan.isPopular"
-          role="listitem">
+          [class.pricing-card--featured]="plan.isPopular">
           @if (plan.isPopular) {
             <span class="pricing-card__badge">Recomendado</span>
           }
@@ -403,7 +402,7 @@
   <!-- ========================================================================== -->
   <!-- FOOTER -->
   <!-- ========================================================================== -->
-  <footer class="footer" role="contentinfo">
+  <footer class="footer">
     <section class="footer__container">
       <!-- Brand Column -->
       <article class="footer__brand">
@@ -423,7 +422,7 @@
             target="_blank"
             rel="noopener noreferrer">
             <app-icon name="user" size="small" aria-hidden="true"></app-icon>
-            <span class="sr-only">Visitar LinkedIn</span>
+            <span class="sr-only">Visitar LinkedIn (abre en nueva ventana)</span>
           </a>
           <a 
             href="mailto:contacto@geststore.com" 
