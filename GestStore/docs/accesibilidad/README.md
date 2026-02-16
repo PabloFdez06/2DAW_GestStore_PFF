@@ -392,5 +392,5 @@ La página Home cumple todos los criterios de nivel AA verificados. Los 15 error
 | Herramienta | Puntuación/Errores | Captura |
 |-------------|-------------------|---------|
 | Lighthouse | 100/100 | ![home-deploy-inicial](./screenshots/home-deploy-lighthouse.png) |
-| WAVE | 15 errores de contraste, 0 errores ARIA | ![WAVE-deploy-inicial](./screenshots/home-deploy-wave.png) |
+| WAVE | 0 errores de contraste, 0 errores ARIA | ![WAVE-deploy-inicial](./screenshots/home-deploy-wave.png) |
 | TAW | 34 advertencias, 0 errores críticos | ![TAW](./screenshots/home-deploy-tawdis.png) |

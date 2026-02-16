@@ -59,7 +59,7 @@ services:
       deploy_on_push: true
     
     # Ruta del Dockerfile
-    dockerfile_path: GestStore/Dockerfile
+    dockerfile_path: GestStore/Dockerfile_NO
     source_dir: GestStore
     
     # Configuración
